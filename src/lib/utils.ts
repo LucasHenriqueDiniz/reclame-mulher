@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+import { defaultLocale } from "@/i18n/config";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -13,7 +15,7 @@ type LocaleOption = {
 
 export function formatDate(
   value: string | number | Date,
-  { locale = "pt-BR" }: LocaleOption = {}
+  { locale = defaultLocale }: LocaleOption = {}
 ) {
   const date = value instanceof Date ? value : new Date(value);
   return new Intl.DateTimeFormat(locale).format(date);
@@ -21,7 +23,7 @@ export function formatDate(
 
 export function formatDateTime(
   value: string | number | Date,
-  { locale = "pt-BR" }: LocaleOption = {}
+  { locale = defaultLocale }: LocaleOption = {}
 ) {
   const date = value instanceof Date ? value : new Date(value);
   return new Intl.DateTimeFormat(locale, {
@@ -30,13 +32,13 @@ export function formatDateTime(
   }).format(date);
 }
 
-export function formatNumber(value: number, { locale = "pt-BR" }: LocaleOption = {}) {
+export function formatNumber(value: number, { locale = defaultLocale }: LocaleOption = {}) {
   return new Intl.NumberFormat(locale).format(value);
 }
 
 export function formatComplaintStatus(
   status: ComplaintStatus,
-  { locale = "pt-BR" }: LocaleOption = {}
+  { locale = defaultLocale }: LocaleOption = {}
 ) {
   const dictionaries: Record<string, Record<ComplaintStatus, string>> = {
     "pt-BR": {

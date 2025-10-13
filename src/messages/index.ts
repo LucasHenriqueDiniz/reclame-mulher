@@ -1,6 +1,6 @@
 import type { AbstractIntlMessages } from "next-intl";
 
-import type { Locale } from "@/i18n/routing";
+import type { Locale } from "@/i18n/config";
 
 const namespaces = [
   "common",

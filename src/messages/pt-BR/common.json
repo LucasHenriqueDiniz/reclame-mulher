@@ -21,5 +21,18 @@
     "close": "Fechar",
     "edit": "Editar",
     "delete": "Excluir"
+  },
+  "language": "Idioma",
+  "languages": {
+    "pt-BR": "Português (Brasil)",
+    "en": "English"
+  },
+  "dashboard": {
+    "title": "Painel",
+    "summary": "Gerencie suas reclamações e acompanhe respostas em tempo real.",
+    "welcome": "Bem-vinda, {name}",
+    "welcomeAnonymous": "Bem-vinda!",
+    "profileLabel": "Perfil",
+    "roleUnknown": "Não informado"
   }
 }
