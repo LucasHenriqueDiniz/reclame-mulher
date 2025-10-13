@@ -1,0 +1,25 @@
+{
+  "heading": "Minhas reclamações",
+  "subheading": "Acompanhe o andamento das denúncias registradas.",
+  "statuses": {
+    "OPEN": "Aberta",
+    "RESPONDED": "Respondida",
+    "RESOLVED": "Resolvida",
+    "CANCELLED": "Cancelada"
+  },
+  "filters": {
+    "all": "Todas",
+    "mine": "Minhas",
+    "public": "Públicas"
+  },
+  "actions": {
+    "new": "Nova reclamação",
+    "edit": "Editar reclamação",
+    "cancel": "Cancelar reclamação",
+    "confirmResolution": "Confirmar resolução"
+  },
+  "empty": {
+    "title": "Nenhuma reclamação por aqui",
+    "description": "Crie uma nova reclamação para começar."
+  }
+}

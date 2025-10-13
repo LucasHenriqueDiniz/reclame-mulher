@@ -1,0 +1,16 @@
+{
+  "menu": {
+    "companies": "Empresas",
+    "blog": "Blog",
+    "audit": "Auditoria"
+  },
+  "audit": {
+    "filters": {
+      "entity": "Entidade",
+      "actor": "Responsável",
+      "from": "De",
+      "to": "Até"
+    },
+    "empty": "Nenhum registro encontrado"
+  }
+}

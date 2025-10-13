@@ -1,0 +1,13 @@
+{
+  "list": {
+    "title": "Projects",
+    "empty": "No projects yet",
+    "create": "New project"
+  },
+  "form": {
+    "name": "Project name",
+    "description": "Description",
+    "status": "Status",
+    "submit": "Save project"
+  }
+}

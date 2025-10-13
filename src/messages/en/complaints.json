@@ -1,0 +1,25 @@
+{
+  "heading": "My complaints",
+  "subheading": "Track how each submission is progressing.",
+  "statuses": {
+    "OPEN": "Open",
+    "RESPONDED": "Responded",
+    "RESOLVED": "Resolved",
+    "CANCELLED": "Cancelled"
+  },
+  "filters": {
+    "all": "All",
+    "mine": "Mine",
+    "public": "Public"
+  },
+  "actions": {
+    "new": "New complaint",
+    "edit": "Edit complaint",
+    "cancel": "Cancel complaint",
+    "confirmResolution": "Confirm resolution"
+  },
+  "empty": {
+    "title": "No complaints yet",
+    "description": "Create a new complaint to get started."
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "appName": "Speak Up",
+  "hero": {
+    "title": "Your voice matters",
+    "subtitle": "Collect complaints and follow company responses in one place.",
+    "ctaLogin": "Sign in",
+    "ctaRegister": "Create account"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "complaints": "Complaints",
+    "companies": "Companies",
+    "projects": "Projects",
+    "blog": "Blog",
+    "admin": "Admin"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "edit": "Edit",
+    "delete": "Delete"
+  }
+}

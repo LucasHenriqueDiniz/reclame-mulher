@@ -1,0 +1,25 @@
+{
+  "appName": "Reclame Mulher",
+  "hero": {
+    "title": "Sua voz tem força",
+    "subtitle": "Centralize denúncias e acompanhe respostas das empresas em um só lugar.",
+    "ctaLogin": "Entrar",
+    "ctaRegister": "Criar conta"
+  },
+  "navigation": {
+    "home": "Início",
+    "dashboard": "Painel",
+    "complaints": "Reclamações",
+    "companies": "Empresas",
+    "projects": "Projetos",
+    "blog": "Blog",
+    "admin": "Administração"
+  },
+  "actions": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "edit": "Editar",
+    "delete": "Excluir"
+  }
+}
