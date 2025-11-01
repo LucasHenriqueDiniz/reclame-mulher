@@ -6,11 +6,11 @@ import { Input } from "@/components/ui/input";
 export const PasswordField = forwardRef<
   HTMLInputElement,
   React.ComponentProps<typeof Input>
->((props, ref) => {
+>(({ className, ...props }, ref) => {
   const [show, setShow] = useState(false);
   return (
     <div className="relative">
-      <Input ref={ref} type={show ? "text" : "password"} {...props} />
+      <Input ref={ref} type={show ? "text" : "password"} className={className} {...props} />
       <button
         type="button"
         onClick={() => setShow((s) => !s)}

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import BoringAvatar from "boring-avatars";
 
 const cardsData = [
   {
@@ -105,8 +106,13 @@ export function BlogCards() {
                   <div className="flex items-center gap-3 mb-4">
                     <Avatar className="w-10 h-10 border-2 border-blue-100">
                       <AvatarImage src={card.authorImage} alt={card.authorName} />
-                      <AvatarFallback className="bg-blue-50 text-blue-700 font-semibold">
-                        {card.authorName.charAt(0)}
+                      <AvatarFallback className="bg-transparent">
+                        <BoringAvatar
+                          name={card.authorName}
+                          size={40}
+                          variant="beam"
+                          colors={["#3BA5FF", "#2A1B55", "#4C2D8F", "#2d8ddf", "#280F5E"]}
+                        />
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">

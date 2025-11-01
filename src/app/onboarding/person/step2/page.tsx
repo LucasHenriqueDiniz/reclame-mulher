@@ -19,6 +19,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabaseClient } from "@/lib/supabase/client";
 import { updateProfilePerson } from "./actions";
+import { HOW_HEARD_OPTIONS, HOW_HEARD_VALUES, type HowHeardType } from "@/lib/constants/how-heard";
 
 const schema = z.object({
   cpf: z.string().min(11, "CPF é obrigatório").optional(),
@@ -26,8 +27,16 @@ const schema = z.object({
   address: z.string().min(3, "Endereço deve ter no mínimo 3 caracteres"),
   city: z.string().min(2, "Cidade é obrigatória"),
   state: z.string().min(2, "Estado é obrigatório"),
-  how_heard_option_id: z.string().uuid().optional(),
-  how_heard_free_text: z.string().optional(),
+  how_heard: z.enum(HOW_HEARD_VALUES).optional(),
+  how_heard_other: z.string().optional(),
+}).refine((data) => {
+  if (data.how_heard === "OUTRO") {
+    return data.how_heard_other && data.how_heard_other.trim().length > 0;
+  }
+  return true;
+}, {
+  message: "Especifique como ficou sabendo da plataforma",
+  path: ["how_heard_other"],
 });
 
 type Form = z.infer<typeof schema>;
@@ -46,39 +55,13 @@ export default function PersonStep2() {
     setValue,
     watch,
     formState: { errors },
-    control,
   } = useForm<Form>({ resolver: zodResolver(schema) });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [checkingAuth, setCheckingAuth] = useState(true);
-  const [howHeardOptions, setHowHeardOptions] = useState<
-    Array<{ id: string; label: string; slug: string }>
-  >([]);
   const [needsCPF, setNeedsCPF] = useState(false);
 
-  const howHeardOptionId = watch("how_heard_option_id");
-
-  // Carrega opções de how_heard
-  useEffect(() => {
-    const loadOptions = async () => {
-      try {
-        // Note: Esta é uma chamada client-side, então vamos criar uma API route ou usar server action
-        // Por enquanto, vamos fazer fetch direto (se RLS permitir) ou criar API route
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) return;
-
-        const response = await fetch("/api/how-heard/options");
-        if (response.ok) {
-          const options = await response.json();
-          setHowHeardOptions(options);
-        }
-      } catch (err) {
-        console.error("Erro ao carregar opções:", err);
-      }
-    };
-
-    loadOptions();
-  }, []);
+  const howHeardValue = watch("how_heard");
 
   // Verifica se usuário está autenticado e se precisa CPF
   useEffect(() => {
@@ -137,8 +120,8 @@ export default function PersonStep2() {
         address: data.address,
         city: data.city,
         state: data.state,
-        how_heard_option_id: data.how_heard_option_id,
-        how_heard_free_text: data.how_heard_free_text,
+        how_heard: data.how_heard,
+        how_heard_other: data.how_heard_other,
         accepted_terms: true,
         locale: "pt-BR",
       });
@@ -187,7 +170,7 @@ export default function PersonStep2() {
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 grid gap-4">
             {needsCPF && (
               <div>
-                <label className="text-sm font-medium text-neutral-700">
+                <label className="text-sm font-medium text-gray-800">
                   CPF*
                 </label>
                 <Input
@@ -195,7 +178,7 @@ export default function PersonStep2() {
                   {...register("cpf")}
                   onChange={onCPF}
                   inputMode="numeric"
-                  className="mt-1"
+                  className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
                 />
                 {errors.cpf && (
                   <p className="mt-1 text-sm text-red-600">
@@ -205,7 +188,7 @@ export default function PersonStep2() {
               </div>
             )}
             <div>
-              <label className="text-sm font-medium text-neutral-700">
+              <label className="text-sm font-medium text-gray-800">
                 Telefone (Recomendado)
               </label>
               <Input
@@ -213,17 +196,17 @@ export default function PersonStep2() {
                 {...register("phone")}
                 onChange={onPhone}
                 inputMode="numeric"
-                className="mt-1"
+                className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-neutral-700">
+              <label className="text-sm font-medium text-gray-800">
                 Endereço*
               </label>
               <Input
                 placeholder="Rua..."
                 {...register("address")}
-                className="mt-1"
+                className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
               {errors.address && (
                 <p className="mt-1 text-sm text-red-600">
@@ -233,16 +216,16 @@ export default function PersonStep2() {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="text-sm font-medium text-neutral-700">
+                <label className="text-sm font-medium text-gray-800">
                   Cidade*
                 </label>
-                <Input {...register("city")} className="mt-1" />
+                <Input {...register("city")} className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper" />
                 {errors.city && (
                   <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>
                 )}
               </div>
               <div>
-                <label className="text-sm font-medium text-neutral-700">
+                <label className="text-sm font-medium text-gray-800">
                   Estado*
                 </label>
                 <Select onValueChange={(v) => setValue("state", v)}>
@@ -265,32 +248,43 @@ export default function PersonStep2() {
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium text-neutral-700">
+              <label className="text-sm font-medium text-gray-800">
                 Como ficou sabendo da plataforma? (opcional)
               </label>
               <Select
-                value={howHeardOptionId || ""}
-                onValueChange={(v) => setValue("how_heard_option_id", v || undefined)}
+                value={howHeardValue || "none"}
+                onValueChange={(v) => {
+                  setValue("how_heard", v && v !== "none" ? (v as HowHeardType) : undefined);
+                  if (v !== "OUTRO" && v !== "none") {
+                    setValue("how_heard_other", "");
+                  }
+                }}
               >
                 <SelectTrigger className="mt-1">
                   <SelectValue placeholder="Selecione uma opção" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Nenhuma opção</SelectItem>
-                  {howHeardOptions.map((opt) => (
-                    <SelectItem key={opt.id} value={opt.id}>
+                  <SelectItem value="none">Nenhuma opção</SelectItem>
+                  {HOW_HEARD_OPTIONS.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
                       {opt.label}
                     </SelectItem>
                   ))}
-                  <SelectItem value="other">Outro (especifique abaixo)</SelectItem>
                 </SelectContent>
               </Select>
-              {howHeardOptionId === "other" && (
-                <Input
-                  placeholder="Digite aqui..."
-                  {...register("how_heard_free_text")}
-                  className="mt-2"
-                />
+              {howHeardValue === "OUTRO" && (
+                <div className="mt-2">
+                  <Input
+                    placeholder="Especifique..."
+                    {...register("how_heard_other")}
+                    className="h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
+                  />
+                  {errors.how_heard_other && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.how_heard_other.message}
+                    </p>
+                  )}
+                </div>
               )}
             </div>
 

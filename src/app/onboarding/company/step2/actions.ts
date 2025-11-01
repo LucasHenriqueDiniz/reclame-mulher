@@ -1,7 +1,6 @@
 "use server";
 
 import { supabaseServer } from "@/lib/supabase/server";
-import { HowHeardRepo } from "@/server/repos/how-heard";
 
 export async function completeCompanyOnboarding(input: {
   phone: string;
@@ -9,8 +8,8 @@ export async function completeCompanyOnboarding(input: {
   city: string;
   state: string;
   contact_name: string;
-  how_heard_option_id?: string | null;
-  how_heard_free_text?: string | null;
+  how_heard?: string | null;
+  how_heard_other?: string | null;
 }) {
   const supabase = await supabaseServer();
 
@@ -23,6 +22,11 @@ export async function completeCompanyOnboarding(input: {
   if (userError || !user) {
     throw new Error("unauthenticated");
   }
+
+  // Prepara how_heard_other: só salva se how_heard = 'OUTRO'
+  const howHeardOtherValue = input.how_heard === "OUTRO" && input.how_heard_other
+    ? input.how_heard_other.trim()
+    : null;
 
   // Chama a função RPC para criar empresa
   const { error: rpcError } = await supabase.rpc("create_company_self", {
@@ -41,13 +45,15 @@ export async function completeCompanyOnboarding(input: {
     throw new Error(rpcError.message);
   }
 
-  // Salvar how_heard na nova tabela
-  if (input.how_heard_option_id || input.how_heard_free_text) {
-    await HowHeardRepo.createForUser(
-      user.id,
-      input.how_heard_option_id,
-      input.how_heard_free_text
-    );
+  // Atualizar how_heard diretamente no perfil
+  if (input.how_heard) {
+    await supabase
+      .from("profiles")
+      .update({
+        how_heard: input.how_heard,
+        how_heard_other: howHeardOtherValue,
+      })
+      .eq("user_id", user.id);
   }
 
   return { success: true };

@@ -1,13 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 import { Mail, CheckCircle2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 export default function RegisterSuccessPage() {
-  const t = useTranslations("auth.register");
 
   return (
     <div className="flex min-h-screen items-center justify-center px-6 py-12">

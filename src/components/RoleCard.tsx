@@ -21,19 +21,23 @@ export function RoleCard({
     <button
       onClick={onClick}
       className={cn(
-        "glass w-full max-w-md rounded-2xl p-8 text-left transition-all",
-        active ? "ring-2 ring-[#3BA5FF]" : "hover:shadow-lg"
+        "glass h-full w-full max-w-md rounded-3xl p-8 text-left transition-all hover:scale-105 hover:shadow-2xl",
+        active ? "ring-2 ring-blue-stepper" : "hover:shadow-xl"
       )}
     >
-      <div className="flex items-center gap-4">
-        <div className="rounded-full bg-[#3F237E]/10 p-3">
-          <Icon className="h-8 w-8 text-[#6D54C7]" />
+      <div className="flex flex-col h-full">
+        <div className="flex items-center gap-4 mb-4">
+          <div className="rounded-full bg-purple-primary/10 p-3">
+            <Icon className="h-8 w-8 text-purple-primary" />
+          </div>
+          <h3 className="text-2xl font-heading font-bold text-gray-900">
+            {title}
+          </h3>
         </div>
-        <h3 className="text-xl font-semibold text-neutral-900">{title}</h3>
-      </div>
-      <p className="mt-4 text-neutral-600 leading-relaxed">{desc}</p>
-      <div className="mt-6 inline-flex items-center rounded-full bg-[#FF6A2A] px-5 py-2 text-white font-medium">
-        {cta}
+        <p className="text-gray-700 leading-relaxed mb-6 flex-grow">{desc}</p>
+        <div className="inline-flex items-center justify-center rounded-full bg-purple-primary hover:bg-purple-primary/90 px-6 py-3 text-white font-heading font-semibold transition-all shadow-md">
+          {cta}
+        </div>
       </div>
     </button>
   );

@@ -67,7 +67,7 @@ export function ProcessCarousel() {
     dragStartX.current = e.clientX;
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleMouseMove = (_e: React.MouseEvent) => {
     if (!isDragging) return;
   };
 
@@ -90,7 +90,7 @@ export function ProcessCarousel() {
     dragStartX.current = e.touches[0].clientX;
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
+  const handleTouchMove = (_e: React.TouchEvent) => {
     if (!isDragging) return;
   };
 

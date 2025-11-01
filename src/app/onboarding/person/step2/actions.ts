@@ -1,7 +1,6 @@
 "use server";
 
 import { supabaseServer } from "@/lib/supabase/server";
-import { HowHeardRepo } from "@/server/repos/how-heard";
 
 export async function updateProfilePerson(input: {
   cpf?: string | null;
@@ -9,8 +8,8 @@ export async function updateProfilePerson(input: {
   address: string;
   city: string;
   state: string;
-  how_heard_option_id?: string | null;
-  how_heard_free_text?: string | null;
+  how_heard?: string | null;
+  how_heard_other?: string | null;
   accepted_terms?: boolean;
   locale?: string;
 }) {
@@ -26,7 +25,12 @@ export async function updateProfilePerson(input: {
     throw new Error("unauthenticated");
   }
 
-  // Chama a função RPC
+  // Prepara how_heard_other: só salva se how_heard = 'OUTRO'
+  const howHeardOtherValue = input.how_heard === "OUTRO" && input.how_heard_other
+    ? input.how_heard_other.trim()
+    : null;
+
+  // Chama a função RPC (precisa atualizar para aceitar how_heard)
   const { error: rpcError } = await supabase.rpc("update_profile_person", {
     p_name: null,
     p_cpf: input.cpf && input.cpf.trim() ? input.cpf.trim().replace(/\D/g, "") : null,
@@ -34,21 +38,14 @@ export async function updateProfilePerson(input: {
     p_address: input.address.trim(),
     p_city: input.city.trim(),
     p_state: input.state.trim(),
+    p_how_heard: input.how_heard || null,
+    p_how_heard_other: howHeardOtherValue,
     p_accepted_terms: input.accepted_terms ?? true,
     p_locale: input.locale || "pt-BR",
   });
 
   if (rpcError) {
     throw new Error(rpcError.message);
-  }
-
-  // Salvar how_heard na nova tabela
-  if (input.how_heard_option_id || input.how_heard_free_text) {
-    await HowHeardRepo.createForUser(
-      user.id,
-      input.how_heard_option_id,
-      input.how_heard_free_text
-    );
   }
 
   return { success: true };

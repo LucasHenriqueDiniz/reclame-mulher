@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import BoringAvatar from "boring-avatars";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,10 +49,21 @@ export function UserMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
-        <Avatar className="h-9 w-9">
-          <AvatarImage src={avatarUrl ?? undefined} alt={name ?? undefined} />
-          <AvatarFallback>{initials}</AvatarFallback>
-        </Avatar>
+        {avatarUrl ? (
+          <Avatar className="h-9 w-9">
+            <AvatarImage src={avatarUrl} alt={name ?? undefined} />
+            <AvatarFallback>{initials}</AvatarFallback>
+          </Avatar>
+        ) : (
+          <div className="h-9 w-9 rounded-full overflow-hidden">
+            <BoringAvatar
+              name={name || email || "User"}
+              size={36}
+              variant="beam"
+              colors={["#3BA5FF", "#2A1B55", "#4C2D8F", "#2d8ddf", "#280F5E"]}
+            />
+          </div>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>

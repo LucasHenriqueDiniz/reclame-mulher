@@ -74,7 +74,7 @@ export default function PersonStep1() {
         // Email já confirmado ou confirmação desabilitada, continua onboarding
         location.href = "/onboarding/person/step2";
       }
-    } catch (err) {
+    } catch {
       setError("Erro ao criar conta. Tente novamente.");
       setLoading(false);
     }
@@ -100,40 +100,40 @@ export default function PersonStep1() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 grid gap-4">
             <div>
-              <label className="text-sm font-medium text-neutral-700">
+              <label className="text-sm font-medium text-gray-800">
                 Nome Completo*
               </label>
               <Input
                 placeholder="Seu nome completo"
                 {...register("name")}
-                className="mt-1"
+                className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
               {errors.name && (
                 <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
               )}
             </div>
             <div>
-              <label className="text-sm font-medium text-neutral-700">CPF*</label>
+              <label className="text-sm font-medium text-gray-800">CPF*</label>
               <Input
                 placeholder="123.456.789-00"
                 {...register("cpf")}
                 onChange={onCPF}
                 inputMode="numeric"
-                className="mt-1"
+                className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
               {errors.cpf && (
                 <p className="mt-1 text-sm text-red-600">{errors.cpf.message}</p>
               )}
             </div>
             <div>
-              <label className="text-sm font-medium text-neutral-700">
+              <label className="text-sm font-medium text-gray-800">
                 Email*
               </label>
               <Input
                 type="email"
                 placeholder="email@gmail.com"
                 {...register("email")}
-                className="mt-1"
+                className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
               {errors.email && (
                 <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
@@ -141,13 +141,13 @@ export default function PersonStep1() {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="text-sm font-medium text-neutral-700">
+                <label className="text-sm font-medium text-gray-800">
                   Senha*
                 </label>
                 <PasswordField
                   placeholder="********"
                   {...register("password")}
-                  className="mt-1"
+                  className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
                 />
                 {errors.password && (
                   <p className="mt-1 text-sm text-red-600">
@@ -156,13 +156,13 @@ export default function PersonStep1() {
                 )}
               </div>
               <div>
-                <label className="text-sm font-medium text-neutral-700">
+                <label className="text-sm font-medium text-gray-800">
                   Confirmar Senha*
                 </label>
                 <PasswordField
                   placeholder="********"
                   {...register("confirm")}
-                  className="mt-1"
+                  className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
                 />
                 {errors.confirm && (
                   <p className="mt-1 text-sm text-red-600">
@@ -205,7 +205,7 @@ export default function PersonStep1() {
             <div className="mt-4 flex items-center justify-between">
               <a
                 href="/login"
-                className="text-sm underline text-neutral-700 hover:text-neutral-900"
+                className="text-sm font-medium text-blue-stepper hover:text-blue-stepper/80 hover:underline transition"
               >
                 Já tem uma conta? Entrar
               </a>

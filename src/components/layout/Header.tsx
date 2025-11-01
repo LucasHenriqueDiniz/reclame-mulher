@@ -8,6 +8,7 @@ import { Bell, Search, ChevronDown, Settings, MessageSquare, LogOut, Menu, Check
 
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import BoringAvatar from "boring-avatars";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -226,7 +227,7 @@ export function Header() {
           className={`flex items-center justify-between px-4 sm:px-6 lg:px-8 py-4 transition-all duration-300 ease-out max-w-7xl mx-auto ${getHeaderClasses()}`}
     >
       {/* Logo */}
-      <Link
+      <Link 
         href={getHomeUrl()}
         className="flex items-center space-x-3 group hover:opacity-80 transition whitespace-nowrap"
       >
@@ -378,15 +379,26 @@ export function Header() {
                     {isLoggedIn ? (
                       <>
                         <div className="px-4 py-4 flex items-center space-x-3 mb-4 bg-gray-50 rounded-lg">
-                          <Avatar className="h-12 w-12">
-                            <AvatarImage
-                              src={profile?.avatar_url || `https://i.pravatar.cc/40?u=${user.id}`}
-                              alt={profile?.name || "Usuário"}
-                            />
-                            <AvatarFallback className="bg-[var(--brand-blue-light)] text-white text-sm">
-                              {getUserInitials()}
-                            </AvatarFallback>
-                          </Avatar>
+                          {profile?.avatar_url ? (
+                            <Avatar className="h-12 w-12">
+                              <AvatarImage
+                                src={profile.avatar_url}
+                                alt={profile?.name || "Usuário"}
+                              />
+                              <AvatarFallback className="bg-[var(--brand-blue-light)] text-white text-sm">
+                                {getUserInitials()}
+                              </AvatarFallback>
+                            </Avatar>
+                          ) : (
+                            <div className="h-12 w-12 rounded-full overflow-hidden">
+                              <BoringAvatar
+                                name={profile?.name || user?.email || "User"}
+                                size={48}
+                                variant="beam"
+                                colors={["#3BA5FF", "#2A1B55", "#4C2D8F", "#2d8ddf", "#280F5E"]}
+                              />
+                            </div>
+                          )}
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold text-[var(--brand-purple-dark)] truncate">
                               {profile?.name || user?.email}
@@ -542,15 +554,26 @@ export function Header() {
           <DropdownMenu open={userMenuOpen} onOpenChange={setUserMenuOpen}>
             <DropdownMenuTrigger asChild>
               <button className="flex items-center space-x-2 hover:opacity-80 transition focus:outline-none">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage
-                    src={profile?.avatar_url || `https://i.pravatar.cc/40?u=${user.id}`}
-                    alt={profile?.name || "Usuário"}
-                  />
-                  <AvatarFallback className="bg-[var(--brand-blue-light)] text-white text-sm">
-                    {getUserInitials()}
-                  </AvatarFallback>
-                </Avatar>
+                {profile?.avatar_url ? (
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage
+                      src={profile.avatar_url}
+                      alt={profile?.name || "Usuário"}
+                    />
+                    <AvatarFallback className="bg-[var(--brand-blue-light)] text-white text-sm">
+                      {getUserInitials()}
+                    </AvatarFallback>
+                  </Avatar>
+                ) : (
+                  <div className="h-10 w-10 rounded-full overflow-hidden">
+                    <BoringAvatar
+                      name={profile?.name || user?.email || "User"}
+                      size={40}
+                      variant="beam"
+                      colors={["#3BA5FF", "#2A1B55", "#4C2D8F", "#2d8ddf", "#280F5E"]}
+                    />
+                  </div>
+                )}
                 <ChevronDown className={`h-4 w-4 ${getTextColor()}`} />
               </button>
             </DropdownMenuTrigger>

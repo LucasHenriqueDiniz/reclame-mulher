@@ -74,7 +74,7 @@ export default function CompanyStep1() {
         // Email já confirmado ou confirmação desabilitada, continua onboarding
         location.href = "/onboarding/company/step2";
       }
-    } catch (err) {
+    } catch {
       setError("Erro ao criar conta. Tente novamente.");
     } finally {
       setLoading(false);
@@ -101,13 +101,13 @@ export default function CompanyStep1() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 grid gap-4">
             <div>
-              <label className="text-sm font-medium text-neutral-700">
+              <label className="text-sm font-medium text-gray-800">
                 Nome da Empresa*
               </label>
               <Input
                 placeholder="Razão social da empresa"
                 {...register("company_name")}
-                className="mt-1"
+                className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
               {errors.company_name && (
                 <p className="mt-1 text-sm text-red-600">
@@ -116,7 +116,7 @@ export default function CompanyStep1() {
               )}
             </div>
             <div>
-              <label className="text-sm font-medium text-neutral-700">
+              <label className="text-sm font-medium text-gray-800">
                 CNPJ*
               </label>
               <Input
@@ -124,21 +124,21 @@ export default function CompanyStep1() {
                 {...register("cnpj")}
                 onChange={onCNPJ}
                 inputMode="numeric"
-                className="mt-1"
+                className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
               {errors.cnpj && (
                 <p className="mt-1 text-sm text-red-600">{errors.cnpj.message}</p>
               )}
             </div>
             <div>
-              <label className="text-sm font-medium text-neutral-700">
+              <label className="text-sm font-medium text-gray-800">
                 Email Corporativo*
               </label>
               <Input
                 type="email"
                 placeholder="contato@empresa.com"
                 {...register("email")}
-                className="mt-1"
+                className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
               {errors.email && (
                 <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
@@ -146,13 +146,13 @@ export default function CompanyStep1() {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="text-sm font-medium text-neutral-700">
+                <label className="text-sm font-medium text-gray-800">
                   Senha*
                 </label>
                 <PasswordField
                   placeholder="********"
                   {...register("password")}
-                  className="mt-1"
+                  className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
                 />
                 {errors.password && (
                   <p className="mt-1 text-sm text-red-600">
@@ -161,13 +161,13 @@ export default function CompanyStep1() {
                 )}
               </div>
               <div>
-                <label className="text-sm font-medium text-neutral-700">
+                <label className="text-sm font-medium text-gray-800">
                   Confirmar Senha*
                 </label>
                 <PasswordField
                   placeholder="********"
                   {...register("confirm")}
-                  className="mt-1"
+                  className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
                 />
                 {errors.confirm && (
                   <p className="mt-1 text-sm text-red-600">
@@ -210,7 +210,7 @@ export default function CompanyStep1() {
             <div className="mt-4 flex items-center justify-between">
               <a
                 href="/login"
-                className="text-sm underline text-neutral-700 hover:text-neutral-900"
+                className="text-sm font-medium text-blue-stepper hover:text-blue-stepper/80 hover:underline transition"
               >
                 Já tem uma conta? Entrar
               </a>

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { HOW_HEARD_VALUES } from "@/lib/constants/how-heard";
 
 /** USER (Pessoa) — Passo 1 (signUp) */
 export const RegisterUserStep1Schema = z.object({
@@ -19,8 +20,17 @@ export const RegisterUserStep2Schema = z.object({
   address: z.string().min(3),
   city: z.string().min(2),
   state: z.string().min(2),
-  how_heard_option_id: z.string().uuid().optional(),
-  how_heard_free_text: z.string().optional(),
+  how_heard: z.enum(HOW_HEARD_VALUES as [string, ...string[]]).optional(),
+  how_heard_other: z.string().optional(), // obrigatório se how_heard = 'OUTRO'
+}).refine((data) => {
+  // Se escolheu OUTRO, precisa preencher how_heard_other
+  if (data.how_heard === "OUTRO") {
+    return data.how_heard_other && data.how_heard_other.trim().length > 0;
+  }
+  return true;
+}, {
+  message: "Especifique como ficou sabendo da plataforma",
+  path: ["how_heard_other"],
 });
 export type RegisterUserStep2 = z.infer<typeof RegisterUserStep2Schema>;
 

@@ -1,5 +1,3 @@
-import { notFound } from "next/navigation";
-
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
 }

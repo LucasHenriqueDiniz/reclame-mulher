@@ -38,11 +38,8 @@ function VerifyEmailContent() {
             }
 
             if (data.session) {
-              setStatus("success");
-              // Redireciona para continuar onboarding ou app
-              setTimeout(() => {
-                router.push(next || "/onboarding/person/step2");
-              }, 1500);
+              // Redireciona imediatamente para continuar onboarding ou app
+              router.push(next || "/onboarding/person/step2");
               return;
             }
           }
@@ -56,11 +53,8 @@ function VerifyEmailContent() {
         }
 
         if (data.session) {
-          setStatus("success");
-          // Redireciona para continuar onboarding ou app
-          setTimeout(() => {
-            router.push(next || "/app");
-          }, 1500);
+          // Redireciona imediatamente para continuar onboarding ou app
+          router.push(next || "/app");
         } else {
           // Sem sessão - mostra mensagem para verificar email
           setStatus("loading");

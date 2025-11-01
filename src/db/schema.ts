@@ -1,5 +1,4 @@
 import {
-  pgSchema,
   pgTable,
   uuid,
   text,
@@ -34,9 +33,16 @@ export const blogPostStatus = pgEnum("blog_post_status", [
   "PUBLISHED",
 ]);
 
-export const howHeardSourceType = pgEnum("how_heard_source_type", [
-  "PREDEFINED",
-  "FREE_TEXT",
+export const howHeardType = pgEnum("how_heard_type", [
+  "LINKEDIN",
+  "INSTAGRAM",
+  "FACEBOOK",
+  "TWITTER",
+  "AMIGOS",
+  "GOOGLE",
+  "YOUTUBE",
+  "EVENTO",
+  "OUTRO",
 ]);
 
 // Tables
@@ -49,7 +55,8 @@ export const profiles = pgTable("profiles", {
   address: text("address"),
   city: text("city"),
   state: text("state"),
-  // Removido howHeard - agora em tabela separada
+  howHeard: howHeardType("how_heard"),
+  howHeardOther: text("how_heard_other"), // texto livre quando how_heard = 'OUTRO'
   acceptedTermsAt: timestamp("accepted_terms_at", { withTimezone: true }),
   onboardingCompletedAt: timestamp("onboarding_completed_at", {
     withTimezone: true,
@@ -224,52 +231,4 @@ export const blogPostsRelations = relations(blogPosts, ({ many }) => ({
   tagLinks: many(blogPostTags),
 }));
 
-// ====== HOW HEARD TABLES ======
-
-export const howHeardOptions = pgTable("how_heard_options", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  label: text("label").notNull().unique(), // "LinkedIn", "Instagram", "Amigos", etc
-  slug: text("slug").notNull().unique(),
-  isActive: boolean("is_active").notNull().default(true),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-});
-
-export const userHowHeard = pgTable("user_how_heard", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id")
-    .notNull()
-    .references(() => profiles.userId, { onDelete: "cascade" }),
-  sourceType: howHeardSourceType("source_type").notNull().default("FREE_TEXT"),
-  optionId: uuid("option_id").references(() => howHeardOptions.id, {
-    onDelete: "set null",
-  }), // null se for FREE_TEXT
-  freeText: text("free_text"), // preenchido se for FREE_TEXT ou complemento
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-});
-
-// Relations
-export const howHeardOptionsRelations = relations(
-  howHeardOptions,
-  ({ many }) => ({
-    userLinks: many(userHowHeard),
-  })
-);
-
-export const userHowHeardRelations = relations(userHowHeard, ({ one }) => ({
-  user: one(profiles, {
-    fields: [userHowHeard.userId],
-    references: [profiles.userId],
-  }),
-  option: one(howHeardOptions, {
-    fields: [userHowHeard.optionId],
-    references: [howHeardOptions.id],
-  }),
-}));
-
-export const profilesRelations = relations(profiles, ({ many }) => ({
-  howHeardLinks: many(userHowHeard),
-}));
+// Relations removidas - how_heard agora é campo direto em profiles

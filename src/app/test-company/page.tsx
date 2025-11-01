@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabaseClient } from "@/lib/supabase/client";
-import { formatCNPJ, formatPhone, slugify } from "@/lib/normalize";
+import { slugify } from "@/lib/normalize";
 
 export default function TestCompanyPage() {
   const [form, setForm] = useState({
