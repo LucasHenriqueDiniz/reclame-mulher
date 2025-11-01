@@ -1,0 +1,17 @@
+{
+  "list": {
+    "title": "Blog",
+    "search": "Buscar publicações",
+    "empty": "Nenhum post publicado"
+  },
+  "post": {
+    "publishedAt": "Publicado em {{date}}",
+    "readMore": "Ler mais"
+  },
+  "editor": {
+    "title": "Título",
+    "slug": "Slug",
+    "content": "Conteúdo",
+    "publishedAt": "Data de publicação"
+  }
+}

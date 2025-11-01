@@ -1,0 +1,18 @@
+{
+  "verification": {
+    "verified": "Verified company",
+    "pending": "Verification pending",
+    "cta": "Request verification"
+  },
+  "tabs": {
+    "overview": "Overview",
+    "complaints": "Complaints",
+    "info": "Information",
+    "projects": "Projects"
+  },
+  "kpis": {
+    "publicComplaints": "Public complaints",
+    "resolvedComplaints": "Resolved complaints",
+    "projects": "Active projects"
+  }
+}

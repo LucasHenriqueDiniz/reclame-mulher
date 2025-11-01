@@ -1,0 +1,23 @@
+CREATE TYPE "public"."blog_post_status" AS ENUM('DRAFT', 'PUBLISHED');--> statement-breakpoint
+CREATE TABLE "blog_post_tags" (
+	"post_id" uuid NOT NULL,
+	"tag_id" uuid NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "blog_post_tags_post_id_tag_id_pk" PRIMARY KEY("post_id","tag_id")
+);
+--> statement-breakpoint
+CREATE TABLE "blog_tags" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"name" text NOT NULL,
+	"slug" text NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "blog_tags_name_unique" UNIQUE("name"),
+	CONSTRAINT "blog_tags_slug_unique" UNIQUE("slug")
+);
+--> statement-breakpoint
+ALTER TABLE "blog_posts" ADD COLUMN "excerpt" text;--> statement-breakpoint
+ALTER TABLE "blog_posts" ADD COLUMN "cover_url" text;--> statement-breakpoint
+ALTER TABLE "blog_posts" ADD COLUMN "status" "blog_post_status" DEFAULT 'DRAFT' NOT NULL;--> statement-breakpoint
+ALTER TABLE "blog_post_tags" ADD CONSTRAINT "blog_post_tags_post_id_blog_posts_id_fk" FOREIGN KEY ("post_id") REFERENCES "public"."blog_posts"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "blog_post_tags" ADD CONSTRAINT "blog_post_tags_tag_id_blog_tags_id_fk" FOREIGN KEY ("tag_id") REFERENCES "public"."blog_tags"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "blog_posts" ADD CONSTRAINT "blog_posts_slug_unique" UNIQUE("slug");

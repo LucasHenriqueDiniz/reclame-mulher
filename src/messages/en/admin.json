@@ -1,0 +1,16 @@
+{
+  "menu": {
+    "companies": "Companies",
+    "blog": "Blog",
+    "audit": "Audit"
+  },
+  "audit": {
+    "filters": {
+      "entity": "Entity",
+      "actor": "Actor",
+      "from": "From",
+      "to": "To"
+    },
+    "empty": "No records found"
+  }
+}

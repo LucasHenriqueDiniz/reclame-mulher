@@ -1,26 +1,19 @@
 "use client";
-import { useState } from "react";
-import { supabaseClient } from "@/lib/supabase/client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
-  const [name,setName]=useState(""), [email,setEmail]=useState(""), [password,setPassword]=useState("");
-  const [err,setErr]=useState<string|null>(null);
+  const router = useRouter();
 
-  const onRegister = async (e: React.FormEvent) => {
-    e.preventDefault(); setErr(null);
-    const { error } = await supabaseClient.auth.signUp({ email, password, options:{ data:{ name } }});
-    if (error) setErr(error.message); else window.location.href="/login";
-  };
+  useEffect(() => {
+    // Redireciona automaticamente para a página de escolha de perfil
+    router.replace("/onboarding/role");
+  }, [router]);
 
   return (
-    <form onSubmit={onRegister} className="max-w-sm mx-auto space-y-3 p-6">
-      <h1 className="text-xl font-semibold">Criar conta</h1>
-      <input className="border w-full p-2" placeholder="nome" value={name} onChange={e=>setName(e.target.value)} />
-      <input className="border w-full p-2" placeholder="email" value={email} onChange={e=>setEmail(e.target.value)} />
-      <input className="border w-full p-2" type="password" placeholder="senha" value={password} onChange={e=>setPassword(e.target.value)} />
-      {err && <p className="text-red-600">{err}</p>}
-      <button className="border px-3 py-2">Registrar</button>
-    </form>
+    <div className="flex min-h-screen items-center justify-center">
+      <p className="text-neutral-600">Redirecionando...</p>
+    </div>
   );
 }
-

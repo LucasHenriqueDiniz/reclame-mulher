@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova mensagem na sua reclamação</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <!-- Header -->
+          <tr>
+            <td style="padding: 40px 40px 20px; text-align: center; background: linear-gradient(135deg, #3BA5FF 0%, #2A1B55 100%); border-radius: 8px 8px 0 0;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700;">Nova Mensagem</h1>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td style="padding: 40px;">
+              <p style="margin: 0 0 20px; color: #333333; font-size: 16px; line-height: 1.6;">
+                Olá {{name}},
+              </p>
+              
+              <p style="margin: 0 0 20px; color: #333333; font-size: 16px; line-height: 1.6;">
+                Você recebeu uma nova mensagem na sua reclamação sobre <strong>{{companyName}}</strong>:
+              </p>
+              
+              <div style="margin: 20px 0; padding: 20px; background-color: #f9f9f9; border-left: 4px solid #3BA5FF; border-radius: 4px;">
+                <p style="margin: 0 0 10px; color: #666666; font-size: 14px; font-weight: 600;">
+                  Título da reclamação:
+                </p>
+                <p style="margin: 0 0 20px; color: #333333; font-size: 16px;">
+                  {{complaintTitle}}
+                </p>
+                
+                <p style="margin: 0 0 10px; color: #666666; font-size: 14px; font-weight: 600;">
+                  Nova mensagem:
+                </p>
+                <p style="margin: 0; color: #333333; font-size: 16px; line-height: 1.6; white-space: pre-wrap;">
+{{messageContent}}
+                </p>
+              </div>
+              
+              <div style="margin: 30px 0; text-align: center;">
+                <a href="{{complaintUrl}}" style="display: inline-block; padding: 14px 32px; background-color: #3BA5FF; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">
+                  Ver Reclamação
+                </a>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 30px 40px; background-color: #f9f9f9; border-radius: 0 0 8px 8px; text-align: center; border-top: 1px solid #eeeeee;">
+              <p style="margin: 0 0 10px; color: #666666; font-size: 14px;">
+                © {{year}} Reclame Mulher. Todos os direitos reservados.
+              </p>
+              <p style="margin: 0; color: #999999; font-size: 12px;">
+                Este é um e-mail automático, por favor não responda.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

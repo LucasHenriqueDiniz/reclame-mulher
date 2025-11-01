@@ -1,0 +1,13 @@
+{
+  "list": {
+    "title": "Projetos",
+    "empty": "Nenhum projeto cadastrado ainda",
+    "create": "Novo projeto"
+  },
+  "form": {
+    "name": "Nome do projeto",
+    "description": "Descrição",
+    "status": "Status",
+    "submit": "Salvar projeto"
+  }
+}

@@ -1,28 +1,31 @@
-import Link from "next/link";
+import { Header } from "@/components/layout/Header";
+import { Hero } from "@/components/landing/Hero";
+import { ImpactStats } from "@/components/landing/ImpactStats";
+import { ProcessCarousel } from "@/components/landing/ProcessCarousel";
+import { ImpactCategories } from "@/components/landing/ImpactCategories";
+import { PartnersSection } from "@/components/landing/PartnersSection";
+import { BlogCards } from "@/components/landing/BlogCards";
+import { Footer } from "@/components/landing/Footer";
+import { Wave } from "@/components/landing/Wave";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8 space-y-6">
-      <h1 className="text-4xl font-bold">Reclame Mulher</h1>
-      <p className="text-lg text-center max-w-md opacity-80">
-        Plataforma de denúncias e reclamações
-      </p>
+    <main className="overflow-hidden">
+      <Header />
+      <Hero />
+      <ImpactStats />
+      <Wave variant={1}/>
+      <ProcessCarousel />
       
-      <div className="flex gap-4">
-        <Link 
-          href="/login"
-          className="px-6 py-3 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-        >
-          Entrar
-        </Link>
-        <Link 
-          href="/register"
-          className="px-6 py-3 bg-black text-white dark:bg-white dark:text-black rounded-lg hover:opacity-80 transition-opacity"
-        >
-          Criar conta
-        </Link>
-      </div>
+      <Wave variant={1} flipped={true} />
+      <ImpactCategories />
+      <Wave variant={1}  />
+      
+      <PartnersSection />
+      <Wave variant={2}  flipped={true} />
+      
+      <BlogCards />
+      <Footer />
     </main>
   );
 }
-

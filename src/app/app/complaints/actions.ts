@@ -1,14 +1,18 @@
 "use server";
+
 import { supabaseServer } from "@/lib/supabase/server";
+import { ComplaintsRepo } from "@/server/repos/complaints";
+import type { CreateComplaintInput } from "@/server/dto/complaints";
 
-export async function createComplaint(input: { company_id: string; title: string; description: string; is_public?: boolean }) {
+export async function createComplaint(input: CreateComplaintInput) {
   const supabase = await supabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("unauthorized");
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  const payload = { author_user_id: user.id, company_id: input.company_id, title: input.title, description: input.description, is_public: !!input.is_public };
-  const { data, error } = await supabase.from("complaints").insert(payload).select("*").single();
-  if (error) throw error;
-  return data;
+  if (!user) {
+    throw new Error("unauthorized");
+  }
+
+  return ComplaintsRepo.create(input, user.id);
 }
-

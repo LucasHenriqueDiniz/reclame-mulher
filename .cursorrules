@@ -1,0 +1,294 @@
+# Reclame Mulher - Cursor Rules
+
+## Arquitetura do Projeto
+
+### Stack Tecnológica
+
+- **Framework:** Next.js 15 (App Router, RSC)
+- **Linguagem:** TypeScript (strict mode)
+- **Styling:** Tailwind CSS 3.4 + shadcn/ui
+- **Database:** Supabase (PostgreSQL) + Drizzle ORM
+- **Auth:** Supabase Auth (email + OAuth Google)
+- **Forms:** react-hook-form + Zod
+- **i18n:** next-intl
+- **State Management:** Zustand (client) + React Query (quando necessário)
+
+### Estrutura de Pastas
+
+```
+src/
+  app/                    # App Router (Next.js)
+    (auth)/              # Route group para páginas de autenticação
+    onboarding/          # Fluxo de onboarding
+    app/                 # Área autenticada
+    api/                 # API Routes (quando necessário)
+    auth/                # Callbacks OAuth
+  components/
+    ui/                  # shadcn/ui components
+    layout/              # Layout components (AppShell, Sidebar, etc)
+  db/
+    schema.ts            # Drizzle schema (fonte de verdade)
+    client.ts            # Drizzle client (server-only)
+    migrations/          # Migrations geradas pelo drizzle-kit
+  lib/
+    supabase/            # Supabase clients (client.ts, server.ts)
+    env.ts               # Validação de env vars (Zod)
+    masks.ts             # Máscaras (CPF, CNPJ, etc)
+    normalize.ts         # Normalização de strings
+  server/
+    dto/                 # Zod schemas por domínio
+    repos/               # Repositórios (Drizzle/Supabase)
+  messages/              # Traduções (next-intl)
+    en/
+    pt-BR/
+  hooks/                 # React hooks customizados
+  stores/                # Zustand stores
+```
+
+## Padrões de Código
+
+### 1. Server Actions
+
+- Sempre usar `"use server"` no topo do arquivo
+- Validar inputs com Zod DTOs
+- Retornar objetos simples (não classes/instâncias)
+- Tratar erros adequadamente
+
+```typescript
+"use server";
+import { CreateComplaintDto } from "@/server/dto/complaints";
+
+export async function createComplaint(input: unknown) {
+  const validated = CreateComplaintDto.parse(input);
+  // ... lógica
+}
+```
+
+### 2. Repositórios
+
+- Usar classes estáticas (padrão atual)
+- Para operações com RLS: usar Supabase JS
+- Para operações admin/públicas: usar Drizzle
+- Sempre tipar retornos
+
+```typescript
+export class ComplaintsRepo {
+  static async create(data: CreateComplaintInput, userId: string) {
+    const supabase = await supabaseServer();
+    // ... implementação
+  }
+}
+```
+
+### 3. DTOs (Data Transfer Objects)
+
+- Todos os DTOs em `src/server/dto/`
+- Usar Zod para validação
+- Exportar type inference
+
+```typescript
+export const CreateComplaintDto = z.object({
+  title: z.string().min(3),
+  // ...
+});
+export type CreateComplaintInput = z.infer<typeof CreateComplaintDto>;
+```
+
+### 4. Componentes React
+
+- Server Components por padrão
+- Client Components apenas quando necessário (use "use client")
+- Usar shadcn/ui para UI
+- Seguir padrão de composição do shadcn
+
+### 5. i18n
+
+- Todas as strings traduzíveis em `src/messages/{locale}/`
+- Namespaces por feature: `auth`, `common`, `complaints`, etc
+- Usar `useTranslations("namespace")` nos componentes
+
+### 6. Database Access Patterns
+
+- **RLS (Row Level Security):** Supabase JS sempre (respeita contexto do usuário)
+- **Admin/Public:** Drizzle ORM (quando precisa bypass RLS)
+- **Migrations:** Apenas via Drizzle Kit (`pnpm db:generate`, `pnpm db:migrate`)
+
+### 7. Environment Variables
+
+- Validar todas as env vars em `src/lib/env.ts`
+- Usar `NEXT_PUBLIC_*` apenas para variáveis que precisam estar no bundle
+- Nunca expor `SUPABASE_SERVICE_ROLE_KEY` no client
+- `DATABASE_URL` ou `DRIZZLE_DATABASE_URL` aceitos (preferir `DATABASE_URL`)
+
+## Brand Guidelines
+
+### Cores
+
+- **Primary:** `#3BA5FF` (azul)
+- **Secondary:** `#2A1B55` (roxo escuro)
+- **Success:** Verde padrão do sistema
+- **Error:** Vermelho padrão do sistema
+- **Neutral:** Tons de cinza (#666, #999, etc)
+
+### Tipografia
+
+**Famílias de Fontes:**
+
+- **Headings (Títulos):** `font-heading` - Poppins (400, 500, 600, 700, 800)
+  - Usado para: H1, H2, H3, H4, H5, H6, labels, badges, buttons
+  - Características: Friendly, approachable, modern, amigável
+- **Body (Corpo):** `font-sans` - Inter (default)
+  - Usado para: Parágrafos, textos, descrições, inputs
+  - Características: Clean, modern, highly legible, acessível
+
+**Hierarquia de Tamanhos:**
+
+- H1: `text-3xl sm:text-4xl md:text-5xl lg:text-6xl` (Hero titles)
+- H2: `text-3xl md:text-4xl lg:text-5xl` (Section titles)
+- H3: `text-2xl md:text-3xl` (Subsection titles)
+- H4: `text-xl md:text-2xl` (Card titles)
+- Body Large: `text-lg md:text-xl` (Subtitles, emphasis)
+- Body: `text-base` (default paragraph)
+- Body Small: `text-sm` (labels, meta info)
+
+**Uso:**
+
+```tsx
+// Headings sempre usam font-heading
+<h1 className="font-heading">Título</h1>
+<h2 className="font-heading">Subtítulo</h2>
+
+// Textos usam font-sans (padrão, não precisa especificar)
+<p>Texto comum</p>
+```
+
+### Espaçamento
+
+- Seguir escala do Tailwind (4px base)
+- Padding padrão: `p-6` (24px) em cards
+- Gaps: `gap-4` (16px) entre elementos relacionados
+
+### Componentes UI
+
+- Usar shadcn/ui como base
+- Customizações mantendo acessibilidade
+- Loading states sempre visíveis
+- Error states com mensagens claras
+
+## Convenções de Nomenclatura
+
+### Arquivos
+
+- **Components:** PascalCase (`AppShell.tsx`)
+- **Utilities:** camelCase (`normalize.ts`, `masks.ts`)
+- **Types/DTOs:** camelCase com sufixo (`CreateComplaintInput`)
+- **Constants:** UPPER_SNAKE_CASE
+
+### Funções/Variáveis
+
+- **camelCase** para funções e variáveis
+- **PascalCase** para componentes React
+- **UPPER_CASE** para constantes
+
+### Database
+
+- **snake_case** para colunas/tabelas (PostgreSQL padrão)
+- **camelCase** no Drizzle schema (conversão automática)
+
+## Regras Específicas
+
+### 1. Supabase Auth
+
+- Usar `supabaseServer()` para Server Components/Actions
+- Usar `supabaseClient` para Client Components
+- Sempre verificar autenticação antes de operações sensíveis
+
+### 2. OAuth
+
+- Sincronizar perfil após login OAuth (ver `src/app/auth/callback/actions.ts`)
+- Preencher automaticamente avatar, nome, email do provider
+
+### 3. Email Templates
+
+- Templates em `email-templates/`
+- Versões HTML e TXT
+- Sincronizar com Supabase Storage via `pnpm email:sync`
+- Usar variáveis `{{variable}}` para substituição
+
+### 4. Migrations e Database
+
+**REGRA CRÍTICA: SEMPRE USAR DRIZZLE PARA MIGRATIONS**
+
+- **NUNCA criar migrations SQL manuais** - sempre usar Drizzle
+- Schema (`src/db/schema.ts`) é a **fonte de verdade única**
+- **Fluxo obrigatório:**
+  1. Editar `src/db/schema.ts` (adicionar/remover tabelas, campos, etc)
+  2. Rodar `pnpm db:generate` - gera migration automaticamente
+  3. Rodar `pnpm db:migrate` - aplica migration no banco
+- **NUNCA** editar migrations geradas manualmente
+- **NUNCA** criar arquivos SQL em `supabase/migrations/` (só existe se usar Supabase CLI separado)
+- Para dados iniciais/seeds: criar script separado em `scripts/` ou usar seed do Drizzle
+- Testar migrations em dev antes de aplicar em prod
+- Revisar SQL gerado (`src/db/migrations/*.sql`) antes de aplicar
+
+### 5. Error Handling
+
+- Try/catch em todas as Server Actions
+- Retornar erros apropriados (não expor detalhes internos)
+- Logging adequado (console.error em dev, serviço de log em prod)
+
+### 6. Performance
+
+- Usar Server Components por padrão
+- Client Components apenas quando necessário (interatividade)
+- Lazy loading para rotas pesadas
+- Otimizar queries do banco (índices quando necessário)
+
+### 7. Segurança
+
+- Validação sempre no server (Zod)
+- RLS ativado em todas as tabelas sensíveis
+- Service Role Key nunca no client
+- Sanitizar inputs de usuário
+
+### 8. Acessibilidade
+
+- Sempre usar labels em formulários
+- Foco visível em elementos interativos
+- ARIA attributes quando necessário
+- Contraste de cores adequado
+
+## Scripts Úteis
+
+```bash
+# Database
+pnpm db:generate      # Gera migration do schema
+pnpm db:migrate       # Aplica migrations
+pnpm db:studio        # Abre Drizzle Studio
+pnpm db:push          # Push direto (apenas dev)
+
+# Email
+pnpm email:sync       # Sincroniza templates com Supabase
+
+# Development
+pnpm dev              # Dev server com Turbopack
+pnpm build            # Build de produção
+pnpm lint             # Linter
+```
+
+## Checklist antes de Commits
+
+- [ ] TypeScript compila sem erros (`pnpm exec tsc --noEmit`)
+- [ ] Linter sem erros (`pnpm lint`)
+- [ ] Testado localmente
+- [ ] Variáveis de ambiente documentadas (se novas)
+- [ ] Migrations testadas (se houver mudanças no schema)
+- [ ] i18n atualizado (se novas strings)
+- [ ] Acessibilidade verificada
+
+## Notas Importantes
+
+- **Never commit:** `.env.local`, `node_modules`, `.next`
+- **Always commit:** `drizzle.config.ts`, `src/db/schema.ts`, migrations
+- Schema do Drizzle é a fonte de verdade - manter atualizado
+- Sempre revisar migrations antes de aplicar em produção
