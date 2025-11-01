@@ -1,66 +1,36 @@
 import { z } from "zod";
 
-export const CompanyKpiSchema = z
-  .object({
-    publicComplaints: z.number().int().nonnegative().optional(),
-    resolvedComplaints: z.number().int().nonnegative().optional(),
-    activeProjects: z.number().int().nonnegative().optional(),
-  })
-  .partial();
-
-export const CompanySchema = z
-  .object({
-    id: z.string().uuid(),
-    name: z.string(),
-    slug: z.string(),
-    description: z.string().nullable().optional(),
-    logo_url: z.string().url().nullable().optional(),
-    website_url: z.string().url().nullable().optional(),
-    cnpj: z.string().min(10).max(18).nullable().optional(),
-    phone: z.string().nullable().optional(),
-    email: z.string().email().nullable().optional(),
-    state: z.string().nullable().optional(),
-    city: z.string().nullable().optional(),
-    verified_at: z.string().datetime().nullable().optional(),
-    created_at: z.string().datetime(),
-    updated_at: z.string().datetime().nullable().optional(),
-    kpis: CompanyKpiSchema.optional(),
-  })
-  .passthrough();
-
-export const ListCompaniesDto = z
-  .object({
-    search: z.string().min(1).optional(),
-    verified: z
-      .enum(["true", "false"])
-      .transform((value) => value === "true")
-      .optional(),
-  })
-  .partial();
-
 export const CreateCompanyDto = z.object({
-  name: z.string().min(3),
-  slug: z.string().min(3),
-  description: z.string().max(400).optional(),
-  website_url: z.string().url().optional(),
-  cnpj: z.string().min(10).max(18).optional(),
-  email: z.string().email().optional(),
-  phone: z.string().optional(),
-  city: z.string().optional(),
-  state: z.string().optional(),
+  name: z.string().min(1, "Nome da empresa é obrigatório"),
+  cnpj: z.string().optional(),
+  corporate_name: z.string().optional(),
+  sector: z.string().optional(),
+  website: z.string().url().optional(),
+  contact_phone: z.string().optional(),
+  responsible_name: z.string().min(1, "Nome do responsável é obrigatório"),
+  responsible_title: z.string().optional(),
+  responsible_email: z.string().email("E-mail inválido"),
+  slug: z.string().optional(),
+  logo_url: z.string().url().optional(),
 });
 
-export const UpdateCompanyDto = CreateCompanyDto.partial().extend({
-  is_public: z.boolean().optional(),
+export const UpdateCompanyDto = z.object({
+  name: z.string().min(1).optional(),
+  cnpj: z.string().optional(),
+  corporate_name: z.string().optional(),
+  sector: z.string().optional(),
+  website: z.string().url().optional(),
+  contact_phone: z.string().optional(),
+  responsible_name: z.string().min(1).optional(),
+  responsible_title: z.string().optional(),
+  responsible_email: z.string().email().optional(),
+  logo_url: z.string().url().optional(),
 });
 
 export const VerifyCompanyDto = z.object({
   verified: z.boolean(),
-  notes: z.string().max(500).optional(),
 });
 
-export type Company = z.infer<typeof CompanySchema>;
-export type ListCompaniesInput = z.input<typeof ListCompaniesDto>;
-export type CreateCompanyInput = z.input<typeof CreateCompanyDto>;
-export type UpdateCompanyInput = z.input<typeof UpdateCompanyDto>;
-export type VerifyCompanyInput = z.input<typeof VerifyCompanyDto>;
+export type CreateCompanyInput = z.infer<typeof CreateCompanyDto>;
+export type UpdateCompanyInput = z.infer<typeof UpdateCompanyDto>;
+export type VerifyCompanyInput = z.infer<typeof VerifyCompanyDto>;

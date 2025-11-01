@@ -1,0 +1,19 @@
+Bem-vindo ao Reclame Mulher!
+
+Olá {{name}},
+
+Ficamos muito felizes em ter você conosco! Sua conta foi criada com sucesso.
+
+No Reclame Mulher, você pode:
+- Registrar reclamações sobre empresas
+- Acompanhar o status das suas reclamações
+- Comunicar-se diretamente com as empresas
+- Ver reclamações públicas de outras pessoas
+
+Acesse sua conta: {{appUrl}}/app
+
+Se você não criou esta conta, pode ignorar este e-mail com segurança.
+
+---
+© {{year}} Reclame Mulher. Todos os direitos reservados.
+Este é um e-mail automático, por favor não responda.

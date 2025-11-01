@@ -1,35 +1,21 @@
 import { z } from "zod";
 
-export const ProjectSchema = z
-  .object({
-    id: z.string().uuid(),
-    company_id: z.string().uuid(),
-    name: z.string(),
-    description: z.string().nullable().optional(),
-    status: z.enum(["PLANNED", "ACTIVE", "PAUSED", "ARCHIVED"]).default("PLANNED"),
-    created_at: z.string().datetime(),
-    updated_at: z.string().datetime().nullable().optional(),
-  })
-  .passthrough();
-
-export const ListProjectsDto = z
-  .object({
-    companyId: z.string().uuid(),
-  })
-  .partial();
-
 export const CreateProjectDto = z.object({
-  company_id: z.string().uuid(),
-  name: z.string().min(3),
-  description: z.string().max(500).optional(),
-  status: z.enum(["PLANNED", "ACTIVE", "PAUSED", "ARCHIVED"]).optional(),
+  name: z.string().min(1, "Nome do projeto é obrigatório"),
+  description: z.string().min(10, "Descrição deve ter pelo menos 10 caracteres"),
+  company_id: z.string().uuid("ID da empresa inválido"),
+  start_date: z.coerce.date().optional(),
+  end_date: z.coerce.date().optional(),
+  status: z.enum(["PLANNING", "IN_PROGRESS", "COMPLETED", "CANCELLED"]).default("PLANNING"),
 });
 
-export const UpdateProjectDto = CreateProjectDto.partial().extend({
-  id: z.string().uuid(),
+export const UpdateProjectDto = z.object({
+  name: z.string().min(1).optional(),
+  description: z.string().min(10).optional(),
+  start_date: z.coerce.date().optional(),
+  end_date: z.coerce.date().optional(),
+  status: z.enum(["PLANNING", "IN_PROGRESS", "COMPLETED", "CANCELLED"]).optional(),
 });
 
-export type Project = z.infer<typeof ProjectSchema>;
-export type ListProjectsInput = z.input<typeof ListProjectsDto>;
-export type CreateProjectInput = z.input<typeof CreateProjectDto>;
-export type UpdateProjectInput = z.input<typeof UpdateProjectDto>;
+export type CreateProjectInput = z.infer<typeof CreateProjectDto>;
+export type UpdateProjectInput = z.infer<typeof UpdateProjectDto>;

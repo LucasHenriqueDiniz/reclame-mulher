@@ -1,40 +1,27 @@
 import { z } from "zod";
 
-export const BlogPostSchema = z
-  .object({
-    id: z.string().uuid(),
-    slug: z.string(),
-    title: z.string(),
-    excerpt: z.string().nullable().optional(),
-    content: z.string(),
-    published_at: z.string().datetime().nullable().optional(),
-    created_at: z.string().datetime(),
-    updated_at: z.string().datetime().nullable().optional(),
-    author_id: z.string().uuid().nullable().optional(),
-  })
-  .passthrough();
-
-export const ListBlogPostsDto = z
-  .object({
-    search: z.string().min(1).optional(),
-    page: z.coerce.number().int().min(1).default(1),
-    limit: z.coerce.number().int().min(1).max(100).default(10),
-  })
-  .partial();
-
-export const CreateBlogPostDto = z.object({
-  slug: z.string().min(3),
-  title: z.string().min(3),
-  excerpt: z.string().max(300).optional(),
-  content: z.string().min(10),
+export const CreatePostDto = z.object({
+  title: z.string().min(3, "Título deve ter pelo menos 3 caracteres"),
+  content: z.string().min(10, "Conteúdo deve ter pelo menos 10 caracteres"),
+  excerpt: z.string().optional(),
+  slug: z.string().min(1, "Slug é obrigatório"),
+  cover_url: z.string().url().optional().or(z.literal("")),
+  status: z.enum(["DRAFT", "PUBLISHED"]).default("DRAFT"),
   published_at: z.coerce.date().optional(),
+  author_id: z.string().uuid("ID do autor inválido").optional(),
+  tag_names: z.array(z.string()).optional(),
 });
 
-export const UpdateBlogPostDto = CreateBlogPostDto.partial().extend({
-  id: z.string().uuid(),
+export const UpdatePostDto = z.object({
+  title: z.string().min(3).optional(),
+  content: z.string().min(10).optional(),
+  excerpt: z.string().optional(),
+  slug: z.string().min(1).optional(),
+  cover_url: z.string().url().optional().or(z.literal("")),
+  status: z.enum(["DRAFT", "PUBLISHED"]).optional(),
+  published_at: z.coerce.date().optional(),
+  tag_names: z.array(z.string()).optional(),
 });
 
-export type BlogPost = z.infer<typeof BlogPostSchema>;
-export type ListBlogPostsInput = z.input<typeof ListBlogPostsDto>;
-export type CreateBlogPostInput = z.input<typeof CreateBlogPostDto>;
-export type UpdateBlogPostInput = z.input<typeof UpdateBlogPostDto>;
+export type CreatePostInput = z.infer<typeof CreatePostDto>;
+export type UpdatePostInput = z.infer<typeof UpdatePostDto>;

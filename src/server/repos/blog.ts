@@ -1,131 +1,228 @@
 import { supabaseServer } from "@/lib/supabase/server";
-import {
-  BlogPostSchema,
-  CreateBlogPostDto,
-  ListBlogPostsDto,
-  UpdateBlogPostDto,
-  type BlogPost,
-  type CreateBlogPostInput,
-  type ListBlogPostsInput,
-  type UpdateBlogPostInput,
-} from "@/server/dto/blog";
+import { CreatePostInput, UpdatePostInput } from "../dto/blog";
 
-const blogSelect = `
-  id,
-  slug,
-  title,
-  excerpt,
-  content,
-  published_at,
-  created_at,
-  updated_at,
-  author_id
-`;
+export class BlogRepo {
+  static async create(data: CreatePostInput) {
+    const supabase = await supabaseServer();
 
-function toDateOrNull(value?: Date | null) {
-  return value ? value.toISOString() : null;
-}
+    // Extrair tag_names antes de inserir
+    const { tag_names, ...postData } = data;
 
-export async function listBlogPosts(
-  filters: ListBlogPostsInput = {},
-  options: { onlyPublished?: boolean } = {}
-): Promise<BlogPost[]> {
-  const parsed = ListBlogPostsDto.parse(filters);
-  const client = await supabaseServer();
+    const { data: post, error } = await supabase
+      .from("blog_posts")
+      .insert(postData)
+      .select()
+      .single();
 
-  const page = parsed.page ?? 1;
-  const limit = parsed.limit ?? 10;
-  const from = (page - 1) * limit;
-  const to = from + limit - 1;
+    if (error) throw error;
 
-  let query = client
-    .from("blog_posts")
-    .select(blogSelect)
-    .order("published_at", { ascending: false, nullsFirst: false })
-    .range(from, to);
+    // Vincular tags se fornecidas
+    if (tag_names && tag_names.length > 0 && post?.id) {
+      await BlogRepo.linkTags(post.id, tag_names);
+    }
 
-  if (options.onlyPublished) {
-    query = query.not("published_at", "is", null);
+    return post;
   }
 
-  if (parsed.search) {
-    query = query.or(`title.ilike.%${parsed.search}%,content.ilike.%${parsed.search}%`);
+  static async linkTags(postId: string, tagNames: string[]) {
+    const supabase = await supabaseServer();
+
+    const { error } = await supabase.rpc("link_post_tags_by_names", {
+      p_post_id: postId,
+      p_names: tagNames,
+    });
+
+    if (error) throw error;
   }
 
-  const { data, error } = await query;
+  static async findBySlug(slug: string, includeTags = false) {
+    const supabase = await supabaseServer();
 
-  if (error) {
-    throw error;
+    const query = supabase
+      .from("blog_posts")
+      .select(includeTags ? "*, blog_post_tags(tag:blog_tags(*))" : "*")
+      .eq("slug", slug)
+      .eq("status", "PUBLISHED")
+      .not("published_at", "is", null)
+      .single();
+
+    const { data, error } = await query;
+
+    if (error) throw error;
+    return data;
   }
 
-  return BlogPostSchema.array().parse(data ?? []);
-}
+  static async findPublic(
+    search?: string,
+    page = 1,
+    limit = 10,
+    includeTags = false
+  ) {
+    const supabase = await supabaseServer();
 
-export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
-  const client = await supabaseServer();
-  const { data, error } = await client
-    .from("blog_posts")
-    .select(blogSelect)
-    .eq("slug", slug)
-    .maybeSingle();
+    let query = supabase
+      .from("blog_posts")
+      .select(
+        includeTags ? "*, blog_post_tags(tag:blog_tags(*))" : "*"
+      )
+      .eq("status", "PUBLISHED")
+      .not("published_at", "is", null)
+      .order("published_at", { ascending: false });
 
-  if (error) {
-    throw error;
+    if (search) {
+      query = query.or(`title.ilike.%${search}%,content.ilike.%${search}%`);
+    }
+
+    const { data, error, count } = await query.range(
+      (page - 1) * limit,
+      page * limit - 1
+    );
+
+    if (error) throw error;
+    return { posts: data, total: count };
   }
 
-  return data ? BlogPostSchema.parse(data) : null;
-}
+  static async findByTagSlug(tagSlug: string, page = 1, limit = 20) {
+    const supabase = await supabaseServer();
 
-export async function createBlogPost(
-  authorId: string,
-  input: CreateBlogPostInput
-): Promise<BlogPost> {
-  const payload = CreateBlogPostDto.parse(input);
-  const client = await supabaseServer();
+    // Buscar tag pelo slug
+    const { data: tag, error: tagError } = await supabase
+      .from("blog_tags")
+      .select("id")
+      .eq("slug", tagSlug)
+      .single();
 
-  const insertPayload = {
-    ...payload,
-    published_at: toDateOrNull(payload.published_at ?? null),
-    author_id: authorId,
-  };
+    if (tagError || !tag) {
+      return { posts: [], total: 0 };
+    }
 
-  const { data, error } = await client
-    .from("blog_posts")
-    .insert(insertPayload)
-    .select(blogSelect)
-    .single();
+    // Buscar posts vinculados
+    const { data: postTags, error: postTagsError } = await supabase
+      .from("blog_post_tags")
+      .select("post_id")
+      .eq("tag_id", tag.id);
 
-  if (error) {
-    throw error;
+    if (postTagsError || !postTags || postTags.length === 0) {
+      return { posts: [], total: 0 };
+    }
+
+    const postIds = postTags.map((pt) => pt.post_id);
+
+    // Buscar posts
+    const { data, error, count } = await supabase
+      .from("blog_posts")
+      .select("*, blog_post_tags(tag:blog_tags(*))")
+      .in("id", postIds)
+      .eq("status", "PUBLISHED")
+      .not("published_at", "is", null)
+      .order("published_at", { ascending: false })
+      .range((page - 1) * limit, page * limit - 1);
+
+    if (error) throw error;
+    return { posts: data || [], total: count || 0 };
   }
 
-  return BlogPostSchema.parse(data);
-}
+  static async update(id: string, data: UpdatePostInput) {
+    const supabase = await supabaseServer();
 
-export async function updateBlogPost(
-  id: string,
-  input: UpdateBlogPostInput
-): Promise<BlogPost> {
-  const payload = UpdateBlogPostDto.parse({ ...input, id });
-  const { id: _id, published_at, ...rest } = payload;
-  void _id;
-  const client = await supabaseServer();
+    // Extrair tag_names antes de atualizar
+    const { tag_names, ...postData } = data;
 
-  const updates = {
-    ...rest,
-    published_at: toDateOrNull(published_at ?? null),
-  };
+    const { data: post, error } = await supabase
+      .from("blog_posts")
+      .update(postData)
+      .eq("id", id)
+      .select()
+      .single();
 
-  const { data, error } = await client
-    .from("blog_posts")
-    .update(updates)
-    .eq("id", id)
-    .select(blogSelect)
-    .single();
+    if (error) throw error;
 
-  if (error) {
-    throw error;
+    // Atualizar tags se fornecidas (undefined significa não alterar, [] significa remover todas)
+    if (tag_names !== undefined && post?.id) {
+      await BlogRepo.linkTags(post.id, tag_names);
+    }
+
+    // Refresh materialized view se mudou status para PUBLISHED
+    if (data.status === "PUBLISHED" || post?.status === "PUBLISHED") {
+      await supabase.rpc("refresh_tag_counts");
+    }
+
+    return post;
   }
 
-  return BlogPostSchema.parse(data);
+  static async delete(id: string) {
+    const supabase = await supabaseServer();
+
+    const { error } = await supabase
+      .from("blog_posts")
+      .delete()
+      .eq("id", id);
+
+    if (error) throw error;
+  }
+
+  static async findAll(page = 1, limit = 10, includeTags = false) {
+    const supabase = await supabaseServer();
+
+    const { data, error, count } = await supabase
+      .from("blog_posts")
+      .select(includeTags ? "*, blog_post_tags(tag:blog_tags(*))" : "*")
+      .order("created_at", { ascending: false })
+      .range((page - 1) * limit, page * limit - 1);
+
+    if (error) throw error;
+    return { posts: data, total: count };
+  }
+
+  // ====== TAG METHODS ======
+
+  static async getAllTags(publicOnly = false) {
+    const supabase = await supabaseServer();
+
+    if (publicOnly) {
+      // Usar materialized view para performance
+      const { data, error } = await supabase
+        .from("mv_tag_counts_public")
+        .select("*")
+        .order("count", { ascending: false });
+
+      if (error) throw error;
+      return data;
+    }
+
+    // Para admin/autocomplete: todas as tags
+    const { data, error } = await supabase
+      .from("blog_tags")
+      .select("*")
+      .order("name", { ascending: true });
+
+    if (error) throw error;
+    return data;
+  }
+
+  static async searchTags(query: string, limit = 50) {
+    const supabase = await supabaseServer();
+
+    const { data, error } = await supabase
+      .from("blog_tags")
+      .select("*")
+      .ilike("name", `%${query}%`)
+      .order("name", { ascending: true })
+      .limit(limit);
+
+    if (error) throw error;
+    return data;
+  }
+
+  static async getPostTags(postId: string) {
+    const supabase = await supabaseServer();
+
+    const { data, error } = await supabase
+      .from("blog_post_tags")
+      .select("tag:blog_tags(*)")
+      .eq("post_id", postId);
+
+    if (error) throw error;
+    return data?.map((item: { tag: unknown }) => item.tag) || [];
+  }
 }

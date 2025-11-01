@@ -2,7 +2,6 @@ import type { Config } from "tailwindcss";
 import animatePlugin from "tailwindcss-animate";
 
 const config: Config = {
-  darkMode: ["class"],
   content: [
     "./src/app/**/*.{ts,tsx}",
     "./src/components/**/*.{ts,tsx}",
@@ -10,6 +9,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        heading: ["var(--font-poppins)", "system-ui", "sans-serif"],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -55,6 +58,26 @@ const config: Config = {
           3: "hsl(var(--chart-3))",
           4: "hsl(var(--chart-4))",
           5: "hsl(var(--chart-5))",
+        },
+        // Brand colors
+        brand: {
+          blue: "var(--brand-blue)",
+          "blue-light": "var(--brand-blue-light)",
+          purple: "var(--brand-purple)",
+          "purple-dark": "var(--brand-purple-dark)",
+        },
+        // Custom colors for authentication flow
+        purple: {
+          primary: "#4C2D8F",
+          dark: "#3F237E",
+          darker: "#280F5E",
+          light: "#6D54C7",
+        },
+        orange: {
+          cta: "#FF6A2A",
+        },
+        blue: {
+          stepper: "#3BA5FF",
         },
       },
       keyframes: {

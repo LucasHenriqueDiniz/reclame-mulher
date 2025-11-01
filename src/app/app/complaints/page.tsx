@@ -1,5 +1,5 @@
 import { supabaseServer } from "@/lib/supabase/server";
-import { listComplaintsForUser } from "@/server/repos/complaints";
+import { ComplaintsRepo } from "@/server/repos/complaints";
 
 import { ComplaintsContent } from "./_components/complaints-content";
 
@@ -13,7 +13,7 @@ export default async function ComplaintsPage() {
     return null;
   }
 
-  const complaints = await listComplaintsForUser(user.id);
+  const complaints = await ComplaintsRepo.findByUser(user.id);
 
   return <ComplaintsContent complaints={complaints} />;
 }

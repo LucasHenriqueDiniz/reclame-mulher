@@ -1,7 +1,7 @@
 "use server";
 
 import { supabaseServer } from "@/lib/supabase/server";
-import { createComplaint as createComplaintRecord } from "@/server/repos/complaints";
+import { ComplaintsRepo } from "@/server/repos/complaints";
 import type { CreateComplaintInput } from "@/server/dto/complaints";
 
 export async function createComplaint(input: CreateComplaintInput) {
@@ -14,5 +14,5 @@ export async function createComplaint(input: CreateComplaintInput) {
     throw new Error("unauthorized");
   }
 
-  return createComplaintRecord(user.id, input);
+  return ComplaintsRepo.create(input, user.id);
 }

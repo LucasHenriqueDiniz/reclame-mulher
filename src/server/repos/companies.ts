@@ -1,142 +1,113 @@
 import { supabaseServer } from "@/lib/supabase/server";
-import {
-  CompanySchema,
-  CreateCompanyDto,
-  ListCompaniesDto,
-  UpdateCompanyDto,
-  VerifyCompanyDto,
-  type Company,
-  type CreateCompanyInput,
-  type ListCompaniesInput,
-  type UpdateCompanyInput,
-  type VerifyCompanyInput,
-} from "@/server/dto/companies";
+import { CreateCompanyInput, UpdateCompanyInput } from "../dto/companies";
 
-const baseCompanySelect = `
-  id,
-  name,
-  slug,
-  description,
-  logo_url,
-  website_url,
-  cnpj,
-  phone,
-  email,
-  state,
-  city,
-  verified_at,
-  created_at,
-  updated_at
-`;
+export class CompaniesRepo {
+  static async create(data: CreateCompanyInput) {
+    const supabase = await supabaseServer();
 
-export async function listCompanies(params: ListCompaniesInput = {}): Promise<Company[]> {
-  const filters = ListCompaniesDto.parse(params);
-  const client = await supabaseServer();
+    const { data: company, error } = await supabase
+      .rpc("create_company_self", {
+        p_company_name: data.name,
+        p_cnpj: data.cnpj ?? null,
+        p_contact_name: data.responsible_name,
+        p_phone: data.contact_phone ?? null,
+        p_email: data.responsible_email,
+        p_sector: data.sector ?? null,
+        p_website: data.website ?? null,
+        p_slug: data.slug ?? null,
+      });
 
-  let query = client.from("companies").select(baseCompanySelect).order("name", { ascending: true });
-
-  if (filters.search) {
-    query = query.ilike("name", `%${filters.search}%`);
+    if (error) throw error;
+    return company;
   }
 
-  if (typeof filters.verified === "boolean") {
-    query = filters.verified
-      ? query.not("verified_at", "is", null)
-      : query.is("verified_at", null);
+  static async findById(id: string) {
+    const supabase = await supabaseServer();
+
+    const { data, error } = await supabase
+      .from("companies")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+    return data;
   }
 
-  const { data, error } = await query;
+  static async findBySlug(slug: string) {
+    const supabase = await supabaseServer();
 
-  if (error) {
-    throw error;
+    const { data, error } = await supabase
+      .from("companies")
+      .select("*")
+      .eq("slug", slug)
+      .single();
+
+    if (error) throw error;
+    return data;
   }
 
-  return CompanySchema.array().parse(data ?? []);
-}
+  static async findPublic(search?: string, verified?: boolean) {
+    const supabase = await supabaseServer();
 
-export async function getCompanyById(id: string): Promise<Company | null> {
-  const client = await supabaseServer();
-  const { data, error } = await client
-    .from("companies")
-    .select(baseCompanySelect)
-    .eq("id", id)
-    .maybeSingle();
+    let query = supabase
+      .from("companies")
+      .select("*")
+      .eq("verified", verified ?? true);
 
-  if (error) {
-    throw error;
+    if (search) {
+      query = query.or(`name.ilike.%${search}%,corporate_name.ilike.%${search}%`);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    return data;
   }
 
-  return data ? CompanySchema.parse(data) : null;
-}
+  static async update(id: string, data: UpdateCompanyInput) {
+    const supabase = await supabaseServer();
 
-export async function getCompanyBySlug(slug: string): Promise<Company | null> {
-  const client = await supabaseServer();
-  const { data, error } = await client
-    .from("companies")
-    .select(baseCompanySelect)
-    .eq("slug", slug)
-    .maybeSingle();
+    const { data: company, error } = await supabase
+      .from("companies")
+      .update(data)
+      .eq("id", id)
+      .select()
+      .single();
 
-  if (error) {
-    throw error;
+    if (error) throw error;
+    return company;
   }
 
-  return data ? CompanySchema.parse(data) : null;
-}
+  static async verify(id: string, verified: boolean) {
+    const supabase = await supabaseServer();
 
-export async function createCompany(input: CreateCompanyInput): Promise<Company> {
-  const payload = CreateCompanyDto.parse(input);
-  const client = await supabaseServer();
+    const updateData = verified
+      ? { verified_at: new Date().toISOString() }
+      : { verified_at: null };
 
-  const { data, error } = await client
-    .from("companies")
-    .insert({ ...payload })
-    .select(baseCompanySelect)
-    .single();
+    const { data, error } = await supabase
+      .from("companies")
+      .update(updateData)
+      .eq("id", id)
+      .select()
+      .single();
 
-  if (error) {
-    throw error;
+    if (error) throw error;
+    return data;
   }
 
-  return CompanySchema.parse(data);
-}
+  static async findByUser(userId: string) {
+    const supabase = await supabaseServer();
 
-export async function updateCompany(id: string, input: UpdateCompanyInput): Promise<Company> {
-  const payload = UpdateCompanyDto.parse(input);
-  const client = await supabaseServer();
+    const { data, error } = await supabase
+      .from("company_users")
+      .select(`
+        role,
+        companies (*)
+      `)
+      .eq("user_id", userId);
 
-  const { data, error } = await client
-    .from("companies")
-    .update({ ...payload })
-    .eq("id", id)
-    .select(baseCompanySelect)
-    .single();
-
-  if (error) {
-    throw error;
+    if (error) throw error;
+    return data;
   }
-
-  return CompanySchema.parse(data);
-}
-
-export async function verifyCompany(id: string, input: VerifyCompanyInput): Promise<Company> {
-  const payload = VerifyCompanyDto.parse(input);
-  const client = await supabaseServer();
-
-  const updates: Record<string, unknown> = {
-    verified_at: payload.verified ? new Date().toISOString() : null,
-  };
-
-  const { data, error } = await client
-    .from("companies")
-    .update(updates)
-    .eq("id", id)
-    .select(baseCompanySelect)
-    .single();
-
-  if (error) {
-    throw error;
-  }
-
-  return CompanySchema.parse(data);
 }

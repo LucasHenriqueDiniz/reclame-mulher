@@ -1,55 +1,35 @@
 import { supabaseServer } from "@/lib/supabase/server";
-import {
-  AuditLogSchema,
-  ListAuditLogsDto,
-  type AuditLog,
-  type ListAuditLogsInput,
-} from "@/server/dto/audit";
+import { AuditFiltersInput } from "../dto/audit";
 
-const auditSelect = `
-  id,
-  entity,
-  action,
-  actor_id,
-  metadata,
-  created_at,
-  actor:actor_id (
-    id,
-    name,
-    role
-  )
-`;
+export class AuditRepo {
+  static async find(filters: AuditFiltersInput) {
+    const supabase = await supabaseServer();
 
-export async function listAuditLogs(filters: ListAuditLogsInput = {}): Promise<AuditLog[]> {
-  const parsed = ListAuditLogsDto.parse(filters);
-  const client = await supabaseServer();
+    let query = supabase
+      .from("audit_logs")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-  let query = client
-    .from("audit_logs")
-    .select(auditSelect)
-    .order("created_at", { ascending: false });
+    if (filters.entity) {
+      query = query.eq("entity_type", filters.entity);
+    }
 
-  if (parsed.entity) {
-    query = query.eq("entity", parsed.entity);
+    if (filters.actor) {
+      query = query.eq("actor_id", filters.actor);
+    }
+
+    if (filters.from) {
+      query = query.gte("created_at", filters.from.toISOString());
+    }
+
+    if (filters.to) {
+      query = query.lte("created_at", filters.to.toISOString());
+    }
+
+    const { data, error, count } = await query
+      .range((filters.page - 1) * filters.limit, filters.page * filters.limit - 1);
+
+    if (error) throw error;
+    return { logs: data, total: count };
   }
-
-  if (parsed.actor) {
-    query = query.eq("actor_id", parsed.actor);
-  }
-
-  if (parsed.from) {
-    query = query.gte("created_at", parsed.from.toISOString());
-  }
-
-  if (parsed.to) {
-    query = query.lte("created_at", parsed.to.toISOString());
-  }
-
-  const { data, error } = await query;
-
-  if (error) {
-    throw error;
-  }
-
-  return AuditLogSchema.array().parse(data ?? []);
 }

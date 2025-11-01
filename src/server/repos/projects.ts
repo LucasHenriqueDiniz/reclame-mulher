@@ -1,86 +1,67 @@
 import { supabaseServer } from "@/lib/supabase/server";
-import {
-  CreateProjectDto,
-  ListProjectsDto,
-  ProjectSchema,
-  UpdateProjectDto,
-  type CreateProjectInput,
-  type ListProjectsInput,
-  type Project,
-  type UpdateProjectInput,
-} from "@/server/dto/projects";
+import { CreateProjectInput, UpdateProjectInput } from "../dto/projects";
 
-const projectSelect = `
-  id,
-  company_id,
-  name,
-  description,
-  status,
-  created_at,
-  updated_at
-`;
+export class ProjectsRepo {
+  static async create(data: CreateProjectInput) {
+    const supabase = await supabaseServer();
 
-export async function listProjects(params: ListProjectsInput = {}): Promise<Project[]> {
-  const filters = ListProjectsDto.parse(params);
-  const client = await supabaseServer();
+    const { data: project, error } = await supabase
+      .from("projects")
+      .insert(data)
+      .select()
+      .single();
 
-  let query = client.from("projects").select(projectSelect).order("created_at", { ascending: false });
-
-  if (filters.companyId) {
-    query = query.eq("company_id", filters.companyId);
+    if (error) throw error;
+    return project;
   }
 
-  const { data, error } = await query;
+  static async findById(id: string) {
+    const supabase = await supabaseServer();
 
-  if (error) {
-    throw error;
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+    return data;
   }
 
-  return ProjectSchema.array().parse(data ?? []);
-}
+  static async findByCompany(companyId: string) {
+    const supabase = await supabaseServer();
 
-export async function createProject(input: CreateProjectInput): Promise<Project> {
-  const payload = CreateProjectDto.parse(input);
-  const client = await supabaseServer();
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .eq("company_id", companyId);
 
-  const { data, error } = await client
-    .from("projects")
-    .insert(payload)
-    .select(projectSelect)
-    .single();
-
-  if (error) {
-    throw error;
+    if (error) throw error;
+    return data;
   }
 
-  return ProjectSchema.parse(data);
-}
+  static async update(id: string, data: UpdateProjectInput) {
+    const supabase = await supabaseServer();
 
-export async function updateProject(id: string, input: UpdateProjectInput): Promise<Project> {
-  const payload = UpdateProjectDto.parse({ ...input, id });
-  const { id: _id, ...updates } = payload;
-  void _id;
-  const client = await supabaseServer();
+    const { data: project, error } = await supabase
+      .from("projects")
+      .update(data)
+      .eq("id", id)
+      .select()
+      .single();
 
-  const { data, error } = await client
-    .from("projects")
-    .update(updates)
-    .eq("id", id)
-    .select(projectSelect)
-    .single();
-
-  if (error) {
-    throw error;
+    if (error) throw error;
+    return project;
   }
 
-  return ProjectSchema.parse(data);
-}
+  static async delete(id: string) {
+    const supabase = await supabaseServer();
 
-export async function deleteProject(id: string): Promise<void> {
-  const client = await supabaseServer();
-  const { error } = await client.from("projects").delete().eq("id", id);
+    const { error } = await supabase
+      .from("projects")
+      .delete()
+      .eq("id", id);
 
-  if (error) {
-    throw error;
+    if (error) throw error;
   }
 }
