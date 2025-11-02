@@ -21,6 +21,21 @@ export const complaintStatus = pgEnum("complaint_status", [
 
 export const senderType = pgEnum("sender_type", ["USER", "COMPANY", "ADMIN"]);
 
+export const reportType = pgEnum("report_type", [
+  "BUG",
+  "FEATURE_REQUEST",
+  "FEEDBACK",
+  "ABUSE",
+  "OTHER",
+]);
+
+export const reportStatus = pgEnum("report_status", [
+  "PENDING",
+  "REVIEWING",
+  "RESOLVED",
+  "REJECTED",
+]);
+
 export const projectStatus = pgEnum("project_status", [
   "PLANNING",
   "IN_PROGRESS",
@@ -50,7 +65,7 @@ export const profiles = pgTable("profiles", {
   userId: uuid("user_id").primaryKey(), // FK auth.users (não modelamos aqui)
   name: text("name"),
   role: appRole("role").notNull().default("USER"),
-  cpf: text("cpf"),
+  cpf: text("cpf").unique(), // CPF único e obrigatório para pessoas (NULL apenas para empresas)
   phone: text("phone"),
   address: text("address"),
   city: text("city"),
@@ -66,7 +81,7 @@ export const profiles = pgTable("profiles", {
   // Campos adicionais para OAuth (Google, etc)
   provider: text("provider"), // 'email', 'google', etc
   providerId: text("provider_id"), // ID do provider (se aplicável)
-  email: text("email"), // cache do email (já está em auth.users, mas útil aqui)
+  email: text("email").unique(), // cache do email (já está em auth.users, mas útil aqui)
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -76,7 +91,7 @@ export const profiles = pgTable("profiles", {
 export const companies = pgTable("companies", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
-  cnpj: text("cnpj"),
+  cnpj: text("cnpj").notNull().unique(), // CNPJ obrigatório e único para empresas
   corporateName: text("corporate_name"),
   sector: text("sector"),
   website: text("website"),
@@ -210,6 +225,34 @@ export const blogPostTags = pgTable(
     pk: primaryKey({ columns: [t.postId, t.tagId] }),
   })
 );
+
+export const reports = pgTable("reports", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  reporterId: uuid("reporter_id")
+    .notNull()
+    .references(() => profiles.userId, { onDelete: "restrict" }),
+  type: reportType("type").notNull(),
+  status: reportStatus("status").notNull().default("PENDING"),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  // Referência opcional - pode ser relacionado a uma reclamação, empresa, etc
+  relatedComplaintId: uuid("related_complaint_id").references(() => complaints.id, {
+    onDelete: "set null",
+  }),
+  relatedCompanyId: uuid("related_company_id").references(() => companies.id, {
+    onDelete: "set null",
+  }),
+  // Resposta/observações do admin
+  adminNotes: text("admin_notes"),
+  resolvedAt: timestamp("resolved_at", { withTimezone: true }),
+  resolvedBy: uuid("resolved_by").references(() => profiles.userId, {
+    onDelete: "set null",
+  }),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
+});
 
 // Relations
 export const blogTagsRelations = relations(blogTags, ({ many }) => ({

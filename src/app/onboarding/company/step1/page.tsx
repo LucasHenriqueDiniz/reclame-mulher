@@ -47,6 +47,22 @@ export default function CompanyStep1() {
     setLoading(true);
     setError(null);
     try {
+      // Normaliza CNPJ para validação
+      const cnpjNormalized = data.cnpj.replace(/\D/g, "");
+
+      // Verifica se CNPJ já existe
+      const { data: existingCompany } = await supabaseClient
+        .from("companies")
+        .select("id")
+        .eq("cnpj", cnpjNormalized)
+        .maybeSingle();
+
+      if (existingCompany) {
+        setError("Este CNPJ já está cadastrado no sistema. Por favor, verifique os dados ou entre em contato com o suporte.");
+        setLoading(false);
+        return;
+      }
+
       const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
         email: data.email,
         password: data.password,
@@ -61,7 +77,14 @@ export default function CompanyStep1() {
       });
       
       if (signUpError) {
-        setError(signUpError.message);
+        // Mensagens de erro mais amigáveis
+        if (signUpError.message.includes("already registered") || signUpError.message.includes("User already registered")) {
+          setError("Este email já está cadastrado. Por favor, faça login ou use outro email.");
+        } else if (signUpError.message.includes("email")) {
+          setError("Erro ao processar o email. Por favor, verifique e tente novamente.");
+        } else {
+          setError(signUpError.message || "Erro ao criar conta. Tente novamente.");
+        }
         setLoading(false);
         return;
       }

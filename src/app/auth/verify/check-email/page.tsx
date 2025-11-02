@@ -96,11 +96,32 @@ function CheckEmailContent() {
 
             <div className="pt-4 border-t border-neutral-200">
               <Button
-                onClick={() => router.push("/login")}
+                onClick={async () => {
+                  // Verifica se o email foi confirmado
+                  const { data: { user }, error } = await supabaseClient.auth.getUser();
+                  
+                  if (error || !user) {
+                    router.push("/login");
+                    return;
+                  }
+
+                  if (user.email_confirmed_at) {
+                    // Email confirmado - busca metadata para saber qual onboarding continuar
+                    const userType = user.user_metadata?.user_type;
+                    if (userType === "company") {
+                      router.push("/onboarding/company/step2");
+                    } else {
+                      router.push("/onboarding/person/step2");
+                    }
+                  } else {
+                    // Email ainda não confirmado - vai para login
+                    router.push("/login");
+                  }
+                }}
                 variant="ghost"
                 className="w-full"
               >
-                Já confirmou? Fazer login
+                Já verificou? Avançar
               </Button>
             </div>
           </div>

@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const CreateCompanyDto = z.object({
   name: z.string().min(1, "Nome da empresa é obrigatório"),
-  cnpj: z.string().optional(),
+  cnpj: z.string().min(14, "CNPJ é obrigatório e deve ter 14 dígitos"),
   corporate_name: z.string().optional(),
   sector: z.string().optional(),
   website: z.string().url().optional(),

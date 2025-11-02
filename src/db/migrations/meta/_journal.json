@@ -36,6 +36,20 @@
       "when": 1762033767511,
       "tag": "0004_light_famine",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1762040272973,
+      "tag": "0005_powerful_umar",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1762040972961,
+      "tag": "0006_bumpy_maginty",
+      "breakpoints": true
     }
   ]
 }
