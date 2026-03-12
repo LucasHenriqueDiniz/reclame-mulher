@@ -1,22 +1,24 @@
-import { supabaseServer } from "@/lib/supabase/server";
+import "server-only";
+import { db } from "@/db/client";
+import { blogPosts, blogTags, blogPostTags } from "@/db/schema";
+import { eq, ilike, or, isNotNull, desc, inArray } from "drizzle-orm";
 import { CreatePostInput, UpdatePostInput } from "../dto/blog";
 
 export class BlogRepo {
   static async create(data: CreatePostInput) {
-    const supabase = await supabaseServer();
-
-    // Extrair tag_names antes de inserir
     const { tag_names, ...postData } = data;
 
-    const { data: post, error } = await supabase
-      .from("blog_posts")
-      .insert(postData)
-      .select()
-      .single();
+    const [post] = await db.insert(blogPosts).values({
+      title: postData.title,
+      slug: postData.slug,
+      content: postData.content,
+      contentMd: postData.content_md,
+      excerpt: postData.excerpt,
+      coverUrl: postData.cover_url,
+      status: postData.status ?? "DRAFT",
+      publishedAt: postData.published_at ? new Date(postData.published_at) : null,
+    }).returning();
 
-    if (error) throw error;
-
-    // Vincular tags se fornecidas
     if (tag_names && tag_names.length > 0 && post?.id) {
       await BlogRepo.linkTags(post.id, tag_names);
     }
@@ -25,204 +27,144 @@ export class BlogRepo {
   }
 
   static async linkTags(postId: string, tagNames: string[]) {
-    const supabase = await supabaseServer();
-
-    const { error } = await supabase.rpc("link_post_tags_by_names", {
-      p_post_id: postId,
-      p_names: tagNames,
-    });
-
-    if (error) throw error;
-  }
-
-  static async findBySlug(slug: string, includeTags = false) {
-    const supabase = await supabaseServer();
-
-    const query = supabase
-      .from("blog_posts")
-      .select(includeTags ? "*, blog_post_tags(tag:blog_tags(*))" : "*")
-      .eq("slug", slug)
-      .eq("status", "PUBLISHED")
-      .not("published_at", "is", null)
-      .single();
-
-    const { data, error } = await query;
-
-    if (error) throw error;
-    return data;
-  }
-
-  static async findPublic(
-    search?: string,
-    page = 1,
-    limit = 10,
-    includeTags = false
-  ) {
-    const supabase = await supabaseServer();
-
-    let query = supabase
-      .from("blog_posts")
-      .select(
-        includeTags ? "*, blog_post_tags(tag:blog_tags(*))" : "*"
-      )
-      .eq("status", "PUBLISHED")
-      .not("published_at", "is", null)
-      .order("published_at", { ascending: false });
-
-    if (search) {
-      query = query.or(`title.ilike.%${search}%,content.ilike.%${search}%`);
+    if (tagNames.length === 0) {
+      await db.delete(blogPostTags).where(eq(blogPostTags.postId, postId));
+      return;
     }
 
-    const { data, error, count } = await query.range(
-      (page - 1) * limit,
-      page * limit - 1
-    );
+    // Upsert tags and get their IDs
+    const tagIds: string[] = [];
+    for (const name of tagNames) {
+      const slug = name.toLowerCase().replace(/\s+/g, "-");
+      const [tag] = await db
+        .insert(blogTags)
+        .values({ name, slug })
+        .onConflictDoUpdate({ target: blogTags.name, set: { name } })
+        .returning({ id: blogTags.id });
+      tagIds.push(tag.id);
+    }
 
-    if (error) throw error;
-    return { posts: data, total: count };
+    // Replace all tag links
+    await db.delete(blogPostTags).where(eq(blogPostTags.postId, postId));
+    if (tagIds.length > 0) {
+      await db.insert(blogPostTags).values(tagIds.map((tagId) => ({ postId, tagId })));
+    }
+  }
+
+  static async findBySlug(slug: string, _includeTags = false) {
+    const [post] = await db
+      .select()
+      .from(blogPosts)
+      .where(eq(blogPosts.slug, slug))
+      .limit(1);
+
+    if (!post || post.status !== "PUBLISHED" || !post.publishedAt) throw new Error("Post not found");
+    return post;
+  }
+
+  static async findPublic(search?: string, page = 1, limit = 10, _includeTags = false) {
+    let query = db
+      .select()
+      .from(blogPosts)
+      .where(eq(blogPosts.status, "PUBLISHED"))
+      .orderBy(desc(blogPosts.publishedAt))
+      .limit(limit)
+      .offset((page - 1) * limit) as ReturnType<typeof db.select>;
+
+    if (search) {
+      query = db
+        .select()
+        .from(blogPosts)
+        .where(
+          or(
+            ilike(blogPosts.title, `%${search}%`),
+            ilike(blogPosts.content, `%${search}%`)
+          )
+        )
+        .orderBy(desc(blogPosts.publishedAt))
+        .limit(limit)
+        .offset((page - 1) * limit) as ReturnType<typeof db.select>;
+    }
+
+    const posts = await query;
+    return { posts, total: posts.length };
   }
 
   static async findByTagSlug(tagSlug: string, page = 1, limit = 20) {
-    const supabase = await supabaseServer();
+    const [tag] = await db.select({ id: blogTags.id }).from(blogTags).where(eq(blogTags.slug, tagSlug)).limit(1);
+    if (!tag) return { posts: [], total: 0 };
 
-    // Buscar tag pelo slug
-    const { data: tag, error: tagError } = await supabase
-      .from("blog_tags")
-      .select("id")
-      .eq("slug", tagSlug)
-      .single();
+    const postTagRows = await db.select({ postId: blogPostTags.postId }).from(blogPostTags).where(eq(blogPostTags.tagId, tag.id));
+    if (postTagRows.length === 0) return { posts: [], total: 0 };
 
-    if (tagError || !tag) {
-      return { posts: [], total: 0 };
-    }
+    const postIds = postTagRows.map((r) => r.postId);
+    const posts = await db
+      .select()
+      .from(blogPosts)
+      .where(inArray(blogPosts.id, postIds))
+      .orderBy(desc(blogPosts.publishedAt))
+      .limit(limit)
+      .offset((page - 1) * limit);
 
-    // Buscar posts vinculados
-    const { data: postTags, error: postTagsError } = await supabase
-      .from("blog_post_tags")
-      .select("post_id")
-      .eq("tag_id", tag.id);
-
-    if (postTagsError || !postTags || postTags.length === 0) {
-      return { posts: [], total: 0 };
-    }
-
-    const postIds = postTags.map((pt) => pt.post_id);
-
-    // Buscar posts
-    const { data, error, count } = await supabase
-      .from("blog_posts")
-      .select("*, blog_post_tags(tag:blog_tags(*))")
-      .in("id", postIds)
-      .eq("status", "PUBLISHED")
-      .not("published_at", "is", null)
-      .order("published_at", { ascending: false })
-      .range((page - 1) * limit, page * limit - 1);
-
-    if (error) throw error;
-    return { posts: data || [], total: count || 0 };
+    return { posts, total: posts.length };
   }
 
   static async update(id: string, data: UpdatePostInput) {
-    const supabase = await supabaseServer();
-
-    // Extrair tag_names antes de atualizar
     const { tag_names, ...postData } = data;
 
-    const { data: post, error } = await supabase
-      .from("blog_posts")
-      .update(postData)
-      .eq("id", id)
-      .select()
-      .single();
+    const updateData: Record<string, unknown> = { updatedAt: new Date() };
+    if (postData.title !== undefined) updateData.title = postData.title;
+    if (postData.slug !== undefined) updateData.slug = postData.slug;
+    if (postData.content !== undefined) updateData.content = postData.content;
+    if (postData.content_md !== undefined) updateData.contentMd = postData.content_md;
+    if (postData.excerpt !== undefined) updateData.excerpt = postData.excerpt;
+    if (postData.cover_url !== undefined) updateData.coverUrl = postData.cover_url;
+    if (postData.status !== undefined) updateData.status = postData.status;
+    if (postData.published_at !== undefined) updateData.publishedAt = postData.published_at ? new Date(postData.published_at) : null;
 
-    if (error) throw error;
+    const [post] = await db.update(blogPosts).set(updateData).where(eq(blogPosts.id, id)).returning();
 
-    // Atualizar tags se fornecidas (undefined significa não alterar, [] significa remover todas)
     if (tag_names !== undefined && post?.id) {
       await BlogRepo.linkTags(post.id, tag_names);
-    }
-
-    // Refresh materialized view se mudou status para PUBLISHED
-    if (data.status === "PUBLISHED" || post?.status === "PUBLISHED") {
-      await supabase.rpc("refresh_tag_counts");
     }
 
     return post;
   }
 
   static async delete(id: string) {
-    const supabase = await supabaseServer();
-
-    const { error } = await supabase
-      .from("blog_posts")
-      .delete()
-      .eq("id", id);
-
-    if (error) throw error;
+    await db.delete(blogPosts).where(eq(blogPosts.id, id));
   }
 
-  static async findAll(page = 1, limit = 10, includeTags = false) {
-    const supabase = await supabaseServer();
+  static async findAll(page = 1, limit = 10, _includeTags = false) {
+    const posts = await db
+      .select()
+      .from(blogPosts)
+      .orderBy(desc(blogPosts.createdAt))
+      .limit(limit)
+      .offset((page - 1) * limit);
 
-    const { data, error, count } = await supabase
-      .from("blog_posts")
-      .select(includeTags ? "*, blog_post_tags(tag:blog_tags(*))" : "*")
-      .order("created_at", { ascending: false })
-      .range((page - 1) * limit, page * limit - 1);
-
-    if (error) throw error;
-    return { posts: data, total: count };
+    return { posts, total: posts.length };
   }
 
-  // ====== TAG METHODS ======
-
-  static async getAllTags(publicOnly = false) {
-    const supabase = await supabaseServer();
-
-    if (publicOnly) {
-      // Usar materialized view para performance
-      const { data, error } = await supabase
-        .from("mv_tag_counts_public")
-        .select("*")
-        .order("count", { ascending: false });
-
-      if (error) throw error;
-      return data;
-    }
-
-    // Para admin/autocomplete: todas as tags
-    const { data, error } = await supabase
-      .from("blog_tags")
-      .select("*")
-      .order("name", { ascending: true });
-
-    if (error) throw error;
-    return data;
+  static async getAllTags(_publicOnly = false) {
+    return db.select().from(blogTags).orderBy(blogTags.name);
   }
 
   static async searchTags(query: string, limit = 50) {
-    const supabase = await supabaseServer();
-
-    const { data, error } = await supabase
-      .from("blog_tags")
-      .select("*")
-      .ilike("name", `%${query}%`)
-      .order("name", { ascending: true })
+    return db
+      .select()
+      .from(blogTags)
+      .where(ilike(blogTags.name, `%${query}%`))
       .limit(limit);
-
-    if (error) throw error;
-    return data;
   }
 
   static async getPostTags(postId: string) {
-    const supabase = await supabaseServer();
+    const rows = await db
+      .select({ tag: blogTags })
+      .from(blogPostTags)
+      .innerJoin(blogTags, eq(blogPostTags.tagId, blogTags.id))
+      .where(eq(blogPostTags.postId, postId));
 
-    const { data, error } = await supabase
-      .from("blog_post_tags")
-      .select("tag:blog_tags(*)")
-      .eq("post_id", postId);
-
-    if (error) throw error;
-    return data?.map((item: { tag: unknown }) => item.tag) || [];
+    return rows.map((r) => r.tag);
   }
 }

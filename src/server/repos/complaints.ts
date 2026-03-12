@@ -1,131 +1,120 @@
-import { supabaseServer } from "@/lib/supabase/server";
+import "server-only";
+import { db } from "@/db/client";
+import { complaints, profiles, companies, projects } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { CreateComplaintInput, UpdateComplaintInput, UpdateComplaintStatusInput } from "../dto/complaints";
 
 export class ComplaintsRepo {
   static async create(data: CreateComplaintInput, userId: string) {
-    const supabase = await supabaseServer();
-
-    const { data: complaint, error } = await supabase
-      .from("complaints")
-      .insert({
-        ...data,
-        author_id: userId,
-        status: "OPEN",
-      })
-      .select()
-      .single();
-
-    if (error) throw error;
+    const [complaint] = await db.insert(complaints).values({
+      ...data,
+      authorId: userId,
+      status: "OPEN",
+    }).returning();
     return complaint;
   }
 
   static async findById(id: string) {
-    const supabase = await supabaseServer();
+    const [row] = await db
+      .select({
+        complaint: complaints,
+        authorName: profiles.name,
+        companyName: companies.name,
+        projectName: projects.name,
+      })
+      .from(complaints)
+      .leftJoin(profiles, eq(complaints.authorId, profiles.userId))
+      .leftJoin(companies, eq(complaints.companyId, companies.id))
+      .leftJoin(projects, eq(complaints.projectId, projects.id))
+      .where(eq(complaints.id, id))
+      .limit(1);
 
-    const { data, error } = await supabase
-      .from("complaints")
-      .select(`
-        *,
-        author:profiles(name),
-        company:companies(name),
-        project:projects(name)
-      `)
-      .eq("id", id)
-      .single();
+    if (!row) throw new Error("Complaint not found");
 
-    if (error) throw error;
-    return data;
+    return {
+      ...row.complaint,
+      author: { name: row.authorName },
+      company: { name: row.companyName },
+      project: row.projectName ? { name: row.projectName } : null,
+    };
   }
 
   static async findByUser(userId: string) {
-    const supabase = await supabaseServer();
+    const rows = await db
+      .select({
+        complaint: complaints,
+        companyName: companies.name,
+        projectName: projects.name,
+      })
+      .from(complaints)
+      .leftJoin(companies, eq(complaints.companyId, companies.id))
+      .leftJoin(projects, eq(complaints.projectId, projects.id))
+      .where(eq(complaints.authorId, userId));
 
-    const { data, error } = await supabase
-      .from("complaints")
-      .select(`
-        *,
-        company:companies(name),
-        project:projects(name)
-      `)
-      .eq("author_id", userId);
-
-    if (error) throw error;
-    return data;
+    return rows.map((r) => ({
+      ...r.complaint,
+      company: { name: r.companyName },
+      project: r.projectName ? { name: r.projectName } : null,
+    }));
   }
 
   static async findByCompany(companyId: string) {
-    const supabase = await supabaseServer();
+    const rows = await db
+      .select({
+        complaint: complaints,
+        authorName: profiles.name,
+        projectName: projects.name,
+      })
+      .from(complaints)
+      .leftJoin(profiles, eq(complaints.authorId, profiles.userId))
+      .leftJoin(projects, eq(complaints.projectId, projects.id))
+      .where(eq(complaints.companyId, companyId));
 
-    const { data, error } = await supabase
-      .from("complaints")
-      .select(`
-        *,
-        author:profiles(name),
-        project:projects(name)
-      `)
-      .eq("company_id", companyId);
-
-    if (error) throw error;
-    return data;
+    return rows.map((r) => ({
+      ...r.complaint,
+      author: { name: r.authorName },
+      project: r.projectName ? { name: r.projectName } : null,
+    }));
   }
 
   static async findPublic(companyId?: string) {
-    const supabase = await supabaseServer();
+    const rows = await db
+      .select({
+        complaint: complaints,
+        companyName: companies.name,
+        projectName: projects.name,
+      })
+      .from(complaints)
+      .leftJoin(companies, eq(complaints.companyId, companies.id))
+      .leftJoin(projects, eq(complaints.projectId, projects.id))
+      .where(eq(complaints.isPublic, true));
 
-    let query = supabase
-      .from("complaints")
-      .select(`
-        *,
-        company:companies(name),
-        project:projects(name)
-      `)
-      .eq("is_public", true);
-
-    if (companyId) {
-      query = query.eq("company_id", companyId);
-    }
-
-    const { data, error } = await query;
-    if (error) throw error;
-    return data;
+    return rows.map((r) => ({
+      ...r.complaint,
+      company: { name: r.companyName },
+      project: r.projectName ? { name: r.projectName } : null,
+    }));
   }
 
   static async update(id: string, data: UpdateComplaintInput) {
-    const supabase = await supabaseServer();
-
-    const { data: complaint, error } = await supabase
-      .from("complaints")
-      .update(data)
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) throw error;
+    const [complaint] = await db
+      .update(complaints)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(complaints.id, id))
+      .returning();
     return complaint;
   }
 
   static async updateStatus(id: string, data: UpdateComplaintStatusInput) {
-    const supabase = await supabaseServer();
-
-    const { data: complaint, error } = await supabase
-      .from("complaints")
-      .update({ status: data.status })
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) throw error;
+    const [complaint] = await db
+      .update(complaints)
+      .set({ status: data.status, updatedAt: new Date() })
+      .where(eq(complaints.id, id))
+      .returning();
     return complaint;
   }
 
   static async delete(id: string) {
-    const supabase = await supabaseServer();
-
-    const { error } = await supabase
-      .from("complaints")
-      .delete()
-      .eq("id", id);
-
-    if (error) throw error;
+    await db.delete(complaints).where(eq(complaints.id, id));
   }
 }

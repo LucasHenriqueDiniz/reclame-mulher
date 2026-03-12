@@ -15,7 +15,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { maskPhone } from "@/lib/masks";
-import { supabaseClient } from "@/lib/supabase/client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { completeCompanyOnboarding } from "./actions";
@@ -62,26 +61,17 @@ export default function CompanyStep2() {
 
   const howHeardValue = watch("how_heard");
 
-
-  // Verifica se usuário está autenticado e email confirmado
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { user } } = await supabaseClient.auth.getUser();
-      
-      if (!user) {
-        router.push("/login");
-        return;
-      }
-
-      if (!user.email_confirmed_at && user.app_metadata?.provider === "email") {
-        router.push(`/auth/verify/check-email?email=${encodeURIComponent(user.email || "")}`);
-        return;
-      }
-
-      setCheckingAuth(false);
-    };
-
-    checkAuth();
+    fetch("/api/me")
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (!data?.user) {
+          router.push("/login");
+        } else {
+          setCheckingAuth(false);
+        }
+      })
+      .catch(() => router.push("/login"));
   }, [router]);
 
   const onPhone = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -100,8 +90,7 @@ export default function CompanyStep2() {
         how_heard: data.how_heard,
         how_heard_other: data.how_heard_other,
       });
-
-      location.href = "/app/company/verification"; // Página de verificação pendente
+      location.href = "/app/company/verification";
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao salvar dados. Tente novamente.");
     } finally {
@@ -131,9 +120,7 @@ export default function CompanyStep2() {
           <h1 className="mt-4 text-3xl font-extrabold text-[#2A1B55]">
             Quase lá! Complete o cadastro
           </h1>
-          <p className="text-neutral-600">
-            Precisamos de mais alguns dados da sua empresa
-          </p>
+          <p className="text-neutral-600">Precisamos de mais alguns dados da sua empresa</p>
 
           {error && (
             <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
@@ -143,24 +130,16 @@ export default function CompanyStep2() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 grid gap-4">
             <div>
-              <label className="text-sm font-medium text-gray-800">
-                Nome do Responsável*
-              </label>
+              <label className="text-sm font-medium text-gray-800">Nome do Responsável*</label>
               <Input
                 placeholder="Nome completo do responsável"
                 {...register("contact_name")}
                 className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
-              {errors.contact_name && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.contact_name.message}
-                </p>
-              )}
+              {errors.contact_name && <p className="mt-1 text-sm text-red-600">{errors.contact_name.message}</p>}
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-800">
-                Telefone da Empresa*
-              </label>
+              <label className="text-sm font-medium text-gray-800">Telefone da Empresa*</label>
               <Input
                 placeholder="(xx) 1234-56789"
                 {...register("phone")}
@@ -168,69 +147,45 @@ export default function CompanyStep2() {
                 inputMode="numeric"
                 className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
-              {errors.phone && (
-                <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
-              )}
+              {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>}
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-800">
-                Endereço da Sede*
-              </label>
+              <label className="text-sm font-medium text-gray-800">Endereço da Sede*</label>
               <Input
                 placeholder="Rua, número, bairro"
                 {...register("address")}
                 className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
-              {errors.address && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.address.message}
-                </p>
-              )}
+              {errors.address && <p className="mt-1 text-sm text-red-600">{errors.address.message}</p>}
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="text-sm font-medium text-gray-800">
-                  Cidade*
-                </label>
+                <label className="text-sm font-medium text-gray-800">Cidade*</label>
                 <Input {...register("city")} className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper" />
-                {errors.city && (
-                  <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>
-                )}
+                {errors.city && <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>}
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-800">
-                  Estado*
-                </label>
+                <label className="text-sm font-medium text-gray-800">Estado*</label>
                 <Select onValueChange={(v) => setValue("state", v)}>
                   <SelectTrigger className="mt-1">
                     <SelectValue placeholder="UF" />
                   </SelectTrigger>
                   <SelectContent>
                     {BRAZILIAN_STATES.map((uf) => (
-                      <SelectItem key={uf} value={uf}>
-                        {uf}
-                      </SelectItem>
+                      <SelectItem key={uf} value={uf}>{uf}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.state && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.state.message}
-                  </p>
-                )}
+                {errors.state && <p className="mt-1 text-sm text-red-600">{errors.state.message}</p>}
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-800">
-                Como ficou sabendo da plataforma? (opcional)
-              </label>
+              <label className="text-sm font-medium text-gray-800">Como ficou sabendo da plataforma? (opcional)</label>
               <Select
                 value={howHeardValue || "none"}
                 onValueChange={(v) => {
                   setValue("how_heard", v && v !== "none" ? (v as HowHeardType) : undefined);
-                  if (v !== "OUTRO" && v !== "none") {
-                    setValue("how_heard_other", "");
-                  }
+                  if (v !== "OUTRO" && v !== "none") setValue("how_heard_other", "");
                 }}
               >
                 <SelectTrigger className="mt-1">
@@ -239,9 +194,7 @@ export default function CompanyStep2() {
                 <SelectContent>
                   <SelectItem value="none">Nenhuma opção</SelectItem>
                   {HOW_HEARD_OPTIONS.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </SelectItem>
+                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -252,28 +205,16 @@ export default function CompanyStep2() {
                     {...register("how_heard_other")}
                     className="h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
                   />
-                  {errors.how_heard_other && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {errors.how_heard_other.message}
-                    </p>
-                  )}
+                  {errors.how_heard_other && <p className="mt-1 text-sm text-red-600">{errors.how_heard_other.message}</p>}
                 </div>
               )}
             </div>
 
             <div className="mt-4 flex items-center justify-between">
-              <Button
-                variant="outline"
-                type="button"
-                onClick={() => history.back()}
-              >
+              <Button variant="outline" type="button" onClick={() => history.back()}>
                 ← Voltar
               </Button>
-              <Button
-                type="submit"
-                disabled={loading}
-                className="bg-[#3BA5FF] hover:bg-[#2d8ddf] text-white"
-              >
+              <Button type="submit" disabled={loading} className="bg-[#3BA5FF] hover:bg-[#2d8ddf] text-white">
                 {loading ? "Finalizando..." : "Finalizar cadastro"}
               </Button>
             </div>
@@ -283,6 +224,3 @@ export default function CompanyStep2() {
     </AuthLayout>
   );
 }
-
-
-

@@ -60,28 +60,41 @@ export const howHeardType = pgEnum("how_heard_type", [
   "OUTRO",
 ]);
 
+// Auth users table (replaces Supabase auth.users)
+export const users = pgTable("users", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  email: text("email").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  metadata: text("metadata"), // JSON: extra data captured at registration
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }),
+});
+
 // Tables
 export const profiles = pgTable("profiles", {
-  userId: uuid("user_id").primaryKey(), // FK auth.users (não modelamos aqui)
+  userId: uuid("user_id")
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
   name: text("name"),
   role: appRole("role").notNull().default("USER"),
-  cpf: text("cpf").unique(), // CPF único e obrigatório para pessoas (NULL apenas para empresas)
+  cpf: text("cpf").unique(),
   phone: text("phone"),
   address: text("address"),
   city: text("city"),
   state: text("state"),
   howHeard: howHeardType("how_heard"),
-  howHeardOther: text("how_heard_other"), // texto livre quando how_heard = 'OUTRO'
+  howHeardOther: text("how_heard_other"),
   acceptedTermsAt: timestamp("accepted_terms_at", { withTimezone: true }),
   onboardingCompletedAt: timestamp("onboarding_completed_at", {
     withTimezone: true,
   }),
   avatarUrl: text("avatar_url"),
   locale: text("locale"),
-  // Campos adicionais para OAuth (Google, etc)
-  provider: text("provider"), // 'email', 'google', etc
-  providerId: text("provider_id"), // ID do provider (se aplicável)
-  email: text("email").unique(), // cache do email (já está em auth.users, mas útil aqui)
+  provider: text("provider"),
+  providerId: text("provider_id"),
+  email: text("email").unique(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -91,11 +104,16 @@ export const profiles = pgTable("profiles", {
 export const companies = pgTable("companies", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
-  cnpj: text("cnpj").notNull().unique(), // CNPJ obrigatório e único para empresas
+  cnpj: text("cnpj").unique(),
   corporateName: text("corporate_name"),
   sector: text("sector"),
   website: text("website"),
+  phone: text("phone"),
+  address: text("address"),
+  city: text("city"),
+  state: text("state"),
   contactPhone: text("contact_phone"),
+  contactName: text("contact_name"),
   responsibleName: text("responsible_name"),
   responsibleTitle: text("responsible_title"),
   responsibleEmail: text("responsible_email"),
@@ -123,7 +141,7 @@ export const companyUsers = pgTable(
       .defaultNow(),
   },
   (t) => ({
-    pk: { columns: [t.userId, t.companyId], isPrimaryKey: true },
+    pk: primaryKey({ columns: [t.userId, t.companyId] }),
   })
 );
 
@@ -175,7 +193,7 @@ export const complaintMessages = pgTable("complaint_messages", {
   senderType: senderType("sender_type").notNull(),
   authorId: uuid("author_id").references(() => profiles.userId, {
     onDelete: "set null",
-  }), // pode ser null para mensagens automáticas
+  }),
   content: text("content").notNull(),
   attachmentPath: text("attachment_path"),
   createdAt: timestamp("created_at", { withTimezone: true })
@@ -187,8 +205,8 @@ export const blogPosts = pgTable("blog_posts", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
   slug: text("slug").notNull().unique(),
-  content: text("content"), // pode ser markdown ou HTML
-  contentMd: text("content_md"), // se quiser separar markdown
+  content: text("content"),
+  contentMd: text("content_md"),
   excerpt: text("excerpt"),
   coverUrl: text("cover_url"),
   status: blogPostStatus("status").notNull().default("DRAFT"),
@@ -235,14 +253,12 @@ export const reports = pgTable("reports", {
   status: reportStatus("status").notNull().default("PENDING"),
   title: text("title").notNull(),
   description: text("description").notNull(),
-  // Referência opcional - pode ser relacionado a uma reclamação, empresa, etc
   relatedComplaintId: uuid("related_complaint_id").references(() => complaints.id, {
     onDelete: "set null",
   }),
   relatedCompanyId: uuid("related_company_id").references(() => companies.id, {
     onDelete: "set null",
   }),
-  // Resposta/observações do admin
   adminNotes: text("admin_notes"),
   resolvedAt: timestamp("resolved_at", { withTimezone: true }),
   resolvedBy: uuid("resolved_by").references(() => profiles.userId, {
@@ -255,6 +271,74 @@ export const reports = pgTable("reports", {
 });
 
 // Relations
+export const usersRelations = relations(users, ({ one }) => ({
+  profile: one(profiles, {
+    fields: [users.id],
+    references: [profiles.userId],
+  }),
+}));
+
+export const profilesRelations = relations(profiles, ({ one, many }) => ({
+  user: one(users, {
+    fields: [profiles.userId],
+    references: [users.id],
+  }),
+  companyUsers: many(companyUsers),
+  complaints: many(complaints),
+}));
+
+export const companiesRelations = relations(companies, ({ many }) => ({
+  companyUsers: many(companyUsers),
+  projects: many(projects),
+  complaints: many(complaints),
+}));
+
+export const companyUsersRelations = relations(companyUsers, ({ one }) => ({
+  profile: one(profiles, {
+    fields: [companyUsers.userId],
+    references: [profiles.userId],
+  }),
+  company: one(companies, {
+    fields: [companyUsers.companyId],
+    references: [companies.id],
+  }),
+}));
+
+export const projectsRelations = relations(projects, ({ one, many }) => ({
+  company: one(companies, {
+    fields: [projects.companyId],
+    references: [companies.id],
+  }),
+  complaints: many(complaints),
+}));
+
+export const complaintsRelations = relations(complaints, ({ one, many }) => ({
+  author: one(profiles, {
+    fields: [complaints.authorId],
+    references: [profiles.userId],
+  }),
+  company: one(companies, {
+    fields: [complaints.companyId],
+    references: [companies.id],
+  }),
+  project: one(projects, {
+    fields: [complaints.projectId],
+    references: [projects.id],
+  }),
+  messages: many(complaintMessages),
+}));
+
+export const complaintMessagesRelations = relations(complaintMessages, ({ one }) => ({
+  complaint: one(complaints, {
+    fields: [complaintMessages.complaintId],
+    references: [complaints.id],
+  }),
+  author: one(profiles, {
+    fields: [complaintMessages.authorId],
+    references: [profiles.userId],
+  }),
+}));
+
 export const blogTagsRelations = relations(blogTags, ({ many }) => ({
   postLinks: many(blogPostTags),
 }));
@@ -273,5 +357,3 @@ export const blogPostTagsRelations = relations(blogPostTags, ({ one }) => ({
 export const blogPostsRelations = relations(blogPosts, ({ many }) => ({
   tagLinks: many(blogPostTags),
 }));
-
-// Relations removidas - how_heard agora é campo direto em profiles

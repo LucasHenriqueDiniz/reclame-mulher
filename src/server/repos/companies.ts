@@ -1,113 +1,77 @@
-import { supabaseServer } from "@/lib/supabase/server";
+import "server-only";
+import { db } from "@/db/client";
+import { companies, companyUsers } from "@/db/schema";
+import { eq, ilike, or, isNotNull } from "drizzle-orm";
 import { CreateCompanyInput, UpdateCompanyInput } from "../dto/companies";
 
 export class CompaniesRepo {
   static async create(data: CreateCompanyInput) {
-    const supabase = await supabaseServer();
-
-    const { data: company, error } = await supabase
-      .rpc("create_company_self", {
-        p_company_name: data.name,
-        p_cnpj: data.cnpj ?? null,
-        p_contact_name: data.responsible_name,
-        p_phone: data.contact_phone ?? null,
-        p_email: data.responsible_email,
-        p_sector: data.sector ?? null,
-        p_website: data.website ?? null,
-        p_slug: data.slug ?? null,
-      });
-
-    if (error) throw error;
+    const [company] = await db.insert(companies).values({
+      name: data.name,
+      cnpj: data.cnpj ?? null,
+      responsibleName: data.responsible_name,
+      contactPhone: data.contact_phone ?? null,
+      responsibleEmail: data.responsible_email,
+      sector: data.sector ?? null,
+      website: data.website ?? null,
+      slug: data.slug ?? null,
+    }).returning();
     return company;
   }
 
   static async findById(id: string) {
-    const supabase = await supabaseServer();
-
-    const { data, error } = await supabase
-      .from("companies")
-      .select("*")
-      .eq("id", id)
-      .single();
-
-    if (error) throw error;
-    return data;
+    const [company] = await db.select().from(companies).where(eq(companies.id, id)).limit(1);
+    if (!company) throw new Error("Company not found");
+    return company;
   }
 
   static async findBySlug(slug: string) {
-    const supabase = await supabaseServer();
-
-    const { data, error } = await supabase
-      .from("companies")
-      .select("*")
-      .eq("slug", slug)
-      .single();
-
-    if (error) throw error;
-    return data;
+    const [company] = await db.select().from(companies).where(eq(companies.slug, slug)).limit(1);
+    if (!company) throw new Error("Company not found");
+    return company;
   }
 
-  static async findPublic(search?: string, verified?: boolean) {
-    const supabase = await supabaseServer();
-
-    let query = supabase
-      .from("companies")
-      .select("*")
-      .eq("verified", verified ?? true);
-
+  static async findPublic(search?: string, _verified?: boolean) {
     if (search) {
-      query = query.or(`name.ilike.%${search}%,corporate_name.ilike.%${search}%`);
+      return db
+        .select()
+        .from(companies)
+        .where(
+          or(
+            ilike(companies.name, `%${search}%`),
+            ilike(companies.corporateName, `%${search}%`)
+          )
+        );
     }
-
-    const { data, error } = await query;
-    if (error) throw error;
-    return data;
+    return db.select().from(companies);
   }
 
   static async update(id: string, data: UpdateCompanyInput) {
-    const supabase = await supabaseServer();
-
-    const { data: company, error } = await supabase
-      .from("companies")
-      .update(data)
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) throw error;
+    const [company] = await db
+      .update(companies)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(companies.id, id))
+      .returning();
     return company;
   }
 
   static async verify(id: string, verified: boolean) {
-    const supabase = await supabaseServer();
-
-    const updateData = verified
-      ? { verified_at: new Date().toISOString() }
-      : { verified_at: null };
-
-    const { data, error } = await supabase
-      .from("companies")
-      .update(updateData)
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
+    const [company] = await db
+      .update(companies)
+      .set({ verifiedAt: verified ? new Date() : null, updatedAt: new Date() })
+      .where(eq(companies.id, id))
+      .returning();
+    return company;
   }
 
   static async findByUser(userId: string) {
-    const supabase = await supabaseServer();
-
-    const { data, error } = await supabase
-      .from("company_users")
-      .select(`
-        role,
-        companies (*)
-      `)
-      .eq("user_id", userId);
-
-    if (error) throw error;
-    return data;
+    return db
+      .select({
+        role: companyUsers.role,
+        company: companies,
+      })
+      .from(companyUsers)
+      .innerJoin(companies, eq(companyUsers.companyId, companies.id))
+      .where(eq(companyUsers.userId, userId));
   }
 }

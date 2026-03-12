@@ -1,15 +1,11 @@
-import { supabaseServer } from "@/lib/supabase/server";
+import { getSession } from "@/lib/auth/session";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export default async function SettingsPage() {
-  const supabase = await supabaseServer();
+  const session = await getSession();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (!session) {
     return null;
   }
 
@@ -20,9 +16,7 @@ export default async function SettingsPage() {
       <div className="space-y-4 max-w-2xl">
         <div className="p-4 border rounded">
           <h2 className="font-heading text-xl mb-2">Perfil</h2>
-          <p className="text-sm text-gray-600 mb-4">
-            Edite seu nome, avatar, locale
-          </p>
+          <p className="text-sm text-gray-600 mb-4">Edite seu nome, avatar, locale</p>
           <Link href="/app/settings">
             <Button>Editar Perfil</Button>
           </Link>
@@ -30,9 +24,7 @@ export default async function SettingsPage() {
 
         <div className="p-4 border rounded">
           <h2 className="font-heading text-xl mb-2">Segurança</h2>
-          <p className="text-sm text-gray-600 mb-4">
-            Senha, privacidade
-          </p>
+          <p className="text-sm text-gray-600 mb-4">Senha, privacidade</p>
           <Link href="/app/settings/security">
             <Button variant="outline">Configurar Segurança</Button>
           </Link>
@@ -40,9 +32,7 @@ export default async function SettingsPage() {
 
         <div className="p-4 border rounded">
           <h2 className="font-heading text-xl mb-2">Conta</h2>
-          <p className="text-sm text-gray-600 mb-4">
-            Deletar conta
-          </p>
+          <p className="text-sm text-gray-600 mb-4">Deletar conta</p>
           <Link href="/app/settings/account">
             <Button variant="outline">Gerenciar Conta</Button>
           </Link>
@@ -51,4 +41,3 @@ export default async function SettingsPage() {
     </div>
   );
 }
-

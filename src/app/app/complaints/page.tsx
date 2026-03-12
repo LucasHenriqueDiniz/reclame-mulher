@@ -1,19 +1,16 @@
-import { supabaseServer } from "@/lib/supabase/server";
+import { getSession } from "@/lib/auth/session";
 import { ComplaintsRepo } from "@/server/repos/complaints";
 
 import { ComplaintsContent } from "./_components/complaints-content";
 
 export default async function ComplaintsPage() {
-  const supabase = await supabaseServer();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const session = await getSession();
 
-  if (!user) {
+  if (!session) {
     return null;
   }
 
-  const complaints = await ComplaintsRepo.findByUser(user.id);
+  const complaints = await ComplaintsRepo.findByUser(session.userId);
 
   return <ComplaintsContent complaints={complaints} />;
 }

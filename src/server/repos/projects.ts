@@ -1,67 +1,45 @@
-import { supabaseServer } from "@/lib/supabase/server";
+import "server-only";
+import { db } from "@/db/client";
+import { projects } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { CreateProjectInput, UpdateProjectInput } from "../dto/projects";
 
 export class ProjectsRepo {
   static async create(data: CreateProjectInput) {
-    const supabase = await supabaseServer();
-
-    const { data: project, error } = await supabase
-      .from("projects")
-      .insert(data)
-      .select()
-      .single();
-
-    if (error) throw error;
+    const [project] = await db.insert(projects).values({
+      companyId: data.company_id,
+      name: data.name,
+      description: data.description ?? null,
+      status: data.status ?? "PLANNING",
+      startDate: data.start_date ? new Date(data.start_date) : null,
+      endDate: data.end_date ? new Date(data.end_date) : null,
+    }).returning();
     return project;
   }
 
   static async findById(id: string) {
-    const supabase = await supabaseServer();
-
-    const { data, error } = await supabase
-      .from("projects")
-      .select("*")
-      .eq("id", id)
-      .single();
-
-    if (error) throw error;
-    return data;
+    const [project] = await db.select().from(projects).where(eq(projects.id, id)).limit(1);
+    if (!project) throw new Error("Project not found");
+    return project;
   }
 
   static async findByCompany(companyId: string) {
-    const supabase = await supabaseServer();
-
-    const { data, error } = await supabase
-      .from("projects")
-      .select("*")
-      .eq("company_id", companyId);
-
-    if (error) throw error;
-    return data;
+    return db.select().from(projects).where(eq(projects.companyId, companyId));
   }
 
   static async update(id: string, data: UpdateProjectInput) {
-    const supabase = await supabaseServer();
+    const updateData: Record<string, unknown> = { updatedAt: new Date() };
+    if (data.name !== undefined) updateData.name = data.name;
+    if (data.description !== undefined) updateData.description = data.description;
+    if (data.status !== undefined) updateData.status = data.status;
+    if (data.start_date !== undefined) updateData.startDate = data.start_date ? new Date(data.start_date) : null;
+    if (data.end_date !== undefined) updateData.endDate = data.end_date ? new Date(data.end_date) : null;
 
-    const { data: project, error } = await supabase
-      .from("projects")
-      .update(data)
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) throw error;
+    const [project] = await db.update(projects).set(updateData).where(eq(projects.id, id)).returning();
     return project;
   }
 
   static async delete(id: string) {
-    const supabase = await supabaseServer();
-
-    const { error } = await supabase
-      .from("projects")
-      .delete()
-      .eq("id", id);
-
-    if (error) throw error;
+    await db.delete(projects).where(eq(projects.id, id));
   }
 }

@@ -1,19 +1,17 @@
 import "server-only";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
+import * as schema from "./schema";
 
-import { env } from "@/lib/env.server";
-
-const connectionString = env.databaseUrl;
+const connectionString = process.env.DATABASE_URL;
 
 if (!connectionString) {
   throw new Error("DATABASE_URL must be set");
 }
 
 const client = postgres(connectionString, {
-  max: 1, // Pool pequeno para SSR / Server Actions
-  ssl: "require", // Supabase exige SSL
-  prepare: false, // evita incompatibilidades com pgbouncer
+  max: 10,
+  prepare: false,
 });
 
-export const db = drizzle(client);
+export const db = drizzle(client, { schema });

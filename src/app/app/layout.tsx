@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { redirect } from "next/navigation";
 
-import { supabaseServer } from "@/lib/supabase/server";
+import { getSession } from "@/lib/auth/session";
 import { AppHeader } from "@/components/layout/AppHeader";
 
 interface AppLayoutProps {
@@ -9,12 +9,9 @@ interface AppLayoutProps {
 }
 
 export default async function AppLayout({ children }: AppLayoutProps) {
-  const supabase = await supabaseServer();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const session = await getSession();
 
-  if (!user) {
+  if (!session) {
     redirect("/login");
   }
 

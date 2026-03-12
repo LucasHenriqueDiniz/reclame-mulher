@@ -10,7 +10,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { PasswordField } from "@/components/PasswordField";
 import { maskCPF } from "@/lib/masks";
-import { supabaseClient } from "@/lib/supabase/client";
 import { useState } from "react";
 
 const schema = z
@@ -47,56 +46,26 @@ export default function PersonStep1() {
     setLoading(true);
     setError(null);
     try {
-      // Normaliza CPF para validação
-      const cpfNormalized = data.cpf.replace(/\D/g, "");
-
-      // Verifica se CPF já existe
-      const { data: existingProfile } = await supabaseClient
-        .from("profiles")
-        .select("user_id")
-        .eq("cpf", cpfNormalized)
-        .maybeSingle();
-
-      if (existingProfile) {
-        setError("Este CPF já está cadastrado no sistema. Por favor, verifique os dados ou entre em contato com o suporte.");
-        setLoading(false);
-        return;
-      }
-
-      const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
-        email: data.email,
-        password: data.password,
-        options: {
-          data: {
-            name: data.name,
-            cpf: data.cpf,
-            user_type: "person",
-          },
-          emailRedirectTo: `${window.location.origin}/auth/verify?type=confirm&next=/onboarding/person/step2`,
-        },
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          cpf: data.cpf,
+        }),
       });
-      
-      if (signUpError) {
-        // Mensagens de erro mais amigáveis
-        if (signUpError.message.includes("already registered") || signUpError.message.includes("User already registered")) {
-          setError("Este email já está cadastrado. Por favor, faça login ou use outro email.");
-        } else if (signUpError.message.includes("email")) {
-          setError("Erro ao processar o email. Por favor, verifique e tente novamente.");
-        } else {
-          setError(signUpError.message || "Erro ao criar conta. Tente novamente.");
-        }
+
+      const body = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setError(body.error || "Erro ao criar conta. Tente novamente.");
         setLoading(false);
         return;
       }
 
-      // Se o email precisa ser confirmado, redireciona para página de verificação
-      if (signUpData.user && !signUpData.session) {
-        // Email precisa ser confirmado
-        location.href = "/auth/verify/check-email?email=" + encodeURIComponent(data.email);
-      } else if (signUpData.session) {
-        // Email já confirmado ou confirmação desabilitada, continua onboarding
-        location.href = "/onboarding/person/step2";
-      }
+      location.href = "/onboarding/person/step2";
     } catch {
       setError("Erro ao criar conta. Tente novamente.");
       setLoading(false);
@@ -123,17 +92,13 @@ export default function PersonStep1() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 grid gap-4">
             <div>
-              <label className="text-sm font-medium text-gray-800">
-                Nome Completo*
-              </label>
+              <label className="text-sm font-medium text-gray-800">Nome Completo*</label>
               <Input
                 placeholder="Seu nome completo"
                 {...register("name")}
                 className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
-              {errors.name && (
-                <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
-              )}
+              {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
             </div>
             <div>
               <label className="text-sm font-medium text-gray-800">CPF*</label>
@@ -144,54 +109,36 @@ export default function PersonStep1() {
                 inputMode="numeric"
                 className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
-              {errors.cpf && (
-                <p className="mt-1 text-sm text-red-600">{errors.cpf.message}</p>
-              )}
+              {errors.cpf && <p className="mt-1 text-sm text-red-600">{errors.cpf.message}</p>}
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-800">
-                Email*
-              </label>
+              <label className="text-sm font-medium text-gray-800">Email*</label>
               <Input
                 type="email"
                 placeholder="email@gmail.com"
                 {...register("email")}
                 className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="text-sm font-medium text-gray-800">
-                  Senha*
-                </label>
+                <label className="text-sm font-medium text-gray-800">Senha*</label>
                 <PasswordField
                   placeholder="********"
                   {...register("password")}
                   className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
                 />
-                {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.password.message}
-                  </p>
-                )}
+                {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>}
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-800">
-                  Confirmar Senha*
-                </label>
+                <label className="text-sm font-medium text-gray-800">Confirmar Senha*</label>
                 <PasswordField
                   placeholder="********"
                   {...register("confirm")}
                   className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
                 />
-                {errors.confirm && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {errors.confirm.message}
-                  </p>
-                )}
+                {errors.confirm && <p className="mt-1 text-sm text-red-600">{errors.confirm.message}</p>}
               </div>
             </div>
 
@@ -210,33 +157,19 @@ export default function PersonStep1() {
                 />
                 <span className="text-sm text-neutral-700">
                   Aceito os{" "}
-                  <a className="underline" href="/terms" target="_blank">
-                    Termos de uso
-                  </a>{" "}
+                  <a className="underline" href="/terms" target="_blank">Termos de uso</a>{" "}
                   e{" "}
-                  <a className="underline" href="/privacy" target="_blank">
-                    política de privacidade
-                  </a>
-                  .
+                  <a className="underline" href="/privacy" target="_blank">política de privacidade</a>.
                 </span>
               </label>
-              {errors.terms && (
-                <p className="text-sm text-red-600 mt-1">{errors.terms.message}</p>
-              )}
+              {errors.terms && <p className="text-sm text-red-600 mt-1">{errors.terms.message}</p>}
             </div>
 
             <div className="mt-4 flex items-center justify-between">
-              <a
-                href="/login"
-                className="text-sm font-medium text-blue-stepper hover:text-blue-stepper/80 hover:underline transition"
-              >
+              <a href="/login" className="text-sm font-medium text-blue-stepper hover:text-blue-stepper/80 hover:underline transition">
                 Já tem uma conta? Entrar
               </a>
-              <Button
-                type="submit"
-                disabled={loading}
-                className="bg-[#3BA5FF] hover:bg-[#2d8ddf] text-white"
-              >
+              <Button type="submit" disabled={loading} className="bg-[#3BA5FF] hover:bg-[#2d8ddf] text-white">
                 {loading ? "Carregando..." : "Continuar"}
               </Button>
             </div>
@@ -246,4 +179,3 @@ export default function PersonStep1() {
     </AuthLayout>
   );
 }
-
