@@ -1,194 +1,362 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
-import {
-  AlertCircle,
-  CheckCircle2,
-  Clock,
-  XCircle,
-  ChevronRight,
-  Plus,
-  FileWarning,
-  Building2,
-  FolderOpen,
-} from "lucide-react";
+import { MapPin, FileText, Plus, CalendarDays, ChevronRight } from "lucide-react";
 
-import { formatDate } from "@/lib/utils";
-import { selectLocale, useLocaleStore } from "@/stores/locale";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+const PRIMARY = "#2189E5";
+const PURPLE = "#1E0F62";
+const TEXT = "#2E435B";
+const MUTED = "#6E8195";
+const BORDER = "#D9E3EC";
+const BG = "#F4F6F8";
 
-interface ComplaintSummary {
+type Status = "OPEN" | "RESPONDED" | "RESOLVED" | "CANCELLED";
+
+interface Complaint {
   id: string;
   title: string;
   description: string;
-  status: "OPEN" | "RESPONDED" | "RESOLVED" | "CANCELLED";
-  createdAt: string | Date;
-  updatedAt: string | Date;
+  status: Status;
+  createdAt: string;
+  updatedAt: string;
   company: { name: string | null };
   project: { name: string } | null;
 }
 
-interface ComplaintsContentProps {
-  complaints: ComplaintSummary[];
+interface Props {
+  complaints: Complaint[];
+  profileName: string;
+  profileCity: string | null;
+  profileState: string | null;
+  avatarUrl: string | null;
 }
 
-const statusConfig = {
+const STATUS_CONFIG: Record<Status, { label: string; style: React.CSSProperties }> = {
   OPEN: {
-    icon: Clock,
-    className: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800",
+    label: "Esperando Resposta",
+    style: { background: "#F1F5F9", color: "#64748B", border: "1px solid #CBD5E1" },
   },
   RESPONDED: {
-    icon: AlertCircle,
-    className: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-800",
+    label: "Em Réplica",
+    style: { background: "#FEFCE8", color: "#854D0E", border: "1px solid #FDE047" },
   },
   RESOLVED: {
-    icon: CheckCircle2,
-    className: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-800",
+    label: "Resolvido",
+    style: { background: "#DCFCE7", color: "#166534", border: "1px solid #86EFAC" },
   },
   CANCELLED: {
-    icon: XCircle,
-    className: "bg-gray-50 text-gray-500 border-gray-200 dark:bg-gray-950/30 dark:text-gray-400 dark:border-gray-800",
+    label: "Não-Resolvido",
+    style: { background: "#FFF7ED", color: "#9A3412", border: "1px solid #FDBA74" },
   },
-} as const;
+};
 
-export function ComplaintsContent({ complaints }: ComplaintsContentProps) {
-  const t = useTranslations("complaints");
-  const locale = useLocaleStore(selectLocale);
+type Filter = "all" | "OPEN" | "RESPONDED" | "RESOLVED";
+const FILTERS: { key: Filter; label: string }[] = [
+  { key: "all", label: "Últimas" },
+  { key: "OPEN", label: "Não Respondidas" },
+  { key: "RESPONDED", label: "Respondidas" },
+  { key: "RESOLVED", label: "Concluídas" },
+];
 
-  const hasComplaints = complaints.length > 0;
+function formatProtocol(id: string) {
+  const hash = id.replace(/-/g, "").slice(0, 8).toUpperCase();
+  return `#R-${hash.slice(0, 4)}-${hash.slice(4, 8)}`;
+}
 
-  const openCount = complaints.filter((c) => c.status === "OPEN").length;
-  const respondedCount = complaints.filter((c) => c.status === "RESPONDED").length;
-  const resolvedCount = complaints.filter((c) => c.status === "RESOLVED").length;
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function StatusBadge({ status }: { status: Status }) {
+  const cfg = STATUS_CONFIG[status];
+  return (
+    <span
+      style={{
+        ...cfg.style,
+        borderRadius: 20,
+        padding: "3px 10px",
+        fontSize: 12,
+        fontWeight: 600,
+        whiteSpace: "nowrap",
+      }}
+    >
+      {cfg.label}
+    </span>
+  );
+}
+
+function Avatar({ name, avatarUrl }: { name: string; avatarUrl: string | null }) {
+  const initials = name
+    .split(" ")
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
 
   return (
-    <main className="space-y-6 p-6">
-      <div className="flex items-start justify-between gap-4">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight">{t("heading")}</h1>
-          <p className="text-sm text-muted-foreground">{t("subheading")}</p>
-        </div>
-        <Link href="/app/complaints/new">
-          <Button size="sm" className="gap-2">
-            <Plus className="h-4 w-4" />
-            {t("actions.new")}
-          </Button>
-        </Link>
-      </div>
-
-      {hasComplaints && (
-        <div className="grid gap-3 sm:grid-cols-3">
-          <div className="flex items-center gap-3 rounded-lg border bg-card p-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-950/50">
-              <Clock className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-            </div>
-            <div>
-              <p className="text-xl font-bold">{openCount}</p>
-              <p className="text-xs text-muted-foreground">{t("statuses.OPEN")}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 rounded-lg border bg-card p-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-950/50">
-              <AlertCircle className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-            </div>
-            <div>
-              <p className="text-xl font-bold">{respondedCount}</p>
-              <p className="text-xs text-muted-foreground">{t("statuses.RESPONDED")}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 rounded-lg border bg-card p-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-950/50">
-              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-            </div>
-            <div>
-              <p className="text-xl font-bold">{resolvedCount}</p>
-              <p className="text-xs text-muted-foreground">{t("statuses.RESOLVED")}</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {hasComplaints ? (
-        <div className="space-y-3">
-          {complaints.map((complaint) => {
-            const config = statusConfig[complaint.status];
-            const StatusIcon = config.icon;
-
-            return (
-              <Link
-                key={complaint.id}
-                href={`/app/complaints/${complaint.id}`}
-                className="block"
-              >
-                <Card className="transition-all duration-200 hover:shadow-md hover:border-primary/20 group cursor-pointer">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-4">
-                      <div className="flex-1 min-w-0 space-y-1.5">
-                        <div className="flex items-center gap-3">
-                          <h3 className="font-semibold text-sm truncate group-hover:text-primary transition-colors">
-                            {complaint.title}
-                          </h3>
-                          <Badge
-                            variant="outline"
-                            className={`shrink-0 gap-1 text-[11px] ${config.className}`}
-                          >
-                            <StatusIcon className="h-3 w-3" />
-                            {t(`statuses.${complaint.status}` as const)}
-                          </Badge>
-                        </div>
-
-                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                          {complaint.company?.name && (
-                            <span className="flex items-center gap-1">
-                              <Building2 className="h-3 w-3" />
-                              {complaint.company.name}
-                            </span>
-                          )}
-                          {complaint.project?.name && (
-                            <span className="flex items-center gap-1">
-                              <FolderOpen className="h-3 w-3" />
-                              {complaint.project.name}
-                            </span>
-                          )}
-                          <span>
-                            {formatDate(complaint.createdAt, { locale })}
-                          </span>
-                        </div>
-                      </div>
-
-                      <ChevronRight className="h-4 w-4 text-muted-foreground/50 shrink-0 group-hover:text-primary transition-colors" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            );
-          })}
-        </div>
+    <div
+      style={{
+        width: 88,
+        height: 88,
+        borderRadius: "50%",
+        border: "4px solid #fff",
+        overflow: "hidden",
+        background: PRIMARY,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: 28,
+        fontWeight: 700,
+        color: "#fff",
+        flexShrink: 0,
+      }}
+    >
+      {avatarUrl ? (
+        <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
       ) : (
-        <Card className="border-dashed">
-          <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-muted">
-              <FileWarning className="h-7 w-7 text-muted-foreground" />
-            </div>
-            <h3 className="mb-1 font-semibold">{t("empty.title")}</h3>
-            <p className="mb-4 text-sm text-muted-foreground max-w-sm">
-              {t("empty.description")}
-            </p>
-            <Link href="/app/complaints/new">
-              <Button size="sm" className="gap-2">
-                <Plus className="h-4 w-4" />
-                {t("actions.new")}
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
+        initials
       )}
-    </main>
+    </div>
+  );
+}
+
+export function ComplaintsContent({ complaints, profileName, profileCity, profileState, avatarUrl }: Props) {
+  const [activeFilter, setActiveFilter] = useState<Filter>("all");
+
+  const filtered = complaints.filter((c) => {
+    if (activeFilter === "all") return true;
+    if (activeFilter === "RESOLVED") return c.status === "RESOLVED" || c.status === "CANCELLED";
+    return c.status === activeFilter;
+  });
+
+  const location = [profileCity, profileState].filter(Boolean).join(", ");
+
+  return (
+    <div style={{ background: BG, minHeight: "100vh", paddingBottom: 48 }}>
+      <div style={{ maxWidth: 1140, margin: "0 auto", padding: "32px 24px 0" }}>
+
+        {/* ── Profile Hero Card ── */}
+        <div style={{ background: "#fff", borderRadius: 16, border: `1px solid ${BORDER}`, overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
+          {/* Blue banner */}
+          <div style={{ height: 96, background: `linear-gradient(135deg, ${PRIMARY} 0%, #1a6fc9 100%)` }} />
+
+          {/* Content below banner */}
+          <div style={{ padding: "0 28px 0" }}>
+            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginTop: -44 }}>
+              {/* Avatar + info */}
+              <div style={{ display: "flex", alignItems: "flex-end", gap: 16 }}>
+                <Avatar name={profileName} avatarUrl={avatarUrl} />
+                <div style={{ paddingBottom: 12 }}>
+                  <h2 style={{ fontSize: 20, fontWeight: 700, color: PURPLE, margin: 0 }}>{profileName}</h2>
+                  <div style={{ display: "flex", gap: 16, marginTop: 4 }}>
+                    {location && (
+                      <span style={{ fontSize: 13, color: MUTED, display: "flex", alignItems: "center", gap: 4 }}>
+                        <MapPin size={13} />
+                        {location}
+                      </span>
+                    )}
+                    <span style={{ fontSize: 13, color: MUTED, display: "flex", alignItems: "center", gap: 4 }}>
+                      <FileText size={13} />
+                      {complaints.length} {complaints.length === 1 ? "reclamação" : "reclamações"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA button */}
+              <div style={{ paddingBottom: 12 }}>
+                <Link href="/app/complaints/new" style={{ textDecoration: "none" }}>
+                  <button
+                    style={{
+                      background: PRIMARY,
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: 10,
+                      padding: "10px 20px",
+                      fontSize: 14,
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                    }}
+                  >
+                    <Plus size={16} />
+                    Nova reclamação
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Profile tabs navigation */}
+            <div style={{ display: "flex", gap: 0, marginTop: 16, borderTop: `1px solid ${BORDER}` }}>
+              {[
+                { label: "Reclamações", href: "/app/complaints", active: true },
+                { label: "Configurações", href: "/app/settings", active: false },
+              ].map((tab) => (
+                <Link
+                  key={tab.label}
+                  href={tab.href}
+                  style={{
+                    textDecoration: "none",
+                    padding: "14px 20px",
+                    fontSize: 14,
+                    fontWeight: 600,
+                    color: tab.active ? PRIMARY : MUTED,
+                    borderBottom: tab.active ? `2px solid ${PRIMARY}` : "2px solid transparent",
+                    marginBottom: -1,
+                    transition: "color 0.15s",
+                  }}
+                >
+                  {tab.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Complaint list card ── */}
+        <div style={{ background: "#fff", borderRadius: 16, border: `1px solid ${BORDER}`, marginTop: 20, boxShadow: "0 1px 4px rgba(0,0,0,0.06)", overflow: "hidden" }}>
+          {/* Filter tabs */}
+          <div style={{ display: "flex", gap: 0, padding: "0 20px", borderBottom: `1px solid ${BORDER}`, overflowX: "auto" }}>
+            {FILTERS.map((f) => (
+              <button
+                key={f.key}
+                onClick={() => setActiveFilter(f.key)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  padding: "16px 16px",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  color: activeFilter === f.key ? PRIMARY : MUTED,
+                  borderBottom: activeFilter === f.key ? `2px solid ${PRIMARY}` : "2px solid transparent",
+                  marginBottom: -1,
+                  whiteSpace: "nowrap",
+                  transition: "color 0.15s",
+                }}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+
+          {/* List */}
+          {filtered.length === 0 ? (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "64px 24px", textAlign: "center" }}>
+              <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#F1F5F9", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+                <FileText size={24} color={MUTED} />
+              </div>
+              <p style={{ color: TEXT, fontWeight: 600, fontSize: 16, margin: 0 }}>Nenhuma reclamação encontrada</p>
+              <p style={{ color: MUTED, fontSize: 14, marginTop: 6 }}>Você ainda não fez nenhuma reclamação nesta categoria.</p>
+              <Link href="/app/complaints/new" style={{ textDecoration: "none" }}>
+                <button
+                  style={{
+                    marginTop: 20,
+                    background: PRIMARY,
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 10,
+                    padding: "10px 20px",
+                    fontSize: 14,
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                  }}
+                >
+                  <Plus size={16} />
+                  Começar uma nova reclamação
+                </button>
+              </Link>
+            </div>
+          ) : (
+            <div>
+              {filtered.map((c, i) => (
+                <div
+                  key={c.id}
+                  style={{
+                    padding: "20px 24px",
+                    borderBottom: i < filtered.length - 1 ? `1px solid ${BORDER}` : "none",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 16,
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {/* Left: info */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                      <span
+                        style={{
+                          background: "#EEF5FF",
+                          color: PRIMARY,
+                          border: `1px solid #BFDBFE`,
+                          borderRadius: 20,
+                          padding: "2px 10px",
+                          fontSize: 12,
+                          fontWeight: 700,
+                          flexShrink: 0,
+                        }}
+                      >
+                        {formatProtocol(c.id)}
+                      </span>
+                      <h3 style={{ fontSize: 15, fontWeight: 600, color: TEXT, margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 400 }}>
+                        {c.title}
+                      </h3>
+                    </div>
+
+                    <div style={{ display: "flex", gap: 20, marginTop: 8, flexWrap: "wrap" }}>
+                      <span style={{ fontSize: 13, color: MUTED, display: "flex", alignItems: "center", gap: 4 }}>
+                        <CalendarDays size={13} />
+                        {formatDate(c.createdAt)}
+                      </span>
+                      {c.company?.name && (
+                        <span style={{ fontSize: 13, color: MUTED }}>
+                          Empresa: <strong style={{ color: TEXT }}>{c.company.name}</strong>
+                        </span>
+                      )}
+                      {c.project?.name && (
+                        <span style={{ fontSize: 13, color: MUTED }}>
+                          Obra: <strong style={{ color: TEXT }}>{c.project.name}</strong>
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Right: status + link */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 16, flexShrink: 0 }}>
+                    <StatusBadge status={c.status} />
+                    <Link
+                      href={`/app/complaints/${c.id}`}
+                      style={{
+                        textDecoration: "none",
+                        fontSize: 13,
+                        fontWeight: 600,
+                        color: PRIMARY,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      Ver detalhes
+                      <ChevronRight size={14} />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

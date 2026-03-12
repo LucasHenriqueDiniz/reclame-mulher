@@ -1,0 +1,141 @@
+Quero implementar fielmente estas telas do ComunicaMulher em React + Tailwind, com visual institucional limpo e muito próximo do mockup.
+
+OBJETIVO
+Criar a área logada da usuária com:
+1. Tela de perfil com aba Reclamações
+2. Tela de perfil com aba Configurações
+3. Modal de confirmação para deletar conta
+
+ESTILO VISUAL
+- Interface limpa, clara, institucional, elegante e simples
+- Nada de visual genérico de SaaS neon
+- Fundo da página: #F4F6F8
+- Cards brancos com borda suave e sombra discreta
+- Primary blue: #2189E5
+- Brand purple/logo/texto forte: #1E0F62
+- Texto principal: #2E435B
+- Texto secundário: #6E8195
+- Bordas/divisores: #D9E3EC
+- Radius dos cards: 16px
+- Radius do modal: 24px
+- Tipografia: Poppins ou Inter, preferencialmente Poppins
+
+LAYOUT GLOBAL
+- Header branco com logo à esquerda
+- Navegação central: Home, Blog, Empresas, Fazer Reclamação
+- Busca, notificações com badge, avatar e dropdown à direita
+- Conteúdo centralizado com max width perto de 1120-1180px
+- Footer institucional no final com logo, links, frase institucional e redes sociais
+
+TELA 1 - PERFIL / RECLAMAÇÕES
+Criar um card principal de perfil com:
+- faixa azul no topo ocupando toda a largura
+- avatar circular grande sobreposto entre a faixa azul e o card branco
+- nome completo em destaque
+- metadados com cidade/estado e total de reclamações
+- botão à direita: "Começar uma nova reclamação"
+- tabs inferiores: "Reclamações" e "Configurações"
+- tab ativa com underline azul
+
+Abaixo do card principal, criar outro card branco com:
+- filtros horizontais: Últimas, Não Respondidas, Respondidas, Concluídas
+- filtro ativo com underline azul
+- lista de reclamações
+
+Cada item da lista deve ter:
+- título da reclamação em destaque
+- badge azul com protocolo como #R-2024-0145
+- nome da autora
+- data
+- localização/endereço
+- badge de status à direita
+- link "Ver detalhes"
+
+Status visual:
+- Esperando Resposta: badge clara neutra
+- Em réplica: badge amarelo/lima
+- Não-Resolvido: badge laranja com texto branco
+- Resolvido: badge verde com texto branco
+
+TELA 2 - PERFIL / CONFIGURAÇÕES
+Usar o mesmo hero card do perfil, mas com a aba Configurações ativa.
+
+Abaixo, criar um card branco com subabas:
+- Informações
+- Senha
+- Deletar
+
+Na aba Informações, criar formulário com:
+- Nome completo (largura total)
+- Email (largura total, com ícone à esquerda)
+- Telefone (largura total, com ícone à esquerda)
+- Cidade + Bairro (2 colunas)
+- Estado + Numero (2 colunas)
+- Endereço (largura total)
+
+Estilo dos inputs:
+- altura por volta de 48px
+- borda suave
+- radius 10px
+- padding interno confortável
+- labels acima dos campos
+
+No rodapé do formulário:
+- botão Cancelar com borda e fundo branco
+- botão Salvar azul sólido
+
+TELA 3 - MODAL DELETAR CONTA
+Criar modal centralizado com overlay.
+Conteúdo:
+- botão X no canto superior direito
+- ícone grande de lixeira em laranja
+- título forte: "Você tem certeza?"
+- texto: "Ao deletar sua conta iremos remover todos os seus dados do nosso banco de dados."
+- texto de alerta em laranja: "Esta é uma ação irreversível!"
+- linha divisória horizontal
+- dois botões grandes:
+  - Cancelar: outline
+  - Deletar: preenchido em laranja
+
+O modal deve ser arredondado, com muito respiro e visual próximo do mockup.
+
+COMPONENTIZAÇÃO
+Criar componentes reutilizáveis:
+- SiteHeader
+- SiteFooter
+- ProfileHeroCard
+- ProfileTabs
+- ComplaintFilters
+- ComplaintList
+- ComplaintListItem
+- StatusBadge
+- SettingsTabs
+- ProfileInfoForm
+- DeleteAccountModal
+- Button
+- Input
+- Badge
+- Divider
+- Avatar
+
+DADOS
+Criar mocks para preencher a tela.
+Exemplo de complaint:
+- protocol
+- title
+- authorName
+- createdAt
+- locationText
+- status
+
+RESPONSIVIDADE
+Fazer desktop-first, mas ajustar tablet/mobile:
+- CTA pode cair para baixo do bloco de perfil
+- colunas do formulário viram 1 coluna no mobile
+- tabs podem ter scroll horizontal
+
+IMPORTANTE
+- Não reinventar o design
+- Seguir o mockup fielmente
+- Priorizar spacing, hierarquia visual e consistência
+- Entregar estrutura limpa, organizada e fácil de manter

@@ -1,16 +1,16 @@
 import { getSession } from "@/lib/auth/session";
 import { ComplaintsRepo } from "@/server/repos/complaints";
-
+import { ProfilesRepo } from "@/server/repos/profiles";
 import { ComplaintsContent } from "./_components/complaints-content";
 
 export default async function ComplaintsPage() {
   const session = await getSession();
+  if (!session) return null;
 
-  if (!session) {
-    return null;
-  }
-
-  const rawComplaints = await ComplaintsRepo.findByUser(session.userId);
+  const [rawComplaints, profile] = await Promise.all([
+    ComplaintsRepo.findByUser(session.userId),
+    ProfilesRepo.findById(session.userId),
+  ]);
 
   const complaints = rawComplaints.map((c) => ({
     id: c.id,
@@ -23,5 +23,13 @@ export default async function ComplaintsPage() {
     project: c.project,
   }));
 
-  return <ComplaintsContent complaints={complaints} />;
+  return (
+    <ComplaintsContent
+      complaints={complaints}
+      profileName={profile?.name ?? "Usuária"}
+      profileCity={profile?.city ?? null}
+      profileState={profile?.state ?? null}
+      avatarUrl={profile?.avatarUrl ?? null}
+    />
+  );
 }
