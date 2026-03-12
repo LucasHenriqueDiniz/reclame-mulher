@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { maskPhone, maskCPF } from "@/lib/masks";
+import { maskPhone } from "@/lib/masks";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { updateProfilePerson } from "./actions";
@@ -22,7 +22,6 @@ import { HOW_HEARD_OPTIONS, HOW_HEARD_VALUES, type HowHeardType } from "@/lib/co
 import { Loader2, UserCircle2 } from "lucide-react";
 
 const schema = z.object({
-  cpf: z.string().min(11, "CPF é obrigatório").optional(),
   phone: z.string().optional(),
   address: z.string().min(3, "Endereço deve ter no mínimo 3 caracteres"),
   city: z.string().min(2, "Cidade é obrigatória"),
@@ -82,15 +81,11 @@ export default function PersonStep2() {
   const onPhone = (e: React.ChangeEvent<HTMLInputElement>) =>
     setValue("phone", maskPhone(e.target.value));
 
-  const onCPF = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setValue("cpf", maskCPF(e.target.value));
-
   const onSubmit = async (data: Form) => {
     setLoading(true);
     setError(null);
     try {
       await updateProfilePerson({
-        cpf: data.cpf,
         phone: data.phone,
         address: data.address,
         city: data.city,
@@ -151,17 +146,6 @@ export default function PersonStep2() {
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 grid gap-4">
-            <div>
-              <label className="text-sm font-medium text-gray-800">CPF (opcional)</label>
-              <Input
-                placeholder="123.456.789-00"
-                {...register("cpf")}
-                onChange={onCPF}
-                inputMode="numeric"
-                className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
-              />
-              {errors.cpf && <p className="mt-1 text-sm text-red-600">{errors.cpf.message}</p>}
-            </div>
             <div>
               <label className="text-sm font-medium text-gray-800">Telefone (opcional)</label>
               <Input
