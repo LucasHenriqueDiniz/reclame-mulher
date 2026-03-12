@@ -19,6 +19,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { completeCompanyOnboarding } from "./actions";
 import { HOW_HEARD_OPTIONS, HOW_HEARD_VALUES, type HowHeardType } from "@/lib/constants/how-heard";
+import { Loader2, Building2 } from "lucide-react";
 
 const schema = z.object({
   phone: z.string().min(10, "Telefone é obrigatório"),
@@ -58,6 +59,8 @@ export default function CompanyStep2() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [companyName, setCompanyName] = useState<string | null>(null);
 
   const howHeardValue = watch("how_heard");
 
@@ -68,6 +71,8 @@ export default function CompanyStep2() {
         if (!data?.user) {
           router.push("/login");
         } else {
+          setUserEmail(data.user.email);
+          if (data.user.metadata?.company_name) setCompanyName(data.user.metadata.company_name);
           setCheckingAuth(false);
         }
       })
@@ -90,7 +95,7 @@ export default function CompanyStep2() {
         how_heard: data.how_heard,
         how_heard_other: data.how_heard_other,
       });
-      location.href = "/app/company/verification";
+      location.href = "/app";
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao salvar dados. Tente novamente.");
     } finally {
@@ -103,8 +108,8 @@ export default function CompanyStep2() {
       <AuthLayout>
         <div className="flex justify-center">
           <GlassCard className="w-full max-w-3xl p-6 sm:p-10">
-            <div className="text-center py-8">
-              <p className="text-neutral-600">Verificando autenticação...</p>
+            <div className="flex justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-[#3BA5FF]" />
             </div>
           </GlassCard>
         </div>
@@ -117,10 +122,22 @@ export default function CompanyStep2() {
       <div className="flex justify-center">
         <GlassCard className="w-full max-w-3xl p-6 sm:p-10">
           <ProgressBar step={2} total={2} />
-          <h1 className="mt-4 text-3xl font-extrabold text-[#2A1B55]">
+
+          {/* Account context banner */}
+          <div className="mt-4 flex items-center gap-3 p-3 bg-purple-50 border border-purple-100 rounded-xl">
+            <Building2 className="h-8 w-8 text-[#2A1B55] flex-shrink-0" />
+            <div>
+              {companyName && <p className="text-sm font-semibold text-[#2A1B55]">{companyName}</p>}
+              {userEmail && <p className="text-xs text-neutral-500">{userEmail}</p>}
+            </div>
+          </div>
+
+          <h1 className="mt-5 text-3xl font-extrabold text-[#2A1B55]">
             Quase lá! Complete o cadastro
           </h1>
-          <p className="text-neutral-600">Precisamos de mais alguns dados da sua empresa</p>
+          <p className="text-neutral-600">
+            Precisamos de mais alguns dados da sua empresa
+          </p>
 
           {error && (
             <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
@@ -161,14 +178,18 @@ export default function CompanyStep2() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="text-sm font-medium text-gray-800">Cidade*</label>
-                <Input {...register("city")} className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper" />
+                <Input
+                  placeholder="Cidade da sede"
+                  {...register("city")}
+                  className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
+                />
                 {errors.city && <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>}
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-800">Estado*</label>
                 <Select onValueChange={(v) => setValue("state", v)}>
                   <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="UF" />
+                    <SelectValue placeholder="Selecione o estado" />
                   </SelectTrigger>
                   <SelectContent>
                     {BRAZILIAN_STATES.map((uf) => (
@@ -192,7 +213,7 @@ export default function CompanyStep2() {
                   <SelectValue placeholder="Selecione uma opção" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">Nenhuma opção</SelectItem>
+                  <SelectItem value="none">Prefiro não informar</SelectItem>
                   {HOW_HEARD_OPTIONS.map((opt) => (
                     <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
                   ))}
@@ -201,7 +222,7 @@ export default function CompanyStep2() {
               {howHeardValue === "OUTRO" && (
                 <div className="mt-2">
                   <Input
-                    placeholder="Especifique..."
+                    placeholder="Como nos encontrou?"
                     {...register("how_heard_other")}
                     className="h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
                   />
@@ -215,7 +236,7 @@ export default function CompanyStep2() {
                 ← Voltar
               </Button>
               <Button type="submit" disabled={loading} className="bg-[#3BA5FF] hover:bg-[#2d8ddf] text-white">
-                {loading ? "Finalizando..." : "Finalizar cadastro"}
+                {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Finalizando...</> : "Finalizar cadastro →"}
               </Button>
             </div>
           </form>

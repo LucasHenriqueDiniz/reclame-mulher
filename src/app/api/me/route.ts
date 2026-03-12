@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { db } from "@/db/client";
-import { profiles } from "@/db/schema";
+import { profiles, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function GET() {
@@ -18,10 +18,22 @@ export async function GET() {
       .where(eq(profiles.userId, session.userId))
       .limit(1);
 
+    const [user] = await db
+      .select({ metadata: users.metadata })
+      .from(users)
+      .where(eq(users.id, session.userId))
+      .limit(1);
+
+    let parsedMeta: Record<string, string> = {};
+    try {
+      if (user?.metadata) parsedMeta = JSON.parse(user.metadata);
+    } catch {}
+
     return NextResponse.json({
       user: {
         id: session.userId,
         email: session.email,
+        metadata: parsedMeta,
       },
       profile: profile ?? null,
     });

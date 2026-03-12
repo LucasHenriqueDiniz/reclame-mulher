@@ -1,4 +1,6 @@
 "use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import AuthLayout from "@/components/layout/AuthLayout";
 import { GlassCard } from "@/components/GlassCard";
 import { ProgressBar } from "@/components/ProgressBar";
@@ -10,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { PasswordField } from "@/components/PasswordField";
 import { maskCPF } from "@/lib/masks";
-import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const schema = z
   .object({
@@ -19,7 +21,7 @@ const schema = z
     email: z.string().email("Email inválido"),
     password: z.string().min(8, "Senha deve ter no mínimo 8 caracteres"),
     confirm: z.string().min(8, "Confirme sua senha"),
-    terms: z.boolean().refine((v) => v, "Aceite os termos para continuar."),
+    terms: z.boolean().refine((v) => v === true, "Aceite os termos para continuar."),
   })
   .refine((v) => v.password === v.confirm, {
     message: "Senhas não conferem",
@@ -29,15 +31,35 @@ const schema = z
 type Form = z.infer<typeof schema>;
 
 export default function PersonStep1() {
+  const router = useRouter();
+  const [checking, setChecking] = useState(true);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
     control,
-  } = useForm<Form>({ resolver: zodResolver(schema) });
+  } = useForm<Form>({
+    resolver: zodResolver(schema),
+    defaultValues: { terms: false },
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // If user already has a session (e.g. pressed back), go straight to step 2
+  useEffect(() => {
+    fetch("/api/me")
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (data?.user) {
+          router.replace("/onboarding/person/step2");
+        } else {
+          setChecking(false);
+        }
+      })
+      .catch(() => setChecking(false));
+  }, [router]);
 
   const onCPF = (e: React.ChangeEvent<HTMLInputElement>) =>
     setValue("cpf", maskCPF(e.target.value));
@@ -71,6 +93,20 @@ export default function PersonStep1() {
       setLoading(false);
     }
   };
+
+  if (checking) {
+    return (
+      <AuthLayout>
+        <div className="flex justify-center">
+          <GlassCard className="w-full max-w-3xl p-6 sm:p-10">
+            <div className="flex justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-[#3BA5FF]" />
+            </div>
+          </GlassCard>
+        </div>
+      </AuthLayout>
+    );
+  }
 
   return (
     <AuthLayout>
@@ -125,7 +161,7 @@ export default function PersonStep1() {
               <div>
                 <label className="text-sm font-medium text-gray-800">Senha*</label>
                 <PasswordField
-                  placeholder="********"
+                  placeholder="Mínimo 8 caracteres"
                   {...register("password")}
                   className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
                 />
@@ -134,7 +170,7 @@ export default function PersonStep1() {
               <div>
                 <label className="text-sm font-medium text-gray-800">Confirmar Senha*</label>
                 <PasswordField
-                  placeholder="********"
+                  placeholder="Repita a senha"
                   {...register("confirm")}
                   className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
                 />
@@ -143,7 +179,7 @@ export default function PersonStep1() {
             </div>
 
             <div className="mt-2">
-              <label className="flex items-start gap-3">
+              <label className="flex items-start gap-3 cursor-pointer">
                 <Controller
                   name="terms"
                   control={control}
@@ -157,9 +193,9 @@ export default function PersonStep1() {
                 />
                 <span className="text-sm text-neutral-700">
                   Aceito os{" "}
-                  <a className="underline" href="/terms" target="_blank">Termos de uso</a>{" "}
+                  <a className="underline text-[#3BA5FF]" href="/terms" target="_blank">Termos de uso</a>{" "}
                   e{" "}
-                  <a className="underline" href="/privacy" target="_blank">política de privacidade</a>.
+                  <a className="underline text-[#3BA5FF]" href="/privacy" target="_blank">política de privacidade</a>.
                 </span>
               </label>
               {errors.terms && <p className="text-sm text-red-600 mt-1">{errors.terms.message}</p>}
@@ -170,7 +206,7 @@ export default function PersonStep1() {
                 Já tem uma conta? Entrar
               </a>
               <Button type="submit" disabled={loading} className="bg-[#3BA5FF] hover:bg-[#2d8ddf] text-white">
-                {loading ? "Carregando..." : "Continuar"}
+                {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Criando conta...</> : "Continuar →"}
               </Button>
             </div>
           </form>

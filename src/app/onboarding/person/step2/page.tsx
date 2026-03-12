@@ -19,6 +19,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { updateProfilePerson } from "./actions";
 import { HOW_HEARD_OPTIONS, HOW_HEARD_VALUES, type HowHeardType } from "@/lib/constants/how-heard";
+import { Loader2, UserCircle2 } from "lucide-react";
 
 const schema = z.object({
   cpf: z.string().min(11, "CPF é obrigatório").optional(),
@@ -58,6 +59,8 @@ export default function PersonStep2() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
 
   const howHeardValue = watch("how_heard");
 
@@ -68,6 +71,8 @@ export default function PersonStep2() {
         if (!data?.user) {
           router.push("/login");
         } else {
+          setUserEmail(data.user.email);
+          if (data.profile?.name) setUserName(data.profile.name);
           setCheckingAuth(false);
         }
       })
@@ -108,8 +113,8 @@ export default function PersonStep2() {
       <AuthLayout>
         <div className="flex justify-center">
           <GlassCard className="w-full max-w-3xl p-6 sm:p-10">
-            <div className="text-center py-8">
-              <p className="text-neutral-600">Verificando autenticação...</p>
+            <div className="flex justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-[#3BA5FF]" />
             </div>
           </GlassCard>
         </div>
@@ -122,10 +127,22 @@ export default function PersonStep2() {
       <div className="flex justify-center">
         <GlassCard className="w-full max-w-3xl p-6 sm:p-10">
           <ProgressBar step={2} total={2} />
-          <h1 className="mt-4 text-3xl font-extrabold text-[#2A1B55]">
-            Olá! Estamos quase terminando!
+
+          {/* Account context banner */}
+          <div className="mt-4 flex items-center gap-3 p-3 bg-blue-50 border border-blue-100 rounded-xl">
+            <UserCircle2 className="h-8 w-8 text-[#3BA5FF] flex-shrink-0" />
+            <div>
+              {userName && <p className="text-sm font-semibold text-[#2A1B55]">{userName}</p>}
+              {userEmail && <p className="text-xs text-neutral-500">{userEmail}</p>}
+            </div>
+          </div>
+
+          <h1 className="mt-5 text-3xl font-extrabold text-[#2A1B55]">
+            Quase lá! Complete seu perfil
           </h1>
-          <p className="text-neutral-600">Complete seu perfil com as informações abaixo</p>
+          <p className="text-neutral-600">
+            Precisamos de mais alguns dados para finalizar seu cadastro
+          </p>
 
           {error && (
             <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
@@ -146,7 +163,7 @@ export default function PersonStep2() {
               {errors.cpf && <p className="mt-1 text-sm text-red-600">{errors.cpf.message}</p>}
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-800">Telefone (Recomendado)</label>
+              <label className="text-sm font-medium text-gray-800">Telefone (opcional)</label>
               <Input
                 placeholder="(xx) 1234-56789"
                 {...register("phone")}
@@ -158,7 +175,7 @@ export default function PersonStep2() {
             <div>
               <label className="text-sm font-medium text-gray-800">Endereço*</label>
               <Input
-                placeholder="Rua..."
+                placeholder="Rua, número, bairro"
                 {...register("address")}
                 className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
               />
@@ -167,14 +184,18 @@ export default function PersonStep2() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="text-sm font-medium text-gray-800">Cidade*</label>
-                <Input {...register("city")} className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper" />
+                <Input
+                  placeholder="Sua cidade"
+                  {...register("city")}
+                  className="mt-1 h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
+                />
                 {errors.city && <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>}
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-800">Estado*</label>
                 <Select onValueChange={(v) => setValue("state", v)}>
                   <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="UF" />
+                    <SelectValue placeholder="Selecione o estado" />
                   </SelectTrigger>
                   <SelectContent>
                     {BRAZILIAN_STATES.map((uf) => (
@@ -198,7 +219,7 @@ export default function PersonStep2() {
                   <SelectValue placeholder="Selecione uma opção" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">Nenhuma opção</SelectItem>
+                  <SelectItem value="none">Prefiro não informar</SelectItem>
                   {HOW_HEARD_OPTIONS.map((opt) => (
                     <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
                   ))}
@@ -207,7 +228,7 @@ export default function PersonStep2() {
               {howHeardValue === "OUTRO" && (
                 <div className="mt-2">
                   <Input
-                    placeholder="Especifique..."
+                    placeholder="Como nos encontrou?"
                     {...register("how_heard_other")}
                     className="h-12 text-base border-gray-200 placeholder:text-gray-500 focus:border-blue-stepper"
                   />
@@ -221,7 +242,7 @@ export default function PersonStep2() {
                 ← Voltar
               </Button>
               <Button type="submit" disabled={loading} className="bg-[#3BA5FF] hover:bg-[#2d8ddf] text-white">
-                {loading ? "Salvando..." : "Continuar"}
+                {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Salvando...</> : "Finalizar cadastro →"}
               </Button>
             </div>
           </form>
