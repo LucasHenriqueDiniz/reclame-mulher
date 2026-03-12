@@ -1,0 +1,278 @@
+Quero implementar o módulo de perfil de empresa do ComunicaMulher, ignorando completamente header e footer.
+
+ESCOPO
+Implementar tanto a visualização pública da empresa quanto o painel da própria empresa logada, usando componentes reutilizáveis, organização limpa e integração real com backend/banco.
+
+PARTES QUE DEVEM EXISTIR
+
+1. PERFIL PÚBLICO DA EMPRESA
+Abas:
+- Início
+- Reclamações
+- Informações
+- Projetos
+
+2. PAINEL DA EMPRESA LOGADA
+Abas:
+- Reclamações
+- Projetos
+- Configurações
+
+3. MODAIS / BLOCOS AUXILIARES
+- Modal de criar/editar projeto
+- Modal de deletar projeto
+- Modal de denunciar empresa
+- Modal de deletar conta
+- Card CTA de reclamação
+- Card de sobre a empresa
+- Card de contatos da empresa
+- Card de áreas de atuação
+- Card de desempenho
+
+BASE VISUAL
+- Fundo cinza claro
+- Hero card grande no topo com faixa azul
+- Avatar/logo circular
+- Nome da empresa
+- Badge VERIFICADA
+- Região e total de projetos em andamento
+- CTA “Iniciar uma reclamação”
+- Cards de métricas
+- Tabs inferiores
+- Cards brancos com radius 16-20px e sombra leve
+- Visual fiel ao mockup
+- Desktop-first
+
+HERO DA EMPRESA
+Criar um componente reutilizável com:
+- avatar/logo
+- company name
+- badge VERIFICADA
+- região
+- número de projetos em andamento
+- métricas:
+  - tempo médio de resposta
+  - taxa de resolução
+  - diálogos ativos
+  - casos resolvidos
+- tabs da página
+
+PERFIL PÚBLICO - ABA INÍCIO
+Renderizar:
+- card de reclamações recentes com botão “Ver todas”
+- card azul CTA “Teve algum problema com a empresa?” com botão “Iniciar uma reclamação”
+- card de áreas de atuação
+- card sobre a empresa
+- card contatos da empresa
+- card vermelho “Algo errado?” com botão “Denunciar”
+
+No card sobre a empresa exibir:
+- CNPJ
+- cadastrada desde
+- projetos em andamento
+- se existir no backend, também razão social e data de fundação
+
+No card contatos exibir:
+- email
+- phone
+- site
+
+No card áreas de atuação exibir:
+- região macro
+- tags como #Rodovia, #Hidrovia
+
+PERFIL PÚBLICO - ABA INFORMAÇÕES
+Renderizar uma visão mais completa da empresa com:
+- informações cadastrais
+- projetos em andamento
+- contatos
+
+PERFIL PÚBLICO - ABA PROJETOS
+Renderizar:
+- busca
+- filtro por status
+- lista de projetos
+- CTA azul no final para iniciar reclamação
+
+Cada projeto deve mostrar:
+- título
+- localização
+- descrição resumida
+- badge de status
+- data de início
+- ação “Fazer uma reclamação sobre este projeto”
+
+PERFIL PÚBLICO - ABA RECLAMAÇÕES
+Renderizar:
+- filtros por status
+- lista de reclamações
+- card de desempenho abaixo
+
+Cada reclamação deve mostrar:
+- protocolo
+- título
+- autora (ou mascarar se for anônima)
+- data
+- localização
+- status
+- link “Ver detalhes”
+
+O card de desempenho deve mostrar:
+- total de reclamações
+- casos resolvidos
+- não respondidas
+- tempo médio de resposta
+- taxa de resolução
+
+PAINEL DA EMPRESA - ABA RECLAMAÇÕES
+Renderizar lista gerencial de reclamações recebidas pela empresa, com filtros e busca.
+
+PAINEL DA EMPRESA - ABA PROJETOS
+Renderizar:
+- busca
+- botão “Adicionar novo projeto”
+- lista de projetos
+- ações de editar e deletar em cada projeto
+
+Ao editar ou criar projeto, abrir modal com campos:
+- Título do projeto
+- Descrição do projeto
+- Localização do projeto
+- Data de início
+- Estimativa de término
+- Status do projeto
+
+Ao deletar projeto, abrir modal de confirmação.
+
+PAINEL DA EMPRESA - ABA CONFIGURAÇÕES
+Subabas:
+- Dados
+- Mudar senha
+- Verificar
+- Deletar conta
+
+DADOS
+Criar formulário com:
+- nome da empresa
+- razão social
+- telefone
+- website
+- email
+- cidade
+- bairro
+- estado
+- número
+- endereço
+
+MUDAR SENHA
+Campos:
+- nova senha
+- confirmar nova senha
+
+VERIFICAR
+Tela simples explicando o processo de auditoria, com email de contato.
+Mas o estado deve depender do backend:
+- não solicitado
+- pendente
+- verificada
+- rejeitada
+
+DELETAR CONTA
+Mostrar botão destrutivo e abrir modal de confirmação.
+A regra do negócio é soft delete com janela de 90 dias para reativação, então não fazer delete hard imediato se o backend seguir essa regra.
+
+MODAL DE DENÚNCIA
+Campos:
+- Motivo da denúncia
+- Mais informações sobre a denúncia
+Ao enviar, precisa criar um registro real vinculado à empresa no banco.
+
+COMPONENTIZAÇÃO
+Quero estrutura limpa e reutilizável, com componentes como:
+- CompanyProfileHero
+- CompanyProfileTabs
+- CompanyMetricsStrip
+- CompanyRecentComplaintsCard
+- CompanyAboutCard
+- CompanyContactsCard
+- CompanyAreasCard
+- CompanyComplaintCtaCard
+- CompanyReportCtaCard
+- CompanyPerformanceCard
+- CompanyComplaintList
+- CompanyProjectList
+- CompanyProjectFormModal
+- CompanyDeleteProjectModal
+- CompanySettingsTabs
+- CompanyProfileDataForm
+- CompanyPasswordForm
+- CompanyVerificationPanel
+- CompanyDeleteAccountModal
+- CompanyReportModal
+- StatusBadge
+- MetricCard
+- TagChip
+- SearchInput
+- ModalShell
+
+IMPORTANTE: CONFERIR BACKEND E BANCO
+Não quero apenas mock visual.
+Preciso que você confira se tudo está lendo e gravando corretamente no banco.
+
+Conferir leitura real de:
+- company.name
+- legalName
+- cnpj
+- region
+- foundationDate
+- registeredSince
+- phone
+- email
+- website
+- city
+- neighborhood
+- state
+- streetNumber
+- address
+- isVerified
+- verificationStatus
+
+Conferir leitura e agregação real de:
+- activeProjectsCount
+- avgResponseHours
+- resolutionRate
+- activeDialogsCount
+- resolvedCasesCount
+- totalComplaints
+- unansweredCount
+
+Conferir CRUD real de projetos:
+- create
+- update
+- delete
+- list by companyId
+- contagem de projetos em andamento
+
+Conferir denúncias:
+- cria registro real
+- salva companyId
+- salva reporterUserId quando existir login
+- salva motivo e detalhes
+
+Conferir exclusão da conta:
+- se a regra for 90 dias, marcar como pending deletion em vez de apagar imediatamente
+- salvar deletedAt / scheduledPermanentDeletionAt se esse for o modelo
+
+REGRAS IMPORTANTES
+- Tabs devem trocar apenas o conteúdo interno, mantendo o hero
+- Status e métricas devem vir do backend real, não hardcoded
+- Se houver campos null, a interface deve continuar estável
+- CNPJ precisa formatar no front, mas salvar limpo no banco
+- Datas precisam ser validadas e formatadas corretamente
+- Se projeto estiver vinculado a reclamações, definir a regra correta antes de permitir exclusão
+- Depois de criar/editar/excluir projeto, a lista precisa atualizar corretamente
+- Depois de editar dados da empresa, o perfil público precisa refletir a mudança
+- Não usar sucesso fake quando a mutation falhar
+
+FOCO
+Quero fidelidade visual ao mockup, boa componentização, organização de arquivos e verificação real da integração com backend/banco.

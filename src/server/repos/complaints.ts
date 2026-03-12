@@ -1,7 +1,7 @@
 import "server-only";
 import { db } from "@/db/client";
 import { complaints, profiles, companies, projects } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { CreateComplaintInput, UpdateComplaintInput, UpdateComplaintStatusInput } from "../dto/complaints";
 
 export class ComplaintsRepo {
@@ -87,7 +87,7 @@ export class ComplaintsRepo {
       .from(complaints)
       .leftJoin(companies, eq(complaints.companyId, companies.id))
       .leftJoin(projects, eq(complaints.projectId, projects.id))
-      .where(eq(complaints.isPublic, true));
+      .where(companyId ? and(eq(complaints.isPublic, true), eq(complaints.companyId, companyId)) : eq(complaints.isPublic, true));
 
     return rows.map((r) => ({
       ...r.complaint,

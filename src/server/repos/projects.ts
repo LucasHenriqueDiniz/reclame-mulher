@@ -24,7 +24,7 @@ export class ProjectsRepo {
   }
 
   static async findByCompany(companyId: string) {
-    return db.select().from(projects).where(eq(projects.companyId, companyId));
+    return db.select().from(projects).where(eq(projects.companyId, companyId)).orderBy(projects.createdAt);
   }
 
   static async update(id: string, data: UpdateProjectInput) {
@@ -34,7 +34,7 @@ export class ProjectsRepo {
     if (data.status !== undefined) updateData.status = data.status;
     if (data.start_date !== undefined) updateData.startDate = data.start_date ? new Date(data.start_date) : null;
     if (data.end_date !== undefined) updateData.endDate = data.end_date ? new Date(data.end_date) : null;
-
+    if (data.location !== undefined) updateData.location = data.location;
     const [project] = await db.update(projects).set(updateData).where(eq(projects.id, id)).returning();
     return project;
   }
