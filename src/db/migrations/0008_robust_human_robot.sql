@@ -1,4 +1,4 @@
-ALTER TABLE "complaint_attachments" ALTER COLUMN "size_bytes" SET DATA TYPE bigint;--> statement-breakpoint
+ALTER TABLE "complaint_attachments" ALTER COLUMN "size_bytes" SET DATA TYPE bigint USING "size_bytes"::bigint;--> statement-breakpoint
 CREATE UNIQUE INDEX "companies_slug_unique" ON "companies" USING btree ("slug");--> statement-breakpoint
 CREATE INDEX "companies_deleted_at_idx" ON "companies" USING btree ("deleted_at");--> statement-breakpoint
 CREATE INDEX "companies_verified_at_idx" ON "companies" USING btree ("verified_at");--> statement-breakpoint

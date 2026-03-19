@@ -71,6 +71,20 @@
       "when": 1773442269067,
       "tag": "0009_company_user_password_reset",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1773443269067,
+      "tag": "0010_repair_companies_schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1773444269067,
+      "tag": "0011_repair_projects_schema",
+      "breakpoints": true
     }
   ]
 }

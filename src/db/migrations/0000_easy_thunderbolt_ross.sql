@@ -19,16 +19,39 @@ CREATE TABLE "companies" (
 	"cnpj" text,
 	"corporate_name" text,
 	"sector" text,
+	"description" text,
 	"website" text,
+	"email" text,
+	"phone" text,
+	"address" text,
+	"neighborhood" text,
+	"street_number" text,
+	"city" text,
+	"state" text,
+	"region" text,
+	"foundation_date" timestamp with time zone,
 	"contact_phone" text,
+	"contact_name" text,
 	"responsible_name" text,
 	"responsible_title" text,
 	"responsible_email" text,
 	"slug" text,
 	"logo_url" text,
 	"verified_at" timestamp with time zone,
+	"deleted_at" timestamp with time zone,
+	"scheduled_permanent_deletion_at" timestamp with time zone,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone
+);
+--> statement-breakpoint
+CREATE TABLE "users" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"email" text NOT NULL,
+	"password_hash" text NOT NULL,
+	"metadata" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone,
+	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
 CREATE TABLE "company_users" (
