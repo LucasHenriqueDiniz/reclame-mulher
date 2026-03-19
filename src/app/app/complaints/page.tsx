@@ -19,8 +19,8 @@ export default async function ComplaintsPage() {
     status: c.status as "OPEN" | "RESPONDED" | "RESOLVED" | "CANCELLED",
     createdAt: c.createdAt instanceof Date ? c.createdAt.toISOString() : String(c.createdAt),
     updatedAt: c.updatedAt instanceof Date ? c.updatedAt.toISOString() : String(c.updatedAt),
-    company: c.company,
-    project: c.project,
+    company: c.company?.name ? { id: c.companyId, name: c.company.name, logoUrl: null } : null,
+    project: c.project ? { id: c.projectId ?? "", name: c.project.name } : null,
   }));
 
   return (

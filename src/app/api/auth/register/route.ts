@@ -34,23 +34,31 @@ export async function POST(request: NextRequest) {
     }
 
     const passwordHash = hashPassword(password);
+    let userId = "";
 
-    const [user] = await db.insert(users).values({
-      email: emailNorm,
-      passwordHash,
-    }).returning({ id: users.id });
+    await db.transaction(async (tx) => {
+      const [user] = await tx
+        .insert(users)
+        .values({
+          email: emailNorm,
+          passwordHash,
+        })
+        .returning({ id: users.id });
 
-    await db.insert(profiles).values({
-      userId: user.id,
-      name,
-      email: emailNorm,
-      cpf: cpfNorm,
-      role: "USER",
-      provider: "email",
+      userId = user.id;
+
+      await tx.insert(profiles).values({
+        userId: user.id,
+        name,
+        email: emailNorm,
+        cpf: cpfNorm,
+        role: "USER",
+        provider: "email",
+      });
     });
 
     const response = NextResponse.json({ success: true });
-    await setSessionCookie(response, { userId: user.id, email: emailNorm });
+    await setSessionCookie(response, { userId, email: emailNorm });
     return response;
   } catch (error) {
     if (error instanceof z.ZodError) {

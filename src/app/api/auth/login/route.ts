@@ -22,7 +22,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Email ou senha inválidos" }, { status: 401 });
     }
 
-    const response = NextResponse.json({ success: true });
+    const response = NextResponse.json({
+      success: true,
+      mustChangePassword: user.mustChangePassword,
+    });
     await setSessionCookie(response, { userId: user.id, email: user.email });
     return response;
   } catch (error) {

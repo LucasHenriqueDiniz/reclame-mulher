@@ -13,8 +13,9 @@ export default async function CompanyDashboardPage({
 }) {
   const session = await getSession();
   if (!session) redirect("/login");
+  const currentSession = session;
 
-  const userCompanies = await CompanyUsersRepo.findByUser(session.userId);
+  const userCompanies = await CompanyUsersRepo.findByUser(currentSession.userId);
   if (!userCompanies.length) redirect("/app");
 
   const companyRow = userCompanies[0];
@@ -37,16 +38,17 @@ export default async function CompanyDashboardPage({
       verifiedAt: company.verifiedAt?.toISOString() ?? null,
       foundationDate: company.foundationDate?.toISOString() ?? null,
       deletedAt: company.deletedAt?.toISOString() ?? null,
+      scheduledPermanentDeletionAt: company.scheduledPermanentDeletionAt?.toISOString() ?? null,
     },
     stats,
-    projects: projects.map((p) => ({
+    projects: projects.map((p: (typeof projects)[number]) => ({
       ...p,
       createdAt: p.createdAt.toISOString(),
       updatedAt: p.updatedAt?.toISOString() ?? null,
       startDate: p.startDate?.toISOString() ?? null,
       endDate: p.endDate?.toISOString() ?? null,
     })),
-    complaints: complaints.map((c) => ({
+    complaints: complaints.map((c: (typeof complaints)[number]) => ({
       ...c,
       createdAt: c.createdAt instanceof Date ? c.createdAt.toISOString() : String(c.createdAt),
       updatedAt: c.updatedAt instanceof Date ? c.updatedAt?.toISOString() : String(c.updatedAt ?? ""),

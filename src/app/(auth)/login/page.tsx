@@ -58,7 +58,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center">
+    <div className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -67,16 +67,16 @@ export default function LoginPage() {
       <div className="absolute inset-0 bg-gradient-to-br from-[#2A1B55]/90 via-[#2A1B55]/75 to-[#1a1038]/95" />
 
       {/* Layout */}
-      <div className="relative z-10 w-full min-h-screen flex flex-col lg:grid lg:grid-cols-2">
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center lg:gap-10 xl:gap-14 px-4 py-8 sm:px-6 lg:px-8">
 
         {/* ── Left: Hero ── */}
-        <div className="flex flex-col justify-center px-8 py-16 lg:px-16 text-white">
+        <div className="flex flex-col justify-center px-0 py-10 text-white lg:py-0 lg:pr-4">
           {/* Brand */}
           <p className="text-[#3BA5FF] font-semibold text-sm uppercase tracking-widest mb-6">
             ComunicaMulher
           </p>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+          <h1 className="max-w-[540px] text-4xl font-extrabold leading-tight mb-6 sm:text-5xl lg:text-[3.35rem]">
             Conectando vozes
             <br />
             que{" "}
@@ -85,7 +85,7 @@ export default function LoginPage() {
             comunidades
           </h1>
 
-          <p className="text-white/60 text-lg leading-relaxed max-w-md mb-10">
+          <p className="max-w-[520px] text-lg leading-relaxed text-white/60 mb-10">
             Diálogo direto entre mulheres e responsáveis por obras de infraestrutura.
           </p>
 
@@ -101,14 +101,14 @@ export default function LoginPage() {
         </div>
 
         {/* ── Right: Login card ── */}
-        <div className="flex items-center justify-center px-6 py-12 lg:py-0">
-          <div className="w-full max-w-md">
-            <div className="bg-white rounded-3xl shadow-2xl p-8 sm:p-10">
+        <div className="flex items-center justify-center px-0 py-4 lg:py-0">
+          <div className="w-full max-w-[440px]">
+            <div className="rounded-[24px] bg-white p-7 shadow-[0_24px_64px_rgba(10,5,30,0.30)] sm:p-9">
 
               {/* Card header */}
-              <div className="mb-8">
-                <h2 className="text-2xl font-extrabold text-[#2A1B55]">Bem-vinda de volta!</h2>
-                <p className="text-neutral-500 text-sm mt-1">
+              <div className="mb-7">
+                <h2 className="text-[26px] font-extrabold tracking-[-0.02em] text-[#2A1B55]">Bem-vinda de volta!</h2>
+                <p className="mt-1 text-sm text-neutral-500">
                   Não tem uma conta?{" "}
                   <Link href="/register" className="text-[#3BA5FF] font-semibold hover:underline">
                     Cadastre-se grátis
@@ -124,7 +124,7 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit(onLogin)} className="space-y-5">
+              <form onSubmit={handleSubmit(onLogin)} className="space-y-4 sm:space-y-5">
                 {/* Email */}
                 <div>
                   <label className="text-sm font-medium text-gray-800 block mb-1.5">
@@ -134,7 +134,7 @@ export default function LoginPage() {
                     type="email"
                     placeholder="email@exemplo.com"
                     {...register("email")}
-                    className="h-12 text-base border-gray-200 placeholder:text-gray-400 focus:border-[#3BA5FF]"
+                    className="h-[46px] text-base border-gray-200 placeholder:text-gray-400 focus:border-[#3BA5FF]"
                     autoComplete="email"
                   />
                   {errors.email && (
@@ -156,7 +156,7 @@ export default function LoginPage() {
                   <PasswordField
                     placeholder="Sua senha"
                     {...register("password")}
-                    className="h-12 text-base border-gray-200 placeholder:text-gray-400 focus:border-[#3BA5FF]"
+                    className="h-[46px] text-base border-gray-200 placeholder:text-gray-400 focus:border-[#3BA5FF]"
                     autoComplete="current-password"
                   />
                   {errors.password && (
@@ -168,7 +168,7 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full h-12 bg-[#3BA5FF] hover:bg-[#2d8ddf] text-white font-semibold text-base rounded-full shadow-md transition-all mt-2"
+                  className="mt-1 h-12 w-full rounded-full bg-[#3BA5FF] text-base font-semibold text-white shadow-md transition-all hover:bg-[#2d8ddf]"
                 >
                   {loading ? (
                     <>
@@ -182,7 +182,7 @@ export default function LoginPage() {
               </form>
 
               {/* Divider */}
-              <div className="relative my-6">
+              <div className="relative my-5">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-100" />
                 </div>

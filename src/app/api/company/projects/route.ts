@@ -1,28 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth/session";
 import { ProjectsRepo } from "@/server/repos/projects";
-import { CompanyUsersRepo } from "@/server/repos/company-users";
-
-async function getCompanyId(userId: string) {
-  const rows = await CompanyUsersRepo.findByUser(userId);
-  return rows.length ? rows[0].company.id : null;
-}
+import { CreateProjectDto } from "@/server/dto/projects";
+import { canManageCompany, getCurrentCompanyContext } from "@/server/auth/company";
 
 export async function GET() {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const companyId = await getCompanyId(session.userId);
-  if (!companyId) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  const projects = await ProjectsRepo.findByCompany(companyId);
+  const context = await getCurrentCompanyContext();
+  if (!context) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const projects = await ProjectsRepo.findByCompany(context.companyId);
   return NextResponse.json({ projects });
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const companyId = await getCompanyId(session.userId);
-  if (!companyId) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  const body = await req.json().catch(() => ({}));
-  const project = await ProjectsRepo.create({ company_id: companyId, name: body.name, description: body.description, location: body.location, status: body.status ?? "PLANNING", start_date: body.start_date, end_date: body.end_date });
-  return NextResponse.json({ project }, { status: 201 });
+  try {
+    const context = await getCurrentCompanyContext();
+    if (!context) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!canManageCompany(context.role)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const body = await req.json().catch(() => ({}));
+    const parsed = CreateProjectDto.parse({
+      ...body,
+      company_id: context.companyId,
+    });
+
+    const project = await ProjectsRepo.create(parsed);
+    return NextResponse.json({ project }, { status: 201 });
+  } catch (error) {
+    if (error instanceof Error && "issues" in error) {
+      return NextResponse.json({ error: "Validation error" }, { status: 400 });
+    }
+    console.error("Error creating project:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }

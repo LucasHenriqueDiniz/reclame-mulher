@@ -7,3 +7,16 @@ export const CreateCompanyUserDto = z.object({
 });
 
 export type CreateCompanyUserInput = z.infer<typeof CreateCompanyUserDto>;
+
+export const CreateCompanyMemberDto = z.object({
+  name: z.string().min(2, "Nome é obrigatório"),
+  email: z.string().email("E-mail inválido"),
+  role: z.enum(["ADMIN", "MEMBER"]).default("MEMBER"),
+});
+
+export const UpdateCompanyMemberRoleDto = z.object({
+  role: z.enum(["ADMIN", "MEMBER"]),
+});
+
+export type CreateCompanyMemberInput = z.infer<typeof CreateCompanyMemberDto>;
+export type UpdateCompanyMemberRoleInput = z.infer<typeof UpdateCompanyMemberRoleDto>;

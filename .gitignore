@@ -40,3 +40,6 @@ next-env.d.ts
 # Env
 .env*
 !.env.example
+
+# uploads (complaint attachments)
+/uploads

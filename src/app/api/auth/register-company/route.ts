@@ -28,24 +28,31 @@ export async function POST(request: NextRequest) {
     }
 
     const passwordHash = hashPassword(password);
+    let userId = "";
 
-    // Store company_name and cnpj in user metadata for step2
-    const [user] = await db.insert(users).values({
-      email: emailNorm,
-      passwordHash,
-      metadata: JSON.stringify({ company_name, cnpj: cnpjNorm }),
-    }).returning({ id: users.id });
+    await db.transaction(async (tx) => {
+      const [user] = await tx
+        .insert(users)
+        .values({
+          email: emailNorm,
+          passwordHash,
+          metadata: JSON.stringify({ company_name, cnpj: cnpjNorm }),
+        })
+        .returning({ id: users.id });
 
-    await db.insert(profiles).values({
-      userId: user.id,
-      name: company_name,
-      email: emailNorm,
-      role: "COMPANY",
-      provider: "email",
+      userId = user.id;
+
+      await tx.insert(profiles).values({
+        userId: user.id,
+        name: company_name,
+        email: emailNorm,
+        role: "COMPANY",
+        provider: "email",
+      });
     });
 
     const response = NextResponse.json({ success: true });
-    await setSessionCookie(response, { userId: user.id, email: emailNorm });
+    await setSessionCookie(response, { userId, email: emailNorm });
     return response;
   } catch (error) {
     if (error instanceof z.ZodError) {

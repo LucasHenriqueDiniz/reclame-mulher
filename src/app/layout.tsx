@@ -6,6 +6,7 @@ import "./globals.css";
 
 import { Providers } from "./providers";
 import { LocaleProvider } from "@/components/providers/locale-provider";
+import { HeaderDataProvider } from "@/lib/stores/header-data-store";
 import { cn } from "@/lib/utils";
 import { defaultLocale } from "@/i18n/config";
 import { loadMessages } from "@/messages";
@@ -37,7 +38,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang={defaultLocale} suppressHydrationWarning>
       <body className={cn("min-h-screen bg-background font-sans antialiased", inter.variable, poppins.variable)}>
         <LocaleProvider initialLocale={defaultLocale} initialMessages={messages}>
-          <Providers>{children}</Providers>
+          <HeaderDataProvider>
+            <Providers>{children}</Providers>
+          </HeaderDataProvider>
         </LocaleProvider>
       </body>
     </html>

@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { updateProfilePerson } from "./actions";
 import { HOW_HEARD_OPTIONS, HOW_HEARD_VALUES, type HowHeardType } from "@/lib/constants/how-heard";
 import { Loader2, UserCircle2 } from "lucide-react";
+import { useAuthState } from "@/hooks/use-auth-state";
 
 const schema = z.object({
   phone: z.string().optional(),
@@ -48,6 +49,7 @@ const BRAZILIAN_STATES = [
 
 export default function PersonStep2() {
   const router = useRouter();
+  const { user, profile, isLoggedIn, loading: authLoading } = useAuthState();
   const {
     register,
     handleSubmit,
@@ -57,26 +59,13 @@ export default function PersonStep2() {
   } = useForm<Form>({ resolver: zodResolver(schema) });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [checkingAuth, setCheckingAuth] = useState(true);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [userName, setUserName] = useState<string | null>(null);
-
   const howHeardValue = watch("how_heard");
 
   useEffect(() => {
-    fetch("/api/me")
-      .then((r) => r.ok ? r.json() : null)
-      .then((data) => {
-        if (!data?.user) {
-          router.push("/login");
-        } else {
-          setUserEmail(data.user.email);
-          if (data.profile?.name) setUserName(data.profile.name);
-          setCheckingAuth(false);
-        }
-      })
-      .catch(() => router.push("/login"));
-  }, [router]);
+    if (!authLoading && !isLoggedIn) {
+      router.push("/login");
+    }
+  }, [authLoading, isLoggedIn, router]);
 
   const onPhone = (e: React.ChangeEvent<HTMLInputElement>) =>
     setValue("phone", maskPhone(e.target.value));
@@ -103,7 +92,7 @@ export default function PersonStep2() {
     }
   };
 
-  if (checkingAuth) {
+  if (authLoading || !isLoggedIn) {
     return (
       <AuthLayout>
         <div className="flex justify-center">
@@ -127,8 +116,8 @@ export default function PersonStep2() {
           <div className="mt-4 flex items-center gap-3 p-3 bg-blue-50 border border-blue-100 rounded-xl">
             <UserCircle2 className="h-8 w-8 text-[#3BA5FF] flex-shrink-0" />
             <div>
-              {userName && <p className="text-sm font-semibold text-[#2A1B55]">{userName}</p>}
-              {userEmail && <p className="text-xs text-neutral-500">{userEmail}</p>}
+              {profile?.name && <p className="text-sm font-semibold text-[#2A1B55]">{profile.name}</p>}
+              {user?.email && <p className="text-xs text-neutral-500">{user.email}</p>}
             </div>
           </div>
 

@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { PasswordField } from "@/components/PasswordField";
 import { maskCPF } from "@/lib/masks";
 import { Loader2 } from "lucide-react";
+import { useAuthState } from "@/hooks/use-auth-state";
 
 const schema = z
   .object({
@@ -32,7 +33,7 @@ type Form = z.infer<typeof schema>;
 
 export default function PersonStep1() {
   const router = useRouter();
-  const [checking, setChecking] = useState(true);
+  const { isLoggedIn, loading: authLoading } = useAuthState();
 
   const {
     register,
@@ -49,17 +50,10 @@ export default function PersonStep1() {
 
   // If user already has a session (e.g. pressed back), go straight to step 2
   useEffect(() => {
-    fetch("/api/me")
-      .then((r) => r.ok ? r.json() : null)
-      .then((data) => {
-        if (data?.user) {
-          router.replace("/onboarding/person/step2");
-        } else {
-          setChecking(false);
-        }
-      })
-      .catch(() => setChecking(false));
-  }, [router]);
+    if (!authLoading && isLoggedIn) {
+      router.replace("/onboarding/person/step2");
+    }
+  }, [authLoading, isLoggedIn, router]);
 
   const onCPF = (e: React.ChangeEvent<HTMLInputElement>) =>
     setValue("cpf", maskCPF(e.target.value));
@@ -94,7 +88,7 @@ export default function PersonStep1() {
     }
   };
 
-  if (checking) {
+  if (authLoading) {
     return (
       <AuthLayout>
         <div className="flex justify-center">

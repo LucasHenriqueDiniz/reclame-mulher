@@ -10,6 +10,7 @@ export class ProjectsRepo {
       companyId: data.company_id,
       name: data.name,
       description: data.description ?? null,
+      location: data.location ?? null,
       status: data.status ?? "PLANNING",
       startDate: data.start_date ? new Date(data.start_date) : null,
       endDate: data.end_date ? new Date(data.end_date) : null,
@@ -21,6 +22,11 @@ export class ProjectsRepo {
     const [project] = await db.select().from(projects).where(eq(projects.id, id)).limit(1);
     if (!project) throw new Error("Project not found");
     return project;
+  }
+
+  static async findByIdOrNull(id: string) {
+    const [project] = await db.select().from(projects).where(eq(projects.id, id)).limit(1);
+    return project ?? null;
   }
 
   static async findByCompany(companyId: string) {

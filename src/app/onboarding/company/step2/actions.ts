@@ -5,6 +5,7 @@ import { db } from "@/db/client";
 import { users, profiles, companies, companyUsers } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import type { HowHeardType } from "@/lib/constants/how-heard";
+import { CompaniesRepo } from "@/server/repos/companies";
 
 export async function completeCompanyOnboarding(input: {
   phone: string;
@@ -28,53 +29,43 @@ export async function completeCompanyOnboarding(input: {
 
   const howHeard = (input.how_heard || null) as HowHeardType | null;
 
-  const [user] = await db.select().from(users).where(eq(users.id, session.userId)).limit(1);
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, session.userId))
+    .limit(1);
   const metadata = (user?.metadata ? JSON.parse(user.metadata) : {}) as Record<string, string>;
-  const companyName = metadata.company_name ?? null;
+  const companyName = metadata.company_name ?? input.contact_name;
   const cnpjRaw = metadata.cnpj ?? null;
   const cnpj = cnpjRaw ? cnpjRaw.replace(/\D/g, "") : null;
 
-  if (cnpj) {
-    const existingCompanies = await db
-      .select({ id: companies.id })
-      .from(companies)
-      .where(eq(companies.cnpj, cnpj))
+  await db.transaction(async (tx) => {
+    const [linkedCompany] = await tx
+      .select({ companyId: companyUsers.companyId })
+      .from(companyUsers)
+      .where(eq(companyUsers.userId, session.userId))
       .limit(1);
 
-    if (existingCompanies.length > 0) {
-      const userCompany = await db
-        .select({ companyId: companyUsers.companyId })
-        .from(companyUsers)
-        .where(eq(companyUsers.userId, session.userId))
+    let companyId = linkedCompany?.companyId ?? null;
+    const slug = await CompaniesRepo.generateUniqueSlug(companyName, companyId ?? undefined);
+
+    if (!companyId && cnpj) {
+      const [existingCompany] = await tx
+        .select({ id: companies.id })
+        .from(companies)
+        .where(eq(companies.cnpj, cnpj))
         .limit(1);
 
-      const isOwn = userCompany.length > 0 && userCompany[0].companyId === existingCompanies[0].id;
-      if (!isOwn) {
+      if (existingCompany) {
         throw new Error("Este CNPJ já está cadastrado no sistema. Por favor, verifique os dados ou entre em contato com o suporte.");
       }
     }
-  }
 
-  // Upsert profile first (companyUsers FK references profiles.userId)
-  await db
-    .insert(profiles)
-    .values({
-      userId: session.userId,
-      email: session.email,
-      name: input.contact_name,
-      phone: input.phone,
-      address: input.address,
-      city: input.city,
-      state: input.state,
-      howHeard,
-      howHeardOther: howHeardOtherValue,
-      acceptedTermsAt: new Date(),
-      locale: "pt-BR",
-      role: "COMPANY",
-    })
-    .onConflictDoUpdate({
-      target: profiles.userId,
-      set: {
+    await tx
+      .insert(profiles)
+      .values({
+        userId: session.userId,
+        email: session.email,
         name: input.contact_name,
         phone: input.phone,
         address: input.address,
@@ -82,32 +73,69 @@ export async function completeCompanyOnboarding(input: {
         state: input.state,
         howHeard,
         howHeardOther: howHeardOtherValue,
-        updatedAt: new Date(),
-      },
-    });
+        acceptedTermsAt: new Date(),
+        onboardingCompletedAt: new Date(),
+        locale: "pt-BR",
+        role: "COMPANY",
+      })
+      .onConflictDoUpdate({
+        target: profiles.userId,
+        set: {
+          name: input.contact_name,
+          phone: input.phone,
+          address: input.address,
+          city: input.city,
+          state: input.state,
+          howHeard,
+          howHeardOther: howHeardOtherValue,
+          acceptedTermsAt: new Date(),
+          onboardingCompletedAt: new Date(),
+          updatedAt: new Date(),
+        },
+      });
 
-  // Then create company and link it
-  const [company] = await db
-    .insert(companies)
-    .values({
-      name: companyName ?? input.contact_name,
-      cnpj: cnpj,
-      phone: input.phone,
-      address: input.address,
-      city: input.city,
-      state: input.state,
-      contactName: input.contact_name,
-    })
-    .returning();
+    if (companyId) {
+      await tx
+        .update(companies)
+        .set({
+          name: companyName,
+          cnpj,
+          slug,
+          phone: input.phone,
+          address: input.address,
+          city: input.city,
+          state: input.state,
+          contactName: input.contact_name,
+          updatedAt: new Date(),
+        })
+        .where(eq(companies.id, companyId));
+    } else {
+      const [company] = await tx
+        .insert(companies)
+        .values({
+          name: companyName,
+          cnpj,
+          slug,
+          phone: input.phone,
+          address: input.address,
+          city: input.city,
+          state: input.state,
+          contactName: input.contact_name,
+        })
+        .returning({ id: companies.id });
 
-  await db
-    .insert(companyUsers)
-    .values({
-      userId: session.userId,
-      companyId: company.id,
-      role: "OWNER",
-    })
-    .onConflictDoNothing();
+      companyId = company.id;
+    }
+
+    await tx
+      .insert(companyUsers)
+      .values({
+        userId: session.userId,
+        companyId,
+        role: "OWNER",
+      })
+      .onConflictDoNothing();
+  });
 
   return { success: true };
 }

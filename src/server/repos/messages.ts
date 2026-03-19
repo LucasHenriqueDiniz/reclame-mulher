@@ -8,7 +8,7 @@ export class MessagesRepo {
   static async create(data: CreateMessageInput, userId: string) {
     const [message] = await db.insert(complaintMessages).values({
       complaintId: data.complaint_id,
-      senderType: data.sender_type,
+      senderType: data.sender_type ?? "USER",
       content: data.content,
       attachmentPath: data.attachment_path ?? null,
       authorId: userId,

@@ -1,4 +1,4 @@
-import { Header } from "@/components/layout/Header";
+import { MainHeader } from "@/components/layout/MainHeader";
 import { Hero } from "@/components/landing/Hero";
 import { ImpactStats } from "@/components/landing/ImpactStats";
 import { ProcessCarousel } from "@/components/landing/ProcessCarousel";
@@ -11,7 +11,7 @@ import { Wave } from "@/components/landing/Wave";
 export default function HomePage() {
   return (
     <main className="overflow-hidden">
-      <Header />
+      <MainHeader />
       <Hero />
       <ImpactStats />
       <Wave variant={1}/>

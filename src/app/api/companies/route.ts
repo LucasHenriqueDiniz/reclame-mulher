@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CompaniesRepo } from "@/server/repos/companies";
 import { CreateCompanyDto } from "@/server/dto/companies";
+import { getCurrentAdminContext } from "@/server/auth/admin";
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const search = searchParams.get("search");
+    const search = searchParams.get("search") ?? searchParams.get("q");
     const verified = searchParams.get("verified") === "true";
 
     const companies = await CompaniesRepo.findPublic(search || undefined, verified);
@@ -22,6 +23,11 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const admin = await getCurrentAdminContext();
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
     const validatedData = CreateCompanyDto.parse(body);
 

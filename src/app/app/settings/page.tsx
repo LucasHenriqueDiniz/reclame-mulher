@@ -2,9 +2,14 @@ import { getSession } from "@/lib/auth/session";
 import { ProfilesRepo } from "@/server/repos/profiles";
 import { SettingsContent } from "./_components/settings-content";
 
-export default async function SettingsPage() {
+export default async function SettingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ forcePasswordChange?: string }>;
+}) {
   const session = await getSession();
   if (!session) return null;
+  const { forcePasswordChange } = await searchParams;
 
   const profile = await ProfilesRepo.findById(session.userId);
 
@@ -17,6 +22,7 @@ export default async function SettingsPage() {
       profilePhone={profile?.phone ?? null}
       profileAddress={profile?.address ?? null}
       avatarUrl={profile?.avatarUrl ?? null}
+      forcePasswordChange={forcePasswordChange === "1"}
     />
   );
 }

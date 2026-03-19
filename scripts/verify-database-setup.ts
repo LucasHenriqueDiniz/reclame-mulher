@@ -10,10 +10,10 @@ import * as path from "path";
 config({ path: path.resolve(process.cwd(), ".env.local") });
 config({ path: path.resolve(process.cwd(), ".env") });
 
-const DATABASE_URL = process.env.DATABASE_URL;
+const DATABASE_URL = process.env.DATABASE_URL || process.env.DIRECT_URL;
 
 if (!DATABASE_URL) {
-  console.error("❌ Erro: DATABASE_URL deve estar definido no .env");
+  console.error("❌ Erro: DATABASE_URL ou DIRECT_URL deve estar definido no .env");
   process.exit(1);
 }
 
@@ -23,13 +23,41 @@ const client = postgres(DATABASE_URL, {
   prepare: false,
 });
 
+type RoutineRow = {
+  routine_name: string;
+  routine_type: string;
+  security_type: string;
+};
+
+type TriggerRow = {
+  trigger_name: string;
+  event_object_table: string;
+  event_manipulation: string;
+};
+
+type PolicyRow = {
+  tablename: string;
+  policyname: string;
+  cmd: string;
+};
+
+type EnumRow = {
+  enum_name: string;
+  enum_values: string[];
+};
+
+type IndexRow = {
+  tablename: string;
+  indexname: string;
+};
+
 async function verifySetup() {
   console.log("🔍 Verificando configuração do banco...\n");
 
   try {
     // Verificar Functions
     console.log("📋 Functions:");
-    const functions = await client`
+    const functions = await client<RoutineRow[]>`
       SELECT 
         routine_name,
         routine_type,
@@ -44,13 +72,13 @@ async function verifySetup() {
       )
       ORDER BY routine_name;
     `;
-    functions.forEach((f: any) => {
+    functions.forEach((f) => {
       console.log(`  ✅ ${f.routine_name} (${f.routine_type}, ${f.security_type})`);
     });
 
     // Verificar Triggers em public
     console.log("\n📋 Triggers (public schema):");
-    const triggers = await client`
+    const triggers = await client<TriggerRow[]>`
       SELECT 
         trigger_name,
         event_object_table,
@@ -59,13 +87,13 @@ async function verifySetup() {
       WHERE trigger_schema = 'public'
       ORDER BY event_object_table, trigger_name;
     `;
-    triggers.forEach((t: any) => {
+    triggers.forEach((t) => {
       console.log(`  ✅ ${t.trigger_name} on ${t.event_object_table} (${t.event_manipulation})`);
     });
 
     // Verificar Trigger em auth.users
     console.log("\n📋 Triggers (auth schema):");
-    const authTriggers = await client`
+    const authTriggers = await client<TriggerRow[]>`
       SELECT 
         trigger_name,
         event_object_table,
@@ -75,7 +103,7 @@ async function verifySetup() {
       AND event_object_table = 'users';
     `;
     if (authTriggers.length > 0) {
-      authTriggers.forEach((t: any) => {
+      authTriggers.forEach((t) => {
         console.log(`  ✅ ${t.trigger_name} on ${t.event_object_table} (${t.event_manipulation})`);
       });
     } else {
@@ -85,7 +113,7 @@ async function verifySetup() {
 
     // Verificar RLS Policies
     console.log("\n📋 RLS Policies:");
-    const policies = await client`
+    const policies = await client<PolicyRow[]>`
       SELECT 
         schemaname,
         tablename,
@@ -97,18 +125,18 @@ async function verifySetup() {
       WHERE schemaname = 'public'
       ORDER BY tablename, policyname;
     `;
-    const tables = new Set(policies.map((p: any) => p.tablename));
+    const tables = new Set(policies.map((p) => p.tablename));
     tables.forEach((table) => {
-      const tablePolicies = policies.filter((p: any) => p.tablename === table);
+      const tablePolicies = policies.filter((p) => p.tablename === table);
       console.log(`  📊 ${table} (${tablePolicies.length} policies)`);
-      tablePolicies.forEach((p: any) => {
+      tablePolicies.forEach((p) => {
         console.log(`    ✅ ${p.policyname} (${p.cmd})`);
       });
     });
 
     // Verificar Enums
     console.log("\n📋 Enums:");
-    const enums = await client`
+    const enums = await client<EnumRow[]>`
       SELECT 
         t.typname as enum_name,
         array_agg(e.enumlabel ORDER BY e.enumsortorder) as enum_values
@@ -118,13 +146,13 @@ async function verifySetup() {
       GROUP BY t.typname
       ORDER BY t.typname;
     `;
-    enums.forEach((e: any) => {
+    enums.forEach((e) => {
       console.log(`  ✅ ${e.enum_name}: [${e.enum_values.join(", ")}]`);
     });
 
     // Verificar Índices
     console.log("\n📋 Índices principais:");
-    const indexes = await client`
+    const indexes = await client<IndexRow[]>`
       SELECT 
         tablename,
         indexname
@@ -134,7 +162,7 @@ async function verifySetup() {
       ORDER BY tablename, indexname
       LIMIT 20;
     `;
-    indexes.forEach((idx: any) => {
+    indexes.forEach((idx) => {
       console.log(`  ✅ ${idx.indexname} on ${idx.tablename}`);
     });
 

@@ -17,6 +17,7 @@ export class CompanyUsersRepo {
   static async findByUser(userId: string) {
     return db
       .select({
+        userId: companyUsers.userId,
         role: companyUsers.role,
         company: companies,
       })
@@ -28,6 +29,7 @@ export class CompanyUsersRepo {
   static async findByCompany(companyId: string) {
     return db
       .select({
+        userId: companyUsers.userId,
         role: companyUsers.role,
         profile: {
           name: profiles.name,
@@ -37,6 +39,20 @@ export class CompanyUsersRepo {
       .from(companyUsers)
       .innerJoin(profiles, eq(companyUsers.userId, profiles.userId))
       .where(eq(companyUsers.companyId, companyId));
+  }
+
+  static async findMembership(userId: string) {
+    const [membership] = await CompanyUsersRepo.findByUser(userId);
+    return membership ?? null;
+  }
+
+  static async updateRole(userId: string, companyId: string, role: "ADMIN" | "MEMBER") {
+    const [updated] = await db
+      .update(companyUsers)
+      .set({ role })
+      .where(and(eq(companyUsers.userId, userId), eq(companyUsers.companyId, companyId)))
+      .returning();
+    return updated ?? null;
   }
 
   static async delete(userId: string, companyId: string) {

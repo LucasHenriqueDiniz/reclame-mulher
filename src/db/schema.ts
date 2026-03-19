@@ -6,6 +6,9 @@ import {
   boolean,
   pgEnum,
   primaryKey,
+  bigint,
+  index,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -60,11 +63,12 @@ export const howHeardType = pgEnum("how_heard_type", [
   "OUTRO",
 ]);
 
-// Auth users table (replaces Supabase auth.users)
+// Auth users table (custom auth, not Supabase)
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
+  mustChangePassword: boolean("must_change_password").notNull().default(false),
   metadata: text("metadata"), // JSON: extra data captured at registration
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
@@ -101,38 +105,46 @@ export const profiles = pgTable("profiles", {
   updatedAt: timestamp("updated_at", { withTimezone: true }),
 });
 
-export const companies = pgTable("companies", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").notNull(),
-  cnpj: text("cnpj").unique(),
-  corporateName: text("corporate_name"),
-  sector: text("sector"),
-  description: text("description"),
-  website: text("website"),
-  email: text("email"),
-  phone: text("phone"),
-  address: text("address"),
-  neighborhood: text("neighborhood"),
-  streetNumber: text("street_number"),
-  city: text("city"),
-  state: text("state"),
-  region: text("region"),
-  foundationDate: timestamp("foundation_date", { withTimezone: true }),
-  contactPhone: text("contact_phone"),
-  contactName: text("contact_name"),
-  responsibleName: text("responsible_name"),
-  responsibleTitle: text("responsible_title"),
-  responsibleEmail: text("responsible_email"),
-  slug: text("slug"),
-  logoUrl: text("logo_url"),
-  verifiedAt: timestamp("verified_at", { withTimezone: true }),
-  deletedAt: timestamp("deleted_at", { withTimezone: true }),
-  scheduledPermanentDeletionAt: timestamp("scheduled_permanent_deletion_at", { withTimezone: true }),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }),
-});
+export const companies = pgTable(
+  "companies",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    name: text("name").notNull(),
+    cnpj: text("cnpj").unique(),
+    corporateName: text("corporate_name"),
+    sector: text("sector"),
+    description: text("description"),
+    website: text("website"),
+    email: text("email"),
+    phone: text("phone"),
+    address: text("address"),
+    neighborhood: text("neighborhood"),
+    streetNumber: text("street_number"),
+    city: text("city"),
+    state: text("state"),
+    region: text("region"),
+    foundationDate: timestamp("foundation_date", { withTimezone: true }),
+    contactPhone: text("contact_phone"),
+    contactName: text("contact_name"),
+    responsibleName: text("responsible_name"),
+    responsibleTitle: text("responsible_title"),
+    responsibleEmail: text("responsible_email"),
+    slug: text("slug"),
+    logoUrl: text("logo_url"),
+    verifiedAt: timestamp("verified_at", { withTimezone: true }),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+    scheduledPermanentDeletionAt: timestamp("scheduled_permanent_deletion_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }),
+  },
+  (t) => ({
+    slugUniqueIdx: uniqueIndex("companies_slug_unique").on(t.slug),
+    deletedAtIdx: index("companies_deleted_at_idx").on(t.deletedAt),
+    verifiedAtIdx: index("companies_verified_at_idx").on(t.verifiedAt),
+  })
+);
 
 export const companyUsers = pgTable(
   "company_users",
@@ -153,62 +165,102 @@ export const companyUsers = pgTable(
   })
 );
 
-export const projects = pgTable("projects", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  companyId: uuid("company_id")
-    .notNull()
-    .references(() => companies.id, { onDelete: "cascade" }),
-  name: text("name").notNull(),
-  description: text("description"),
-  location: text("location"),
-  status: projectStatus("status").notNull().default("PLANNING"),
-  startDate: timestamp("start_date", { withTimezone: true }),
-  endDate: timestamp("end_date", { withTimezone: true }),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }),
-});
+export const projects = pgTable(
+  "projects",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    companyId: uuid("company_id")
+      .notNull()
+      .references(() => companies.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    description: text("description"),
+    location: text("location"),
+    status: projectStatus("status").notNull().default("PLANNING"),
+    startDate: timestamp("start_date", { withTimezone: true }),
+    endDate: timestamp("end_date", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }),
+  },
+  (t) => ({
+    companyStatusIdx: index("projects_company_status_idx").on(t.companyId, t.status),
+  })
+);
 
-export const complaints = pgTable("complaints", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  authorId: uuid("author_id")
-    .notNull()
-    .references(() => profiles.userId, { onDelete: "restrict" }),
-  companyId: uuid("company_id")
-    .notNull()
-    .references(() => companies.id, { onDelete: "restrict" }),
-  projectId: uuid("project_id").references(() => projects.id, {
-    onDelete: "set null",
-  }),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  occurredAt: timestamp("occurred_at", { withTimezone: true }),
-  expectedSolution: text("expected_solution"),
-  isAnonymous: boolean("is_anonymous").notNull().default(false),
-  isPublic: boolean("is_public").notNull().default(false),
-  status: complaintStatus("status").notNull().default("OPEN"),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }),
-});
+export const complaints = pgTable(
+  "complaints",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    authorId: uuid("author_id")
+      .notNull()
+      .references(() => profiles.userId, { onDelete: "restrict" }),
+    companyId: uuid("company_id")
+      .notNull()
+      .references(() => companies.id, { onDelete: "restrict" }),
+    projectId: uuid("project_id").references(() => projects.id, {
+      onDelete: "set null",
+    }),
+    title: text("title").notNull(),
+    description: text("description").notNull(),
+    problemLocation: text("problem_location"),
+    occurredAt: timestamp("occurred_at", { withTimezone: true }),
+    expectedSolution: text("expected_solution"),
+    hasPreviousComplaintElsewhere: boolean("has_previous_complaint_elsewhere").default(false),
+    previousComplaintChannel: text("previous_complaint_channel"),
+    impactCategory: text("impact_category"),
+    urgencyLevel: text("urgency_level"),
+    impactScope: text("impact_scope"),
+    isAnonymous: boolean("is_anonymous").notNull().default(false),
+    isPublic: boolean("is_public").notNull().default(true),
+    status: complaintStatus("status").notNull().default("OPEN"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }),
+  },
+  (t) => ({
+    companyStatusIdx: index("complaints_company_status_idx").on(t.companyId, t.status),
+    authorIdx: index("complaints_author_id_idx").on(t.authorId),
+    publicIdx: index("complaints_is_public_idx").on(t.isPublic),
+  })
+);
 
-export const complaintMessages = pgTable("complaint_messages", {
+export const complaintAttachments = pgTable("complaint_attachments", {
   id: uuid("id").primaryKey().defaultRandom(),
   complaintId: uuid("complaint_id")
     .notNull()
     .references(() => complaints.id, { onDelete: "cascade" }),
-  senderType: senderType("sender_type").notNull(),
-  authorId: uuid("author_id").references(() => profiles.userId, {
-    onDelete: "set null",
-  }),
-  content: text("content").notNull(),
-  attachmentPath: text("attachment_path"),
+  filePath: text("file_path").notNull(),
+  fileName: text("file_name").notNull(),
+  contentType: text("content_type"),
+  sizeBytes: bigint("size_bytes", { mode: "number" }),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
 });
+
+export const complaintMessages = pgTable(
+  "complaint_messages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    complaintId: uuid("complaint_id")
+      .notNull()
+      .references(() => complaints.id, { onDelete: "cascade" }),
+    senderType: senderType("sender_type").notNull(),
+    authorId: uuid("author_id").references(() => profiles.userId, {
+      onDelete: "set null",
+    }),
+    content: text("content").notNull(),
+    attachmentPath: text("attachment_path"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => ({
+    complaintIdIdx: index("complaint_messages_complaint_id_idx").on(t.complaintId),
+  })
+);
 
 export const blogPosts = pgTable("blog_posts", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -321,6 +373,13 @@ export const projectsRelations = relations(projects, ({ one, many }) => ({
   complaints: many(complaints),
 }));
 
+export const complaintAttachmentsRelations = relations(complaintAttachments, ({ one }) => ({
+  complaint: one(complaints, {
+    fields: [complaintAttachments.complaintId],
+    references: [complaints.id],
+  }),
+}));
+
 export const complaintsRelations = relations(complaints, ({ one, many }) => ({
   author: one(profiles, {
     fields: [complaints.authorId],
@@ -335,6 +394,7 @@ export const complaintsRelations = relations(complaints, ({ one, many }) => ({
     references: [projects.id],
   }),
   messages: many(complaintMessages),
+  attachments: many(complaintAttachments),
 }));
 
 export const complaintMessagesRelations = relations(complaintMessages, ({ one }) => ({

@@ -3,7 +3,7 @@
  * Script para aplicar migrations SQL manuais
  * 
  * Uso:
- *   pnpm tsx scripts/apply-sql-migration.ts supabase/migrations/04_rls_policies_and_triggers.sql
+ *   pnpm tsx scripts/apply-sql-migration.ts src/db/migrations/0000_xxx.sql
  */
 
 import { config } from "dotenv";
@@ -20,10 +20,10 @@ config({ path: path.resolve(process.cwd(), ".env") });
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const DATABASE_URL = process.env.DATABASE_URL;
+const DATABASE_URL = process.env.DATABASE_URL || process.env.DIRECT_URL;
 
 if (!DATABASE_URL) {
-  console.error("❌ Erro: DATABASE_URL deve estar definido no .env");
+  console.error("❌ Erro: DATABASE_URL ou DIRECT_URL deve estar definido no .env");
   process.exit(1);
 }
 

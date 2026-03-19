@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Reclame Mulher
 
-## Getting Started
+Plataforma para conectar mulheres impactadas por obras de infraestrutura com empresas responsaveis, permitindo registro, reclamacoes, respostas, perfil publico de empresas, blog e administracao.
 
-First, run the development server:
+## Stack real atual
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- Drizzle ORM
+- Postgres/Neon
+- autenticacao propria com cookie HTTP-only
+- React Hook Form + Zod
+- next-intl
+
+## Comandos
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+O projeto roda na porta `5000` em desenvolvimento.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Banco
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+A fonte de verdade atual do banco esta em:
 
-## Learn More
+- `src/db/schema.ts`
+- `src/db/migrations`
+- `drizzle.config.ts`
 
-To learn more about Next.js, take a look at the following resources:
+O legado antigo baseado em Supabase foi removido para evitar ambiguidade arquitetural.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Documentacao interna
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `docs/project-status.md`: estado tecnico atual do projeto
+- `docs/mvp-backlog.md`: backlog tecnico priorizado a partir do estado atual
 
-## Deploy on Vercel
+## Logins de teste
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Senha para todos: `senha123`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `maria@exemplo.com` (pessoa)
+- `empresa@construtorax.com` (empresa)
+- `ana@exemplo.com` (pessoa)
+- `admin@comunicamulher.com.br` (admin)

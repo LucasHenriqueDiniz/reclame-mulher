@@ -1,17 +1,12 @@
 import "server-only";
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 
-const connectionString = process.env.DATABASE_URL;
+const raw = process.env.DATABASE_URL ?? process.env.DIRECT_URL;
+const connectionString =
+  raw && !raw.includes("build") ? raw : "postgresql://build:build@localhost/build";
 
-if (!connectionString) {
-  throw new Error("DATABASE_URL must be set");
-}
-
-const client = postgres(connectionString, {
-  max: 10,
-  prepare: false,
-});
-
-export const db = drizzle(client, { schema });
+// Neon serverless driver (HTTP) — keep DATABASE_URL only in server env, never expose to client
+const sql = neon(connectionString);
+export const db = drizzle(sql, { schema });

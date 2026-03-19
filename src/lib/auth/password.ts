@@ -12,3 +12,12 @@ export function verifyPassword(password: string, stored: string): boolean {
   const candidate = crypto.scryptSync(password, salt, 64).toString("hex");
   return crypto.timingSafeEqual(Buffer.from(hash, "hex"), Buffer.from(candidate, "hex"));
 }
+
+export function generateTemporaryPassword(length = 12): string {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";
+  const bytes = crypto.randomBytes(length);
+
+  return Array.from(bytes)
+    .map((byte) => alphabet[byte % alphabet.length])
+    .join("");
+}

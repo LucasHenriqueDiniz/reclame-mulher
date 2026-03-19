@@ -50,6 +50,27 @@
       "when": 1762040972961,
       "tag": "0006_bumpy_maginty",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1773362153187,
+      "tag": "0007_clear_squadron_supreme",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1773441269067,
+      "tag": "0008_robust_human_robot",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1773442269067,
+      "tag": "0009_company_user_password_reset",
+      "breakpoints": true
     }
   ]
 }

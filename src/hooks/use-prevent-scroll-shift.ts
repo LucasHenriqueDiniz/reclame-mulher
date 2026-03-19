@@ -1,35 +1,36 @@
-"use client";
-
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 
 /**
- * Hook global para prevenir scroll do body quando dropdowns/modais abrem
- * 
- * Com scrollbar-gutter: stable no CSS, não precisamos mais calcular padding
- * O CSS já reserva o espaço da scrollbar automaticamente, evitando layout shift
- * 
- * Este hook apenas bloqueia o scroll quando necessário
- * 
- * @param isOpen - Quando true, bloqueia o scroll do body
+ * Hook para prevenir layout shift quando dropdowns abrem
+ * O Radix UI esconde a scrollbar ao abrir dropdowns, causando shift
+ * Este hook adiciona padding para compensar
  */
 export function usePreventScrollShift(isOpen: boolean) {
-  useLayoutEffect(() => {
-    if (!isOpen) {
-      // Restore scroll when closing
-      document.body.style.overflow = "";
-      document.body.classList.remove("dropdown-open");
+  useEffect(() => {
+    if (typeof CSS !== "undefined" && CSS.supports("scrollbar-gutter: stable")) {
+      document.body.style.paddingRight = "";
       return;
     }
 
-    // Block scroll when opening
-    // scrollbar-gutter: stable no CSS já previne o layout shift
-    document.body.style.overflow = "hidden";
-    document.body.classList.add("dropdown-open");
+    if (isOpen) {
+      // Salva o estado atual da scrollbar
+      const hasScrollbar = window.innerWidth > document.documentElement.clientWidth;
+      
+      if (hasScrollbar) {
+        // Calcula a largura da scrollbar
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        
+        // Adiciona padding ao body para compensar quando o Radix esconder a scrollbar
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      }
+    } else {
+      // Remove o padding quando fecha
+      document.body.style.paddingRight = "";
+    }
 
     return () => {
-      document.body.style.overflow = "";
-      document.body.classList.remove("dropdown-open");
+      // Cleanup
+      document.body.style.paddingRight = "";
     };
   }, [isOpen]);
 }
-

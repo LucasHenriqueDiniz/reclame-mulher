@@ -59,6 +59,7 @@ export async function updateProfilePerson(input: {
       howHeard,
       howHeardOther: howHeardOtherValue,
       acceptedTermsAt: input.accepted_terms ? new Date() : null,
+      onboardingCompletedAt: new Date(),
       locale: input.locale || "pt-BR",
       role: "USER",
     })
@@ -73,6 +74,7 @@ export async function updateProfilePerson(input: {
         howHeard,
         howHeardOther: howHeardOtherValue,
         acceptedTermsAt: input.accepted_terms ? new Date() : null,
+        onboardingCompletedAt: new Date(),
         locale: input.locale || "pt-BR",
         updatedAt: new Date(),
       },

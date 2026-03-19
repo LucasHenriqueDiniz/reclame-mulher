@@ -1,32 +1,47 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth/session";
 import { ProjectsRepo } from "@/server/repos/projects";
-import { CompanyUsersRepo } from "@/server/repos/company-users";
-
-async function getCompanyId(userId: string) {
-  const rows = await CompanyUsersRepo.findByUser(userId);
-  return rows.length ? rows[0].company.id : null;
-}
+import { UpdateProjectDto } from "@/server/dto/projects";
+import { canManageCompany, getCurrentCompanyContext } from "@/server/auth/company";
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const companyId = await getCompanyId(session.userId);
-  if (!companyId) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  const { id } = await params;
-  const body = await req.json().catch(() => ({}));
-  const project = await ProjectsRepo.update(id, { name: body.name, description: body.description, location: body.location, status: body.status, start_date: body.start_date, end_date: body.end_date });
-  return NextResponse.json({ project });
+  try {
+    const context = await getCurrentCompanyContext();
+    if (!context) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!canManageCompany(context.role)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const { id } = await params;
+    const project = await ProjectsRepo.findByIdOrNull(id);
+    if (!project) {
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    }
+    if (project.companyId !== context.companyId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const body = await req.json().catch(() => ({}));
+    const parsed = UpdateProjectDto.parse(body);
+    const updated = await ProjectsRepo.update(id, parsed);
+
+    return NextResponse.json({ project: updated });
+  } catch (error) {
+    if (error instanceof Error && "issues" in error) {
+      return NextResponse.json({ error: "Validation error" }, { status: 400 });
+    }
+    console.error("Error updating project:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const companyId = await getCompanyId(session.userId);
-  if (!companyId) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  const context = await getCurrentCompanyContext();
+  if (!context) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canManageCompany(context.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const { id } = await params;
-  const proj = await ProjectsRepo.findById(id);
-  if (proj.companyId !== companyId) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const proj = await ProjectsRepo.findByIdOrNull(id);
+  if (!proj) return NextResponse.json({ error: "Project not found" }, { status: 404 });
+  if (proj.companyId !== context.companyId) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   await ProjectsRepo.delete(id);
   return NextResponse.json({ ok: true });
 }

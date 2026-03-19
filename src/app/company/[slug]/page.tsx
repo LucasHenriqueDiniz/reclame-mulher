@@ -44,6 +44,8 @@ export default async function CompanyProfilePage({
       updatedAt: company.updatedAt?.toISOString() ?? null,
       verifiedAt: company.verifiedAt?.toISOString() ?? null,
       foundationDate: company.foundationDate?.toISOString() ?? null,
+      deletedAt: company.deletedAt?.toISOString() ?? null,
+      scheduledPermanentDeletionAt: company.scheduledPermanentDeletionAt?.toISOString() ?? null,
     },
     complaints: publicComplaints.map((c) => ({
       ...c,

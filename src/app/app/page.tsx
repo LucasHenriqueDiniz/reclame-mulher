@@ -1,44 +1,56 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
 import { db } from "@/db/client";
-import { profiles } from "@/db/schema";
+import { profiles, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
-
-import { AppHomeContent } from "./_components/app-home-content";
+import { CompanyUsersRepo } from "@/server/repos/company-users";
 
 export default async function AppHome() {
   const session = await getSession();
 
   if (!session) {
-    return null;
+    redirect("/login");
   }
 
-  const [profile] = await db
-    .select()
-    .from(profiles)
-    .where(eq(profiles.userId, session.userId))
-    .limit(1);
+  const [{ ProfilesRepo }, profile, user, membership] = await Promise.all([
+    import("@/server/repos/profiles"),
+    db.select().from(profiles).where(eq(profiles.userId, session.userId)).limit(1).then((rows) => rows[0] ?? null),
+    db
+      .select({ mustChangePassword: users.mustChangePassword })
+      .from(users)
+      .where(eq(users.id, session.userId))
+      .limit(1)
+      .then((rows) => rows[0] ?? null),
+    CompanyUsersRepo.findMembership(session.userId),
+  ]);
 
   if (!profile) {
     redirect("/onboarding/role");
   }
 
-  if (!profile.onboardingCompletedAt) {
-    const { ProfilesRepo } = await import("@/server/repos/profiles");
-    const step = await ProfilesRepo.getRequiredOnboardingStep(session.userId);
-
-    if (step === "role") redirect("/onboarding/role");
-    else if (step === "person_step1") redirect("/onboarding/person/step1");
-    else if (step === "person_step2") redirect("/onboarding/person/step2");
-    else if (step === "company_step1") redirect("/onboarding/company/step1");
-    else if (step === "company_step2") redirect("/onboarding/company/step2");
-
-    if (profile.role === "COMPANY") {
-      redirect("/onboarding/company/step2");
-    } else {
-      redirect("/onboarding/person/step2");
-    }
+  if (user?.mustChangePassword) {
+    redirect("/app/settings?forcePasswordChange=1");
   }
 
-  return <AppHomeContent name={profile?.name} role={profile?.role} email={session.email} />;
+  if (profile.role === "ADMIN") {
+    redirect("/app/admin");
+  }
+
+  if (membership) {
+    redirect("/app/company/dashboard");
+  }
+
+  const step = await ProfilesRepo.getRequiredOnboardingStep(session.userId);
+
+  if (step === "role") redirect("/onboarding/role");
+  if (step === "person_step1") redirect("/onboarding/person/step1");
+  if (step === "person_step2") redirect("/onboarding/person/step2");
+  if (step === "company_step1") redirect("/onboarding/company/step1");
+  if (step === "company_step2") redirect("/onboarding/company/step2");
+
+  if (!profile.onboardingCompletedAt) {
+    redirect(profile.role === "COMPANY" ? "/onboarding/company/step2" : "/onboarding/person/step2");
+  }
+
+  redirect("/app/complaints");
 }

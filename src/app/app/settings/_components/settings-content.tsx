@@ -1,15 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { MapPin, FileText, Eye, EyeOff, Trash2, X, Mail, Phone } from "lucide-react";
-
-const PRIMARY = "#2189E5";
-const PURPLE = "#1E0F62";
-const TEXT = "#2E435B";
-const MUTED = "#6E8195";
-const BORDER = "#D9E3EC";
-const BG = "#F4F6F8";
+import { MapPin, Eye, EyeOff, Trash2, X, BarChart2, MessageCircle, Settings as SettingsIcon, Info, ShieldCheck, PlusSquare } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 
 interface Props {
   email: string;
@@ -19,14 +17,21 @@ interface Props {
   profilePhone: string | null;
   profileAddress: string | null;
   avatarUrl: string | null;
+  forcePasswordChange?: boolean;
 }
 
-type SettingsTab = "info" | "password" | "delete";
+type ProfileTab = "reclamacoes" | "configuracoes";
+type SettingsTab = "informacoes" | "senha" | "deletar";
 
-const SETTINGS_TABS: { key: SettingsTab; label: string }[] = [
-  { key: "info", label: "Informações" },
-  { key: "password", label: "Senha" },
-  { key: "delete", label: "Deletar" },
+const PROFILE_TABS: { key: ProfileTab; label: string; icon: React.ComponentType<{ size?: number; className?: string }>; href: string }[] = [
+  { key: "reclamacoes", label: "Reclamações", icon: MessageCircle, href: "/app/complaints" },
+  { key: "configuracoes", label: "Configurações", icon: SettingsIcon, href: "/app/settings" },
+];
+
+const SETTINGS_TABS: { key: SettingsTab; label: string; icon: React.ComponentType<{ size?: number; className?: string }> }[] = [
+  { key: "informacoes", label: "Informações", icon: Info },
+  { key: "senha", label: "Senha", icon: ShieldCheck },
+  { key: "deletar", label: "Deletar", icon: Trash2 },
 ];
 
 function Avatar({ name, avatarUrl }: { name: string; avatarUrl: string | null }) {
@@ -38,82 +43,18 @@ function Avatar({ name, avatarUrl }: { name: string; avatarUrl: string | null })
     .toUpperCase();
 
   return (
-    <div
-      style={{
-        width: 88,
-        height: 88,
-        borderRadius: "50%",
-        border: "4px solid #fff",
-        overflow: "hidden",
-        background: PRIMARY,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: 28,
-        fontWeight: 700,
-        color: "#fff",
-        flexShrink: 0,
-      }}
-    >
+    <div className="absolute top-[58px] left-[43px] w-[137px] h-[137px] rounded-full border-4 border-white overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm bg-[#1E88E5]">
       {avatarUrl ? (
-        <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        <img 
+          src={avatarUrl} 
+          alt={name} 
+          className="w-full h-full object-cover"
+        />
       ) : (
-        initials
-      )}
-    </div>
-  );
-}
-
-function FieldLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <label style={{ fontSize: 13, fontWeight: 600, color: TEXT, marginBottom: 6, display: "block" }}>
-      {children}
-    </label>
-  );
-}
-
-function InputField({
-  value,
-  onChange,
-  placeholder,
-  type = "text",
-  disabled,
-  icon,
-}: {
-  value: string;
-  onChange?: (v: string) => void;
-  placeholder?: string;
-  type?: string;
-  disabled?: boolean;
-  icon?: React.ReactNode;
-}) {
-  return (
-    <div style={{ position: "relative" }}>
-      {icon && (
-        <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: MUTED, display: "flex" }}>
-          {icon}
+        <span className="text-white text-5xl font-bold font-['Poppins']">
+          {initials}
         </span>
       )}
-      <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange?.(e.target.value)}
-        placeholder={placeholder}
-        disabled={disabled}
-        style={{
-          width: "100%",
-          height: 48,
-          border: `1px solid ${BORDER}`,
-          borderRadius: 10,
-          padding: icon ? "0 14px 0 40px" : "0 14px",
-          fontSize: 14,
-          color: disabled ? MUTED : TEXT,
-          background: disabled ? "#F8FAFC" : "#fff",
-          outline: "none",
-          boxSizing: "border-box",
-          cursor: disabled ? "not-allowed" : "text",
-        }}
-      />
     </div>
   );
 }
@@ -121,151 +62,97 @@ function InputField({
 function PasswordInput({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder?: string }) {
   const [show, setShow] = useState(false);
   return (
-    <div style={{ position: "relative" }}>
-      <input
+    <div className="relative">
+      <Input
         type={show ? "text" : "password"}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder ?? "••••••••"}
-        style={{
-          width: "100%",
-          height: 48,
-          border: `1px solid ${BORDER}`,
-          borderRadius: 10,
-          padding: "0 44px 0 14px",
-          fontSize: 14,
-          color: TEXT,
-          background: "#fff",
-          outline: "none",
-          boxSizing: "border-box",
-        }}
+        className="h-[45px] rounded-[9px] border-[#e5e5ed] pr-10"
       />
       <button
         type="button"
         onClick={() => setShow((s) => !s)}
-        style={{
-          position: "absolute",
-          right: 14,
-          top: "50%",
-          transform: "translateY(-50%)",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          color: MUTED,
-          display: "flex",
-        }}
+        className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-[#607D8B] flex items-center justify-center"
       >
-        {show ? <EyeOff size={16} /> : <Eye size={16} />}
+        {show ? <EyeOff size={18} /> : <Eye size={18} />}
       </button>
     </div>
   );
 }
 
 function DeleteModal({ onClose }: { onClose: () => void }) {
+  const { toast } = useToast();
+  const [deleting, setDeleting] = useState(false);
+
   return (
     <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,0.45)",
-        zIndex: 1000,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 24,
-      }}
+      className="fixed inset-0 bg-black/45 z-[1000] flex items-center justify-center p-6 backdrop-blur-sm"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 24,
-          padding: "40px 36px 32px",
-          maxWidth: 440,
-          width: "100%",
-          position: "relative",
-          textAlign: "center",
-        }}
-      >
+      <div className="bg-white rounded-3xl p-10 pb-8 max-w-[440px] w-full relative text-center shadow-2xl">
         {/* Close */}
         <button
           onClick={onClose}
-          style={{
-            position: "absolute",
-            top: 16,
-            right: 16,
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            color: MUTED,
-            display: "flex",
-          }}
+          className="absolute top-4 right-4 bg-transparent border-none cursor-pointer text-[#607D8B] flex items-center justify-center hover:text-[#455A64] transition-colors"
         >
           <X size={20} />
         </button>
 
         {/* Icon */}
-        <div
-          style={{
-            width: 72,
-            height: 72,
-            borderRadius: "50%",
-            background: "#FFF3EC",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: "0 auto 20px",
-          }}
-        >
-          <Trash2 size={32} color="#E8721D" />
+        <div className="w-[72px] h-[72px] rounded-full bg-[#FFF3EC] flex items-center justify-center mx-auto mb-5">
+          <Trash2 size={32} className="text-[#E8721D]" />
         </div>
 
-        <h3 style={{ fontSize: 22, fontWeight: 700, color: TEXT, margin: "0 0 10px" }}>
+        <h3 className="text-[22px] font-bold text-[#2A3F54] mb-2.5">
           Você tem certeza?
         </h3>
-        <p style={{ fontSize: 14, color: MUTED, lineHeight: 1.6, margin: "0 0 10px" }}>
+        <p className="text-sm text-[#607D8B] leading-relaxed mb-2.5">
           Ao deletar sua conta iremos remover todos os seus dados do nosso banco de dados.
         </p>
-        <p style={{ fontSize: 14, fontWeight: 600, color: "#E8721D", margin: "0 0 24px" }}>
+        <p className="text-sm font-semibold text-[#E8721D] mb-6">
           Esta é uma ação irreversível!
         </p>
 
-        <hr style={{ border: "none", borderTop: `1px solid ${BORDER}`, margin: "0 0 24px" }} />
+        <hr className="border-none border-t border-[#E5E5ED] mb-6" />
 
-        <div style={{ display: "flex", gap: 12 }}>
+        <div className="flex gap-3">
           <button
             onClick={onClose}
-            style={{
-              flex: 1,
-              height: 48,
-              border: `1px solid ${BORDER}`,
-              borderRadius: 10,
-              background: "#fff",
-              color: TEXT,
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
+            className="flex-1 h-12 border border-[#E5E5ED] rounded-[10px] bg-white text-[#2A3F54] text-sm font-semibold cursor-pointer hover:bg-gray-50 transition-colors"
           >
             Cancelar
           </button>
           <button
-            onClick={() => {
-              // TODO: [API: DELETE /api/user/account]
+            onClick={async () => {
+              try {
+                setDeleting(true);
+                const response = await fetch("/api/user/account", {
+                  method: "DELETE",
+                });
+                if (response.ok) {
+                  window.location.href = "/";
+                } else {
+                  toast({
+                    title: "Erro ao deletar conta",
+                    description: "Nao foi possivel remover sua conta.",
+                    variant: "destructive",
+                  });
+                }
+              } catch {
+                toast({
+                  title: "Erro ao deletar conta",
+                  description: "Nao foi possivel remover sua conta.",
+                  variant: "destructive",
+                });
+              } finally {
+                setDeleting(false);
+              }
             }}
-            style={{
-              flex: 1,
-              height: 48,
-              border: "none",
-              borderRadius: 10,
-              background: "#E8721D",
-              color: "#fff",
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
+            disabled={deleting}
+            className="flex-1 h-12 border-none rounded-[10px] bg-[#E8721D] text-white text-sm font-semibold cursor-pointer hover:bg-[#D66519] transition-colors"
           >
-            Deletar
+            {deleting ? "Deletando..." : "Deletar"}
           </button>
         </div>
       </div>
@@ -281,8 +168,11 @@ export function SettingsContent({
   profilePhone,
   profileAddress,
   avatarUrl,
+  forcePasswordChange = false,
 }: Props) {
-  const [activeTab, setActiveTab] = useState<SettingsTab>("info");
+  const { toast } = useToast();
+  const [activeProfileTab] = useState<ProfileTab>("configuracoes");
+  const [activeTab, setActiveTab] = useState<SettingsTab>(forcePasswordChange ? "senha" : "senha");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [name, setName] = useState(profileName);
@@ -290,12 +180,12 @@ export function SettingsContent({
   const [city, setCity] = useState(profileCity ?? "");
   const [state, setState] = useState(profileState ?? "");
   const [address, setAddress] = useState(profileAddress ?? "");
-  const [bairro, setBairro] = useState("");
-  const [numero, setNumero] = useState("");
 
   const [currentPwd, setCurrentPwd] = useState("");
   const [newPwd, setNewPwd] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [savingPassword, setSavingPassword] = useState(false);
 
   const location = [profileCity, profileState].filter(Boolean).join(", ");
 
@@ -303,272 +193,420 @@ export function SettingsContent({
     <>
       {showDeleteModal && <DeleteModal onClose={() => setShowDeleteModal(false)} />}
 
-      <div style={{ background: BG, minHeight: "100vh", paddingBottom: 48 }}>
-        <div style={{ maxWidth: 1140, margin: "0 auto", padding: "32px 24px 0" }}>
+      <div className="bg-[#F5F7FA] min-h-screen pb-12">
+        <div className="max-w-[1200px] mx-auto px-6 pt-8">
 
           {/* ── Profile Hero Card ── */}
-          <div style={{ background: "#fff", borderRadius: 16, border: `1px solid ${BORDER}`, overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
-            <div style={{ height: 96, background: `linear-gradient(135deg, ${PRIMARY} 0%, #1a6fc9 100%)` }} />
+          <Card className="relative overflow-hidden shadow-md border-0">
+            {/* Blue Banner */}
+            <div className="h-[126px] bg-[#1E88E5] rounded-t-xl" />
 
-            <div style={{ padding: "0 28px 0" }}>
-              <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginTop: -44 }}>
-                <div style={{ display: "flex", alignItems: "flex-end", gap: 16 }}>
-                  <Avatar name={profileName || "U"} avatarUrl={avatarUrl} />
-                  <div style={{ paddingBottom: 12 }}>
-                    <h2 style={{ fontSize: 20, fontWeight: 700, color: PURPLE, margin: 0 }}>{profileName}</h2>
-                    <div style={{ display: "flex", gap: 16, marginTop: 4 }}>
-                      {location && (
-                        <span style={{ fontSize: 13, color: MUTED, display: "flex", alignItems: "center", gap: 4 }}>
-                          <MapPin size={13} />
-                          {location}
-                        </span>
-                      )}
-                      <span style={{ fontSize: 13, color: MUTED, display: "flex", alignItems: "center", gap: 4 }}>
-                        <FileText size={13} />
-                        Configurações da conta
+            {/* Avatar - overlapping banner */}
+            <Avatar name={profileName || "U"} avatarUrl={avatarUrl} />
+
+            <div className="pt-[75px] pb-2.5 px-2.5">
+              {/* User Name */}
+              <div className="px-4 h-[30px] flex items-center">
+                <h2 className="font-bold text-xl text-[#2A3F54] m-0">
+                  {profileName}
+                </h2>
+              </div>
+
+              {/* Location, Stats, and Action Button */}
+              <div className="py-2.5 px-4 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  {location && (
+                    <div className="flex items-center gap-1.5">
+                      <MapPin size={18} className="text-[#607D8B]" />
+                      <span className="text-[13px] text-[#607D8B]">
+                        {location}
                       </span>
                     </div>
+                  )}
+                  <div className="flex items-center gap-1.5">
+                    <BarChart2 size={18} className="text-[#607D8B]" />
+                    <span className="text-[13px] text-[#607D8B]">Suas reclamações</span>
                   </div>
                 </div>
+
+                <Link href="/app/complaints/new">
+                  <Button 
+                    className="h-auto px-6 py-3 rounded-xl gap-3 bg-[#1E88E5] hover:bg-[#1976D2]"
+                  >
+                    <span className="text-sm font-medium">Começar uma nova reclamação</span>
+                    <PlusSquare size={18} />
+                  </Button>
+                </Link>
               </div>
 
-              {/* Profile-level tabs (Reclamações / Configurações) */}
-              <div style={{ display: "flex", gap: 0, marginTop: 16, borderTop: `1px solid ${BORDER}` }}>
-                {[
-                  { label: "Reclamações", href: "/app/complaints", active: false },
-                  { label: "Configurações", href: "/app/settings", active: true },
-                ].map((tab) => (
-                  <Link
-                    key={tab.label}
-                    href={tab.href}
-                    style={{
-                      textDecoration: "none",
-                      padding: "14px 20px",
-                      fontSize: 14,
-                      fontWeight: 600,
-                      color: tab.active ? PRIMARY : MUTED,
-                      borderBottom: tab.active ? `2px solid ${PRIMARY}` : "2px solid transparent",
-                      marginBottom: -1,
-                    }}
-                  >
-                    {tab.label}
-                  </Link>
-                ))}
+              {/* Profile Navigation Tabs */}
+              <div className="flex items-center gap-4 px-4 border-t border-[#E5E5ED]">
+                {PROFILE_TABS.map((tab) => {
+                  const Icon = tab.icon;
+                  const isActive = activeProfileTab === tab.key;
+                  return (
+                    <Link
+                      key={tab.key}
+                      href={tab.href}
+                      className={`flex items-center gap-1.5 py-4 px-2 no-underline border-b-2 -mb-px transition-colors ${
+                        isActive ? "border-[#1E88E5]" : "border-transparent"
+                      }`}
+                    >
+                      <Icon 
+                        size={24} 
+                        className={isActive ? "text-[#1E88E5]" : "text-[#607D8B]"}
+                      />
+                      <span 
+                        className={`text-sm font-medium ${
+                          isActive ? "text-[#1E88E5]" : "text-[#607D8B]"
+                        }`}
+                      >
+                        {tab.label}
+                      </span>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
-          </div>
+          </Card>
+
+          {forcePasswordChange ? (
+            <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-900">
+              Sua conta foi criada com uma senha temporária. Troque sua senha agora para continuar usando a plataforma com segurança.
+            </div>
+          ) : null}
 
           {/* ── Settings Card ── */}
-          <div style={{ background: "#fff", borderRadius: 16, border: `1px solid ${BORDER}`, marginTop: 20, boxShadow: "0 1px 4px rgba(0,0,0,0.06)", overflow: "hidden" }}>
-            {/* Sub-tabs */}
-            <div style={{ display: "flex", padding: "0 24px", borderBottom: `1px solid ${BORDER}` }}>
-              {SETTINGS_TABS.map((t) => (
-                <button
-                  key={t.key}
-                  onClick={() => setActiveTab(t.key)}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    padding: "16px 20px",
-                    fontSize: 14,
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    color: activeTab === t.key ? PRIMARY : MUTED,
-                    borderBottom: activeTab === t.key ? `2px solid ${PRIMARY}` : "2px solid transparent",
-                    marginBottom: -1,
-                  }}
-                >
-                  {t.label}
-                </button>
-              ))}
-            </div>
-
-            <div style={{ padding: 28 }}>
-              {/* ── Informações ── */}
-              {activeTab === "info" && (
-                <div>
-                  <div style={{ marginBottom: 20 }}>
-                    <FieldLabel>Nome completo</FieldLabel>
-                    <InputField value={name} onChange={setName} placeholder="Seu nome completo" />
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <FieldLabel>Email</FieldLabel>
-                    <InputField
-                      value={email}
-                      disabled
-                      placeholder="email@exemplo.com"
-                      icon={<Mail size={15} />}
-                    />
-                    <p style={{ fontSize: 12, color: MUTED, marginTop: 4 }}>O e-mail não pode ser alterado.</p>
-                  </div>
-
-                  <div style={{ marginBottom: 20 }}>
-                    <FieldLabel>Telefone</FieldLabel>
-                    <InputField value={phone} onChange={setPhone} placeholder="(xx) 1234-56789" icon={<Phone size={15} />} />
-                  </div>
-
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
-                    <div>
-                      <FieldLabel>Cidade</FieldLabel>
-                      <InputField value={city} onChange={setCity} placeholder="Sua cidade" />
-                    </div>
-                    <div>
-                      <FieldLabel>Bairro</FieldLabel>
-                      <InputField value={bairro} onChange={setBairro} placeholder="Seu bairro" />
-                    </div>
-                  </div>
-
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
-                    <div>
-                      <FieldLabel>Estado</FieldLabel>
-                      <InputField value={state} onChange={setState} placeholder="UF" />
-                    </div>
-                    <div>
-                      <FieldLabel>Número</FieldLabel>
-                      <InputField value={numero} onChange={setNumero} placeholder="Nº" />
-                    </div>
-                  </div>
-
-                  <div style={{ marginBottom: 28 }}>
-                    <FieldLabel>Endereço</FieldLabel>
-                    <InputField value={address} onChange={setAddress} placeholder="Rua, número, bairro" />
-                  </div>
-
-                  <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, paddingTop: 20, borderTop: `1px solid ${BORDER}` }}>
+          <Card className="mt-5 shadow-md border-0 overflow-hidden">
+            <CardContent className="p-0">
+              {/* Sub-tabs */}
+              <div className="flex h-14 items-center gap-4 px-4 border-b border-[#26a69a1a] bg-white">
+                {SETTINGS_TABS.map((tab) => {
+                  const Icon = tab.icon;
+                  const isActive = activeTab === tab.key;
+                  return (
                     <button
-                      style={{
-                        height: 44,
-                        padding: "0 24px",
-                        border: `1px solid ${BORDER}`,
-                        borderRadius: 10,
-                        background: "#fff",
-                        color: TEXT,
-                        fontSize: 14,
-                        fontWeight: 600,
-                        cursor: "pointer",
-                      }}
+                      key={tab.key}
+                      onClick={() => setActiveTab(tab.key)}
+                      className={`flex items-center gap-1.5 px-2 py-4 bg-transparent border-none cursor-pointer -mb-px border-b-2 transition-colors ${
+                        isActive ? "border-[#1E88E5]" : "border-transparent"
+                      }`}
                     >
-                      Cancelar
+                      <Icon 
+                        size={24} 
+                        className={isActive ? "text-[#1E88E5]" : "text-[#607D8B]"}
+                      />
+                      <span 
+                        className={`text-sm font-medium ${
+                          isActive ? "text-[#1E88E5]" : "text-[#607D8B]"
+                        }`}
+                      >
+                        {tab.label}
+                      </span>
                     </button>
+                  );
+                })}
+              </div>
+
+              <div className="p-3 px-4">
+                {/* ── Informações ── */}
+                {activeTab === "informacoes" && (
+                  <div className="pt-3">
+                    <div className="mb-4 max-w-[400px]">
+                      <Label 
+                        htmlFor="name"
+                        className="text-sm font-medium mb-1.5 block text-[#232360]"
+                      >
+                        Nome completo
+                      </Label>
+                      <Input
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Seu nome completo"
+                        className="h-[45px] rounded-[9px] border-[#e5e5ed]"
+                      />
+                    </div>
+
+                    <div className="mb-4 max-w-[400px]">
+                      <Label 
+                        htmlFor="email"
+                        className="text-sm font-medium mb-1.5 block text-[#232360]"
+                      >
+                        Email
+                      </Label>
+                      <Input
+                        id="email"
+                        value={email}
+                        disabled
+                        className="h-[45px] rounded-[9px] border-[#e5e5ed] bg-gray-50"
+                      />
+                      <p className="text-xs text-[#607D8B] mt-1">
+                        O e-mail não pode ser alterado.
+                      </p>
+                    </div>
+
+                    <div className="mb-4 max-w-[400px]">
+                      <Label 
+                        htmlFor="phone"
+                        className="text-sm font-medium mb-1.5 block text-[#232360]"
+                      >
+                        Telefone
+                      </Label>
+                      <Input
+                        id="phone"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="(xx) 1234-56789"
+                        className="h-[45px] rounded-[9px] border-[#e5e5ed]"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 mb-4 max-w-[400px]">
+                      <div>
+                        <Label 
+                          htmlFor="city"
+                          className="text-sm font-medium mb-1.5 block text-[#232360]"
+                        >
+                          Cidade
+                        </Label>
+                        <Input
+                          id="city"
+                          value={city}
+                          onChange={(e) => setCity(e.target.value)}
+                          placeholder="Sua cidade"
+                          className="h-[45px] rounded-[9px] border-[#e5e5ed]"
+                        />
+                      </div>
+                      <div>
+                        <Label 
+                          htmlFor="state"
+                          className="text-sm font-medium mb-1.5 block text-[#232360]"
+                        >
+                          Estado
+                        </Label>
+                        <Input
+                          id="state"
+                          value={state}
+                          onChange={(e) => setState(e.target.value)}
+                          placeholder="UF"
+                          className="h-[45px] rounded-[9px] border-[#e5e5ed]"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mb-7 max-w-[400px]">
+                      <Label 
+                        htmlFor="address"
+                        className="text-sm font-medium mb-1.5 block text-[#232360]"
+                      >
+                        Endereço
+                      </Label>
+                      <Input
+                        id="address"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        placeholder="Rua, número, bairro"
+                        className="h-[45px] rounded-[9px] border-[#e5e5ed]"
+                      />
+                    </div>
+
+                    <div className="flex justify-end gap-1">
+                      <Button
+                        variant="outline"
+                        className="h-auto px-6 py-3 rounded-lg"
+                        onClick={() => {
+                          setName(profileName);
+                          setPhone(profilePhone ?? "");
+                          setCity(profileCity ?? "");
+                          setState(profileState ?? "");
+                          setAddress(profileAddress ?? "");
+                        }}
+                      >
+                        <span className="text-sm font-medium text-black">Cancelar</span>
+                      </Button>
+                      <Button
+                        onClick={async () => {
+                          try {
+                            setSavingProfile(true);
+                            const response = await fetch("/api/user/profile", {
+                              method: "PATCH",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ name, phone, city, state, address }),
+                            });
+                            if (response.ok) {
+                              toast({
+                                title: "Perfil atualizado",
+                                description: "Suas informacoes foram salvas.",
+                              });
+                            } else {
+                              toast({
+                                title: "Erro ao salvar perfil",
+                                description: "Nao foi possivel salvar suas informacoes.",
+                                variant: "destructive",
+                              });
+                            }
+                          } catch {
+                            toast({
+                              title: "Erro ao salvar perfil",
+                              description: "Nao foi possivel salvar suas informacoes.",
+                              variant: "destructive",
+                            });
+                          } finally {
+                            setSavingProfile(false);
+                          }
+                        }}
+                        disabled={savingProfile}
+                        className="h-auto px-6 py-3 rounded-lg bg-[#1E88E5] hover:bg-[#1976D2]"
+                      >
+                        <span className="text-sm font-medium">{savingProfile ? "Salvando..." : "Salvar"}</span>
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {/* ── Senha ── */}
+                {activeTab === "senha" && (
+                  <div className="pt-3">
+                    <div className="mb-4 max-w-[400px]">
+                      <Label 
+                        htmlFor="current-password"
+                        className="text-sm font-medium mb-1.5 block text-[#232360]"
+                      >
+                        Senha atual
+                      </Label>
+                      <PasswordInput 
+                        value={currentPwd} 
+                        onChange={setCurrentPwd}
+                        placeholder="Digite sua senha atual"
+                      />
+                    </div>
+
+                    <div className="mb-4 max-w-[400px]">
+                      <Label 
+                        htmlFor="new-password"
+                        className="text-sm font-medium mb-1.5 block text-[#232360]"
+                      >
+                        Nova senha
+                      </Label>
+                      <PasswordInput 
+                        value={newPwd} 
+                        onChange={setNewPwd}
+                        placeholder="Mínimo 8 caracteres"
+                      />
+                    </div>
+
+                    <div className="mb-7 max-w-[400px]">
+                      <Label 
+                        htmlFor="confirm-password"
+                        className="text-sm font-medium mb-1.5 block text-[#232360]"
+                      >
+                        Confirmar nova senha
+                      </Label>
+                      <PasswordInput 
+                        value={confirmPwd} 
+                        onChange={setConfirmPwd}
+                        placeholder="Repita a nova senha"
+                      />
+                    </div>
+
+                    <div className="flex justify-end gap-1">
+                      <Button
+                        variant="outline"
+                        className="h-auto px-6 py-3 rounded-lg"
+                        onClick={() => {
+                          setCurrentPwd("");
+                          setNewPwd("");
+                          setConfirmPwd("");
+                        }}
+                      >
+                        <span className="text-sm font-medium text-black">Cancelar</span>
+                      </Button>
+                      <Button
+                        onClick={async () => {
+                          if (newPwd !== confirmPwd) {
+                            toast({
+                              title: "Senhas divergentes",
+                              description: "As senhas nao coincidem.",
+                              variant: "destructive",
+                            });
+                            return;
+                          }
+                          if (newPwd.length < 8) {
+                            toast({
+                              title: "Senha invalida",
+                              description: "A senha deve ter no minimo 8 caracteres.",
+                              variant: "destructive",
+                            });
+                            return;
+                          }
+                          try {
+                            setSavingPassword(true);
+                            const response = await fetch("/api/auth/change-password", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ 
+                                currentPassword: currentPwd, 
+                                newPassword: newPwd 
+                              }),
+                            });
+                            const data = await response.json();
+                            if (response.ok) {
+                              toast({
+                                title: "Senha alterada",
+                                description: "Sua senha foi atualizada com sucesso.",
+                              });
+                              setCurrentPwd("");
+                              setNewPwd("");
+                              setConfirmPwd("");
+                            } else {
+                              toast({
+                                title: "Erro ao alterar senha",
+                                description: data.error || "Nao foi possivel alterar sua senha.",
+                                variant: "destructive",
+                              });
+                            }
+                          } catch {
+                            toast({
+                              title: "Erro ao alterar senha",
+                              description: "Nao foi possivel alterar sua senha.",
+                              variant: "destructive",
+                            });
+                          } finally {
+                            setSavingPassword(false);
+                          }
+                        }}
+                        disabled={savingPassword}
+                        className="h-auto px-6 py-3 rounded-lg bg-[#1E88E5] hover:bg-[#1976D2]"
+                      >
+                        <span className="text-sm font-medium">{savingPassword ? "Salvando..." : "Salvar"}</span>
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {/* ── Deletar ── */}
+                {activeTab === "deletar" && (
+                  <div className="pt-3 max-w-[560px]">
+                    <div className="border border-[#FED7AA] rounded-xl p-5 bg-[#FFF7ED] mb-6">
+                      <p className="text-sm text-[#2A3F54] m-0 leading-relaxed">
+                        Ao deletar sua conta, todos os seus dados serão permanentemente removidos — reclamações, mensagens e informações pessoais.{" "}
+                        <strong className="text-[#E8721D]">Esta ação não pode ser desfeita.</strong>
+                      </p>
+                    </div>
+
                     <button
-                      onClick={() => {
-                        // TODO: [API: PATCH /api/user/profile]
-                      }}
-                      style={{
-                        height: 44,
-                        padding: "0 24px",
-                        border: "none",
-                        borderRadius: 10,
-                        background: PRIMARY,
-                        color: "#fff",
-                        fontSize: 14,
-                        fontWeight: 600,
-                        cursor: "pointer",
-                      }}
+                      onClick={() => setShowDeleteModal(true)}
+                      className="h-[46px] px-6 border-none rounded-[10px] bg-[#E8721D] text-white text-sm font-semibold cursor-pointer flex items-center gap-2 hover:bg-[#D66519] transition-colors"
                     >
-                      Salvar
+                      <Trash2 size={16} />
+                      Deletar minha conta
                     </button>
                   </div>
-                </div>
-              )}
-
-              {/* ── Senha ── */}
-              {activeTab === "password" && (
-                <div style={{ maxWidth: 480 }}>
-                  <div style={{ marginBottom: 20 }}>
-                    <FieldLabel>Senha Atual</FieldLabel>
-                    <PasswordInput value={currentPwd} onChange={setCurrentPwd} />
-                  </div>
-                  <div style={{ marginBottom: 20 }}>
-                    <FieldLabel>Nova Senha</FieldLabel>
-                    <PasswordInput value={newPwd} onChange={setNewPwd} placeholder="Mínimo 8 caracteres" />
-                  </div>
-                  <div style={{ marginBottom: 28 }}>
-                    <FieldLabel>Confirmar Nova Senha</FieldLabel>
-                    <PasswordInput value={confirmPwd} onChange={setConfirmPwd} placeholder="Repita a nova senha" />
-                  </div>
-
-                  <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, paddingTop: 20, borderTop: `1px solid ${BORDER}` }}>
-                    <button
-                      style={{
-                        height: 44,
-                        padding: "0 24px",
-                        border: `1px solid ${BORDER}`,
-                        borderRadius: 10,
-                        background: "#fff",
-                        color: TEXT,
-                        fontSize: 14,
-                        fontWeight: 600,
-                        cursor: "pointer",
-                      }}
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      onClick={() => {
-                        // TODO: [API: PATCH /api/auth/password]
-                      }}
-                      style={{
-                        height: 44,
-                        padding: "0 24px",
-                        border: "none",
-                        borderRadius: 10,
-                        background: PRIMARY,
-                        color: "#fff",
-                        fontSize: 14,
-                        fontWeight: 600,
-                        cursor: "pointer",
-                      }}
-                    >
-                      Alterar Senha
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* ── Deletar ── */}
-              {activeTab === "delete" && (
-                <div style={{ maxWidth: 560 }}>
-                  <div
-                    style={{
-                      border: "1px solid #FED7AA",
-                      borderRadius: 12,
-                      padding: 20,
-                      background: "#FFF7ED",
-                      marginBottom: 24,
-                    }}
-                  >
-                    <p style={{ fontSize: 14, color: TEXT, margin: 0, lineHeight: 1.6 }}>
-                      Ao deletar sua conta, todos os seus dados serão permanentemente removidos — reclamações, mensagens e informações pessoais.{" "}
-                      <strong style={{ color: "#E8721D" }}>Esta ação não pode ser desfeita.</strong>
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() => setShowDeleteModal(true)}
-                    style={{
-                      height: 46,
-                      padding: "0 24px",
-                      border: "none",
-                      borderRadius: 10,
-                      background: "#E8721D",
-                      color: "#fff",
-                      fontSize: 14,
-                      fontWeight: 600,
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 8,
-                    }}
-                  >
-                    <Trash2 size={16} />
-                    Deletar minha conta
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </>

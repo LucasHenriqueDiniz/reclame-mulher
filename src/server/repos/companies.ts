@@ -1,11 +1,44 @@
 import "server-only";
 import { db } from "@/db/client";
 import { companies, companyUsers, complaints, projects } from "@/db/schema";
-import { eq, ilike, or, count, and, sql } from "drizzle-orm";
-import { CreateCompanyInput, UpdateCompanyInput } from "../dto/companies";
+import { eq, ilike, or, count, and, sql, isNull, like, ne } from "drizzle-orm";
+import { CreateCompanyInput } from "../dto/companies";
+import { slugify } from "@/lib/normalize";
 
 export class CompaniesRepo {
+  static async generateUniqueSlug(source: string, excludeId?: string) {
+    const base = slugify(source).slice(0, 80) || "empresa";
+    const rows = await db
+      .select({ slug: companies.slug })
+      .from(companies)
+      .where(
+        and(
+          or(eq(companies.slug, base), like(companies.slug, `${base}-%`)),
+          excludeId ? ne(companies.id, excludeId) : undefined
+        )
+      );
+
+    const existing = new Set(
+      rows
+        .map((row) => row.slug)
+        .filter((value): value is string => typeof value === "string" && value.length > 0)
+    );
+
+    if (!existing.has(base)) {
+      return base;
+    }
+
+    let suffix = 2;
+    while (existing.has(`${base}-${suffix}`)) {
+      suffix += 1;
+    }
+
+    return `${base}-${suffix}`;
+  }
+
   static async create(data: CreateCompanyInput) {
+    const slugSource = data.slug ?? data.name;
+    const slug = slugSource ? await CompaniesRepo.generateUniqueSlug(slugSource) : null;
     const [company] = await db.insert(companies).values({
       name: data.name,
       cnpj: data.cnpj ?? null,
@@ -14,7 +47,7 @@ export class CompaniesRepo {
       responsibleEmail: data.responsible_email,
       sector: data.sector ?? null,
       website: data.website ?? null,
-      slug: data.slug ?? null,
+      slug,
     }).returning();
     return company;
   }
@@ -25,29 +58,102 @@ export class CompaniesRepo {
     return company;
   }
 
+  static async findByIdOrNull(id: string) {
+    const [company] = await db.select().from(companies).where(eq(companies.id, id)).limit(1);
+    return company ?? null;
+  }
+
   static async findBySlug(slug: string) {
-    const [company] = await db.select().from(companies).where(eq(companies.slug, slug)).limit(1);
+    const [company] = await db
+      .select()
+      .from(companies)
+      .where(and(eq(companies.slug, slug), isNull(companies.deletedAt)))
+      .limit(1);
     if (!company) throw new Error("Company not found");
     return company;
   }
 
-  static async findPublic(search?: string) {
-    if (search) {
-      return db.select().from(companies).where(
-        or(ilike(companies.name, `%${search}%`), ilike(companies.corporateName, `%${search}%`))
-      );
-    }
-    return db.select().from(companies);
+  static async findPublic(search?: string, verifiedOnly?: boolean) {
+    const where = and(
+      isNull(companies.deletedAt),
+      verifiedOnly ? sql`${companies.verifiedAt} is not null` : undefined,
+      search
+        ? or(
+            ilike(companies.name, `%${search}%`),
+            ilike(companies.corporateName, `%${search}%`)
+          )
+        : undefined
+    );
+
+    return db
+      .select({
+        id: companies.id,
+        name: companies.name,
+        corporateName: companies.corporateName,
+        sector: companies.sector,
+        website: companies.website,
+        phone: companies.phone,
+        city: companies.city,
+        state: companies.state,
+        region: companies.region,
+        slug: companies.slug,
+        logoUrl: companies.logoUrl,
+        verifiedAt: companies.verifiedAt,
+        createdAt: companies.createdAt,
+      })
+      .from(companies)
+      .where(where);
   }
 
-  static async update(id: string, data: Partial<typeof companies.$inferInsert>) {
-    const [company] = await db.update(companies).set({ ...data, updatedAt: new Date() }).where(eq(companies.id, id)).returning();
+  static async update(id: string, data: Record<string, unknown>) {
+    const updateData: Record<string, unknown> = { ...data, updatedAt: new Date() };
+
+    if (data.slug !== undefined) {
+      updateData.slug = data.slug
+        ? await CompaniesRepo.generateUniqueSlug(String(data.slug), id)
+        : null;
+    }
+
+    const [company] = await db
+      .update(companies)
+      .set(updateData)
+      .where(eq(companies.id, id))
+      .returning();
     return company;
   }
 
   static async verify(id: string, verified: boolean) {
     const [company] = await db.update(companies).set({ verifiedAt: verified ? new Date() : null, updatedAt: new Date() }).where(eq(companies.id, id)).returning();
     return company;
+  }
+
+  static async findForAdmin(status: "all" | "pending" | "verified" = "all") {
+    const where = and(
+      isNull(companies.deletedAt),
+      status === "pending"
+        ? isNull(companies.verifiedAt)
+        : status === "verified"
+          ? sql`${companies.verifiedAt} is not null`
+          : undefined
+    );
+
+    return db
+      .select({
+        id: companies.id,
+        name: companies.name,
+        cnpj: companies.cnpj,
+        city: companies.city,
+        state: companies.state,
+        contactName: companies.contactName,
+        responsibleName: companies.responsibleName,
+        responsibleEmail: companies.responsibleEmail,
+        verifiedAt: companies.verifiedAt,
+        createdAt: companies.createdAt,
+        updatedAt: companies.updatedAt,
+      })
+      .from(companies)
+      .where(where)
+      .orderBy(companies.createdAt);
   }
 
   static async softDelete(id: string) {

@@ -1,5 +1,8 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
+import { db } from "@/db/client";
+import { profiles } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -10,6 +13,16 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
 
   if (!session) {
     redirect("/login");
+  }
+
+  const [profile] = await db
+    .select({ role: profiles.role })
+    .from(profiles)
+    .where(eq(profiles.userId, session.userId))
+    .limit(1);
+
+  if (profile?.role !== "ADMIN") {
+    redirect("/app");
   }
 
   return (

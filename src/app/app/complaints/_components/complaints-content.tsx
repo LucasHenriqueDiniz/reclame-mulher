@@ -1,27 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { MapPin, FileText, Plus, CalendarDays, ChevronRight } from "lucide-react";
+import { MapPin, BarChart2, MessageCircle, Settings as SettingsIcon, PlusSquare, ChevronRight, Clock, Meh, Smile, Laugh } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { protocolId } from "@/components/company/utils";
+import { getComplaintStatusConfig, type ComplaintStatus } from "@/lib/constants/complaint-status";
 
-const PRIMARY = "#2189E5";
-const PURPLE = "#1E0F62";
-const TEXT = "#2E435B";
-const MUTED = "#6E8195";
-const BORDER = "#D9E3EC";
-const BG = "#F4F6F8";
-
-type Status = "OPEN" | "RESPONDED" | "RESOLVED" | "CANCELLED";
+const MUTED = "#607D8B";
 
 interface Complaint {
   id: string;
   title: string;
   description: string;
-  status: Status;
+  status: ComplaintStatus;
   createdAt: string;
   updatedAt: string;
-  company: { name: string | null };
-  project: { name: string } | null;
+  company: {
+    id: string;
+    name: string;
+    logoUrl?: string | null;
+  } | null;
+  project: {
+    id: string;
+    name: string;
+  } | null;
 }
 
 interface Props {
@@ -32,328 +37,301 @@ interface Props {
   avatarUrl: string | null;
 }
 
-const STATUS_CONFIG: Record<Status, { label: string; style: React.CSSProperties }> = {
-  OPEN: {
-    label: "Esperando Resposta",
-    style: { background: "#F1F5F9", color: "#64748B", border: "1px solid #CBD5E1" },
-  },
-  RESPONDED: {
-    label: "Em Réplica",
-    style: { background: "#FEFCE8", color: "#854D0E", border: "1px solid #FDE047" },
-  },
-  RESOLVED: {
-    label: "Resolvido",
-    style: { background: "#DCFCE7", color: "#166534", border: "1px solid #86EFAC" },
-  },
-  CANCELLED: {
-    label: "Não-Resolvido",
-    style: { background: "#FFF7ED", color: "#9A3412", border: "1px solid #FDBA74" },
-  },
-};
+type ProfileTab = "reclamacoes" | "configuracoes";
+type FilterTab = "ultimas" | "nao-respondidas" | "respondidas" | "concluidas";
 
-type Filter = "all" | "OPEN" | "RESPONDED" | "RESOLVED";
-const FILTERS: { key: Filter; label: string }[] = [
-  { key: "all", label: "Últimas" },
-  { key: "OPEN", label: "Não Respondidas" },
-  { key: "RESPONDED", label: "Respondidas" },
-  { key: "RESOLVED", label: "Concluídas" },
+const PROFILE_TABS: { key: ProfileTab; label: string; icon: React.ComponentType<{ size?: number; className?: string }>; href: string }[] = [
+  { key: "reclamacoes", label: "Reclamações", icon: MessageCircle, href: "/app/complaints" },
+  { key: "configuracoes", label: "Configurações", icon: SettingsIcon, href: "/app/settings" },
 ];
 
-function formatProtocol(id: string) {
-  const hash = id.replace(/-/g, "").slice(0, 8).toUpperCase();
-  return `#R-${hash.slice(0, 4)}-${hash.slice(4, 8)}`;
-}
+const FILTER_TABS: { 
+  id: FilterTab; 
+  label: string; 
+  icon: React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>; 
+  color: string;
+}[] = [
+  {
+    id: "ultimas",
+    label: "Últimas",
+    icon: Clock,
+    color: "#1E88E5",
+  },
+  {
+    id: "nao-respondidas",
+    label: "Não Respondidas",
+    icon: Meh,
+    color: "#607D8B",
+  },
+  {
+    id: "respondidas",
+    label: "Respondidas",
+    icon: Smile,
+    color: "#26A69A",
+  },
+  {
+    id: "concluidas",
+    label: "Concluídas",
+    icon: Laugh,
+    color: "#26A69A",
+  },
+];
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("pt-BR", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
-
-function StatusBadge({ status }: { status: Status }) {
-  const cfg = STATUS_CONFIG[status];
-  return (
-    <span
-      style={{
-        ...cfg.style,
-        borderRadius: 20,
-        padding: "3px 10px",
-        fontSize: 12,
-        fontWeight: 600,
-        whiteSpace: "nowrap",
-      }}
-    >
-      {cfg.label}
-    </span>
-  );
-}
-
-function Avatar({ name, avatarUrl }: { name: string; avatarUrl: string | null }) {
-  const initials = name
-    .split(" ")
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join("")
-    .toUpperCase();
-
-  return (
-    <div
-      style={{
-        width: 88,
-        height: 88,
-        borderRadius: "50%",
-        border: "4px solid #fff",
-        overflow: "hidden",
-        background: PRIMARY,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: 28,
-        fontWeight: 700,
-        color: "#fff",
-        flexShrink: 0,
-      }}
-    >
-      {avatarUrl ? (
-        <img src={avatarUrl} alt={name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-      ) : (
-        initials
-      )}
-    </div>
-  );
-}
-
-export function ComplaintsContent({ complaints, profileName, profileCity, profileState, avatarUrl }: Props) {
-  const [activeFilter, setActiveFilter] = useState<Filter>("all");
-
-  const filtered = complaints.filter((c) => {
-    if (activeFilter === "all") return true;
-    if (activeFilter === "RESOLVED") return c.status === "RESOLVED" || c.status === "CANCELLED";
-    return c.status === activeFilter;
-  });
+export function ComplaintsContent({
+  complaints,
+  profileName,
+  profileCity,
+  profileState,
+  avatarUrl,
+}: Props) {
+  const [activeProfileTab] = useState<ProfileTab>("reclamacoes");
+  const [activeFilterTab, setActiveFilterTab] = useState<FilterTab>("ultimas");
 
   const location = [profileCity, profileState].filter(Boolean).join(", ");
+  const complaintCount = complaints.length;
+
+  // Filtrar reclamações baseado na tab ativa
+  const filteredComplaints = useMemo(() => {
+    switch (activeFilterTab) {
+      case "nao-respondidas":
+        return complaints.filter(c => c.status === "OPEN");
+      case "respondidas":
+        return complaints.filter(c => c.status === "RESPONDED");
+      case "concluidas":
+        return complaints.filter(c => c.status === "RESOLVED" || c.status === "CANCELLED");
+      case "ultimas":
+      default:
+        return complaints;
+    }
+  }, [complaints, activeFilterTab]);
 
   return (
-    <div style={{ background: BG, minHeight: "100vh", paddingBottom: 48 }}>
-      <div style={{ maxWidth: 1140, margin: "0 auto", padding: "32px 24px 0" }}>
+    <div className="min-h-screen bg-[#F5F7FA] pb-12">
+      <div className="max-w-[1200px] mx-auto px-6 pt-8">
 
         {/* ── Profile Hero Card ── */}
-        <div style={{ background: "#fff", borderRadius: 16, border: `1px solid ${BORDER}`, overflow: "hidden", boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
-          {/* Blue banner */}
-          <div style={{ height: 96, background: `linear-gradient(135deg, ${PRIMARY} 0%, #1a6fc9 100%)` }} />
+        <Card className="relative overflow-hidden shadow-md border-0">
+          {/* Blue Banner */}
+          <div className="h-[126px] bg-[#1E88E5] rounded-t-xl" />
 
-          {/* Content below banner */}
-          <div style={{ padding: "0 28px 0" }}>
-            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginTop: -44 }}>
-              {/* Avatar + info */}
-              <div style={{ display: "flex", alignItems: "flex-end", gap: 16 }}>
-                <Avatar name={profileName} avatarUrl={avatarUrl} />
-                <div style={{ paddingBottom: 12 }}>
-                  <h2 style={{ fontSize: 20, fontWeight: 700, color: PURPLE, margin: 0 }}>{profileName}</h2>
-                  <div style={{ display: "flex", gap: 16, marginTop: 4 }}>
-                    {location && (
-                      <span style={{ fontSize: 13, color: MUTED, display: "flex", alignItems: "center", gap: 4 }}>
-                        <MapPin size={13} />
-                        {location}
-                      </span>
-                    )}
-                    <span style={{ fontSize: 13, color: MUTED, display: "flex", alignItems: "center", gap: 4 }}>
-                      <FileText size={13} />
-                      {complaints.length} {complaints.length === 1 ? "reclamação" : "reclamações"}
+          {/* Avatar - overlapping banner */}
+          <div className="absolute top-[58px] left-[43px] w-[137px] h-[137px] rounded-full border-4 border-white overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm bg-[#1E88E5]">
+            {avatarUrl ? (
+              <img 
+                src={avatarUrl} 
+                alt={profileName || "U"} 
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-white text-5xl font-bold font-['Poppins']">
+                {profileName
+                  .split(" ")
+                  .slice(0, 2)
+                  .map((w) => w[0])
+                  .join("")
+                  .toUpperCase()}
+              </span>
+            )}
+          </div>
+
+          <div className="pt-[75px] pb-2.5 px-2.5">
+            {/* User Name */}
+            <div className="px-4 h-[30px] flex items-center">
+              <h2 className="font-bold text-xl text-[#2A3F54] m-0">
+                {profileName}
+              </h2>
+            </div>
+
+            {/* Location, Stats, and Action Button */}
+            <div className="py-2.5 px-4 flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-4 flex-wrap">
+                {location && (
+                  <div className="flex items-center gap-1.5">
+                    <MapPin size={18} className="text-[#607D8B]" />
+                    <span className="text-[13px] text-[#607D8B]">
+                      {location}
                     </span>
                   </div>
+                )}
+                <div className="flex items-center gap-1.5">
+                  <BarChart2 size={18} className="text-[#607D8B]" />
+                  <span className="text-[13px] text-[#607D8B]">
+                    {complaintCount} Reclamações
+                  </span>
                 </div>
               </div>
 
-              {/* CTA button */}
-              <div style={{ paddingBottom: 12 }}>
-                <Link href="/app/complaints/new" style={{ textDecoration: "none" }}>
-                  <button
-                    style={{
-                      background: PRIMARY,
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: 10,
-                      padding: "10px 20px",
-                      fontSize: 14,
-                      fontWeight: 600,
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 8,
-                    }}
-                  >
-                    <Plus size={16} />
-                    Nova reclamação
-                  </button>
-                </Link>
-              </div>
-            </div>
-
-            {/* Profile tabs navigation */}
-            <div style={{ display: "flex", gap: 0, marginTop: 16, borderTop: `1px solid ${BORDER}` }}>
-              {[
-                { label: "Reclamações", href: "/app/complaints", active: true },
-                { label: "Configurações", href: "/app/settings", active: false },
-              ].map((tab) => (
-                <Link
-                  key={tab.label}
-                  href={tab.href}
-                  style={{
-                    textDecoration: "none",
-                    padding: "14px 20px",
-                    fontSize: 14,
-                    fontWeight: 600,
-                    color: tab.active ? PRIMARY : MUTED,
-                    borderBottom: tab.active ? `2px solid ${PRIMARY}` : "2px solid transparent",
-                    marginBottom: -1,
-                    transition: "color 0.15s",
-                  }}
+              <Link href="/app/complaints/new">
+                <Button 
+                  className="h-auto px-6 py-3 rounded-xl gap-3 bg-[#1E88E5] hover:bg-[#1976D2]"
                 >
-                  {tab.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* ── Complaint list card ── */}
-        <div style={{ background: "#fff", borderRadius: 16, border: `1px solid ${BORDER}`, marginTop: 20, boxShadow: "0 1px 4px rgba(0,0,0,0.06)", overflow: "hidden" }}>
-          {/* Filter tabs */}
-          <div style={{ display: "flex", gap: 0, padding: "0 20px", borderBottom: `1px solid ${BORDER}`, overflowX: "auto" }}>
-            {FILTERS.map((f) => (
-              <button
-                key={f.key}
-                onClick={() => setActiveFilter(f.key)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  padding: "16px 16px",
-                  fontSize: 14,
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  color: activeFilter === f.key ? PRIMARY : MUTED,
-                  borderBottom: activeFilter === f.key ? `2px solid ${PRIMARY}` : "2px solid transparent",
-                  marginBottom: -1,
-                  whiteSpace: "nowrap",
-                  transition: "color 0.15s",
-                }}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
-
-          {/* List */}
-          {filtered.length === 0 ? (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "64px 24px", textAlign: "center" }}>
-              <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#F1F5F9", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-                <FileText size={24} color={MUTED} />
-              </div>
-              <p style={{ color: TEXT, fontWeight: 600, fontSize: 16, margin: 0 }}>Nenhuma reclamação encontrada</p>
-              <p style={{ color: MUTED, fontSize: 14, marginTop: 6 }}>Você ainda não fez nenhuma reclamação nesta categoria.</p>
-              <Link href="/app/complaints/new" style={{ textDecoration: "none" }}>
-                <button
-                  style={{
-                    marginTop: 20,
-                    background: PRIMARY,
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: 10,
-                    padding: "10px 20px",
-                    fontSize: 14,
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                  }}
-                >
-                  <Plus size={16} />
-                  Começar uma nova reclamação
-                </button>
+                  <span className="text-sm font-medium">Começar uma nova reclamação</span>
+                  <PlusSquare size={18} />
+                </Button>
               </Link>
             </div>
-          ) : (
-            <div>
-              {filtered.map((c, i) => (
-                <div
-                  key={c.id}
-                  style={{
-                    padding: "20px 24px",
-                    borderBottom: i < filtered.length - 1 ? `1px solid ${BORDER}` : "none",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 16,
-                    justifyContent: "space-between",
-                  }}
-                >
-                  {/* Left: info */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                      <span
-                        style={{
-                          background: "#EEF5FF",
-                          color: PRIMARY,
-                          border: `1px solid #BFDBFE`,
-                          borderRadius: 20,
-                          padding: "2px 10px",
-                          fontSize: 12,
-                          fontWeight: 700,
-                          flexShrink: 0,
-                        }}
-                      >
-                        {formatProtocol(c.id)}
-                      </span>
-                      <h3 style={{ fontSize: 15, fontWeight: 600, color: TEXT, margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 400 }}>
-                        {c.title}
-                      </h3>
-                    </div>
 
-                    <div style={{ display: "flex", gap: 20, marginTop: 8, flexWrap: "wrap" }}>
-                      <span style={{ fontSize: 13, color: MUTED, display: "flex", alignItems: "center", gap: 4 }}>
-                        <CalendarDays size={13} />
-                        {formatDate(c.createdAt)}
-                      </span>
-                      {c.company?.name && (
-                        <span style={{ fontSize: 13, color: MUTED }}>
-                          Empresa: <strong style={{ color: TEXT }}>{c.company.name}</strong>
-                        </span>
-                      )}
-                      {c.project?.name && (
-                        <span style={{ fontSize: 13, color: MUTED }}>
-                          Obra: <strong style={{ color: TEXT }}>{c.project.name}</strong>
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Right: status + link */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 16, flexShrink: 0 }}>
-                    <StatusBadge status={c.status} />
-                    <Link
-                      href={`/app/complaints/${c.id}`}
-                      style={{
-                        textDecoration: "none",
-                        fontSize: 13,
-                        fontWeight: 600,
-                        color: PRIMARY,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                        whiteSpace: "nowrap",
-                      }}
+            {/* Profile Navigation Tabs */}
+            <div className="flex items-center gap-4 px-4 border-t border-[#E5E5ED]">
+              {PROFILE_TABS.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeProfileTab === tab.key;
+                return (
+                  <Link
+                    key={tab.key}
+                    href={tab.href}
+                    className={`flex items-center gap-1.5 py-4 px-2 no-underline border-b-2 -mb-px transition-colors ${
+                      isActive ? "border-[#1E88E5]" : "border-transparent"
+                    }`}
+                  >
+                    <Icon 
+                      size={24} 
+                      className={isActive ? "text-[#1E88E5]" : "text-[#607D8B]"}
+                    />
+                    <span 
+                      className={`text-sm font-medium ${
+                        isActive ? "text-[#1E88E5]" : "text-[#607D8B]"
+                      }`}
                     >
-                      Ver detalhes
-                      <ChevronRight size={14} />
-                    </Link>
-                  </div>
-                </div>
-              ))}
+                      {tab.label}
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
+          </div>
+        </Card>
+
+        {/* ── Complaints List ── */}
+        <div className="mt-5">
+          {complaints.length === 0 ? (
+            <Card className="shadow-md border-0">
+              <CardContent className="p-12 text-center">
+                <MessageCircle size={48} className="text-[#607D8B] mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-[#2A3F54] mb-2">
+                  Nenhuma reclamação ainda
+                </h3>
+                <p className="text-sm text-[#607D8B] mb-6">
+                  Comece criando sua primeira reclamação
+                </p>
+                <Link href="/app/complaints/new">
+                  <Button 
+                    className="h-auto px-6 py-3 rounded-xl bg-[#1E88E5] hover:bg-[#1976D2]"
+                  >
+                    Criar reclamação
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="shadow-md border-0 overflow-hidden">
+              {/* Filter Tabs */}
+              <nav className="flex h-14 items-center gap-4 bg-white border-b border-[#26a69a1a] px-4">
+                {FILTER_TABS.map((tab) => {
+                  const IconComponent = tab.icon;
+                  const isActive = activeFilterTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveFilterTab(tab.id)}
+                      className={`inline-flex items-center gap-1.5 px-2 py-4 self-stretch flex-[0_0_auto] border-b-2 cursor-pointer transition-colors -mb-px ${
+                        isActive
+                          ? "border-[#1E88E5]"
+                          : "border-transparent hover:border-gray-300"
+                      }`}
+                    >
+                      <IconComponent 
+                        className="w-6 h-6" 
+                        style={{ color: isActive ? tab.color : MUTED }}
+                      />
+                      <span
+                        className="font-['Poppins'] font-medium text-sm"
+                        style={{ color: isActive ? tab.color : MUTED }}
+                      >
+                        {tab.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </nav>
+
+              {/* Complaints List */}
+              <CardContent className="p-0">
+                {filteredComplaints.length === 0 ? (
+                  <div className="p-12 text-center">
+                    <p className="font-['Poppins'] text-[#607D8B] text-sm">
+                      Nenhuma reclamação encontrada nesta categoria
+                    </p>
+                  </div>
+                ) : (
+                  filteredComplaints.map((complaint: Complaint, index: number) => {
+                    const statusConfig = getComplaintStatusConfig(complaint.status);
+                    const date = new Date(complaint.createdAt);
+                    
+                    return (
+                      <Link 
+                        key={complaint.id} 
+                        href={`/app/complaints/${complaint.id}`}
+                        className="block no-underline"
+                      >
+                        <div 
+                          className={`hover:bg-gray-50 transition-colors cursor-pointer p-6 ${
+                            index < filteredComplaints.length - 1 ? "border-b border-[#E5E5ED]" : ""
+                          }`}
+                        >
+                          {/* Row 1: Title + Status Badge */}
+                          <div className="flex justify-between items-start mb-3">
+                            <p className="font-['Poppins'] font-medium text-base text-[#2A3F54] flex-1 mr-4">
+                              {complaint.title}
+                            </p>
+                            <Badge 
+                              className="font-['Poppins'] font-bold text-xs flex items-center justify-center gap-2.5 px-3 py-2 rounded-[22px] border whitespace-nowrap"
+                              style={{ 
+                                backgroundColor: statusConfig.bgColor,
+                                color: statusConfig.color,
+                                borderColor: statusConfig.borderColor,
+                              }}
+                            >
+                              {statusConfig.label}
+                            </Badge>
+                          </div>
+
+                          {/* Row 2: Reference ID + Company + Date */}
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded-md bg-[#1E88E5]">
+                              <span className="font-['Poppins'] font-medium text-white text-xs">
+                                {protocolId(complaint.id)}
+                              </span>
+                            </div>
+                            {complaint.company && (
+                              <span className="font-['Poppins'] text-sm text-[#607D8B]">
+                                {complaint.company.name}
+                              </span>
+                            )}
+                            <span className="font-['Poppins'] text-sm text-[#607D8B]">
+                              {date.toLocaleDateString("pt-BR")}
+                            </span>
+                          </div>
+
+                          {/* Row 3: Project + Ver detalhes link */}
+                          <div className="flex justify-between items-center">
+                            <span className="font-['Poppins'] text-sm text-[#607D8B]">
+                              {complaint.project?.name || "Sem projeto específico"}
+                            </span>
+                            <div className="flex items-center gap-1">
+                              <span className="font-['Poppins'] font-medium text-xs text-[#AD92FF]">
+                                Ver detalhes
+                              </span>
+                              <ChevronRight size={12} className="text-[#AD92FF]" />
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })
+                )}
+              </CardContent>
+            </Card>
           )}
         </div>
       </div>

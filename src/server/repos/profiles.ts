@@ -48,26 +48,24 @@ export class ProfilesRepo {
       .limit(1);
 
     if (!profile) return "role";
+    if (profile.role === "ADMIN") return null;
     if (profile.onboardingCompletedAt) return null;
 
-    if (!profile.role || profile.role === "USER") {
-      if (!profile.cpf) return "role";
-      if (!profile.address || !profile.city || !profile.state) return "person_step2";
+    const [companyUser] = await db
+      .select({ companyId: companyUsers.companyId })
+      .from(companyUsers)
+      .where(eq(companyUsers.userId, userId))
+      .limit(1);
+
+    if (companyUser) {
+      return null;
     }
 
     if (profile.role === "COMPANY") {
-      const [companyUser] = await db
-        .select({ companyId: companyUsers.companyId })
-        .from(companyUsers)
-        .where(eq(companyUsers.userId, userId))
-        .limit(1);
-
-      if (!companyUser) return "company_step2";
-
-      if (!profile.address || !profile.city || !profile.state) return "company_step2";
+      return "company_step2";
     }
 
-    return null;
+    return "person_step2";
   }
 
   static async findById(userId: string) {
