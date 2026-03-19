@@ -8,6 +8,7 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordField } from "@/components/PasswordField";
+import { useAuthState } from "@/hooks/use-auth-state";
 import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 const loginSchema = z.object({
@@ -28,6 +29,7 @@ export default function LoginPage() {
   const [err, setErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { refresh } = useAuthState();
 
   const {
     register,
@@ -53,6 +55,7 @@ export default function LoginPage() {
       const body = await res.json().catch(() => ({}));
       setErr(body.error || "Email ou senha inválidos");
     } else {
+      await refresh();
       router.push("/app");
     }
   };
