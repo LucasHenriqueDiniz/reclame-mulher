@@ -19,7 +19,7 @@ export function Hero() {
   };
 
   return (
-    <section className="relative w-full min-h-[600px] md:min-h-[700px] overflow-hidden bg-[url(/hero.webp)] bg-cover bg-center">
+      <section className="relative w-full min-h-[600px] md:min-h-[700px] overflow-hidden bg-[url('/hero.webp')] bg-cover bg-center">
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/60 to-black/40" />
 
