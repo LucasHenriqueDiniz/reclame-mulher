@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { getSession } from "@/lib/auth/session";
+import { getSession, setSessionCookie } from "@/lib/auth/session";
 import { db } from "@/db/client";
 import { users } from "@/db/schema";
 import { hashPassword, verifyPassword } from "@/lib/auth/password";
+import { rateLimit } from "@/lib/rate-limit";
 
 const ChangePasswordDto = z.object({
   currentPassword: z.string().min(1),
@@ -13,6 +14,9 @@ const ChangePasswordDto = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  const limit = rateLimit(request);
+  if (limit) return limit;
+
   try {
     const session = await getSession();
     if (!session) {
@@ -28,20 +32,23 @@ export async function POST(request: NextRequest) {
       .where(eq(users.id, session.userId))
       .limit(1);
 
-    if (!user || !verifyPassword(parsed.currentPassword, user.passwordHash)) {
+    if (!user || !(await verifyPassword(parsed.currentPassword, user.passwordHash))) {
       return NextResponse.json({ error: "Senha atual inválida" }, { status: 400 });
     }
 
     await db
       .update(users)
       .set({
-        passwordHash: hashPassword(parsed.newPassword),
+        passwordHash: await hashPassword(parsed.newPassword),
         mustChangePassword: false,
         updatedAt: new Date(),
       })
       .where(eq(users.id, session.userId));
 
-    return NextResponse.json({ success: true });
+    // Rotacionar sessão para invalidar token antigo
+    const response = NextResponse.json({ success: true });
+    await setSessionCookie(response, { userId: session.userId, email: session.email });
+    return response;
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });

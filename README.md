@@ -39,6 +39,7 @@ O legado antigo baseado em Supabase foi removido para evitar ambiguidade arquite
 
 - `docs/project-status.md`: estado tecnico atual do projeto
 - `docs/mvp-backlog.md`: backlog tecnico priorizado a partir do estado atual
+- `docs/acessibilidade-inclusiva.md`: diretrizes para baixa alfabetizacao e baixa familiaridade digital
 
 ## Logins de teste
 

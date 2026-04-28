@@ -20,8 +20,8 @@ export interface StepFourProps {
 }
 
 /**
- * Passo 4: Classificação da reclamação
- * Categoria, projeto, urgência, escopo e configurações de privacidade
+ * Passo 4: Últimas informações
+ * Classificação simples e configurações de privacidade
  */
 export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
   const impactCategories = [
@@ -34,17 +34,17 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
   ];
 
   const urgencyLevels = [
-    { value: "baixa", label: "Baixa" },
-    { value: "media", label: "Média" },
-    { value: "alta", label: "Alta" },
-    { value: "emergencial", label: "Emergencial" },
+    { value: "baixa", label: "Baixa — pode esperar" },
+    { value: "media", label: "Média — incomoda bastante" },
+    { value: "alta", label: "Alta — precisa de solução rápida" },
+    { value: "emergencial", label: "Emergencial — risco de acidente" },
   ];
 
   const impactScopes = [
-    { value: "individual", label: "Individual" },
-    { value: "familiar", label: "Familiar" },
-    { value: "comunitario", label: "Comunitário" },
-    { value: "regional", label: "Regional" },
+    { value: "individual", label: "Só eu" },
+    { value: "familiar", label: "Minha família" },
+    { value: "comunitario", label: "Vizinhos e comunidade" },
+    { value: "regional", label: "Bairro inteiro ou mais" },
   ];
 
   const projectOptions = projects.map((p) => ({
@@ -54,19 +54,19 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
 
   return (
     <div className="space-y-6">
-      {/* Heading */}
+      {/* Heading simples */}
       <div className="flex flex-col items-center justify-center gap-2 px-2 py-0">
-        <h2 className="text-center font-['Poppins'] font-semibold text-[#000000] text-2xl leading-tight">
-          Nos ajude a classificar sua reclamação
+        <h2 className="text-center font-['Poppins'] font-semibold text-[#2A3F54] text-2xl leading-tight">
+          Quase pronto!
         </h2>
-        <p className="text-center font-['Poppins'] font-light text-[#607D8B] text-sm leading-normal">
-          Isso pode ajudar a empresa na resolução do seu problema e ajudar outras pessoas a encontrarem sua reclamação em situações similares
+        <p className="text-center font-['Poppins'] text-[#607D8B] text-sm leading-normal">
+          Só mais algumas informações para organizar sua reclamação
         </p>
       </div>
 
-      {/* Category field */}
+      {/* Categoria */}
       <ComplaintField
-        label="Categoria do Impacto"
+        label="Qual tipo de problema?"
         htmlFor="impact-category"
         required
       >
@@ -76,16 +76,16 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
           onValueChange={(value) =>
             onChange({ ...data, impactCategory: value })
           }
-          placeholder="Selecione a categoria"
+          placeholder="Escolha uma opção"
         />
       </ComplaintField>
 
-      {/* Project field (optional) */}
+      {/* Projeto (se houver) */}
       {projectOptions.length > 0 && (
         <ComplaintField
-          label="Projeto da empresa (opcional)"
+          label="Qual projeto da empresa? (opcional)"
           htmlFor="company-project"
-          hint="Se souber qual projeto específico está relacionado"
+          hint="Só escolha se souber"
         >
           <ComplaintSelect
             options={projectOptions}
@@ -93,37 +93,37 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
             onValueChange={(value) =>
               onChange({ ...data, companyProjectId: value })
             }
-            placeholder="Selecione o projeto"
+            placeholder="Escolha um projeto"
           />
         </ComplaintField>
       )}
 
-      {/* Urgency field */}
-      <ComplaintField label="Urgência" htmlFor="urgency-level" required>
+      {/* Urgência */}
+      <ComplaintField label="Quão urgente é?" htmlFor="urgency-level" required>
         <ComplaintSelect
           options={urgencyLevels}
           value={data.urgencyLevel}
           onValueChange={(value) => onChange({ ...data, urgencyLevel: value })}
-          placeholder="Selecione a urgência"
+          placeholder="Escolha uma opção"
         />
       </ComplaintField>
 
-      {/* Scope field */}
-      <ComplaintField label="Escopo" htmlFor="impact-scope" required>
+      {/* Escopo */}
+      <ComplaintField label="Quem mais está sendo afetado?" htmlFor="impact-scope" required>
         <ComplaintSelect
           options={impactScopes}
           value={data.impactScope}
           onValueChange={(value) => onChange({ ...data, impactScope: value })}
-          placeholder="Selecione o escopo"
+          placeholder="Escolha uma opção"
         />
       </ComplaintField>
 
-      {/* Privacy settings */}
+      {/* Privacidade */}
       <div className="space-y-0 border border-[#E5E5ED] rounded-lg overflow-hidden">
         <ComplaintSwitchRow
           id="anonymous"
-          label="Desejo fazer esta reclamação de forma anônima"
-          description="Seu nome não será exibido publicamente"
+          label="Quero fazer esta reclamação sem mostrar meu nome"
+          description="Seu nome não aparecerá publicamente"
           checked={data.isAnonymous}
           onCheckedChange={(checked) =>
             onChange({ ...data, isAnonymous: checked })
@@ -131,10 +131,12 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
         />
         <ComplaintSwitchRow
           id="public"
-          label="Desejo manter essa reclamação pública para todos verem"
-          description="Outras pessoas poderão ver e acompanhar esta reclamação"
+          label="Quero que outras pessoas possam ver esta reclamação"
+          description="Outras pessoas poderão acompanhar"
           checked={data.isPublic}
-          onCheckedChange={(checked) => onChange({ ...data, isPublic: checked })}
+          onCheckedChange={(checked) =>
+            onChange({ ...data, isPublic: checked })
+          }
         />
       </div>
     </div>

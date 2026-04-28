@@ -42,13 +42,14 @@ export async function GET(request: NextRequest) {
       result = await BlogRepo.findPublic(search, page, limit);
     }
 
-    // Buscar tags para cada post
-    const postsWithTags = await Promise.all(
-      result.posts.map(async (post) => {
-        const tags = await BlogRepo.getPostTags(post.id);
-        return { ...post, tags };
-      })
-    );
+    // Buscar tags em batch para todos os posts da página
+    const postIds = result.posts.map((p) => p.id);
+    const tagsMap = await BlogRepo.getPostTagsBatch(postIds);
+
+    const postsWithTags = result.posts.map((post) => ({
+      ...post,
+      tags: tagsMap.get(post.id) ?? [],
+    }));
 
     return NextResponse.json({
       posts: postsWithTags,

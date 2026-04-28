@@ -5,10 +5,16 @@ export interface ComplaintStepProgressProps {
   totalSteps?: number;
 }
 
+const STEP_LABELS = [
+  "Histórico",
+  "Descrição",
+  "Fotos",
+  "Finalizar",
+];
+
 /**
  * Barra de progresso do wizard
- * Exibe "Passo X de Y" e barra visual
- * Segue design do Figma com peso visual adequado
+ * Mostra o passo atual de forma clara e acessível
  */
 export function ComplaintStepProgress({ 
   currentStep, 
@@ -17,28 +23,34 @@ export function ComplaintStepProgress({
   const percentage = totalSteps > 0 ? (currentStep / totalSteps) * 100 : 0;
 
   return (
-    <div className="flex flex-col w-[280px] items-start gap-2 mx-auto">
-      <div className="h-5 flex items-center justify-center self-stretch w-full">
-        <span className="font-['Poppins'] font-semibold text-[#607D8B] text-sm leading-normal">
-          Passo {currentStep} de {totalSteps}
+    <div className="flex flex-col w-full max-w-md items-start gap-3 mx-auto">
+      <div className="flex items-center justify-center self-stretch w-full">
+        <span className="font-['Poppins'] font-semibold text-[#2A3F54] text-base">
+          {STEP_LABELS[currentStep - 1] ?? ""}
         </span>
       </div>
-      <div className="self-stretch w-full bg-gradient-to-r from-gray-200 to-gray-100 rounded-full h-3 overflow-hidden shadow-inner">
+      <div className="self-stretch w-full bg-gray-200 rounded-full h-3 overflow-hidden">
         <div
-          className="h-3 bg-gradient-to-r from-[#1E88E5] to-[#1976D2] rounded-full transition-all duration-500 ease-out shadow-sm"
+          className="h-3 bg-[#1E88E5] rounded-full transition-all duration-500 ease-out"
           style={{ width: `${percentage}%` }}
         />
       </div>
-      <div className="flex justify-between w-full px-1">
+      <div className="flex justify-between w-full">
         {Array.from({ length: totalSteps }).map((_, i) => (
-          <div
-            key={i}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              i < currentStep
-                ? "bg-[#1E88E5] scale-110"
-                : "bg-gray-300 scale-90"
-            }`}
-          />
+          <div key={i} className="flex flex-col items-center gap-1 flex-1">
+            <div
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                i < currentStep
+                  ? "bg-[#1E88E5]"
+                  : "bg-gray-300"
+              }`}
+            />
+            <span className={`text-[10px] font-['Poppins'] text-center ${
+              i < currentStep ? "text-[#1E88E5] font-medium" : "text-gray-400"
+            }`}>
+              {STEP_LABELS[i]}
+            </span>
+          </div>
         ))}
       </div>
     </div>

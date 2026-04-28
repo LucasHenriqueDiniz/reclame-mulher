@@ -17,25 +17,25 @@ export interface StepTwoProps {
 }
 
 /**
- * Passo 2: Detalhes da reclamação
- * Título, descrição e localização do problema
+ * Passo 2: Conte o que aconteceu
+ * Apenas 3 campos: título, descrição e local
  */
 export function StepTwo({ data, onChange }: StepTwoProps) {
   return (
     <div className="space-y-6">
-      {/* Heading */}
+      {/* Heading simples */}
       <div className="flex flex-col items-center justify-center gap-2 px-2 py-0">
-        <h2 className="text-center font-['Poppins'] font-semibold text-[#000000] text-2xl leading-tight">
-          Vamos começar!
+        <h2 className="text-center font-['Poppins'] font-semibold text-[#2A3F54] text-2xl leading-tight">
+          Conte o que aconteceu
         </h2>
-        <p className="text-center font-['Poppins'] font-light text-[#607D8B] text-sm leading-normal">
-          Descreva o problema que você está enfrentando
+        <p className="text-center font-['Poppins'] text-[#607D8B] text-sm leading-normal">
+          Escreva de forma simples. Não precisa usar palavras difíceis.
         </p>
       </div>
 
-      {/* Title field */}
+      {/* Título */}
       <ComplaintField
-        label="Título da reclamação"
+        label="Qual é o problema?"
         htmlFor="complaint-title"
         required
       >
@@ -43,33 +43,33 @@ export function StepTwo({ data, onChange }: StepTwoProps) {
           id="complaint-title"
           value={data.title}
           onChange={(e) => onChange({ ...data, title: e.target.value })}
-          placeholder="Ex: Rachaduras em residência após início das obras"
+          placeholder="Ex: Barulho muito alto da obra à noite"
           error={data.title.length > 0 && data.title.length < 3}
         />
       </ComplaintField>
 
-      {/* Description field */}
+      {/* Descrição */}
       <ComplaintField
-        label="Descrição detalhada"
+        label="Conte com mais detalhes"
         htmlFor="complaint-description"
         required
-        hint="Descreva o problema com o máximo de detalhes possível"
+        hint="Quando começou? Como está afetando você?"
       >
         <ComplaintTextarea
           id="complaint-description"
           value={data.description}
           onChange={(e) => onChange({ ...data, description: e.target.value })}
-          placeholder="Descreva o que aconteceu, quando começou, como está afetando você..."
-          rows={6}
+          placeholder="Ex: A obra começou há 2 semanas. O barulho começa às 22h e vai até 2h da manhã. Não consigo dormir..."
+          rows={5}
           error={data.description.length > 0 && data.description.length < 10}
         />
       </ComplaintField>
 
-      {/* Location field */}
+      {/* Local */}
       <ComplaintField
-        label="Localização do problema"
+        label="Onde aconteceu?"
         htmlFor="complaint-location"
-        hint="Endereço ou referência do local afetado"
+        hint="Endereço ou ponto de referência"
       >
         <ComplaintInput
           id="complaint-location"
@@ -77,18 +77,15 @@ export function StepTwo({ data, onChange }: StepTwoProps) {
           onChange={(e) =>
             onChange({ ...data, problemLocation: e.target.value })
           }
-          placeholder="Ex: Rua das Flores, 123 - Centro"
+          placeholder="Ex: Rua das Flores, 123 - perto do mercado"
         />
       </ComplaintField>
 
-      {/* Info alert */}
-      <div className="bg-gradient-to-r from-[#E3F2FD] to-[#E1F5FE] border-l-4 border-[#1E88E5] rounded-xl p-4 flex items-start gap-3 shadow-sm hover:shadow-md transition-shadow duration-200">
-        <div className="p-1.5 rounded-lg bg-[#1E88E5]/10">
-          <Info className="w-5 h-5 text-[#1E88E5] flex-shrink-0" />
-        </div>
+      {/* Aviso importante */}
+      <div className="bg-[#E3F2FD] border-l-4 border-[#1E88E5] rounded-r-xl p-4 flex items-start gap-3">
+        <Info className="w-5 h-5 text-[#1E88E5] flex-shrink-0 mt-0.5" />
         <p className="font-['Poppins'] text-[#1565C0] text-sm leading-relaxed">
-          Não inclua dados sensíveis como CPF, RG ou informações bancárias na descrição. 
-          Essas informações não são necessárias para o registro da reclamação.
+          Não coloque seu CPF, RG ou dados bancários aqui. Esses dados não são necessários.
         </p>
       </div>
     </div>

@@ -1,15 +1,18 @@
 import crypto from "crypto";
+import { promisify } from "util";
 
-export function hashPassword(password: string): string {
+const scryptAsync = promisify(crypto.scrypt);
+
+export async function hashPassword(password: string): Promise<string> {
   const salt = crypto.randomBytes(16).toString("hex");
-  const hash = crypto.scryptSync(password, salt, 64).toString("hex");
+  const hash = ((await scryptAsync(password, salt, 64)) as Buffer).toString("hex");
   return `${salt}:${hash}`;
 }
 
-export function verifyPassword(password: string, stored: string): boolean {
+export async function verifyPassword(password: string, stored: string): Promise<boolean> {
   const [salt, hash] = stored.split(":");
   if (!salt || !hash) return false;
-  const candidate = crypto.scryptSync(password, salt, 64).toString("hex");
+  const candidate = ((await scryptAsync(password, salt, 64)) as Buffer).toString("hex");
   return crypto.timingSafeEqual(Buffer.from(hash, "hex"), Buffer.from(candidate, "hex"));
 }
 

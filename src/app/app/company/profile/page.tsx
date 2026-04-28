@@ -1,11 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Building2, LayoutDashboard, MessageSquare, FolderKanban } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { CompanyPageShell } from "@/components/app/CompanyPageShell";
+import { CompanyPageHeader } from "@/components/app/CompanyPageHeader";
+import { ContentCard } from "@/components/app/ContentCard";
+import type { CompanyNavTab } from "@/components/app/CompanyPageHeader";
+
+const COMPANY_TABS: CompanyNavTab[] = [
+  { key: "dashboard", label: "Painel", href: "/app/company/dashboard", icon: LayoutDashboard },
+  { key: "reclamacoes", label: "Reclamações", href: "/app/company/complaints", icon: MessageSquare },
+  { key: "projetos", label: "Projetos", href: "/app/company/projects", icon: FolderKanban },
+  { key: "perfil", label: "Perfil", href: "/app/company/profile", icon: Building2 },
+];
 
 interface CompanyProfile {
   name: string | null;
@@ -104,19 +116,29 @@ export default function CompanyProfilePage() {
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="mb-6 font-heading text-3xl">Perfil da Empresa</h1>
+    <CompanyPageShell>
+      <CompanyPageHeader
+        title="Perfil da Empresa"
+        subtitle="Atualize as informações públicas da sua empresa"
+        icon={<Building2 className="w-8 h-8" />}
+        tabs={COMPANY_TABS}
+        activeTab="perfil"
+      />
 
       {error ? (
-        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</div>
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          {error}
+        </div>
       ) : null}
 
       {loading ? (
         <p className="text-gray-600">Carregando perfil...</p>
       ) : (
         <div className="max-w-3xl space-y-6">
-          <section className="rounded-xl border bg-white p-6 shadow-sm">
-            <h2 className="mb-4 font-heading text-xl">Informacoes Publicas</h2>
+          <ContentCard innerClassName="p-6">
+            <h2 className="mb-4 font-['Poppins'] text-xl font-semibold text-[#2A3F54]">
+              Informações Públicas
+            </h2>
             <div className="space-y-4">
               <div>
                 <Label htmlFor="name">Nome da Empresa</Label>
@@ -149,16 +171,16 @@ export default function CompanyProfilePage() {
                 </div>
               </div>
               <div>
-                <Label htmlFor="address">Endereco</Label>
+                <Label htmlFor="address">Endereço</Label>
                 <Input
                   id="address"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Rua, numero, bairro"
+                  placeholder="Rua, número, bairro"
                 />
               </div>
               <div>
-                <Label htmlFor="description">Descricao</Label>
+                <Label htmlFor="description">Descrição</Label>
                 <Textarea
                   id="description"
                   value={description}
@@ -168,24 +190,26 @@ export default function CompanyProfilePage() {
               </div>
               <div className="flex justify-end">
                 <Button onClick={() => void handleSave()} disabled={saving}>
-                  {saving ? "Salvando..." : "Salvar Alteracoes"}
+                  {saving ? "Salvando..." : "Salvar Alterações"}
                 </Button>
               </div>
             </div>
-          </section>
+          </ContentCard>
 
-          <section className="rounded-xl border bg-white p-6 shadow-sm">
-            <h2 className="mb-4 font-heading text-xl">Preview rapido</h2>
+          <ContentCard innerClassName="p-6">
+            <h2 className="mb-4 font-['Poppins'] text-xl font-semibold text-[#2A3F54]">
+              Preview rápido
+            </h2>
             <div className="space-y-2 text-sm text-gray-700">
-              <p><strong>Nome:</strong> {name || "Nao informado"}</p>
-              <p><strong>Setor:</strong> {sector || "Nao informado"}</p>
-              <p><strong>Website:</strong> {website || "Nao informado"}</p>
-              <p><strong>Local:</strong> {[city, state].filter(Boolean).join(", ") || "Nao informado"}</p>
-              <p><strong>Descricao:</strong> {description || "Nao informada"}</p>
+              <p><strong>Nome:</strong> {name || "Não informado"}</p>
+              <p><strong>Setor:</strong> {sector || "Não informado"}</p>
+              <p><strong>Website:</strong> {website || "Não informado"}</p>
+              <p><strong>Local:</strong> {[city, state].filter(Boolean).join(", ") || "Não informado"}</p>
+              <p><strong>Descrição:</strong> {description || "Não informada"}</p>
             </div>
-          </section>
+          </ContentCard>
         </div>
       )}
-    </div>
+    </CompanyPageShell>
   );
 }

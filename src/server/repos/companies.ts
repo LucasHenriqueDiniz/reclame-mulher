@@ -1,7 +1,7 @@
 import "server-only";
 import { db } from "@/db/client";
 import { companies, companyUsers, complaints, projects } from "@/db/schema";
-import { eq, ilike, or, count, and, sql, isNull, like, ne } from "drizzle-orm";
+import { eq, ilike, or, count, and, sql, isNull, like, ne, inArray } from "drizzle-orm";
 import { CreateCompanyInput } from "../dto/companies";
 import { slugify } from "@/lib/normalize";
 
@@ -195,5 +195,68 @@ export class CompaniesRepo {
       resolutionRate: total > 0 ? Math.round((resolved / total) * 100) : 0,
       activeProjectsCount: Number(projCount?.c ?? 0),
     };
+  }
+
+  static async getStatsBatch(companyIds: string[]) {
+    if (companyIds.length === 0) {
+      return new Map<string, Awaited<ReturnType<typeof CompaniesRepo.getStats>>>();
+    }
+
+    const complaintRows = await db
+      .select({
+        companyId: complaints.companyId,
+        total: count(complaints.id),
+        resolved: sql<number>`sum(case when ${complaints.status} = 'RESOLVED' then 1 else 0 end)::int`,
+        unanswered: sql<number>`sum(case when ${complaints.status} = 'OPEN' then 1 else 0 end)::int`,
+        activeDialogs: sql<number>`sum(case when ${complaints.status} = 'RESPONDED' then 1 else 0 end)::int`,
+        avgResponseSec: sql<number>`avg(case when ${complaints.updatedAt} is not null and ${complaints.status} != 'OPEN' then extract(epoch from (${complaints.updatedAt} - ${complaints.createdAt})) else null end)`,
+      })
+      .from(complaints)
+      .where(inArray(complaints.companyId, companyIds))
+      .groupBy(complaints.companyId);
+
+    const projectRows = await db
+      .select({
+        companyId: projects.companyId,
+        c: count(projects.id),
+      })
+      .from(projects)
+      .where(and(inArray(projects.companyId, companyIds), eq(projects.status, "IN_PROGRESS")))
+      .groupBy(projects.companyId);
+
+    const projMap = new Map(projectRows.map((r) => [r.companyId, Number(r.c)]));
+
+    const result = new Map<string, Awaited<ReturnType<typeof CompaniesRepo.getStats>>>();
+    for (const row of complaintRows) {
+      const total = Number(row.total ?? 0);
+      const resolved = Number(row.resolved ?? 0);
+      const avgSec = Number(row.avgResponseSec ?? 0);
+      result.set(row.companyId, {
+        totalComplaints: total,
+        resolvedCases: resolved,
+        unansweredCount: Number(row.unanswered ?? 0),
+        activeDialogsCount: Number(row.activeDialogs ?? 0),
+        avgResponseHours: avgSec > 0 ? Math.round(avgSec / 3600) : null,
+        resolutionRate: total > 0 ? Math.round((resolved / total) * 100) : 0,
+        activeProjectsCount: projMap.get(row.companyId) ?? 0,
+      });
+    }
+
+    // Garantir que todas as empresas tenham entrada (mesmo que zerada)
+    for (const id of companyIds) {
+      if (!result.has(id)) {
+        result.set(id, {
+          totalComplaints: 0,
+          resolvedCases: 0,
+          unansweredCount: 0,
+          activeDialogsCount: 0,
+          avgResponseHours: null,
+          resolutionRate: 0,
+          activeProjectsCount: 0,
+        });
+      }
+    }
+
+    return result;
   }
 }

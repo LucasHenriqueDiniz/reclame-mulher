@@ -1,0 +1,44 @@
+todas telas:
+
+
+Home/Landing Page [X]
+Apresentação do projeto  [ X ] 
+Estatísticas de uso (problemas resolvidos, empresas participantes) [ X ]  
+Últimos recursos educativos publicados [ X ] 
+Acesso ao cadastro/login
+
+( Pesquisa ) [X]
+Lista de empresas participantes[X]
+Filtros por região, tipo de projeto, setor[X]
+Indicadores de responsividade (como estrelas ou índices)[X]
+
+Perfil Público de Empresa [ X ]
+Informações sobre a empresa e seus projetos [ X ] 
+Estatísticas de resolução (tempo médio, taxa de resolução)  [ X ] 
+Botão para iniciar nova conversa/denúncia [ X ] 
+
+Recursos Educativos (Blog)   [ X ] 
+Pagina todas postagens   [ X ]
+pagina postagem unica    [ X ] 
+pagina criar postagem  [ X ] 
+
+Login/Cadastro [X]
+Opções para diferentes tipos de usuário [ X ] 
+
+Área Logada (Mulheres/Usuárias) [ X ] 
+Minhas Conversas [ X ] 
+Página de Conversa Individual [ X ] 
+Editar Perfil [ X ] 
+
+Área Logada (Empresas)   [ X ] 
+Central de Atendimento [ X ]  
+Gerenciamento de Perfil Público [ X ]  
+
+
+
+Valores da Marca
+Transparência: Comunicação clara e honesta
+Empoderamento: Dar voz e autonomia às mulheres
+Resolutividade: Foco em soluções efetivas
+Inclusão: Acessível a todos os níveis de instrução
+Confiança: Segurança no compartilhamento de informações

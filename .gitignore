@@ -43,3 +43,6 @@ next-env.d.ts
 
 # uploads (complaint attachments)
 /uploads
+
+# IDE
+.vscode/

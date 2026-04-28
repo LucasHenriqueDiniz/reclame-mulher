@@ -30,31 +30,30 @@ export async function GET() {
         return a.name.localeCompare(b.name, "pt-BR");
       });
 
-    const topCompanies = await Promise.all(
-      orderedCompanies
-        .slice(0, 4)
-        .map(async (company) => {
-          const stats = await CompaniesRepo.getStats(company.id);
+    const selectedCompanies = orderedCompanies.slice(0, 4);
+    const statsMap = await CompaniesRepo.getStatsBatch(selectedCompanies.map((c) => c.id));
 
-          return {
-            id: company.id,
-            name: company.name,
-            slug: company.slug,
-            logoUrl: company.logoUrl,
-            sector: company.sector ?? "Não informado",
-            region:
-              company.region ??
-              ([company.city, company.state].filter(Boolean).join(" / ") || "Não informada"),
-            verifiedAt: company.verifiedAt?.toISOString() ?? null,
-            stats: {
-              totalComplaints: stats.totalComplaints,
-              resolvedComplaints: stats.resolvedCases,
-              resolutionRate: stats.resolutionRate,
-              avgResponseTime: formatAvgResponseTime(stats.avgResponseHours),
-            },
-          };
-        })
-    );
+    const topCompanies = selectedCompanies.map((company) => {
+      const stats = statsMap.get(company.id)!;
+
+      return {
+        id: company.id,
+        name: company.name,
+        slug: company.slug,
+        logoUrl: company.logoUrl,
+        sector: company.sector ?? "Não informado",
+        region:
+          company.region ??
+          ([company.city, company.state].filter(Boolean).join(" / ") || "Não informada"),
+        verifiedAt: company.verifiedAt?.toISOString() ?? null,
+        stats: {
+          totalComplaints: stats.totalComplaints,
+          resolvedComplaints: stats.resolvedCases,
+          resolutionRate: stats.resolutionRate,
+          avgResponseTime: formatAvgResponseTime(stats.avgResponseHours),
+        },
+      };
+    });
 
     return NextResponse.json(topCompanies);
   } catch (error) {

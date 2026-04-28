@@ -12,6 +12,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { eq } from "drizzle-orm";
 import * as schema from "../src/db/schema";
 import crypto from "crypto";
+import { promisify } from "util";
 
 // Usa DATABASE_URL (pooled) ou DIRECT_URL (conexão direta) — qualquer um serve para o seed
 const connectionString =
@@ -25,9 +26,9 @@ if (!connectionString || connectionString.includes("build")) {
 const sql = neon(connectionString);
 const db = drizzle(sql, { schema });
 
-function hashPassword(password: string): string {
+async function hashPassword(password: string): Promise<string> {
   const salt = crypto.randomBytes(16).toString("hex");
-  const hash = crypto.scryptSync(password, salt, 64).toString("hex");
+  const hash = ((await promisify(crypto.scrypt)(password, salt, 64)) as Buffer).toString("hex");
   return `${salt}:${hash}`;
 }
 
@@ -51,7 +52,7 @@ async function main() {
 
   const now = new Date();
   const defaultPassword = "senha123";
-  const passwordHash = hashPassword(defaultPassword);
+  const passwordHash = await hashPassword(defaultPassword);
 
   // ─── Users ─────────────────────────────────────────────────────────────
   const usersInserted = await db

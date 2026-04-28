@@ -30,11 +30,25 @@ export const ourFileRouter = {
 
       return { userId: session.userId };
     })
-    .onUploadComplete(async ({ metadata, file }) => {
+    .onUploadComplete(async ({ file }) => {
       const fileUrl = file.ufsUrl ?? file.url;
-      console.log("Upload complete for userId:", metadata.userId);
-      console.log("File URL:", fileUrl);
+      return { url: fileUrl };
+    }),
 
+  // Rota para upload de anexos de reclamações (usuários logados)
+  complaintAttachment: f({
+    image: { maxFileSize: "4MB", maxFileCount: 1 },
+    pdf: { maxFileSize: "4MB", maxFileCount: 1 },
+  })
+    .middleware(async () => {
+      const session = await getSession();
+      if (!session?.userId) {
+        throw new Error("Unauthorized");
+      }
+      return { userId: session.userId };
+    })
+    .onUploadComplete(async ({ file }) => {
+      const fileUrl = file.ufsUrl ?? file.url;
       return { url: fileUrl };
     }),
 } satisfies FileRouter;

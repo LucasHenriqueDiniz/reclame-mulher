@@ -1,10 +1,19 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Home, MessageCircle, Info, BarChart3, Clock, Check } from "lucide-react";
+import {
+  Home,
+  MessageCircle,
+  Info,
+  BarChart3,
+  Clock,
+  Check,
+  MapPin,
+  FileText,
+  Shield,
+} from "lucide-react";
 import {
   companyTheme as S,
-  CompanyProfileHero,
   CompanyAboutCard,
   CompanyContactsCard,
   CompanyAreasCard,
@@ -16,12 +25,15 @@ import {
   CompanyProjectList,
   CompanyReportModal,
   SearchInput,
-  MetricCard,
   formatDate,
   type CompanyStats,
 } from "@/components/company";
 import { MainHeader } from "@/components/layout/MainHeader";
 import { Footer } from "@/components/landing/Footer";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type Company = Record<string, string | null | boolean | number | undefined>;
 type Complaint = {
@@ -54,27 +66,196 @@ function InfoRow({
 }) {
   if (value == null || value === "") return null;
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: 12,
-        paddingBottom: 14,
-        borderBottom: `1px solid ${S.border}`,
-        marginBottom: 14,
-      }}
-    >
-      <div
-        style={{
-          width: 140,
-          fontSize: 13,
-          color: S.muted,
-          flexShrink: 0,
-        }}
-      >
+    <div className="flex gap-3 pb-3 border-b border-gray-100 mb-3 last:border-0 last:mb-0 last:pb-0">
+      <div className="w-32 text-xs text-gray-400 flex-shrink-0 font-medium">
         {label}
       </div>
-      <div style={{ fontSize: 14, color: S.text, fontWeight: 500, flex: 1 }}>
+      <div className="text-sm text-[#2A3F54] font-medium flex-1">
         {value}
+      </div>
+    </div>
+  );
+}
+
+// ─── HERO MODERNO ────────────────────────────────────────────────────────────
+function CompanyHero({
+  company,
+  stats,
+  isMember,
+  isVerified,
+  dashboardLink,
+  complaintCtaHref,
+  tabs,
+  activeTab,
+  onTabChange,
+}: {
+  company: Company;
+  stats: CompanyStats;
+  isMember: boolean;
+  isVerified: boolean;
+  dashboardLink?: string;
+  complaintCtaHref?: string;
+  tabs: { key: string; label: string; count?: number }[];
+  activeTab: string;
+  onTabChange: (key: string) => void;
+}) {
+  const region = company.region ?? ([company.city, company.state].filter(Boolean).join(", ") || null);
+  const projectsCount = stats.activeProjectsCount ?? 0;
+
+  return (
+    <div className="bg-gradient-to-br from-[#1E88E5] to-[#1565C0]">
+      <div className="max-w-[960px] mx-auto px-6 pt-8 pb-4">
+        {/* Header row */}
+        <div className="flex items-start gap-5 flex-wrap mb-6">
+          {/* Avatar */}
+          <div className="w-[72px] h-[72px] rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center text-white text-[28px] font-bold flex-shrink-0 overflow-hidden">
+            {company.logoUrl ? (
+              <img src={String(company.logoUrl)} alt="" className="w-full h-full object-cover" />
+            ) : (
+              String(company.name ?? "E").charAt(0).toUpperCase()
+            )}
+          </div>
+
+          {/* Info */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap mb-1">
+              <h1 className="text-[22px] font-bold text-white m-0">
+                {String(company.name ?? "")}
+              </h1>
+              {isVerified && (
+                <Badge className="bg-white/25 text-white border-0 text-[11px] font-bold px-2 py-0.5 hover:bg-white/25">
+                  <Shield className="w-3 h-3 mr-1" />
+                  VERIFICADA
+                </Badge>
+              )}
+              {isMember && (
+                <Badge className="bg-white/25 text-white border-0 text-[11px] font-bold px-2 py-0.5 hover:bg-white/25">
+                  MEMBRO
+                </Badge>
+              )}
+            </div>
+
+            {region && (
+              <div className="flex items-center gap-1.5 text-[13px] text-white/90 mb-0.5">
+                <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+                <span>{region}</span>
+              </div>
+            )}
+
+            <div className="flex items-center gap-1.5 text-[13px] text-white/85">
+              <BarChart3 className="w-3.5 h-3.5 flex-shrink-0" />
+              <span>
+                {projectsCount} {projectsCount === 1 ? "projeto" : "projetos"} em andamento
+              </span>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {dashboardLink && (
+              <Link href={dashboardLink}>
+                <Button
+                  variant="outline"
+                  className="bg-transparent border-white/50 text-white hover:bg-white/10 hover:text-white text-[13px] font-semibold"
+                >
+                  Painel da empresa →
+                </Button>
+              </Link>
+            )}
+            {complaintCtaHref && (
+              <Link href={complaintCtaHref}>
+                <Button className="bg-white text-[#1E88E5] hover:bg-gray-100 text-sm font-semibold gap-2">
+                  <FileText className="w-4 h-4" />
+                  Reclamar
+                </Button>
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-1 flex-wrap items-center">
+          {tabs.map((t) => (
+            <button
+              key={t.key}
+              type="button"
+              onClick={() => onTabChange(t.key)}
+              className={`inline-flex items-center gap-2 px-4 py-2.5 text-[13px] font-semibold rounded-t-xl transition-all cursor-pointer border-none ${
+                activeTab === t.key
+                  ? "bg-white text-[#1E88E5]"
+                  : "bg-transparent text-white/85 hover:text-white"
+              }`}
+            >
+              {t.label}
+              {t.count != null && (
+                <span className={`text-[11px] px-1.5 py-0.5 rounded-full font-bold ${
+                  activeTab === t.key ? "bg-[#1E88E5]/10 text-[#1E88E5]" : "bg-white/20 text-white"
+                }`}>
+                  {t.count}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── MÉTRICAS MODERNAS ──────────────────────────────────────────────────────
+function MetricsBar({ stats }: { stats: CompanyStats }) {
+  const metrics = [
+    {
+      label: "Tempo médio de resposta",
+      value: stats.avgResponseHours != null ? `${stats.avgResponseHours}h` : "-",
+      icon: <Clock className="w-4 h-4" />,
+      color: "#1E88E5",
+      bg: "#E3F2FD",
+    },
+    {
+      label: "Taxa de resolução",
+      value: `${stats.resolutionRate}%`,
+      icon: <Check className="w-4 h-4" />,
+      color: stats.resolutionRate >= 70 ? "#22C55E" : "#F97316",
+      bg: stats.resolutionRate >= 70 ? "#F0FDF4" : "#FFF7ED",
+    },
+    {
+      label: "Diálogos ativos",
+      value: stats.activeDialogsCount,
+      icon: <MessageCircle className="w-4 h-4" />,
+      color: "#1E88E5",
+      bg: "#E3F2FD",
+    },
+    {
+      label: "Casos resolvidos",
+      value: stats.resolvedCases,
+      icon: <Check className="w-4 h-4" />,
+      color: "#22C55E",
+      bg: "#F0FDF4",
+    },
+  ];
+
+  return (
+    <div className="max-w-[960px] mx-auto px-6 mt-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {metrics.map((m, i) => (
+          <Card key={i} className="border-0 shadow-md hover:shadow-lg transition-shadow">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div
+                  className="w-8 h-8 rounded-lg flex items-center justify-center"
+                  style={{ backgroundColor: m.bg, color: m.color }}
+                >
+                  {m.icon}
+                </div>
+                <span className="text-2xl font-bold font-['Poppins']" style={{ color: m.color }}>
+                  {m.value}
+                </span>
+              </div>
+              <p className="text-xs text-gray-500 font-medium font-['Poppins']">{m.label}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );
@@ -101,16 +282,8 @@ function OverviewTab({
   const companyName = company.name ? String(company.name) : undefined;
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "minmax(0, 1fr) 320px",
-        gap: 24,
-        alignItems: "start",
-      }}
-      className="company-overview-grid"
-    >
-      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+      <div className="flex flex-col gap-6">
         <CompanyRecentComplaintsCard
           complaints={recent.map((c) => ({
             id: c.id,
@@ -131,7 +304,7 @@ function OverviewTab({
           sector={company.sector ? String(company.sector) : null}
         />
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <div className="flex flex-col gap-6">
         <CompanyAboutCard company={company} stats={stats} />
         <CompanyContactsCard
           company={{
@@ -146,15 +319,6 @@ function OverviewTab({
   );
 }
 
-// Adicionar CSS responsivo para mobile
-const responsiveStyles = `
-  @media (max-width: 768px) {
-    .company-overview-grid {
-      grid-template-columns: 1fr !important;
-    }
-  }
-`;
-
 // ─── PERFIL PÚBLICO - ABA INFORMAÇÕES ───────────────────────────────────────
 function InformacoesTab({ company }: { company: Company }) {
   const addr = [
@@ -168,45 +332,26 @@ function InformacoesTab({ company }: { company: Company }) {
     .join(", ");
 
   return (
-    <div
-      style={{
-        background: S.white,
-        border: `1px solid ${S.border}`,
-        borderRadius: 16,
-        padding: "20px 24px",
-        maxWidth: 560,
-        boxShadow: "0 1px 3px 0 rgba(0,0,0,0.05)",
-      }}
-    >
-      <div
-        style={{
-          fontSize: 13,
-          fontWeight: 700,
-          color: S.muted,
-          textTransform: "uppercase",
-          letterSpacing: "0.06em",
-          marginBottom: 16,
-        }}
-      >
-        Informações cadastrais
-      </div>
-      <InfoRow label="Nome fantasia" value={company.name ? String(company.name) : null} />
-      <InfoRow label="Razão social" value={company.corporateName ? String(company.corporateName) : null} />
-      <InfoRow label="CNPJ" value={company.cnpj ? String(company.cnpj) : null} />
-      <InfoRow label="Setor" value={company.sector ? String(company.sector) : null} />
-      <InfoRow label="Região" value={company.region ? String(company.region) : null} />
-      <InfoRow label="Endereço" value={addr || undefined} />
-      <InfoRow label="Site" value={company.website ? String(company.website) : null} />
-      <InfoRow label="E-mail" value={company.email ? String(company.email) : null} />
-      <InfoRow label="Telefone" value={company.phone ? String(company.phone) : null} />
-      {company.foundationDate && (
-        <InfoRow
-          label="Fundação"
-          value={formatDate(String(company.foundationDate))}
-        />
-      )}
-      <InfoRow label="Cadastrada desde" value={company.createdAt ? formatDate(String(company.createdAt)) : null} />
-    </div>
+    <Card className="border-0 shadow-md max-w-xl">
+      <CardContent className="p-6">
+        <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
+          Informações cadastrais
+        </h2>
+        <InfoRow label="Nome fantasia" value={company.name ? String(company.name) : null} />
+        <InfoRow label="Razão social" value={company.corporateName ? String(company.corporateName) : null} />
+        <InfoRow label="CNPJ" value={company.cnpj ? String(company.cnpj) : null} />
+        <InfoRow label="Setor" value={company.sector ? String(company.sector) : null} />
+        <InfoRow label="Região" value={company.region ? String(company.region) : null} />
+        <InfoRow label="Endereço" value={addr || undefined} />
+        <InfoRow label="Site" value={company.website ? String(company.website) : null} />
+        <InfoRow label="E-mail" value={company.email ? String(company.email) : null} />
+        <InfoRow label="Telefone" value={company.phone ? String(company.phone) : null} />
+        {company.foundationDate && (
+          <InfoRow label="Fundação" value={formatDate(String(company.foundationDate))} />
+        )}
+        <InfoRow label="Cadastrada desde" value={company.createdAt ? formatDate(String(company.createdAt)) : null} />
+      </CardContent>
+    </Card>
   );
 }
 
@@ -248,25 +393,20 @@ function ProjetosTab({
   ];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+    <div className="flex flex-col gap-6">
+      <div className="flex gap-3 flex-wrap items-center">
         <SearchInput value={search} onChange={setSearch} placeholder="Buscar projetos..." />
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <div className="flex gap-2 flex-wrap">
           {statusOpts.map((o) => (
             <button
               key={o.key}
               type="button"
               onClick={() => setStatusFilter(o.key)}
-              style={{
-                padding: "7px 14px",
-                borderRadius: 20,
-                border: `1px solid ${statusFilter === o.key ? S.primary : S.border}`,
-                background: statusFilter === o.key ? S.primary : S.white,
-                color: statusFilter === o.key ? S.white : S.text,
-                fontSize: 13,
-                fontWeight: 500,
-                cursor: "pointer",
-              }}
+              className={`px-4 py-2 rounded-full text-[13px] font-medium cursor-pointer transition-all border ${
+                statusFilter === o.key
+                  ? "bg-[#1E88E5] text-white border-[#1E88E5] shadow-md"
+                  : "bg-white text-[#2A3F54] border-gray-200 hover:bg-gray-50"
+              }`}
             >
               {o.label}
             </button>
@@ -307,51 +447,37 @@ function ReclamacoesTab({
       : complaints.filter((c) => c.status === filter);
 
   const filters = [
-    { key: "ALL", label: "Todas" },
-    { key: "OPEN", label: "Abertas" },
-    { key: "RESPONDED", label: "Respondidas" },
-    { key: "RESOLVED", label: "Resolvidas" },
-    { key: "CANCELLED", label: "Canceladas" },
+    { key: "ALL", label: "Todas", count: stats.totalComplaints },
+    { key: "OPEN", label: "Abertas", count: complaints.filter((c) => c.status === "OPEN").length },
+    { key: "RESPONDED", label: "Respondidas", count: complaints.filter((c) => c.status === "RESPONDED").length },
+    { key: "RESOLVED", label: "Resolvidas", count: complaints.filter((c) => c.status === "RESOLVED").length },
+    { key: "CANCELLED", label: "Canceladas", count: complaints.filter((c) => c.status === "CANCELLED").length },
   ];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+    <div className="flex flex-col gap-6">
+      <div className="flex gap-2 flex-wrap items-center">
         {filters.map((f) => (
           <button
             key={f.key}
             type="button"
             onClick={() => setFilter(f.key)}
-            style={{
-              padding: "7px 16px",
-              borderRadius: 20,
-              border: `1px solid ${filter === f.key ? S.primary : S.border}`,
-              background: filter === f.key ? S.primary : S.white,
-              color: filter === f.key ? S.white : S.text,
-              fontSize: 13,
-              fontWeight: 500,
-              cursor: "pointer",
-            }}
+            className={`px-4 py-2 rounded-full text-[13px] font-medium cursor-pointer transition-all border ${
+              filter === f.key
+                ? "bg-[#1E88E5] text-white border-[#1E88E5] shadow-md"
+                : "bg-white text-[#2A3F54] border-gray-200 hover:bg-gray-50"
+            }`}
           >
-            {f.label}
+            {f.label} ({f.count})
           </button>
         ))}
         {isLoggedIn && (
-          <a
-            href={`/app/complaints/new?company=${companyId}`}
-            style={{
-              background: S.primary,
-              color: S.white,
-              borderRadius: 8,
-              padding: "9px 18px",
-              fontSize: 13,
-              fontWeight: 600,
-              textDecoration: "none",
-              marginLeft: "auto",
-            }}
-          >
-            + Reclamar
-          </a>
+          <Link href={`/app/complaints/new?company=${companyId}`} className="ml-auto">
+            <Button className="bg-[#1E88E5] hover:bg-[#1976D2] text-sm gap-1">
+              <MessageCircle className="w-4 h-4" />
+              Reclamar
+            </Button>
+          </Link>
         )}
       </div>
       <CompanyComplaintList
@@ -403,124 +529,71 @@ export function CompanyProfileContent({
   const [reportOpen, setReportOpen] = useState(false);
 
   const companySlug = company.slug ? String(company.slug) : String(company.id);
+
   const publicTabs = [
-    { key: "overview", label: "Início", icon: <Home style={{ width: 18, height: 18 }} /> },
-    {
-      key: "complaints",
-      label: `Reclamações (${stats.totalComplaints})`,
-      icon: <MessageCircle style={{ width: 18, height: 18 }} />,
-    },
-    { key: "info", label: "Informações", icon: <Info style={{ width: 18, height: 18 }} /> },
-    {
-      key: "projects",
-      label: `Projetos (${stats.activeProjectsCount})`,
-      icon: <BarChart3 style={{ width: 18, height: 18 }} />,
-    },
+    { key: "overview", label: "Início" },
+    { key: "complaints", label: "Reclamações", count: stats.totalComplaints },
+    { key: "info", label: "Informações" },
+    { key: "projects", label: "Projetos", count: stats.activeProjectsCount },
   ];
+
+  const isVerified = !!company.verifiedAt;
 
   return (
     <>
       <MainHeader />
-      <div style={{ minHeight: "100vh", background: S.bg }}>
-        <style>{responsiveStyles}</style>
-        <CompanyProfileHero
-        company={{
-          id: String(company.id),
-          name: company.name ? String(company.name) : null,
-          logoUrl: company.logoUrl ? String(company.logoUrl) : null,
-          verifiedAt: company.verifiedAt != null ? String(company.verifiedAt) : null,
-          region: company.region ? String(company.region) : null,
-          city: company.city ? String(company.city) : null,
-          state: company.state ? String(company.state) : null,
-          sector: company.sector ? String(company.sector) : null,
-          slug: company.slug ? String(company.slug) : null,
-        }}
-        stats={stats}
-        tabs={publicTabs}
-        activeTab={tab}
-        onTabChange={setTab}
-        isMember={isMember}
-        showMetrics={false}
-        dashboardLink={isMember ? "/app/company/dashboard" : undefined}
-        complaintCtaHref={!isMember ? `/app/complaints/new?company=${company.id}` : undefined}
-      />
-
-      {/* Métricas em cards brancos abaixo do banner */}
-      <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 24px" }}>
-        <div
-          style={{
-            display: "flex",
-            gap: 16,
-            flexWrap: "wrap",
-            marginTop: -1,
-            padding: "20px 0",
-            background: S.bg,
-            borderTop: `1px solid ${S.border}`,
-          }}
-        >
-          <MetricCard
-            label="Tempo médio de resposta"
-            value={stats.avgResponseHours != null ? `${stats.avgResponseHours}h` : "-"}
-            icon={<Clock style={{ width: 16, height: 16 }} />}
-          />
-          <MetricCard
-            label="Taxa de resolução"
-            value={`${stats.resolutionRate}%`}
-            color={stats.resolutionRate >= 70 ? S.green : S.orange}
-            icon={<Check style={{ width: 16, height: 16 }} />}
-          />
-          <MetricCard
-            label="Diálogos ativos"
-            value={stats.activeDialogsCount}
-            color={S.primary}
-            icon={<MessageCircle style={{ width: 16, height: 16 }} />}
-          />
-          <MetricCard
-            label="Casos resolvidos"
-            value={stats.resolvedCases}
-            color={S.green}
-            icon={<Check style={{ width: 16, height: 16 }} />}
-          />
-        </div>
-      </div>
-
-      <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 24px 60px" }}>
-        {tab === "overview" && (
-          <OverviewTab
-            company={company}
-            stats={stats}
-            complaints={complaints}
-            isLoggedIn={isLoggedIn}
-            onReport={() => setReportOpen(true)}
-            companySlug={companySlug}
-          />
-        )}
-        {tab === "complaints" && (
-          <ReclamacoesTab
-            complaints={complaints}
-            stats={stats}
-            isLoggedIn={isLoggedIn}
-            companyId={String(company.id)}
-          />
-        )}
-        {tab === "info" && <InformacoesTab company={company} />}
-        {tab === "projects" && (
-          <ProjetosTab
-            projects={projects}
-            companyId={String(company.id)}
-            isLoggedIn={isLoggedIn}
-          />
-        )}
-      </div>
-
-      {reportOpen && (
-        <CompanyReportModal
-          companyId={String(company.id)}
-          onClose={() => setReportOpen(false)}
+      <div className="min-h-screen bg-[#F5F7FA]">
+        <CompanyHero
+          company={company}
+          stats={stats}
+          isMember={isMember}
+          isVerified={isVerified}
+          dashboardLink={isMember ? "/app/company/dashboard" : undefined}
+          complaintCtaHref={!isMember ? `/app/complaints/new?company=${company.id}` : undefined}
+          tabs={publicTabs}
+          activeTab={tab}
+          onTabChange={setTab}
         />
-      )}
-    </div>
-    <Footer />
+
+        <MetricsBar stats={stats} />
+
+        <div className="max-w-[960px] mx-auto px-6 py-8">
+          {tab === "overview" && (
+            <OverviewTab
+              company={company}
+              stats={stats}
+              complaints={complaints}
+              isLoggedIn={isLoggedIn}
+              onReport={() => setReportOpen(true)}
+              companySlug={companySlug}
+            />
+          )}
+          {tab === "complaints" && (
+            <ReclamacoesTab
+              complaints={complaints}
+              stats={stats}
+              isLoggedIn={isLoggedIn}
+              companyId={String(company.id)}
+            />
+          )}
+          {tab === "info" && <InformacoesTab company={company} />}
+          {tab === "projects" && (
+            <ProjetosTab
+              projects={projects}
+              companyId={String(company.id)}
+              isLoggedIn={isLoggedIn}
+            />
+          )}
+        </div>
+
+        {reportOpen && (
+          <CompanyReportModal
+            companyId={String(company.id)}
+            onClose={() => setReportOpen(false)}
+          />
+        )}
+      </div>
+      <Footer />
     </>
   );
 }

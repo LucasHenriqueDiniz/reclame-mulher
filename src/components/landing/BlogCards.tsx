@@ -1,45 +1,29 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { BlogPostCard, type BlogPostCardPost } from "@/components/blog/BlogPostCard";
-
-const cardsData: BlogPostCardPost[] = [
-  {
-    image: "/blog-image.webp",
-    tags: ["Políticas Públicas", "Legislação"],
-    title: "Políticas Públicas para Mulheres Impactadas",
-    author: {
-      name: "Maria Silva",
-      avatar: "/blog-avatar.webp",
-    },
-    date: "20 de Agosto, 2024",
-    slug: "politicas-publicas-mulheres-impactadas",
-  },
-  {
-    image: "/blog-image-2.webp",
-    tags: ["Direitos Essenciais", "Recursos Hídricos"],
-    title: "Acesso à Água em Áreas de Reassentamento",
-    author: {
-      name: "Ana Santos",
-      avatar: "/blog-avatar.webp",
-    },
-    date: "15 de Agosto, 2024",
-    slug: "acesso-agua-reassentamento",
-  },
-  {
-    image: "/blog-image-3.webp",
-    tags: ["Participação Social", "Casos de Sucesso"],
-    title: "Participação Social Feminina: Como Mulheres Transformaram Projetos",
-    author: {
-      name: "Carla Oliveira",
-      avatar: "/blog-avatar.webp",
-    },
-    date: "10 de Agosto, 2024",
-    slug: "participacao-social-feminina",
-  },
-];
+import { BlogPostCard, toBlogCardPost, type BlogPostCardPost } from "@/components/blog/BlogPostCard";
 
 export function BlogCards() {
+  const [posts, setPosts] = useState<BlogPostCardPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const res = await fetch("/api/blog/posts?limit=3");
+        if (!res.ok) return;
+        const data = (await res.json()) as { posts: Array<Parameters<typeof toBlogCardPost>[0]> };
+        setPosts(data.posts.map(toBlogCardPost));
+      } catch {
+        // silencioso: landing não deve quebrar se blog falhar
+      } finally {
+        setLoading(false);
+      }
+    }
+    void fetchPosts();
+  }, []);
+
   return (
     <section className="flex flex-col items-center justify-center gap-14 px-6 md:px-[100px] py-[75px] w-full bg-brand-blue">
       <motion.header
@@ -59,15 +43,22 @@ export function BlogCards() {
       </motion.header>
 
       <div className="grid md:grid-cols-3 w-full max-w-7xl mx-auto gap-6">
-        {cardsData.map((card, index) => (
-          <BlogPostCard 
-            key={index}
-            post={card}
-            index={index}
-            showAnimation={true}
-            showReadMore={true}
-          />
-        ))}
+        {loading
+          ? Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={index}
+                className="h-96 w-full animate-pulse rounded-2xl bg-white/10"
+              />
+            ))
+          : posts.map((post, index) => (
+              <BlogPostCard
+                key={post.slug}
+                post={post}
+                index={index}
+                showAnimation={true}
+                showReadMore={true}
+              />
+            ))}
       </div>
     </section>
   );

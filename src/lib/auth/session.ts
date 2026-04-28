@@ -50,6 +50,7 @@ export async function setSessionCookie(response: NextResponse, payload: SessionP
     sameSite: "lax",
     maxAge: COOKIE_MAX_AGE,
     path: "/",
+    partitioned: process.env.NODE_ENV === "production",
   });
 }
 
@@ -60,5 +61,5 @@ export async function getSessionFromRequest(request: NextRequest): Promise<Sessi
 }
 
 export async function clearSessionCookie(response: NextResponse): Promise<void> {
-  response.cookies.set(COOKIE_NAME, "", { maxAge: 0, path: "/" });
+  response.cookies.set(COOKIE_NAME, "", { maxAge: 0, path: "/", partitioned: process.env.NODE_ENV === "production" });
 }

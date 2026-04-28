@@ -203,4 +203,22 @@ export class BlogRepo {
 
     return rows.map((r) => r.tag);
   }
+
+  static async getPostTagsBatch(postIds: string[]) {
+    if (postIds.length === 0) return new Map<string, typeof blogTags.$inferSelect[]>();
+
+    const rows = await db
+      .select({ postId: blogPostTags.postId, tag: blogTags })
+      .from(blogPostTags)
+      .innerJoin(blogTags, eq(blogPostTags.tagId, blogTags.id))
+      .where(inArray(blogPostTags.postId, postIds));
+
+    const map = new Map<string, typeof blogTags.$inferSelect[]>();
+    for (const row of rows) {
+      const list = map.get(row.postId) ?? [];
+      list.push(row.tag);
+      map.set(row.postId, list);
+    }
+    return map;
+  }
 }

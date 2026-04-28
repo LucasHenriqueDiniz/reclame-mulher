@@ -5,6 +5,7 @@ import { users, profiles } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { hashPassword } from "@/lib/auth/password";
 import { setSessionCookie } from "@/lib/auth/session";
+import { rateLimit } from "@/lib/rate-limit";
 
 const schema = z.object({
   name: z.string().min(3),
@@ -14,6 +15,9 @@ const schema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  const limit = rateLimit(request);
+  if (limit) return limit;
+
   try {
     const body = await request.json();
     const { name, email, password, cpf } = schema.parse(body);
@@ -33,7 +37,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Este CPF já está cadastrado." }, { status: 409 });
     }
 
-    const passwordHash = hashPassword(password);
+    const passwordHash = await hashPassword(password);
     let userId = "";
 
     await db.transaction(async (tx) => {

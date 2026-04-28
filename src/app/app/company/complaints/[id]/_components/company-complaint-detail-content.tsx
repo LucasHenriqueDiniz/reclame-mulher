@@ -3,18 +3,63 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-import { companyTheme as S } from "@/components/company/theme";
+import {
+  ArrowLeft,
+  MessageCircle,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  XCircle,
+  MapPin,
+  Tag,
+  Zap,
+  Users,
+  Send,
+  Shield,
+  Building2,
+  ThumbsUp,
+  Share2,
+  Flag,
+  Paperclip,
+  BarChart3,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { formatDateTime } from "@/lib/utils";
+import { protocolId } from "@/components/company/utils";
+import { CompanyPageShell } from "@/components/app/CompanyPageShell";
 
-const STATUS_LABELS: Record<string, string> = {
-  OPEN: "Em aberto",
-  RESPONDED: "Respondida",
-  RESOLVED: "Resolvida",
-  CANCELLED: "Cancelada",
+const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; border: string; icon: React.ReactNode }> = {
+  OPEN: {
+    label: "Em aberto",
+    color: "#F97316",
+    bg: "#FFF7ED",
+    border: "#FDBA74",
+    icon: <AlertCircle className="w-4 h-4" />,
+  },
+  RESPONDED: {
+    label: "Respondida",
+    color: "#EAB308",
+    bg: "#FEFCE8",
+    border: "#FDE047",
+    icon: <MessageCircle className="w-4 h-4" />,
+  },
+  RESOLVED: {
+    label: "Resolvida",
+    color: "#22C55E",
+    bg: "#F0FDF4",
+    border: "#86EFAC",
+    icon: <CheckCircle2 className="w-4 h-4" />,
+  },
+  CANCELLED: {
+    label: "Cancelada",
+    color: "#94A3B8",
+    bg: "#F8FAFC",
+    border: "#CBD5E1",
+    icon: <XCircle className="w-4 h-4" />,
+  },
 };
 
 const STATUS_OPTIONS = [
@@ -23,6 +68,22 @@ const STATUS_OPTIONS = [
   { value: "RESOLVED", label: "Resolvida" },
   { value: "CANCELLED", label: "Cancelada" },
 ];
+
+const CATEGORY_LABELS: Record<string, string> = {
+  meio_ambiente: "Meio Ambiente",
+  seguranca: "Segurança",
+  infraestrutura: "Infraestrutura",
+  social: "Social",
+  saude: "Saúde",
+  outro: "Outro",
+};
+
+const URGENCY_LABELS: Record<string, string> = {
+  baixa: "Baixa",
+  media: "Média",
+  alta: "Alta",
+  emergencial: "Emergencial",
+};
 
 type ComplaintDetail = {
   id: string;
@@ -53,6 +114,19 @@ type MessageItem = {
   author: { name: string | null } | null;
 };
 
+function StatusBadge({ status }: { status: string }) {
+  const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.OPEN;
+  return (
+    <span
+      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
+      style={{ backgroundColor: config.bg, color: config.color, border: `1px solid ${config.border}` }}
+    >
+      {config.icon}
+      {config.label}
+    </span>
+  );
+}
+
 export function CompanyComplaintDetailContent({
   complaint,
   messages,
@@ -69,7 +143,7 @@ export function CompanyComplaintDetailContent({
   function submitResponse() {
     setFeedback(null);
     if (!response.trim()) {
-      setFeedback({ type: "error", message: "Digite uma resposta antes de enviar." });
+      setFeedback({ type: "error", message: "Escreva uma resposta antes de enviar." });
       return;
     }
 
@@ -82,19 +156,18 @@ export function CompanyComplaintDetailContent({
 
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setFeedback({ type: "error", message: data.error ?? "Erro ao enviar resposta." });
+        setFeedback({ type: "error", message: data.error ?? "Não foi possível enviar a resposta." });
         return;
       }
 
       setResponse("");
-      setFeedback({ type: "success", message: "Resposta enviada com sucesso." });
+      setFeedback({ type: "success", message: "Resposta enviada com sucesso!" });
       router.refresh();
     });
   }
 
   function updateStatus() {
     setFeedback(null);
-
     startTransition(async () => {
       const res = await fetch(`/api/company/complaints/${complaint.id}/status`, {
         method: "PATCH",
@@ -104,7 +177,7 @@ export function CompanyComplaintDetailContent({
 
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setFeedback({ type: "error", message: data.error ?? "Erro ao atualizar status." });
+        setFeedback({ type: "error", message: data.error ?? "Não foi possível mudar o status." });
         return;
       }
 
@@ -113,124 +186,330 @@ export function CompanyComplaintDetailContent({
     });
   }
 
+  const allMessages: MessageItem[] = [
+    {
+      id: "original",
+      content: complaint.description,
+      senderType: "USER",
+      createdAt: complaint.createdAt,
+      author: complaint.author,
+    },
+    ...messages,
+  ];
+
   return (
-    <div className="container mx-auto max-w-5xl p-6">
-      <div className="mb-6">
-        <Link href="/app/company/dashboard?tab=complaints">
-          <Button variant="ghost" size="sm">
-            ← Voltar
-          </Button>
-        </Link>
-        <h1 className="font-heading mt-4 mb-2 text-3xl">{complaint.title}</h1>
-        <p className="text-gray-600">
-          Protocolo #{complaint.id.slice(0, 8).toUpperCase()} · {STATUS_LABELS[complaint.status] ?? complaint.status}
-        </p>
+    <CompanyPageShell>
+      {/* Header azul */}
+      <div className="bg-gradient-to-br from-[#1E88E5] to-[#1565C0] -mx-6 -mt-8 px-6 py-8 mb-6">
+        <div className="max-w-[960px] mx-auto">
+          <Link
+            href="/app/company/complaints"
+            className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-4"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span className="text-sm font-medium">Voltar</span>
+          </Link>
+
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <div>
+              <h1 className="font-['Poppins'] text-2xl font-bold text-white mb-1">
+                {complaint.title}
+              </h1>
+              <p className="text-sm text-white/80 font-['Poppins']">
+                Reclamação <span className="font-mono font-semibold">#{protocolId(complaint.id)}</span>
+              </p>
+            </div>
+            <StatusBadge status={complaint.status} />
+          </div>
+        </div>
       </div>
 
-      {feedback ? (
+      {/* Feedback */}
+      {feedback && (
         <div
-          className="mb-6 rounded-lg border px-4 py-3 text-sm"
-          style={{
-            borderColor: feedback.type === "error" ? "#fecaca" : "#bbf7d0",
-            background: feedback.type === "error" ? "#fef2f2" : "#f0fdf4",
-            color: feedback.type === "error" ? "#b91c1c" : "#166534",
-          }}
+          className={`mb-6 rounded-xl px-4 py-3 text-sm font-medium ${
+            feedback.type === "error"
+              ? "bg-red-50 text-red-700 border border-red-200"
+              : "bg-green-50 text-green-700 border border-green-200"
+          }`}
         >
           {feedback.message}
         </div>
-      ) : null}
+      )}
 
-      <div className="space-y-6">
-        <section className="rounded-xl border bg-white p-6">
-          <h2 className="font-heading mb-4 text-xl">Detalhes</h2>
-          <div className="grid gap-3 md:grid-cols-2">
-            <p><strong>Status:</strong> {STATUS_LABELS[complaint.status] ?? complaint.status}</p>
-            <p><strong>Data de abertura:</strong> {formatDateTime(complaint.createdAt)}</p>
-            <p><strong>Autora:</strong> {complaint.isAnonymous ? "Anônima" : complaint.author?.name ?? "Usuária"}</p>
-            <p><strong>Empresa:</strong> {complaint.company.name ?? "—"}</p>
-            {complaint.project ? <p><strong>Projeto:</strong> {complaint.project.name}</p> : null}
-            {complaint.problemLocation ? <p><strong>Local:</strong> {complaint.problemLocation}</p> : null}
-            {complaint.occurredAt ? <p><strong>Ocorrido em:</strong> {formatDateTime(complaint.occurredAt)}</p> : null}
-            {complaint.expectedSolution ? <p><strong>Solução esperada:</strong> {complaint.expectedSolution}</p> : null}
-          </div>
-        </section>
-
-        <section className="rounded-xl border bg-white p-6">
-          <h2 className="font-heading mb-4 text-xl">Conversa</h2>
-          <div className="space-y-4">
-            <div className="rounded-lg border bg-slate-50 p-4">
-              <p className="mb-1 text-sm font-semibold">
-                {complaint.isAnonymous ? "Reclamante anônima" : complaint.author?.name ?? "Reclamante"}
-              </p>
-              <p className="whitespace-pre-wrap">{complaint.description}</p>
-              <p className="mt-2 text-xs text-gray-500">{formatDateTime(complaint.createdAt)}</p>
-            </div>
-
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className="rounded-lg border p-4"
-                style={{
-                  background: message.senderType === "COMPANY" ? `${S.primary}12` : "#fff",
-                }}
-              >
-                <p className="mb-1 text-sm font-semibold">
-                  {message.author?.name ?? (message.senderType === "COMPANY" ? "Empresa" : "Usuária")}
-                </p>
-                <p className="whitespace-pre-wrap">{message.content}</p>
-                <p className="mt-2 text-xs text-gray-500">{formatDateTime(message.createdAt)}</p>
+      {/* Layout 2 colunas */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
+        {/* Coluna principal */}
+        <div className="space-y-4">
+          {/* Card de detalhes */}
+          <Card className="border-0 shadow-md overflow-hidden">
+            <CardContent className="p-0">
+              {/* Info grid */}
+              <div className="grid grid-cols-2 gap-4 p-5 border-b border-gray-100">
+                <div>
+                  <p className="text-xs text-gray-400 mb-1">Empresa</p>
+                  <p className="text-sm font-semibold text-[#2A3F54]">{complaint.company.name ?? "—"}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-400 mb-1">Localização</p>
+                  <p className="text-sm font-semibold text-[#2A3F54]">{complaint.problemLocation ?? "—"}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-400 mb-1">Data de abertura</p>
+                  <p className="text-sm font-semibold text-[#2A3F54]">{formatDateTime(complaint.createdAt)}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-400 mb-1">Categorias</p>
+                  <div className="flex gap-1 flex-wrap">
+                    {complaint.impactCategory && (
+                      <Badge className="bg-[#1E88E5] text-white hover:bg-[#1E88E5] text-xs">
+                        {CATEGORY_LABELS[complaint.impactCategory] ?? complaint.impactCategory}
+                      </Badge>
+                    )}
+                    {complaint.urgencyLevel && (
+                      <Badge variant="outline" className="text-xs">
+                        {URGENCY_LABELS[complaint.urgencyLevel] ?? complaint.urgencyLevel}
+                      </Badge>
+                    )}
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
 
-          <div className="mt-6 border-t pt-6">
-            <h3 className="mb-4 font-semibold">Responder</h3>
-            <form
-              className="space-y-4"
-              onSubmit={(event) => {
-                event.preventDefault();
-                submitResponse();
-              }}
-            >
-              <div>
-                <Label htmlFor="response">Sua resposta</Label>
+              {/* Ações */}
+              <div className="flex items-center gap-4 px-5 py-3 border-b border-gray-100">
+                <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#1E88E5] transition-colors">
+                  <ThumbsUp className="w-4 h-4" />
+                  Apoiar
+                </button>
+                <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#1E88E5] transition-colors">
+                  <Share2 className="w-4 h-4" />
+                  Compartilhar
+                </button>
+                <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-red-500 transition-colors">
+                  <Flag className="w-4 h-4" />
+                  Reportar
+                </button>
+              </div>
+
+              {/* Timeline */}
+              <div className="p-5 space-y-0">
+                {allMessages.map((message, index) => {
+                  const isCompany = message.senderType === "COMPANY";
+                  const isFirst = index === 0;
+
+                  return (
+                    <div key={message.id} className="flex gap-4">
+                      {/* Linha do tempo */}
+                      <div className="flex flex-col items-center">
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                            isCompany
+                              ? "bg-[#1E88E5]"
+                              : isFirst
+                              ? "bg-orange-100"
+                              : "bg-gray-100"
+                          }`}
+                        >
+                          {isCompany ? (
+                            <Building2 className="w-5 h-5 text-white" />
+                          ) : isFirst ? (
+                            <AlertCircle className="w-5 h-5 text-orange-600" />
+                          ) : (
+                            <MessageCircle className="w-5 h-5 text-gray-500" />
+                          )}
+                        </div>
+                        {index < allMessages.length - 1 && (
+                          <div className="w-0.5 flex-1 bg-gray-200 mt-2" />
+                        )}
+                      </div>
+
+                      {/* Conteúdo */}
+                      <div className={`flex-1 pb-6 ${isCompany ? "border-l-4 border-[#1E88E5] pl-4 -ml-0.5" : ""}`}>
+                        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="font-semibold text-sm text-[#2A3F54]">
+                              {message.author?.name ?? (isCompany ? "Sua empresa" : "Reclamante")}
+                              {isCompany && (
+                                <span className="font-normal text-gray-400 ml-1">— Coordenador de Relações Comunitárias</span>
+                              )}
+                            </span>
+                            <span className="text-xs text-gray-400">
+                              {formatDateTime(message.createdAt)}
+                            </span>
+                          </div>
+                          <p className="text-[#2A3F54] whitespace-pre-wrap leading-relaxed text-sm">
+                            {message.content}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {/* Card de conclusão (se resolvida) */}
+                {complaint.status === "RESOLVED" && (
+                  <div className="flex gap-4">
+                    <div className="flex flex-col items-center">
+                      <div className="w-10 h-10 rounded-full bg-[#1E88E5] flex items-center justify-center flex-shrink-0">
+                        <CheckCircle2 className="w-5 h-5 text-white" />
+                      </div>
+                    </div>
+                    <div className="flex-1 border-l-4 border-[#1E88E5] pl-4 -ml-0.5">
+                      <div className="bg-gradient-to-r from-[#1E88E5] to-[#1565C0] rounded-xl p-6 text-center text-white">
+                        <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-3">
+                          <CheckCircle2 className="w-8 h-8 text-white" />
+                        </div>
+                        <p className="font-['Poppins'] text-lg font-semibold">Chamado Concluído</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Área de resposta */}
+              <div className="p-5 border-t border-gray-100">
+                <h3 className="font-['Poppins'] font-semibold text-[#2A3F54] mb-3">Enviar resposta</h3>
                 <Textarea
-                  id="response"
-                  placeholder="Digite sua resposta..."
+                  placeholder="Escrever sua resposta..."
                   rows={4}
                   disabled={pending}
                   value={response}
-                  onChange={(event) => setResponse(event.target.value)}
+                  onChange={(e) => setResponse(e.target.value)}
+                  className="rounded-xl border-gray-200 focus:border-[#1E88E5] focus:ring-[#1E88E5]/20 resize-none mb-3"
                 />
+                <div className="flex items-center justify-between">
+                  <button className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#1E88E5] transition-colors">
+                    <Paperclip className="w-4 h-4" />
+                    Anexar arquivo
+                  </button>
+                  <Button
+                    onClick={submitResponse}
+                    disabled={pending || !response.trim()}
+                    className="bg-[#1E88E5] hover:bg-[#1976D2] gap-2"
+                  >
+                    <Send className="w-4 h-4" />
+                    {pending ? "Enviando..." : "Enviar resposta"}
+                  </Button>
+                </div>
               </div>
-              <Button type="submit" disabled={pending}>
-                {pending ? "Enviando..." : "Enviar resposta"}
-              </Button>
-            </form>
-          </div>
-        </section>
+            </CardContent>
+          </Card>
+        </div>
 
-        <section className="rounded-xl border bg-white p-6">
-          <h2 className="font-heading mb-4 text-xl">Ações</h2>
-          <div className="flex flex-wrap gap-2">
-            <select
-              className="rounded border px-4 py-2"
-              value={status}
-              disabled={pending}
-              onChange={(event) => setStatus(event.target.value)}
-            >
-              {STATUS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            <Button type="button" onClick={updateStatus} disabled={pending}>
-              {pending ? "Salvando..." : "Alterar status"}
-            </Button>
-          </div>
-        </section>
+        {/* Sidebar */}
+        <div className="space-y-4">
+          {/* Card da empresa */}
+          <Card className="border-0 shadow-md">
+            <CardContent className="p-6 text-center">
+              {/* Avatar */}
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#1E88E5] to-[#1565C0] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                {complaint.company.name?.charAt(0).toUpperCase() ?? "E"}
+              </div>
+              <h3 className="font-['Poppins'] font-semibold text-[#2A3F54] text-lg mb-1">
+                {complaint.company.name ?? "Empresa"}
+              </h3>
+              <Badge className="bg-[#1E88E5]/10 text-[#1E88E5] hover:bg-[#1E88E5]/10 mb-4">
+                <Shield className="w-3 h-3 mr-1" />
+                VERIFICADA
+              </Badge>
+
+              {/* Stats */}
+              <div className="space-y-3 text-left">
+                <div>
+                  <div className="flex items-center justify-between text-xs mb-1">
+                    <span className="text-gray-500">Taxa de resolução</span>
+                    <span className="font-semibold text-[#2A3F54]">92%</span>
+                  </div>
+                  <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-green-500 rounded-full" style={{ width: "92%" }} />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <div className="flex items-center gap-2">
+                    <MessageCircle className="w-4 h-4 text-[#1E88E5]" />
+                    <span className="text-xs text-gray-600">
+                      <strong className="text-[#2A3F54]">27</strong> diálogos ativos
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-green-500" />
+                    <span className="text-xs text-gray-600">
+                      <strong className="text-[#2A3F54]">143</strong> casos resolvidos
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <BarChart3 className="w-4 h-4 text-[#1E88E5]" />
+                    <span className="text-xs text-gray-600">3 projetos em andamento</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-[#1E88E5]" />
+                    <span className="text-xs text-gray-600">Resposta em 43h</span>
+                  </div>
+                </div>
+              </div>
+
+              <Link href={`/company/${complaint.company.name?.toLowerCase().replace(/\s+/g, "-") ?? ""}`}>
+                <Button variant="link" className="mt-4 text-[#1E88E5]">
+                  Ver página da empresa →
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Card Criar reclamação */}
+          <Card className="border-0 shadow-md">
+            <CardContent className="p-6">
+              <p className="text-sm text-[#2A3F54] mb-4">
+                Está querendo fazer uma reclamação sobre <strong>{complaint.company.name ?? "esta empresa"}</strong>?
+              </p>
+              <Link href={`/app/complaints/new?company=${complaint.company.name}`}>
+                <Button className="w-full bg-[#1E88E5] hover:bg-[#1976D2] gap-2">
+                  <MessageCircle className="w-4 h-4" />
+                  Criar uma reclamação
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Ações da empresa */}
+          <Card className="border-0 shadow-md">
+            <CardContent className="p-6">
+              <h4 className="font-semibold text-sm text-gray-400 uppercase tracking-wider mb-4">
+                Ações da empresa
+              </h4>
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm text-gray-500 mb-1.5 block">Mudar status</label>
+                  <div className="flex gap-2">
+                    <select
+                      className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm bg-white focus:border-[#1E88E5] focus:ring-2 focus:ring-[#1E88E5]/20 outline-none"
+                      value={status}
+                      disabled={pending}
+                      onChange={(e) => setStatus(e.target.value)}
+                    >
+                      {STATUS_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                    <Button
+                      type="button"
+                      onClick={updateStatus}
+                      disabled={pending || status === complaint.status}
+                      variant="outline"
+                      className="px-3"
+                    >
+                      {pending ? "..." : "Salvar"}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+    </CompanyPageShell>
   );
 }

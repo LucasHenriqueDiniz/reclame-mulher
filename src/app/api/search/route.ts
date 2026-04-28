@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { CompaniesRepo } from "@/server/repos/companies";
 import { db } from "@/db/client";
 import { complaints, companies, profiles, projects } from "@/db/schema";
-import { ilike, and, eq, desc, or, count, sql } from "drizzle-orm";
+import { ilike, and, eq, desc, or, count, sql, inArray } from "drizzle-orm";
 
 export async function GET(request: NextRequest) {
   try {
@@ -55,54 +55,47 @@ export async function GET(request: NextRequest) {
     // Buscar empresas com estatísticas
     if (scope === "all" || scope === "companies") {
       const companiesResults = await CompaniesRepo.findPublic(query, false);
-      
-      // Buscar estatísticas para cada empresa
-      const companiesWithStats = await Promise.all(
-        companiesResults.slice(0, limit).map(async (c) => {
-          // Contar projetos
-          const [projectStats] = await db
+      const selected = companiesResults.slice(0, limit);
+      const companyIds = selected.map((c) => c.id);
+
+      const statsMap = companyIds.length > 0
+        ? await CompaniesRepo.getStatsBatch(companyIds)
+        : new Map();
+
+      const projectRows = companyIds.length > 0
+        ? await db
             .select({
+              companyId: projects.companyId,
               total: count(projects.id),
               active: sql<number>`count(case when ${projects.status} = 'IN_PROGRESS' then 1 end)`,
             })
             .from(projects)
-            .where(eq(projects.companyId, c.id));
+            .where(inArray(projects.companyId, companyIds))
+            .groupBy(projects.companyId)
+        : [];
 
-          // Contar reclamações
-          const [complaintStats] = await db
-            .select({
-              total: count(complaints.id),
-              resolved: sql<number>`count(case when ${complaints.status} = 'RESOLVED' then 1 end)`,
-            })
-            .from(complaints)
-            .where(eq(complaints.companyId, c.id));
+      const projectMap = new Map(projectRows.map((r) => [r.companyId, r]));
 
-          const totalComplaints = Number(complaintStats?.total || 0);
-          const resolvedComplaints = Number(complaintStats?.resolved || 0);
-          const resolutionRate = totalComplaints > 0 
-            ? Math.round((resolvedComplaints / totalComplaints) * 100) 
-            : 0;
-
-          return {
-            id: c.id,
-            name: c.name,
-            corporateName: c.corporateName,
-            sector: c.sector,
-            region: c.region,
-            verifiedAt: c.verifiedAt,
-            slug: c.slug,
-            stats: {
-              totalProjects: Number(projectStats?.total || 0),
-              activeProjects: Number(projectStats?.active || 0),
-              totalComplaints,
-              resolvedComplaints,
-              resolutionRate,
-            },
-          };
-        })
-      );
-
-      results.companies = companiesWithStats;
+      results.companies = selected.map((c) => {
+        const stats = statsMap.get(c.id);
+        const proj = projectMap.get(c.id);
+        return {
+          id: c.id,
+          name: c.name,
+          corporateName: c.corporateName,
+          sector: c.sector,
+          region: c.region,
+          verifiedAt: c.verifiedAt,
+          slug: c.slug,
+          stats: {
+            totalProjects: Number(proj?.total || 0),
+            activeProjects: Number(proj?.active || 0),
+            totalComplaints: stats?.totalComplaints ?? 0,
+            resolvedComplaints: stats?.resolvedCases ?? 0,
+            resolutionRate: stats?.resolutionRate ?? 0,
+          },
+        };
+      });
     }
 
     // Buscar reclamações públicas

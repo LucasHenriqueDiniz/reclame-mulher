@@ -5,6 +5,7 @@ import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { verifyPassword } from "@/lib/auth/password";
 import { setSessionCookie } from "@/lib/auth/session";
+import { rateLimit } from "@/lib/rate-limit";
 
 const schema = z.object({
   email: z.string().email(),
@@ -12,13 +13,16 @@ const schema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  const limit = rateLimit(request);
+  if (limit) return limit;
+
   try {
     const body = await request.json();
     const { email, password } = schema.parse(body);
 
     const [user] = await db.select().from(users).where(eq(users.email, email.toLowerCase())).limit(1);
 
-    if (!user || !verifyPassword(password, user.passwordHash)) {
+    if (!user || !(await verifyPassword(password, user.passwordHash))) {
       return NextResponse.json({ error: "Email ou senha inválidos" }, { status: 401 });
     }
 

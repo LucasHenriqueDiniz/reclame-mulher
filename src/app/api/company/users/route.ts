@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
         .insert(users)
         .values({
           email,
-          passwordHash: hashPassword(temporaryPassword),
+          passwordHash: await hashPassword(temporaryPassword),
           mustChangePassword: true,
         })
         .returning({ id: users.id });
