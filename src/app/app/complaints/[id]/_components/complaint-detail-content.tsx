@@ -17,6 +17,7 @@ import {
   ExternalLink,
   Send,
 } from "lucide-react";
+import { ShareModal } from "@/components/share-modal";
 import { formatDateTime } from "@/lib/utils";
 import { protocolId } from "@/components/company/utils";
 import { companyTheme as S } from "@/components/company/theme";
@@ -193,27 +194,6 @@ export function ComplaintDetailContent({
           </span>
         </div>
 
-        {/* Compartilhar */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            marginBottom: 20,
-            fontSize: 13,
-            color: S.muted,
-          }}
-        >
-          <Share2 style={{ width: 16, height: 16 }} />
-          <span>Compartilhar esse problema</span>
-          <a href="#" aria-label="Twitter" style={{ color: S.muted }}>
-            <Share2 style={{ width: 18, height: 18 }} />
-          </a>
-          <a href="#" aria-label="Facebook" style={{ color: S.muted }}>
-            <Share2 style={{ width: 18, height: 18 }} />
-          </a>
-        </div>
-
         <div className="complaint-detail-grid" style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 24, alignItems: "start" }}>
           {/* Coluna principal */}
           <div>
@@ -278,9 +258,15 @@ export function ComplaintDetailContent({
                 <button type="button" style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", fontSize: 13, color: S.primary, fontWeight: 600 }}>
                   <ThumbsUp style={{ width: 16, height: 16 }} /> Apoiar
                 </button>
-                <button type="button" style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", fontSize: 13, color: S.primary, fontWeight: 600 }}>
-                  <Share2 style={{ width: 16, height: 16 }} /> Compartilhar
-                </button>
+                <ShareModal
+                  url={`${typeof window !== "undefined" ? window.location.origin : ""}/app/complaints/${complaint.id}`}
+                  title={complaint.title}
+                  trigger={
+                    <button type="button" style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", fontSize: 13, color: S.primary, fontWeight: 600 }}>
+                      <Share2 style={{ width: 16, height: 16 }} /> Compartilhar
+                    </button>
+                  }
+                />
                 <button type="button" style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", fontSize: 13, color: S.red, fontWeight: 600 }}>
                   <Flag style={{ width: 16, height: 16 }} /> Reportar
                 </button>
