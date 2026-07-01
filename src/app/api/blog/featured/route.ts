@@ -1,51 +1,39 @@
 import { NextResponse } from "next/server";
 
-// Mock data - posts em destaque do blog
-export async function GET() {
-  const featuredPosts = [
-    {
-      id: "1",
-      title: "Como fazer uma reclamação efetiva sobre obras de infraestrutura",
-      slug: "como-fazer-reclamacao-efetiva",
-      excerpt: "Aprenda as melhores práticas para registrar reclamações que realmente geram resultados e melhoram sua comunidade.",
-      imageUrl: "/blog-image.webp",
-      publishedAt: new Date("2024-03-10").toISOString(),
-      author: {
-        name: "Maria Silva",
-        avatarUrl: "/blog-avatar.webp",
-      },
-      category: "Guias",
-      readTime: "5 min",
-    },
-    {
-      id: "2",
-      title: "Direitos da comunidade em projetos de grande porte",
-      slug: "direitos-comunidade-projetos",
-      excerpt: "Conheça seus direitos quando grandes obras de infraestrutura afetam sua região e como exercê-los.",
-      imageUrl: "/blog-image-2.webp",
-      publishedAt: new Date("2024-03-08").toISOString(),
-      author: {
-        name: "João Costa",
-        avatarUrl: "/blog-avatar.webp",
-      },
-      category: "Direitos",
-      readTime: "8 min",
-    },
-    {
-      id: "3",
-      title: "Casos de sucesso: Comunidades que transformaram suas realidades",
-      slug: "casos-sucesso-comunidades",
-      excerpt: "Histórias inspiradoras de como a participação ativa da comunidade resultou em melhorias significativas.",
-      imageUrl: "/blog-image-3.webp",
-      publishedAt: new Date("2024-03-05").toISOString(),
-      author: {
-        name: "Ana Santos",
-        avatarUrl: "/blog-avatar.webp",
-      },
-      category: "Casos de Sucesso",
-      readTime: "6 min",
-    },
-  ];
+import { BlogRepo } from "@/server/repos/blog";
 
-  return NextResponse.json(featuredPosts);
+function estimateReadTime(content: string | null | undefined) {
+  const words = content?.trim().split(/\s+/).filter(Boolean).length ?? 0;
+  return `${Math.max(1, Math.ceil(words / 200))} min`;
+}
+
+export async function GET() {
+  try {
+    const { posts } = await BlogRepo.findPublic(undefined, 1, 3);
+    const tagsByPost = await BlogRepo.getPostTagsBatch(posts.map((post) => post.id));
+
+    return NextResponse.json(
+      posts.map((post) => {
+        const tags = tagsByPost.get(post.id) ?? [];
+
+        return {
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          excerpt: post.excerpt ?? "",
+          imageUrl: post.coverUrl ?? "/blog-image.webp",
+          publishedAt: (post.publishedAt ?? post.createdAt).toISOString(),
+          author: {
+            name: "Comunica Mulher",
+            avatarUrl: "/blog-avatar.webp",
+          },
+          category: tags[0]?.name ?? "Recursos",
+          readTime: estimateReadTime(post.contentMd ?? post.content),
+        };
+      })
+    );
+  } catch (error) {
+    console.error("Error fetching featured blog posts:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }

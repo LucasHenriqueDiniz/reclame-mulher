@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
+import { CompanyUsersRepo } from "@/server/repos/company-users";
 import { ComplaintsRepo } from "@/server/repos/complaints";
 import { CompaniesRepo } from "@/server/repos/companies";
 import { MessagesRepo } from "@/server/repos/messages";
@@ -24,6 +25,16 @@ export default async function ComplaintDetailPage({
 
   const isPublic = complaint.isPublic === true;
   const isAuthor = session?.userId != null && complaint.authorId === session.userId;
+  let isCompanyMember = false;
+
+  if (session?.userId != null) {
+    const memberships = await CompanyUsersRepo.findByUser(session.userId);
+    isCompanyMember = memberships.some(
+      (membership) => membership.company.id === complaint.companyId
+    );
+  }
+
+  const canViewThread = isAuthor || isCompanyMember;
 
   if (!isPublic && !isAuthor) {
     notFound();
@@ -55,7 +66,7 @@ export default async function ComplaintDetailPage({
     }
   }
 
-  const messages = await MessagesRepo.findByComplaint(id);
+  const messages = canViewThread ? await MessagesRepo.findByComplaint(id) : [];
 
   const serialized = {
     id: complaint.id,

@@ -85,6 +85,13 @@
       "when": 1773444269067,
       "tag": "0011_repair_projects_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1782900663103,
+      "tag": "0012_new_morgan_stark",
+      "breakpoints": true
     }
   ]
 }

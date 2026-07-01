@@ -331,6 +331,28 @@ export const reports = pgTable("reports", {
   updatedAt: timestamp("updated_at", { withTimezone: true }),
 });
 
+export const auditLogs = pgTable(
+  "audit_logs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    actorUserId: uuid("actor_user_id").references(() => profiles.userId, {
+      onDelete: "set null",
+    }),
+    action: text("action").notNull(),
+    entityType: text("entity_type").notNull(),
+    entityId: uuid("entity_id"),
+    metadata: text("metadata"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => ({
+    actorIdx: index("audit_logs_actor_user_id_idx").on(t.actorUserId),
+    entityIdx: index("audit_logs_entity_idx").on(t.entityType, t.entityId),
+    createdAtIdx: index("audit_logs_created_at_idx").on(t.createdAt),
+  })
+);
+
 // Relations
 export const usersRelations = relations(users, ({ one }) => ({
   profile: one(profiles, {
