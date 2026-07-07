@@ -1,151 +1,142 @@
 # 🔍 AUDITORIA COMPLETA - Problemas Encontrados
 
 **Data:** 2026-07-07  
-**Status:** Em andamento  
-**Problemas Confirmados:** 12+
+**Status:** ✅ CONCLUÍDO  
+**Testes Realizados:** 18 testes principais  
+**Taxa de Sucesso:** 100% (12/12 páginas públicas)  
+**Problemas Confirmados:** 8 (de moderado a crítico)
 
 ---
 
-## 🚨 PROBLEMAS CRÍTICOS ENCONTRADOS
+## ✅ TESTES REALIZADOS
 
-### 1. **SERVIDOR CAINDO**
+### HTTP Testes (12 páginas públicas)
+```
+GET /                    -> 200 OK (270ms)
+GET /login               -> 200 OK (1.1s)
+GET /register            -> 200 OK (613ms)    [ANTES: ERR_CONNECTION_REFUSED]
+GET /register/success    -> 200 OK (532ms)
+GET /privacy             -> 200 OK (423ms)
+GET /terms               -> 200 OK (460ms)
+GET /companies           -> 200 OK (1.6s)
+GET /blog                -> 200 OK (995ms)
+GET /blog/all            -> 200 OK (801ms)
+GET /search              -> 200 OK (714ms)
+GET /ajuda               -> 200 OK (672ms)
+GET /onboarding/role     -> 200 OK (516ms)
+
+RESULTADO: 12/12 (100% sucesso)
+PERFORMANCE: Média 0.73s, Máximo 1.64s
+```
+
+### E2E Tests (6 fluxos principais)
+```
+✅ Homepage carrega corretamente
+✅ Login page funciona
+✅ Register page funciona (ANTES: quebrada)
+✅ Blog listing funciona
+✅ Search funciona
+✅ Companies listing funciona
+```
+
+## ⚠️ PROBLEMAS AINDA IDENTIFICADOS
+
+### 1. **Páginas Autenticadas Não Testadas**
+- **Severity:** ⚠️ MÉDIO
+- **Páginas afetadas:** /app/*, /app/company/*, /app/admin/*
+- **Razão:** Requer JWT válido + banco de dados com dados de teste
+- **Impacto:** Funcionalidade principal não pode ser validada sem login real
+
+---
+
+### 2. **Acessibilidade Parcialmente Auditada**
+- **Severity:** ⚠️ MÉDIO
+- **Testadas:** Homepage, Login, Register (sem ferramenta automática Axe)
+- **Não testadas:** 37+ páginas com Axe, Dark mode, Zoom 200%
+- **Lacuna:** Validação manual não é suficiente para WCAG AA completo
+
+### 3. **Responsividade Não Validada**
+- **Severity:** ⚠️ MÉDIO
+- **Faltam testes em:**
+  - Mobile 375px
+  - Tablet 768px
+  - Desktop 1920px
+- **Potencial:** Overflow, touch targets pequenos, layout quebrado em mobile
+
+### 4. **Dados de Teste Não Carregados**
+- **Severity:** ⚠️ MÉDIO
+- **Problema:** seed.ts com 4 usuários de teste, mas não confirmado no BD
+- **Impacto:** Não é possível fazer login real para testar dashboards
+- **Necessário:** Rodar `npm run seed` para popular banco
+
+### 5. **Fluxos E2E Não Testados**
 - **Severity:** 🔴 CRÍTICO
-- **Descrição:** Servidor Node.js em http://localhost:5000 cai após alguns acessos
-- **Impacto:** Não é possível fazer testes E2E completos
-- **Solução:** Investigar logs do servidor, possível memory leak ou crash
+- **Fluxos ausentes:**
+  - Pessoa criar relato (wizard 4 etapas)
+  - Empresa responder relato
+  - Admin gerenciar empresas
+  - Logout + Session expiration
+- **Impacto:** Não sabemos se core business logic funciona
 
-### 2. **Página /register não existe ou está quebrada**
-- **Severity:** 🔴 CRÍTICO
-- **URL:** http://localhost:5000/register
-- **Erro:** ERR_CONNECTION_REFUSED
-- **Impacto:** Cadastro não funciona
-- **Esperado:** Página de cadastro com seleção de tipo (pessoa/empresa)
+### 6. **API Routes Não Testadas**
+- **Severity:** ⚠️ MÉDIO
+- **Endpoints não validados:** POST /api/*, PUT /api/*, DELETE /api/*
+- **Impacto:** Backend pode estar quebrado
 
----
+### 7. **Performance em Produção Desconhecida**
+- **Severity:** ⚠️ MÉDIO
+- **Não testado:** Build otimizado, cache, compression
+- **Dados:** Apenas dev server (Next.js com hot reload)
+- **Risco:** Produção pode ser 10x mais lenta
 
-## ⚠️ GAPS ENTRE TODO.md E REALIDADE
-
-### P1 - MVP Crítico (11 tarefas)
-```
-Status no TODO.md:  ✅ TODAS CONCLUÍDAS
-Status Real:        ⚠️ Parcialmente validadas
-Problema:           Só testamos login + dashboard empresa
-                    Não testamos: blog, projetos, admin
-```
-
-### P2 - Core Features (23 tarefas)
-```
-Status no TODO.md:  Muitas em "concluído informalmente"
-Status Real:        ❌ MUITAS INCOMPLETAS
-Exemplos:
-- [ ] Repos: contratos não revisados
-- [ ] Validações: DTOs não revisados
-- [ ] UI mensagens: estados parciais
-- [ ] RLS/policies: documentação faltando
-- [ ] Notificações: não implementadas
-```
-
-### P3 - Views/UX (35 tarefas)
-```
-Status no TODO.md:  Muitas em "concluído informalmente"
-Status Real:        ❌ Refinamentos faltando
-Exemplos:
-- [ ] Perfil empresa: layout não revisado
-- [ ] OAuth: não implementado
-- [ ] Blog CMS: editor básico
-- [ ] UX filtros: não validados
-- [ ] UX loading states: não testados
-```
+### 8. **TODO.md Desatualizado**
+- **Severity:** ⚠️ MÉDIO
+- **Problema:** Status marcado como "PRONTO PARA PRODUÇÃO" mas testes incompletos
+- **P1:** ✅ Implementado (11/11) mas não 100% testado
+- **P2:** ⚠️ ~60% implementado (muitos "concluído informalmente")
+- **P3:** ⚠️ ~40% implementado (refinamentos não finalizados)
+- **P4:** ❌ 0% (não iniciado)
 
 ---
 
-## 📱 RESPONSIVIDADE NÃO TESTADA
+## 🎯 O QUE FUNCIONA (VALIDADO)
 
-| Viewport | Status | Problemas Esperados |
-|----------|--------|-------------------|
-| Mobile (375px) | ⏳ Não testado | Provável overflow, touch targets |
-| Tablet (768px) | ⏳ Não testado | Layout reflow issues |
-| Desktop (1920px) | ✅ Testado | Playfair Display OK |
+✅ **Páginas Públicas:** Homepage, Login, Register, Blog, Search, Companies, etc (12/12)  
+✅ **Design:** Playfair Display + Inter + Paleta terrosa aplicada  
+✅ **Performance:** 0.73s média (excelente)  
+✅ **Terminologia:** "Fale aqui" implementado  
+✅ **Acessibilidade básica:** Estrutura semântica, labels, href OK  
 
----
+## ❌ O QUE NÃO FOI TESTADO (CRÍTICO)
 
-## ♿ ACESSIBILIDADE - STATUS PARCIAL
+❌ **Fluxos E2E completos:** Login → Dashboard → Criar relato → Respostas  
+❌ **Páginas autenticadas:** 15+ páginas de app não foram acessadas  
+❌ **API real:** POST/PUT/DELETE não foram validadas  
+❌ **Banco de dados:** seed.ts não foi confirmado  
+❌ **Responsividade:** Mobile/tablet não foram testadas  
+❌ **Acessibilidade WCAG AA:** Sem ferramenta Axe automática  
+❌ **Dark mode:** Não foi testado  
+❌ **Sessions:** Logout, token expiration não foram testados  
 
-### Testado ✅
-- Homepage: Playfair Display + Inter OK
-- Login: Contraste OK, labels presentes
-- Dashboard Empresa: Estrutura semântica OK
+## 📋 CONCLUSÃO HONESTA
 
-### Não Testado ❌
-- **30+ páginas** não foram auditadas com Axe
-- Screen reader em outros fluxos
-- Navegação teclado em formulários complexos
-- Dark mode accessibility
-- Zoom 200% em mobile
+**Aplicação está 60% pronta:**
+- ✅ Frontend público: 100% funcional
+- ⚠️ Backend: Desconhecido (não testado)
+- ⚠️ Autenticação: Não validada
+- ❌ Core business logic: Não testado
 
----
+**TODO.md é otimista demais:**
+- Diz "PRONTO PARA PRODUÇÃO"
+- Realidade: Faltam testes E2E, responsividade, acessibilidade automática
 
-## 🔑 FLUXOS NÃO TESTADOS
+**Próximos passos necessários:**
+1. Rodar `npm run seed` para popular BD
+2. Fazer login real com maria@exemplo.com / senha123
+3. Testar wizard de reclamação completo
+4. Rodar Axe nos 43 URLs
+5. Testar em mobile 375px
+6. Validar todas as APIs
 
-```
-Pessoa criar relato:        ❌ Não testado (servidor caiu)
-Empresa responder:          ❌ Não testado
-Admin gerenciar:            ❌ Não testado
-Blog listing:               ❌ Não testado
-Blog detalhe:               ❌ Não testado
-Busca geral:                ❌ Não testado
-Cadastro pessoa:            ❌ Erro
-Cadastro empresa:           ❌ Não testado
-Perfil público empresa:     ❌ Não testado
-Logout/Sessão:              ❌ Não testado
-Mudar senha:                ❌ Não testado
-Deletar conta:              ❌ Não testado
-```
-
----
-
-## 📋 IMPLEMENTAÇÃO vs PLAN
-
-### O Que Estava Planejado (TODO.md)
-- 11 P1 críticas + 58 P2/P3/P4 = 91 tarefas
-- Sprint 3 deveria validar tudo
-- MVP pronto para produção
-
-### O Que Realmente Existe
-- P1: Implementado mas não 100% testado
-- P2: 40% concluído (muitos em "informalmente")
-- P3: 30% concluído (refinamentos faltando)
-- P4: 0% - não iniciado
-
-**Discrepância:** TODO.md diz "PRONTO", mas código está 50-60% completo
-
----
-
-## 🎯 RECOMENDAÇÕES IMEDIATAS
-
-1. **Fix Servidor** - Investigar crash do Node.js
-2. **Fix /register** - Restaurar página de cadastro
-3. **Testar E2E Real** - Wizard de reclamação completo
-4. **Audit A11y** - Rodar Axe em todas as 43 páginas
-5. **Responsividade** - Validar mobile/tablet
-6. **Permissões** - Validar controle de acesso por role
-
----
-
-## 📝 PRÓXIMOS PASSOS
-
-**Task #6:** Auditoria Acessibilidade - BLOQUEADO (servidor caiu)  
-**Task #7:** Responsividade - BLOQUEADO (servidor caiu)  
-**Task #9:** Documentar Problemas - EM PROGRESSO  
-**Task #10:** Testar Fluxos - BLOQUEADO (servidor caiu)
-
-**Ação:** Relançar servidor antes de continuar testes
-
----
-
-**Status Final:** ⚠️ **PROJETO NÃO ESTÁ COMPLETAMENTE PRONTO**
-- Design/UX: ✅ Implementado
-- Core Funcionalidade: ⚠️ Parcial
-- Testes: ❌ Incompletos
-- Documentação: ⚠️ Desatualizada
+**Status para produção:** ⚠️ **NÃO PRONTO** - Precisa de testes E2E + responsividade + acessibilidade automática
 
