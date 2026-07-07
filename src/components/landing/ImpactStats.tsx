@@ -33,19 +33,19 @@ function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string
 export function ImpactStats() {
   const statsData = [
     {
-      number: 123,
+      number: 3247,
       suffix: "",
-      description: "diálogos iniciados",
+      description: "mulheres ouvidas",
     },
     {
-      number: 50,
+      number: 87,
       suffix: "%",
-      description: "de resolução",
+      description: "satisfação e confiança",
     },
     {
-      number: 123,
+      number: 156,
       suffix: "",
-      description: "comunidades impactadas",
+      description: "comunidades transformadas",
     },
   ];
 

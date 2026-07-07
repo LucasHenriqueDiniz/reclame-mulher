@@ -1,44 +1,32 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MapPin, Shield, TreePine, Building2, TrendingUp, Plus } from "lucide-react";
+import { MapPin, Shield, TreePine, TrendingUp } from "lucide-react";
 
 const categories = [
   {
-    icon: MapPin,
-    title: "DESLOCAMENTO E MOBILIDADE",
-    description:
-      "Impactos no seu direito de ir e vir, reassentamentos e alterações em rotas de transporte.",
-  },
-  {
     icon: Shield,
-    title: "SEGURANÇA COMUNITÁRIA",
+    title: "SEGURANÇA E DIGNIDADE",
     description:
-      "Questões relacionadas à segurança pessoal e familiar durante e após as obras.",
-  },
-  {
-    icon: TreePine,
-    title: "IMPACTO AMBIENTAL",
-    description:
-      "Problemas com poluição, ruído, poeira e danos aos recursos naturais locais.",
-  },
-  {
-    icon: Building2,
-    title: "INFRAESTRUTURA COMUNITÁRIA",
-    description:
-      "Danos ou melhorias necessárias em escolas, centros comunitários e espaços públicos.",
+      "Riscos à segurança pessoal, familiar e comunitária. Violência, assédio e violação de direitos fundamentais.",
   },
   {
     icon: TrendingUp,
-    title: "ECONOMIA LOCAL",
+    title: "OPORTUNIDADES ECONÔMICAS",
     description:
-      "Impactos no comércio, empregos e oportunidades de renda para mulheres.",
+      "Impacto no trabalho, renda e empreendedorismo. Programas de capacitação e empregos afirmativos para mulheres.",
   },
   {
-    icon: Plus,
-    title: "OUTRAS PREOCUPAÇÕES",
+    icon: TreePine,
+    title: "MEIO AMBIENTE E SAÚDE",
     description:
-      "Questões específicas que não se encaixam nas categorias anteriores.",
+      "Poluição, qualidade do ar e água. Acesso a saúde e serviços que afetam você e sua família.",
+  },
+  {
+    icon: MapPin,
+    title: "MOBILIDADE E ACESSO",
+    description:
+      "Direito de ir e vir. Transporte, rotas seguras e acesso à serviços essenciais.",
   },
 ];
 
@@ -65,7 +53,7 @@ export function ImpactCategories() {
           </motion.div>
 
           {/* Categories Grid */}
-          <div className="grid md:grid-cols-2 gap-[30px] w-full max-w-[770px] mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-[30px] w-full max-w-[850px] mx-auto">
             {categories.map((category, index) => {
               const IconComponent = category.icon;
               return (

@@ -12,33 +12,33 @@ const steps = [
   {
     number: 1,
     label: "etapa 1",
-    title: "Identifique o problema",
+    title: "Compartilhe",
     description:
-      "Selecione a categoria do impacto que afeta você e sua comunidade: deslocamento, segurança, meio ambiente, infraestrutura ou oportunidades econômicas.",
+      "Você relata o impacto que sofre. Cada reclamação é documentada com segurança e detalhes que você fornecer: fotos, vídeos e contexto.",
     icon: Search,
   },
   {
     number: 2,
     label: "etapa 2",
-    title: "Registre sua experiência",
+    title: "Amplificamos",
     description:
-      "Compartilhe sua vivência de forma segura e detalhada. Fotos e vídeos podem ser anexados para melhor documentação.",
+      "Suas vozes são unidas às de outras mulheres afetadas. Criamos padrões de impacto e damos força coletiva às reclamações individuais.",
     icon: FileText,
   },
   {
     number: 3,
     label: "etapa 3",
-    title: "Acompanhe a resolução",
+    title: "Pressionamos",
     description:
-      "Monitore em tempo real o status da sua solicitação, desde o recebimento até a implementação das soluções.",
+      "A evidência coletiva é apresentada aos responsáveis pelas obras. Abrimos diálogo direto para garantir que suas demandas sejam ouvidas.",
     icon: TrendingUp,
   },
   {
     number: 4,
     label: "etapa 4",
-    title: "Avalie o resultado",
+    title: "Conquista",
     description:
-      "Dê seu feedback sobre as medidas adotadas e ajude a melhorar o processo para toda a comunidade.",
+      "Medidas são adotadas, compensações garantidas e processos melhorados. Você acompanha cada passo até a mudança real.",
     icon: Star,
   },
 ];
@@ -279,17 +279,17 @@ export function ProcessCarousel() {
           className="mt-12 text-center flex flex-col items-center gap-2"
         >
           <p className="text-muted-foreground text-lg md:text-xl mb-6 font-medium">
-            Quer fazer uma reclamação?
+            Pronta para começar?
           </p>
           <Link href="/app/complaints/new">
             <Button
               size="lg"
-              className="bg-[var(--brand-blue-light)] hover:bg-[var(--brand-blue)] text-white 
+              className="bg-[var(--brand-blue-light)] hover:bg-[var(--brand-blue)] text-white
                        px-8 py-6 text-base md:text-lg font-semibold rounded-full
                        shadow-lg hover:shadow-xl transition-all duration-200
                        flex items-center gap-2 group"
             >
-              <span>Fazer uma reclamação</span>
+              <span>Compartilhe sua história</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
