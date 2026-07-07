@@ -115,13 +115,14 @@ export function ComplaintsContent({
 
       {/* Complaints List */}
       <div className="mt-5">
+        <h1 className="sr-only">Meus Relatos</h1>
         {complaints.length === 0 ? (
           <Card className="shadow-md border-0">
             <CardContent className="p-12 text-center">
               <MessageCircle size={48} className="text-[#607D8B] mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-[#2A3F54] mb-2">
+              <h2 className="text-lg font-semibold text-[#2A3F54] mb-2">
                 Nenhum relato ainda
-              </h3>
+              </h2>
               <p className="text-sm text-[#607D8B] mb-6">
                 Comece criando seu primeiro relato
               </p>

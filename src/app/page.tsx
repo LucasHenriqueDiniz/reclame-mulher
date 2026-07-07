@@ -12,7 +12,7 @@ const Footer = dynamic(() => import("@/components/landing/Footer").then((m) => m
 
 export default function HomePage() {
   return (
-    <main className="overflow-hidden">
+    <main id="main-content" className="overflow-hidden">
       <MainHeader />
       <Hero />
       <ImpactStats />

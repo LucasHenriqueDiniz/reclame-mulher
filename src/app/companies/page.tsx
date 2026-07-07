@@ -58,21 +58,25 @@ export default async function CompaniesPage({
             <Card className="border-0 shadow-xl">
               <CardContent className="p-4">
                 <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto]">
+                  <label htmlFor="company-search" className="sr-only">Buscar empresa ou órgão</label>
                   <input
+                    id="company-search"
                     type="search"
                     name="q"
                     defaultValue={query}
                     placeholder="Buscar empresa ou órgão..."
                     className="h-12 rounded-lg border border-[#E5E5ED] bg-white px-4 text-sm font-['Poppins'] outline-none transition focus:border-[#1E88E5] focus:ring-2 focus:ring-[#1E88E5]/20"
+                    aria-label="Buscar empresa ou órgão"
                   />
-                  
+
                   <label className="flex h-12 items-center gap-2 rounded-lg border border-[#E5E5ED] bg-white px-4 text-sm font-['Poppins'] text-[#2A3F54] cursor-pointer hover:bg-gray-50 transition">
-                    <input 
-                      type="checkbox" 
-                      name="verified" 
-                      value="true" 
+                    <input
+                      type="checkbox"
+                      name="verified"
+                      value="true"
                       defaultChecked={verifiedOnly}
                       className="w-4 h-4 text-[#1E88E5] rounded focus:ring-[#1E88E5]"
+                      aria-label="Filtrar apenas empresas verificadas"
                     />
                     Apenas verificadas
                   </label>

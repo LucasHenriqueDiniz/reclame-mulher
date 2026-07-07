@@ -45,6 +45,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang={defaultLocale} suppressHydrationWarning>
       <body className={cn("min-h-screen bg-background font-sans antialiased", inter.variable, poppins.variable, playfair.variable)}>
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-4 focus:bg-blue-600 focus:text-white focus:rounded">
+          Pular para conteúdo principal
+        </a>
         <LocaleProvider initialLocale={defaultLocale} initialMessages={messages}>
           <HeaderDataProvider>
             <Providers>{children}</Providers>

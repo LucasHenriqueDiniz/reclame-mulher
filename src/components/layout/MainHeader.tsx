@@ -333,7 +333,7 @@ export function MainHeader() {
 
             <DropdownMenu modal={false} open={userMenuOpen} onOpenChange={setUserMenuOpen}>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center space-x-2 hover:opacity-80 transition focus:outline-none">
+                <button aria-label="Menu de usuário" className="flex items-center space-x-2 hover:opacity-80 transition focus:outline-none">
                   {profile?.avatar_url ? (
                     <Avatar className="h-10 w-10">
                       <AvatarImage src={profile.avatar_url} alt={profile?.name || "Usuário"} />
@@ -346,7 +346,7 @@ export function MainHeader() {
                       </AvatarFallback>
                     </Avatar>
                   )}
-                  <ChevronDown className="h-4 w-4 text-[#2A3F54]" />
+                  <ChevronDown aria-hidden="true" className="h-4 w-4 text-[#2A3F54]" />
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-64">
