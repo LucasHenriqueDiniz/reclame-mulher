@@ -31,7 +31,7 @@ export function Hero() {
           transition={{ delay: 0.2, duration: 0.8 }}
           className="font-heading w-full max-w-5xl font-bold text-white text-center mb-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight"
         >
-          Conectando vozes que transformam comunidades
+          Sua voz importa
         </motion.h1>
 
         <motion.p
@@ -40,7 +40,7 @@ export function Hero() {
           transition={{ delay: 0.4, duration: 0.8 }}
           className="w-full max-w-2xl font-normal text-white/95 text-center mb-10 text-base sm:text-lg md:text-xl leading-relaxed"
         >
-          Diálogo direto entre mulheres e responsáveis por obras de infraestrutura
+          Amplificamos as vozes das mulheres afetadas por obras de infraestrutura, transformando reclamações em ações concretas
         </motion.p>
 
         <motion.form
@@ -64,7 +64,7 @@ export function Hero() {
             <Button
               type="submit"
               size="lg"
-              className="h-12 sm:h-14 px-6 sm:px-10 bg-[#3BA5FF] hover:bg-[#2d94f5] rounded-full font-semibold text-white text-base sm:text-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-lg"
+              className="h-12 sm:h-14 px-6 sm:px-10 bg-[#5C4B73] hover:bg-[#4a3d5c] rounded-full font-semibold text-white text-base sm:text-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-lg"
             >
               <Search className="h-5 w-5" />
               <span>Pesquisar</span>

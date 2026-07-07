@@ -50,22 +50,33 @@
   --chart-3: 197 37% 24%;
   --chart-4: 43 74% 66%;
   --chart-5: 27 87% 67%;
-  
-  /* Brand colors */
-  --brand-blue: #3BA5FF;
-  --brand-blue-light: #3BA5FF;
-  --brand-purple: #4C2D8F;
-  --brand-purple-dark: #2A1B55;
-  --scrollbar-track: #eef4f8;
-  --scrollbar-thumb: #9db2c1;
-  --scrollbar-thumb-hover: #6f8ea3;
+
+  /* Brand colors - Updated palette */
+  --brand-blue: #5C4B73;
+  --brand-blue-light: #5C4B73;
+  --brand-purple: #5C4B73;
+  --brand-purple-dark: #5C4B73;
+  --scrollbar-track: #f5f1ed;
+  --scrollbar-thumb: #d4a5a5;
+  --scrollbar-thumb-hover: #c9937f;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
-  --font-heading: var(--font-poppins);
+  --font-heading: Georgia, serif;
+}
+
+/* Typography definitions */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Georgia:wght@400;700&display=swap');
+
+.font-heading {
+  font-family: Georgia, serif;
+}
+
+.font-body {
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
 
 html {
