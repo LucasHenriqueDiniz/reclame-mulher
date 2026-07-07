@@ -58,6 +58,7 @@ const QUICK_LINKS = [
   { href: "/company/construtora-x", label: "Perfil Público Empresa", icon: Building2 },
   { href: "/blog", label: "Blog / Recursos", icon: FileText },
   { href: "/blog/all", label: "Todos os Posts", icon: FileText },
+  { href: "/ajuda/recursos", label: "Recursos de Suporte", icon: Shield },
   { href: "/app/complaints/new", label: "Nova Reclamação", icon: MessageSquare },
   { href: "/app", label: "Área Logada", icon: User },
   { href: "/app/admin/blog", label: "Admin Blog", icon: Shield },

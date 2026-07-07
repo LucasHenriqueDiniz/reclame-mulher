@@ -8,6 +8,7 @@ const navigationLinks = [
   { label: "Home", href: "/" },
   { label: "Blog", href: "/blog" },
   { label: "Empresas", href: "/companies" },
+  { label: "Recursos", href: "/ajuda/recursos" },
   { label: "Fazer Reclamação", href: "/app/complaints/new" },
 ];
 
