@@ -15,7 +15,7 @@ export function CompanyComplaintCtaCard({
   const href = isLoggedIn
     ? `/app/complaints/new?company=${companyId}`
     : "/login";
-  const label = isLoggedIn ? "Iniciar uma reclamação" : "Entrar para reclamar";
+  const label = isLoggedIn ? "Iniciar um relato" : "Entrar para relatar";
   const title = companyName
     ? `Teve algum problema com a ${companyName}?`
     : "Teve algum problema com a empresa?";

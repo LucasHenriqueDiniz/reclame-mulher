@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const CreateMessageDto = z.object({
-  complaint_id: z.string().uuid("ID da reclamação inválido"),
+  complaint_id: z.string().uuid("ID do relato inválido"),
   content: z.string().min(1, "Mensagem não pode estar vazia"),
   attachment_path: z.string().optional(),
   sender_type: z.enum(["USER", "COMPANY", "ADMIN"]).default("USER"),

@@ -32,7 +32,7 @@ export function ComplaintStepTwoForm({ value, onChange }: Props) {
 
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="title">Título da reclamação</Label>
+          <Label htmlFor="title">Título do relato</Label>
           <Input
             id="title"
             value={value.title}

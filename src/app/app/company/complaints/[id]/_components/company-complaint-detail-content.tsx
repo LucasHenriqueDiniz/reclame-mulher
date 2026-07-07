@@ -216,7 +216,7 @@ export function CompanyComplaintDetailContent({
                 {complaint.title}
               </h1>
               <p className="text-sm text-white/80 font-['Poppins']">
-                Reclamação <span className="font-mono font-semibold">#{protocolId(complaint.id)}</span>
+                Relato <span className="font-mono font-semibold">#{protocolId(complaint.id)}</span>
               </p>
             </div>
             <StatusBadge status={complaint.status} />
@@ -457,16 +457,16 @@ export function CompanyComplaintDetailContent({
             </CardContent>
           </Card>
 
-          {/* Card Criar reclamação */}
+          {/* Card Criar relato */}
           <Card className="border-0 shadow-md">
             <CardContent className="p-6">
               <p className="text-sm text-[#2A3F54] mb-4">
-                Está querendo fazer uma reclamação sobre <strong>{complaint.company.name ?? "esta empresa"}</strong>?
+                Está querendo fazer um relato sobre <strong>{complaint.company.name ?? "esta empresa"}</strong>?
               </p>
               <Link href={`/app/complaints/new?company=${complaint.company.name}`}>
                 <Button className="w-full bg-[#1E88E5] hover:bg-[#1976D2] gap-2">
                   <MessageCircle className="w-4 h-4" />
-                  Criar uma reclamação
+                  Criar um relato
                 </Button>
               </Link>
             </CardContent>

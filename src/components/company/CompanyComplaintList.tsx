@@ -35,7 +35,7 @@ export function CompanyComplaintList({
           fontSize: 14,
         }}
       >
-        Nenhuma reclamação encontrada.
+        Nenhum relato encontrado.
       </div>
     );
   }

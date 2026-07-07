@@ -12,33 +12,33 @@ const steps = [
   {
     number: 1,
     label: "etapa 1",
-    title: "Compartilhe",
+    title: "Identifique o problema",
     description:
-      "Você relata o impacto que sofre. Cada reclamação é documentada com segurança e detalhes que você fornecer: fotos, vídeos e contexto.",
+      "Selecione a categoria do impacto que afeta você e sua comunidade: deslocamento, segurança, meio ambiente, infraestrutura ou oportunidades econômicas.",
     icon: Search,
   },
   {
     number: 2,
     label: "etapa 2",
-    title: "Amplificamos",
+    title: "Registre sua experiência",
     description:
-      "Suas vozes são unidas às de outras mulheres afetadas. Criamos padrões de impacto e damos força coletiva às reclamações individuais.",
+      "Compartilhe sua vivência de forma segura e detalhada. Fotos e vídeos podem ser anexados para melhor documentação.",
     icon: FileText,
   },
   {
     number: 3,
     label: "etapa 3",
-    title: "Pressionamos",
+    title: "Acompanhe a resolução",
     description:
-      "A evidência coletiva é apresentada aos responsáveis pelas obras. Abrimos diálogo direto para garantir que suas demandas sejam ouvidas.",
+      "Monitore em tempo real o status da sua solicitação, desde o recebimento até a implementação das soluções.",
     icon: TrendingUp,
   },
   {
     number: 4,
     label: "etapa 4",
-    title: "Conquista",
+    title: "Avalie o resultado",
     description:
-      "Medidas são adotadas, compensações garantidas e processos melhorados. Você acompanha cada passo até a mudança real.",
+      "Dê seu feedback sobre as medidas adotadas e ajude a melhorar o processo para toda a comunidade.",
     icon: Star,
   },
 ];
@@ -279,7 +279,7 @@ export function ProcessCarousel() {
           className="mt-12 text-center flex flex-col items-center gap-2"
         >
           <p className="text-muted-foreground text-lg md:text-xl mb-6 font-medium">
-            Pronta para começar?
+            Quer falar conosco?
           </p>
           <Link href="/app/complaints/new">
             <Button
@@ -289,7 +289,7 @@ export function ProcessCarousel() {
                        shadow-lg hover:shadow-xl transition-all duration-200
                        flex items-center gap-2 group"
             >
-              <span>Compartilhe sua história</span>
+              <span>Fale aqui</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>

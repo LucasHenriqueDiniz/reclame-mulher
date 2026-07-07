@@ -8,7 +8,7 @@ const navigationLinks = [
   { label: "Home", href: "/" },
   { label: "Blog", href: "/blog" },
   { label: "Empresas", href: "/companies" },
-  { label: "Fazer Reclamação", href: "/app/complaints/new" },
+  { label: "Fale aqui", href: "/app/complaints/new" },
 ];
 
 const socialLinks = [

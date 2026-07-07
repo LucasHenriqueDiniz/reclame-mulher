@@ -200,9 +200,9 @@ export function SettingsContent({
           avatarUrl={avatarUrl}
           tabs={PROFILE_TABS}
           activeTabKey="configuracoes"
-          stats={[{ icon: BarChart2, label: "Suas reclamações" }]}
+          stats={[{ icon: BarChart2, label: "Seus relatos" }]}
           actionButton={{
-            label: "Começar uma nova reclamação",
+            label: "Começar um novo relato",
             href: "/app/complaints/new",
           }}
         />

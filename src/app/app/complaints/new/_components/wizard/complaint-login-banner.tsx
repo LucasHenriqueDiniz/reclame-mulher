@@ -17,7 +17,7 @@ export function ComplaintLoginBanner() {
       
       <div className="flex flex-col gap-4 items-end relative z-10">
         <h3 className="self-stretch font-['Poppins'] font-bold text-white text-2xl tracking-[-0.40px] leading-normal drop-shadow-sm">
-          Você precisa estar em uma conta para criar uma reclamação
+          Você precisa estar em uma conta para criar um relato
         </h3>
         <Link href="/login">
           <Button 

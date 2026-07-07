@@ -82,7 +82,7 @@ export function CompanyRecentComplaintsCard({
             fontFamily: "Poppins, sans-serif",
           }}
         >
-          Nenhuma reclamação pública ainda.
+          Nenhum relato público ainda.
         </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>

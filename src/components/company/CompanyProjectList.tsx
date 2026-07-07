@@ -133,7 +133,7 @@ export function CompanyProjectList({
                 cursor: isLoggedIn ? "pointer" : "not-allowed",
               }}
             >
-              Fazer uma reclamação sobre este projeto
+              Fazer um relato sobre este projeto
             </button>
           )}
           {showActions && onEdit && onDelete && (

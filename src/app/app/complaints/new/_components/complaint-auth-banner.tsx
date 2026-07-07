@@ -8,7 +8,7 @@ export function ComplaintAuthBanner() {
     <div className="w-full rounded-xl px-6 py-6 shadow-[0px_4px_4px_#00000040] bg-[linear-gradient(90deg,rgba(30,136,229,1)_0%,rgba(7,85,153,1)_100%)]">
       <div className="flex flex-col gap-3 items-end">
         <h3 className="self-stretch font-bold text-white text-2xl tracking-[-0.40px] leading-normal">
-          Você precisa estar em uma conta para criar uma reclamação
+          Você precisa estar em uma conta para criar um relato
         </h3>
         <Link href="/login">
           <Button className="inline-flex items-center justify-center gap-3 px-6 py-3 bg-white rounded-xl hover:bg-gray-100">

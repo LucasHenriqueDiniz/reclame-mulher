@@ -59,10 +59,10 @@ export function ComplaintStepFourClassification({
     <div className="space-y-6">
       <div>
         <h2 className="text-lg font-semibold tracking-tight">
-          Nos ajude a classificar sua reclamação
+          Nos ajude a classificar seu relato
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Essa classificação ajuda na resolução e também outras pessoas a encontrarem reclamações similares.
+          Essa classificação ajuda na resolução e também outras pessoas a encontrarem relatos similares.
         </p>
       </div>
 
@@ -148,7 +148,7 @@ export function ComplaintStepFourClassification({
 
         <div className="flex items-center justify-between rounded-lg border p-4">
           <Label htmlFor="isAnonymous" className="cursor-pointer font-normal">
-            Desejo fazer esta reclamação de forma anônima
+            Desejo fazer este relato de forma anônima
           </Label>
           <Switch
             id="isAnonymous"
@@ -161,7 +161,7 @@ export function ComplaintStepFourClassification({
 
         <div className="flex items-center justify-between rounded-lg border p-4">
           <Label htmlFor="isPublic" className="cursor-pointer font-normal">
-            Desejo manter essa reclamação pública para todos verem
+            Desejo manter esse relato público para todos verem
           </Label>
           <Switch
             id="isPublic"

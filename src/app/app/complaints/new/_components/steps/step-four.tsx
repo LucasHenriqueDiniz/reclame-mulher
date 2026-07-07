@@ -60,7 +60,7 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
           Quase pronto!
         </h2>
         <p className="text-center font-['Poppins'] text-[#607D8B] text-sm leading-normal">
-          Só mais algumas informações para organizar sua reclamação
+          Só mais algumas informações para organizar seu relato
         </p>
       </div>
 
@@ -122,7 +122,7 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
       <div className="space-y-0 border border-[#E5E5ED] rounded-lg overflow-hidden">
         <ComplaintSwitchRow
           id="anonymous"
-          label="Quero fazer esta reclamação sem mostrar meu nome"
+          label="Quero fazer este relato sem mostrar meu nome"
           description="Seu nome não aparecerá publicamente"
           checked={data.isAnonymous}
           onCheckedChange={(checked) =>
@@ -131,7 +131,7 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
         />
         <ComplaintSwitchRow
           id="public"
-          label="Quero que outras pessoas possam ver esta reclamação"
+          label="Quero que outras pessoas possam ver este relato"
           description="Outras pessoas poderão acompanhar"
           checked={data.isPublic}
           onCheckedChange={(checked) =>

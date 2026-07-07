@@ -176,7 +176,7 @@ export function ComplaintDetailContent({
               {complaint.title}
             </h1>
             <p style={{ fontSize: 13, color: "rgba(255,255,255,0.9)", margin: 0 }}>
-              Reclamação {protocolId(complaint.id)}
+              Relato {protocolId(complaint.id)}
             </p>
           </div>
           <span
@@ -273,9 +273,9 @@ export function ComplaintDetailContent({
               </div>
             </div>
 
-            {/* Thread: reclamação inicial + mensagens */}
+            {/* Thread: relato inicial + mensagens */}
             <div style={{ marginBottom: 20 }}>
-              {/* Bloco inicial: autor da reclamação + descrição */}
+              {/* Bloco inicial: autor do relato + descrição */}
               <div
                 style={{
                   background: S.white,
@@ -288,7 +288,7 @@ export function ComplaintDetailContent({
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 8 }}>
                   <span style={{ fontWeight: 600, fontSize: 14, color: S.text }}>
-                    {complaint.isAnonymous ? "Reclamante (anônimo)" : (complaint.author?.name ?? "Reclamante")}
+                    {complaint.isAnonymous ? "Autor (anônimo)" : (complaint.author?.name ?? "Autor")}
                   </span>
                   <span style={{ fontSize: 12, color: S.muted }}>{formatDateTime(complaint.createdAt)}</span>
                 </div>
@@ -520,11 +520,11 @@ export function ComplaintDetailContent({
                   }}
                 >
                   <p style={{ fontSize: 14, color: S.text, margin: "0 0 14px 0", lineHeight: 1.5 }}>
-                    Está querendo fazer uma reclamação sobre {complaint.company?.name}?
+                    Está querendo fazer um relato sobre {complaint.company?.name}?
                   </p>
                   <Link href={isLoggedIn ? `/app/complaints/new?company=${complaint.companyId}` : "/login"}>
                     <Button style={{ width: "100%", background: S.primary, color: S.white }} className="gap-2">
-                      <FileText style={{ width: 18, height: 18 }} /> Criar uma reclamação
+                      <FileText style={{ width: 18, height: 18 }} /> Criar um relato
                     </Button>
                   </Link>
                 </div>

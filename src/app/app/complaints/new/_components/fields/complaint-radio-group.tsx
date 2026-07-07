@@ -17,7 +17,7 @@ export interface ComplaintRadioGroupProps {
 }
 
 /**
- * Radio group padronizado para o wizard de reclamação
+ * Radio group padronizado para o wizard de relato
  * Segue design do Figma com tamanho, espaçamento e tipografia consistentes
  */
 export function ComplaintRadioGroup({

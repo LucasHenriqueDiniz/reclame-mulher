@@ -10,7 +10,7 @@ export interface ComplaintTextareaProps
 }
 
 /**
- * Textarea padronizado para o wizard de reclamação
+ * Textarea padronizado para o wizard de relato
  * Segue design do Figma com bordas, espaçamento e altura mínima consistentes
  */
 export const ComplaintTextarea = forwardRef<

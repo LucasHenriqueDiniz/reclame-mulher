@@ -151,7 +151,7 @@ export function MainHeader() {
                     </SheetClose>
                     {!isCompany && !isAdmin && isLoggedIn && (
                       <SheetClose asChild>
-                        <Link href="/app/complaints/new" className="flex items-center px-4 py-3 text-base font-medium text-[#2A3F54] hover:bg-gray-50 rounded-lg transition font-['Poppins']">Fazer Reclamação</Link>
+                        <Link href="/app/complaints/new" className="flex items-center px-4 py-3 text-base font-medium text-[#2A3F54] hover:bg-gray-50 rounded-lg transition font-['Poppins']">Fale aqui</Link>
                       </SheetClose>
                     )}
                     <div className="border-t pt-4 mt-4">
@@ -206,14 +206,14 @@ export function MainHeader() {
                             <SheetClose asChild>
                               <Link href="/app/company/complaints" className="flex items-center px-4 py-3 text-base font-medium text-[#2A3F54] hover:bg-gray-50 rounded-lg transition font-['Poppins']">
                                 <MessageSquare className="mr-3 h-5 w-5" />
-                                Ver reclamações
+                                Ver relatos
                               </Link>
                             </SheetClose>
                           ) : (
                             <SheetClose asChild>
                               <Link href="/app/complaints" className="flex items-center px-4 py-3 text-base font-medium text-[#2A3F54] hover:bg-gray-50 rounded-lg transition font-['Poppins']">
                                 <MessageSquare className="mr-3 h-5 w-5" />
-                                Minhas reclamações
+                                Meus relatos
                               </Link>
                             </SheetClose>
                           )}
@@ -302,11 +302,11 @@ export function MainHeader() {
               </DropdownMenu>
             ) : isCompany ? (
               <Button asChild className="bg-[#1E88E5] hover:bg-[#1976D2] text-white rounded-full px-4 font-['Poppins']">
-                <Link href="/app/company/complaints">Ver reclamações</Link>
+                <Link href="/app/company/complaints">Ver relatos</Link>
               </Button>
             ) : (
               <Button asChild className="bg-[#1E88E5] hover:bg-[#1976D2] text-white rounded-full px-4 font-['Poppins']">
-                <Link href="/app/complaints/new">Fazer Reclamação</Link>
+                <Link href="/app/complaints/new">Fale aqui</Link>
               </Button>
             )}
 
@@ -417,14 +417,14 @@ export function MainHeader() {
                     <DropdownMenuItem asChild>
                       <Link href="/app/company/complaints" className="cursor-pointer flex items-center font-['Poppins'] px-3 py-2">
                         <MessageSquare className="mr-3 h-4 w-4 text-[#607D8B]" />
-                        <span>Ver reclamações</span>
+                        <span>Ver relatos</span>
                       </Link>
                     </DropdownMenuItem>
                   ) : !isAdmin ? (
                     <DropdownMenuItem asChild>
                       <Link href="/app/complaints" className="cursor-pointer flex items-center font-['Poppins'] px-3 py-2">
                         <MessageSquare className="mr-3 h-4 w-4 text-[#607D8B]" />
-                        <span>Minhas reclamações</span>
+                        <span>Meus relatos</span>
                       </Link>
                     </DropdownMenuItem>
                   ) : null}

@@ -25,7 +25,7 @@ export interface ComplaintSelectProps {
 }
 
 /**
- * Select padronizado para o wizard de reclamação
+ * Select padronizado para o wizard de relato
  * Segue design do Figma com altura, bordas e espaçamento consistentes
  */
 export function ComplaintSelect({
