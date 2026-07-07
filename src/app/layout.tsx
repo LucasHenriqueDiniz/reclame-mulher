@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Inter, Poppins } from "next/font/google";
+import { Inter, Poppins, Playfair_Display } from "next/font/google";
 
 import "./globals.css";
 
@@ -26,6 +26,14 @@ const poppins = Poppins({
   display: "swap",
 });
 
+// Font for headings - elegant serif for main headings
+const playfair = Playfair_Display({
+  variable: "--font-heading",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Reclame Mulher",
   description: "Plataforma de denúncias e reclamações",
@@ -36,7 +44,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 
   return (
     <html lang={defaultLocale} suppressHydrationWarning>
-      <body className={cn("min-h-screen bg-background font-sans antialiased", inter.variable, poppins.variable)}>
+      <body className={cn("min-h-screen bg-background font-sans antialiased", inter.variable, poppins.variable, playfair.variable)}>
         <LocaleProvider initialLocale={defaultLocale} initialMessages={messages}>
           <HeaderDataProvider>
             <Providers>{children}</Providers>
