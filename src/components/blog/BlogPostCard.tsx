@@ -96,6 +96,8 @@ export function BlogPostCard({
               key={typeof tag === "string" ? `${tag}-${tagIndex}` : `${tag.slug ?? tag.name}-${tagIndex}`}
               variant="secondary"
               className="bg-blue-50 font-medium text-blue-700 hover:bg-blue-100"
+              role="status"
+              aria-label={`Tag: ${typeof tag === "string" ? tag : tag.name}`}
             >
               {typeof tag === "string" ? tag : tag.name}
             </Badge>
@@ -123,7 +125,8 @@ export function BlogPostCard({
           <div className="mt-auto border-t border-gray-100 pt-4">
             <Button
               variant="ghost"
-              className="w-full justify-between text-blue-600 hover:bg-blue-50 hover:text-blue-700 group/btn"
+              className="w-full justify-between text-blue-600 hover:bg-blue-50 hover:text-blue-700 group/btn focus-visible:ring-2 focus-visible:ring-blue-500"
+              aria-label={`Ler mais sobre ${post.title}`}
             >
               <span className="font-semibold">Ler mais</span>
               <svg
@@ -131,6 +134,7 @@ export function BlogPostCard({
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"

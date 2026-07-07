@@ -116,6 +116,8 @@ export function CompanyComplaintList({
                 textDecoration: "none",
                 whiteSpace: "nowrap",
               }}
+              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:rounded px-2 py-1"
+              aria-label={`Ver detalhes da reclamação ${c.title}`}
             >
               Ver detalhes
             </Link>

@@ -48,6 +48,8 @@ export function StatusBadge({
 
   return (
     <span
+      role="status"
+      aria-label={`Status: ${label}`}
       style={{
         background: color + "22",
         color,

@@ -208,9 +208,11 @@ function Field({
   textarea?: boolean;
 }) {
   const style = inputStyle();
+  const fieldId = `field-${label.toLowerCase().replace(/\s+/g, "-")}`;
   return (
     <div style={{ marginBottom: 16 }}>
       <label
+        htmlFor={fieldId}
         style={{
           display: "block",
           fontSize: 13,
@@ -223,19 +225,37 @@ function Field({
       </label>
       {textarea ? (
         <textarea
+          id={fieldId}
           rows={3}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          style={{ ...style, resize: "vertical" }}
+          style={{ ...style, resize: "vertical", outline: "none" }}
+          onFocus={(e) => {
+            e.currentTarget.style.boxShadow = `0 0 0 2px ${S.primary}`;
+            e.currentTarget.style.borderColor = S.primary;
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.boxShadow = "none";
+            e.currentTarget.style.borderColor = S.border;
+          }}
         />
       ) : (
         <input
+          id={fieldId}
           type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           style={style}
+          onFocus={(e) => {
+            e.currentTarget.style.boxShadow = `0 0 0 2px ${S.primary}`;
+            e.currentTarget.style.borderColor = S.primary;
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.boxShadow = "none";
+            e.currentTarget.style.borderColor = S.border;
+          }}
         />
       )}
     </div>

@@ -128,7 +128,8 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
               <p>Nenhum resultado encontrado</p>
               <button
                 onClick={handleSearchAll}
-                className="text-[#1E88E5] hover:underline font-medium"
+                className="text-[#1E88E5] hover:underline font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:rounded px-2 py-1"
+                aria-label={`Buscar "${query}" em todas as categorias`}
               >
                 Buscar &quot;{query}&quot; em tudo
               </button>

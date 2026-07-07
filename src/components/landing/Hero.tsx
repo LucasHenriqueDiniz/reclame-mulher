@@ -21,7 +21,7 @@ export function Hero() {
   return (
       <section className="relative w-full min-h-[600px] md:min-h-[700px] overflow-hidden bg-[url('/hero.webp')] bg-cover bg-center">
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/60 to-black/40" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/60 to-black/40" aria-hidden="true" />
 
       {/* Content */}
       <div className="relative z-10 w-full min-h-[600px] md:min-h-[700px] flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 pt-32 pb-16">
@@ -31,7 +31,7 @@ export function Hero() {
           transition={{ delay: 0.2, duration: 0.8 }}
           className="font-heading w-full max-w-5xl font-bold text-white text-center mb-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight"
         >
-          Sua voz importa
+          Conectando vozes que transformam comunidades
         </motion.h1>
 
         <motion.p
@@ -40,7 +40,7 @@ export function Hero() {
           transition={{ delay: 0.4, duration: 0.8 }}
           className="w-full max-w-2xl font-normal text-white/95 text-center mb-10 text-base sm:text-lg md:text-xl leading-relaxed"
         >
-          Amplificamos as vozes das mulheres afetadas por obras de infraestrutura, transformando reclamações em ações concretas
+          Diálogo direto entre mulheres e responsáveis por obras de infraestrutura
         </motion.p>
 
         <motion.form
@@ -50,26 +50,30 @@ export function Hero() {
           onSubmit={handleSearch}
           className="w-full max-w-3xl"
         >
-          <div className="flex flex-col sm:flex-row gap-3 bg-white/10 backdrop-blur-md rounded-full p-2 border border-white/20">
+          <fieldset className="flex flex-col sm:flex-row gap-3 bg-white/10 backdrop-blur-md rounded-full p-2 border border-white/20">
+            <legend className="sr-only">Buscar por empresa ou órgão</legend>
             <div className="relative flex-1 flex items-center">
+              <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-white/60 pointer-events-none" aria-hidden="true" />
               <Input
-                type="text"
+                type="search"
                 placeholder="Procure por empresa/órgão..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 h-12 sm:h-14 bg-transparent border-0 text-white text-base sm:text-lg placeholder:text-white/60 focus-visible:ring-0 focus-visible:ring-offset-0 pl-5 pr-3"
+                className="flex-1 h-12 sm:h-14 bg-transparent border-0 text-white text-base sm:text-lg placeholder:text-white/60 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent pl-10 pr-3"
+                aria-label="Buscar por empresa ou órgão público"
               />
             </div>
 
             <Button
               type="submit"
               size="lg"
-              className="h-12 sm:h-14 px-6 sm:px-10 bg-[#5C4B73] hover:bg-[#4a3d5c] rounded-full font-semibold text-white text-base sm:text-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-lg"
+              className="h-12 sm:h-14 px-6 sm:px-10 bg-[#3BA5FF] hover:bg-[#2d94f5] rounded-full font-semibold text-white text-base sm:text-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-lg focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+              aria-label="Pesquisar empresa ou órgão"
             >
-              <Search className="h-5 w-5" />
+              <Search className="h-5 w-5" aria-hidden="true" />
               <span>Pesquisar</span>
             </Button>
-          </div>
+          </fieldset>
         </motion.form>
       </div>
     </section>
