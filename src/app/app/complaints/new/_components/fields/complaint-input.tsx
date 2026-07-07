@@ -10,7 +10,7 @@ export interface ComplaintInputProps
 }
 
 /**
- * Input padronizado para o wizard de reclamação
+ * Input padronizado para o wizard de relato
  * Segue design do Figma com altura, bordas e espaçamento consistentes
  */
 export const ComplaintInput = forwardRef<HTMLInputElement, ComplaintInputProps>(

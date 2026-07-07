@@ -19,7 +19,7 @@ export function ComplaintSuccessCard({
   complaintId,
   companyName,
   verified,
-  estimatedResponseText = "Demora normalmente 73 horas para responder, iremos notificar quando sua reclamação receber uma resposta!",
+  estimatedResponseText = "Demora normalmente 73 horas para responder, iremos notificar quando seu relato receber uma resposta!",
 }: ComplaintSuccessCardProps) {
   return (
     <div className="w-full rounded-2xl px-8 py-12 text-white shadow-2xl bg-gradient-to-br from-[#1E88E5] via-[#1976D2] to-[#075599] relative overflow-hidden animate-in fade-in zoom-in-95 duration-500">
@@ -38,7 +38,7 @@ export function ComplaintSuccessCard({
 
         {/* Success message */}
         <h2 className="text-3xl font-['Poppins'] font-bold mb-3 animate-in slide-in-from-bottom-4 duration-500 delay-200">
-          Sua reclamação foi criada com sucesso!
+          Seu relato foi criado com sucesso!
         </h2>
 
         {/* Title */}
@@ -49,7 +49,7 @@ export function ComplaintSuccessCard({
         {/* Protocol ID */}
         <div className="mb-8 px-6 py-3 bg-white/15 backdrop-blur-sm rounded-xl border border-white/20 animate-in slide-in-from-bottom-4 duration-500 delay-400">
           <p className="text-sm opacity-90 mb-1 font-['Poppins']">
-            Identificador da reclamação
+            Identificador do relato
           </p>
           <p className="text-2xl font-['Poppins'] font-bold tracking-wider">
             {protocolId(complaintId)}
@@ -89,7 +89,7 @@ export function ComplaintSuccessCard({
         {/* Action button */}
         <Link href={`/app/complaints/${complaintId}`} className="animate-in slide-in-from-bottom-4 duration-500 delay-700">
           <Button className="bg-white text-[#1E88E5] hover:bg-gray-50 hover:scale-105 font-['Poppins'] font-bold px-10 py-4 h-auto rounded-xl shadow-xl hover:shadow-2xl transition-all duration-200">
-            Ver minha reclamação
+            Ver meu relato
           </Button>
         </Link>
       </div>

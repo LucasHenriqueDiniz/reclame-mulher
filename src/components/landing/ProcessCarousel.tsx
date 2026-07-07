@@ -279,17 +279,17 @@ export function ProcessCarousel() {
           className="mt-12 text-center flex flex-col items-center gap-2"
         >
           <p className="text-muted-foreground text-lg md:text-xl mb-6 font-medium">
-            Quer fazer uma reclamação?
+            Quer falar conosco?
           </p>
           <Link href="/app/complaints/new">
             <Button
               size="lg"
-              className="bg-[var(--brand-blue-light)] hover:bg-[var(--brand-blue)] text-white 
+              className="bg-[var(--brand-blue-light)] hover:bg-[var(--brand-blue)] text-white
                        px-8 py-6 text-base md:text-lg font-semibold rounded-full
                        shadow-lg hover:shadow-xl transition-all duration-200
                        flex items-center gap-2 group"
             >
-              <span>Fazer uma reclamação</span>
+              <span>Fale aqui</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>

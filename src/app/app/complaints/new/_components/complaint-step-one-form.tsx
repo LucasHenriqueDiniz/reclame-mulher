@@ -21,7 +21,7 @@ export function ComplaintStepOneForm({ value, onChange }: Props) {
       {/* Form heading */}
       <div className="flex flex-col items-center justify-center gap-3 px-5 py-0">
         <h2 className="text-center font-semibold text-black text-[32px] leading-normal">
-          Precisamos de algumas informações antes de abrir a sua reclamação
+          Precisamos de algumas informações antes de abrir seu relato
         </h2>
         <p className="text-center font-light text-black text-base leading-normal">
           Ajude a empresa a resolver o seu problema dando algumas informações para agilizar o processo
@@ -32,7 +32,7 @@ export function ComplaintStepOneForm({ value, onChange }: Props) {
         {/* Radio question */}
         <div className="flex flex-col gap-2">
           <Label className="font-bold text-gray-800 text-sm tracking-[2.00px] leading-[26px]">
-            Você abriu uma reclamação sobre esse tema em outro canal?
+            Você abriu um relato sobre esse tema em outro canal?
           </Label>
           <RadioGroup
             value={value.hasPreviousComplaintElsewhere ? "yes" : "no"}

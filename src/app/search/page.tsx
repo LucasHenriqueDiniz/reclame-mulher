@@ -113,11 +113,11 @@ function SearchContent() {
           </div>
           
           <h1 className="font-['Poppins'] max-w-3xl text-4xl font-bold text-white sm:text-5xl leading-tight">
-            Encontre empresas e reclamações
+            Encontre empresas e relatos
           </h1>
-          
+
           <p className="mt-4 text-lg text-white/90 font-['Poppins']">
-            Busque por nome de empresa, título de reclamação ou palavras-chave
+            Busque por nome de empresa, título de relato ou palavras-chave
           </p>
 
           {/* Search Form */}

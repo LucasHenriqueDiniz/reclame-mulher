@@ -53,7 +53,7 @@ interface Props {
 }
 
 const PROFILE_TABS: PageTabItem[] = [
-  { key: "reclamacoes", label: "Reclamações", icon: MessageCircle, href: "/app/complaints" },
+  { key: "relatos", label: "Relatos", icon: MessageCircle, href: "/app/complaints" },
   { key: "configuracoes", label: "Configurações", icon: SettingsIcon, href: "/app/settings" },
 ];
 
@@ -78,7 +78,7 @@ export function ComplaintsContent({
   const stats: StatItem[] = [
     {
       icon: BarChart2,
-      label: complaints.length === 1 ? "Reclamação" : "Reclamações",
+      label: complaints.length === 1 ? "Relato" : "Relatos",
       value: complaints.length,
     },
   ];
@@ -108,7 +108,7 @@ export function ComplaintsContent({
         activeTabKey="reclamacoes"
         stats={stats}
         actionButton={{
-          label: "Começar uma nova reclamação",
+          label: "Começar um novo relato",
           href: "/app/complaints/new",
         }}
       />
@@ -120,14 +120,14 @@ export function ComplaintsContent({
             <CardContent className="p-12 text-center">
               <MessageCircle size={48} className="text-[#607D8B] mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-[#2A3F54] mb-2">
-                Nenhuma reclamação ainda
+                Nenhum relato ainda
               </h3>
               <p className="text-sm text-[#607D8B] mb-6">
-                Comece criando sua primeira reclamação
+                Comece criando seu primeiro relato
               </p>
               <Link href="/app/complaints/new">
                 <Button className="h-auto px-6 py-3 rounded-xl bg-[#1E88E5] hover:bg-[#1976D2]">
-                  Criar reclamação
+                  Criar relato
                 </Button>
               </Link>
             </CardContent>
@@ -144,7 +144,7 @@ export function ComplaintsContent({
               {filteredComplaints.length === 0 ? (
                 <div className="p-12 text-center">
                   <p className="font-['Poppins'] text-[#607D8B] text-sm">
-                    Nenhuma reclamação encontrada nesta categoria
+                    Nenhum relato encontrado nesta categoria
                   </p>
                 </div>
               ) : (

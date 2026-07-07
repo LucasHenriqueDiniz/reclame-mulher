@@ -29,7 +29,7 @@ export function ComplaintStepThreeAttachments({
           Anexar arquivos?
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Deseja anexar um arquivo a sua reclamação?
+          Deseja anexar um arquivo ao seu relato?
         </p>
       </div>
 

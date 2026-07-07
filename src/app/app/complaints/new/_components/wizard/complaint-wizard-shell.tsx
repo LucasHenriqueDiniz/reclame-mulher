@@ -7,7 +7,7 @@ interface ComplaintWizardShellProps {
 }
 
 /**
- * Shell principal do wizard de reclamação
+ * Shell principal do wizard de relato
  * Define o layout, background e container centralizado
  */
 export function ComplaintWizardShell({ children }: ComplaintWizardShellProps) {

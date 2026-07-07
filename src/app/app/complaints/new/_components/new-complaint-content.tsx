@@ -195,7 +195,7 @@ export function NewComplaintContent({
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setSubmitError(data.error ?? "Erro ao criar reclamação.");
+        setSubmitError(data.error ?? "Erro ao criar relato.");
         return;
       }
       setCreatedComplaint({
@@ -246,7 +246,7 @@ export function NewComplaintContent({
       return stepThree.attachments.length > 0 ? "Continuar" : "Continuar sem foto";
     }
     if (step === TOTAL_STEPS) {
-      return "Enviar reclamação";
+      return "Enviar relato";
     }
     return "Continuar";
   };
@@ -299,7 +299,7 @@ export function NewComplaintContent({
                       Selecione uma empresa
                     </p>
                     <p className="font-['Poppins'] text-[#607D8B] text-xs">
-                      Busque a empresa para iniciar sua reclamação
+                      Busque a empresa para iniciar seu relato
                     </p>
                   </div>
                 </div>

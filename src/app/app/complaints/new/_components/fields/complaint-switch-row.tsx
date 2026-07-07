@@ -13,7 +13,7 @@ export interface ComplaintSwitchRowProps {
 }
 
 /**
- * Linha com switch padronizada para o wizard de reclamação
+ * Linha com switch padronizada para o wizard de relato
  * Segue design do Figma com alinhamento e espaçamento consistentes
  */
 export function ComplaintSwitchRow({

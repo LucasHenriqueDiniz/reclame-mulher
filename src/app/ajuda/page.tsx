@@ -37,7 +37,7 @@ const TEST_USERS = [
   {
     email: "ana@exemplo.com",
     role: "Pessoa",
-    description: "Usuária anônima com reclamação pública",
+    description: "Usuária anônima com relato público",
     icon: User,
     color: "text-blue-600",
     bg: "bg-blue-50",

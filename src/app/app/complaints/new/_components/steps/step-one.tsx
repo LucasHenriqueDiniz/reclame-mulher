@@ -38,7 +38,7 @@ export function StepOne({ data, onChange }: StepOneProps) {
       {/* Pergunta em destaque */}
       <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
         <ComplaintField
-          label="Você já fez uma reclamação sobre esse problema em outro lugar?"
+          label="Você já fez um relato sobre esse problema em outro lugar?"
         >
           <ComplaintRadioGroup
             name="previous-complaint"

@@ -29,7 +29,7 @@ export function CompanyProfileHero({
   showMetrics?: boolean;
   dashboardLink?: string;
   publicProfileLink?: string;
-  /** Link para "Iniciar uma reclamação" (perfil público) */
+  /** Link para "Iniciar um relato" (perfil público) */
   complaintCtaHref?: string;
 }) {
   const isVerified = !!company.verifiedAt;
@@ -213,7 +213,7 @@ export function CompanyProfileHero({
               }}
             >
               <FileText style={{ width: 18, height: 18 }} />
-              Iniciar uma reclamação
+              Iniciar um relato
             </a>
           )}
         </div>

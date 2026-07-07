@@ -195,7 +195,7 @@ export function CompanyComplaintsContent({
             </div>
             <div className="flex-1">
               <p className="font-['Poppins'] font-semibold text-[#2A3F54] text-sm">
-                {stats.open} {stats.open === 1 ? "reclamação aguardando resposta" : "reclamações aguardando resposta"}
+                {stats.open} {stats.open === 1 ? "relato aguardando resposta" : "relatos aguardando resposta"}
               </p>
               <p className="font-['Poppins'] text-xs text-[#607D8B]">
                 Responda rapidamente para melhorar sua avaliação
@@ -217,7 +217,7 @@ export function CompanyComplaintsContent({
         <div className="relative max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#607D8B]" />
           <Input
-            placeholder="Buscar reclamação..."
+            placeholder="Buscar relato..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10 h-12 rounded-xl border-[#E5E5ED] font-['Poppins'] focus:border-[#1E88E5] focus:ring-2 focus:ring-[#1E88E5]/20 bg-white"
@@ -231,12 +231,12 @@ export function CompanyComplaintsContent({
           <CardContent className="px-6 py-16 text-center">
             <MessageSquare className="w-16 h-16 text-[#607D8B] mx-auto mb-4 opacity-50" />
             <h3 className="font-['Poppins'] text-xl font-semibold text-[#2A3F54] mb-2">
-              Nenhuma reclamação encontrada
+              Nenhum relato encontrado
             </h3>
             <p className="text-sm font-['Poppins'] text-[#607D8B]">
               {searchQuery || statusFilter !== "ALL"
                 ? "Tente ajustar os filtros de busca."
-                : "Ainda não há reclamações registradas."}
+                : "Ainda não há relatos registrados."}
             </p>
           </CardContent>
         </Card>
