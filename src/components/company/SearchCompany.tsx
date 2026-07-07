@@ -67,15 +67,20 @@ export function SearchCompany({
 
   return (
     <div className={cn("flex flex-col gap-3", className)}>
+      <label htmlFor="company-search" className="sr-only">
+        {placeholder}
+      </label>
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
         <Input
+          id="company-search"
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
           className="pl-9"
           autoFocus
+          aria-label={placeholder}
         />
       </div>
 
@@ -98,7 +103,8 @@ export function SearchCompany({
               <button
                 type="button"
                 onClick={() => onSelect(company)}
-                className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/60 focus:bg-muted/60 focus:outline-none"
+                className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/60 focus:bg-muted/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-inset focus:outline-none"
+                aria-label={`Selecionar ${company.name}`}
               >
                 <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-muted">
                   {company.logoUrl ? (

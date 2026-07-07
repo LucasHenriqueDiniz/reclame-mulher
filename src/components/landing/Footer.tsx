@@ -38,12 +38,12 @@ export function Footer() {
           </div>
         </div>
 
-        <nav className="flex items-center justify-center gap-[35px] flex-1">
+        <nav className="flex items-center justify-center gap-[35px] flex-1" aria-label="Footer navigation">
           {navigationLinks.map((link, index) => (
             <Link
               key={index}
               href={link.href}
-              className="font-normal text-[#190E4F] text-base tracking-[0] leading-[26px] whitespace-nowrap hover:opacity-80 transition-opacity"
+              className="font-normal text-[#190E4F] text-base tracking-[0] leading-[26px] whitespace-nowrap hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:rounded px-2 py-1"
             >
               {link.label}
             </Link>
@@ -69,9 +69,9 @@ export function Footer() {
               key={index}
               href={social.href}
               aria-label={social.label}
-              className="text-[#190E4F] hover:opacity-80 transition-opacity"
+              className="text-[#190E4F] hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:rounded p-1"
             >
-              <social.icon className="w-4 h-4" />
+              <social.icon className="w-4 h-4" aria-hidden="true" />
             </a>
           ))}
         </div>

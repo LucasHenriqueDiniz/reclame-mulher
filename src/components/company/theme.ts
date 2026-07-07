@@ -3,8 +3,8 @@ export const companyTheme = {
   primary: "#2189E5",
   purple: "#1E0F62",
   text: "#2E435B",
-  muted: "#6E8195",
-  border: "#D9E3EC",
+  muted: "#3E4A57", // Increased from #6E8195 for 4.5:1 contrast ratio (WCAG AA)
+  border: "#6B7683", // Increased from #D9E3EC for better accessibility
   white: "#FFFFFF",
   green: "#1CA85B",
   yellow: "#E0A800",

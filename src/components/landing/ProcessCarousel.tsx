@@ -153,18 +153,19 @@ export function ProcessCarousel() {
           <button
             onClick={prevStep}
             disabled={currentStep === 0}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 md:-translate-x-16 z-10 
-                     w-10 h-10 md:w-12 md:h-12 rounded-full 
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 md:-translate-x-16 z-10
+                     w-10 h-10 md:w-12 md:h-12 rounded-full
                      bg-white border border-border shadow-lg
                      flex items-center justify-center
                      text-muted-foreground hover:text-[var(--brand-blue-light)]
                      hover:border-[var(--brand-blue-light)]
                      disabled:opacity-40 disabled:cursor-not-allowed
                      transition-all duration-200
-                     hover:scale-110 active:scale-95"
+                     hover:scale-110 active:scale-95
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             aria-label="Etapa anterior"
           >
-            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" aria-hidden="true" />
           </button>
 
           {/* Card principal com animação */}
@@ -239,7 +240,7 @@ export function ProcessCarousel() {
                   <button
                     key={index}
                     onClick={() => goToStep(index)}
-                    className={`h-2 rounded-full transition-all duration-200 ${
+                    className={`h-2 rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                       index === currentStep
                         ? "bg-[var(--brand-blue-light)] w-8"
                         : "bg-muted-foreground/30 w-2 hover:bg-muted-foreground/50"
@@ -263,10 +264,11 @@ export function ProcessCarousel() {
                      hover:border-[var(--brand-blue-light)]
                      disabled:opacity-40 disabled:cursor-not-allowed
                      transition-all duration-200
-                     hover:scale-110 active:scale-95"
+                     hover:scale-110 active:scale-95
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             aria-label="Próxima etapa"
           >
-            <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+            <ChevronRight className="w-5 h-5 md:w-6 md:h-6" aria-hidden="true" />
           </button>
         </div>
 
