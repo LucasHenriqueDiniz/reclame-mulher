@@ -71,6 +71,14 @@ export async function middleware(request: NextRequest) {
   const session = await getSessionFromRequest(request);
 
   if (!session && !isPublicRoute) {
+    // Rota de API responde em JSON. Redirecionar para a tela de login faria o
+    // cliente receber HTML no lugar de JSON e um 200 no lugar de um 401 — o
+    // `response.json()` do front quebraria, e o tratamento de erro nunca
+    // veria a falha de autenticação.
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/login";
     return NextResponse.redirect(redirectUrl);

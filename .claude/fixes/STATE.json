@@ -12,7 +12,7 @@
     "eslint_errors_note": "0 erros apos ignorar .claude/** no eslint.config.mjs (task 01)",
     "eslint_warnings": 0,
     "eslint_top_rules": {},
-    "automated_tests": 24,
+    "automated_tests": 114,
     "pages": 42,
     "api_routes": 32,
     "components": 95,
@@ -107,7 +107,7 @@
       "depends_on": [
         "03"
       ],
-      "notes": "Causa-raiz: middleware.ts na raiz, mas projeto usa src/ - Next so le src/middleware.ts. Era codigo morto. Lista de rotas publicas tambem estava errada (/companies, /api/complaints, /api/search, /api/uploadthing).",
+      "notes": "Causa-raiz: middleware.ts na raiz, mas projeto usa src/ - Next so le src/middleware.ts. Era codigo morto. Lista de rotas publicas tambem estava errada (/companies, /api/complaints, /api/search, /api/uploadthing). | PENDENCIA FECHADA pela task 08 (16 rotas protegidas + 17 publicas asseridas). Regressao corrigida la: API agora devolve 401 JSON, nao redirect.",
       "started_at": "2026-08-26T21:56:00",
       "finished_at": "2026-08-26T22:25:00",
       "debug_iterations": 1,
@@ -205,12 +205,20 @@
       "slug": "e2e-autenticacao",
       "phase": 3,
       "order": 8,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [
         "07"
       ],
-      "notes": "asserir tambem que as 17 paginas publicas e 6 APIs publicas seguem abertas (regressao da task 50)"
+      "notes": "96 testes E2E passando. A suite encontrou regressao da task 50: middleware redirecionava rotas de API para /login em vez de 401 JSON. Corrigido.",
+      "started_at": "2026-08-26T22:57:00",
+      "finished_at": "2026-08-26T23:10:00",
+      "debug_iterations": 2,
+      "files_changed": [
+        "e2e/auth.spec.ts",
+        "e2e/fixtures/auth.ts",
+        "src/middleware.ts"
+      ]
     },
     {
       "id": "09",
@@ -490,6 +498,13 @@
       "at": "2026-08-26",
       "status": "done",
       "report": "reports/07-infra-de-testes.md"
+    },
+    {
+      "task": "08",
+      "at": "2026-08-26",
+      "status": "done",
+      "report": "reports/08-e2e-autenticacao.md",
+      "regressao_corrigida": "50"
     }
   ]
 }
