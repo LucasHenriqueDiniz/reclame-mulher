@@ -60,9 +60,6 @@ fazer.
 
 Encontrados durante a fila de correções, cada um com investigação escrita.
 
-- [ ] [`66`](.claude/fixes/tasks/66-teste-de-teclado-instavel.md) — o teste
-      de teclado do assistente falha de vez em quando no celular. É corrida do
-      teste com a lista do Radix, não defeito do produto.
 - [ ] [`68`](.claude/fixes/tasks/68-teste-de-erro-instavel.md) — um teste de
       formato de erro falhou uma vez e não se reproduz. O detalhe da falha se
       perdeu: a execução usava um reporter que não guarda o motivo.

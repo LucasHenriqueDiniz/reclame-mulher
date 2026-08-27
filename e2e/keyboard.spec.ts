@@ -26,6 +26,32 @@ test.afterAll(async () => {
   await limparRelatosDeTeste();
 });
 
+/**
+ * Abre um `select` do Radix pelo teclado e escolhe a primeira opção.
+ *
+ * As três teclas **não podem** ir em sequência direta. O Radix monta a lista
+ * num portal e só então move o foco para dentro dela; seta que chega antes
+ * disso cai no gatilho — que já está aberto — e a escolha não acontece. Era a
+ * corrida da task `66`, que aparecia só no celular, porque em 375 px a página
+ * rola para trazer o campo à vista antes de abrir e essa rolagem atrasa a
+ * montagem.
+ *
+ * Os dois sinais esperados são de camadas diferentes de propósito:
+ * `data-state="open"` é o gatilho dizendo que abriu, e a `listbox` visível é a
+ * lista existindo de fato no portal. É a segunda que precisa estar lá para a
+ * seta ter onde cair.
+ */
+async function escolherPrimeiraOpcao(page: Page, id: string) {
+  await page.keyboard.press("Enter");
+  await expect(page.locator(id), `${id} não abriu`).toHaveAttribute("data-state", "open");
+  await expect(page.getByRole("listbox"), `a lista de ${id} não montou`).toBeVisible();
+
+  await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("Enter");
+
+  await expect(page.locator(id)).not.toContainText("Escolha uma opção");
+}
+
 /** Aperta Tab até o elemento pedido receber foco, ou falha dizendo onde parou. */
 async function tabAte(page: Page, seletor: string, limite = 40) {
   const alvo = page.locator(seletor);
@@ -113,10 +139,7 @@ test("fluxo 2: criar um relato só com teclado", async ({ page }) => {
   for (const id of ["#impact-category", "#urgency-level", "#impact-scope"]) {
     await tabAte(page, id);
     expect(await focoVisivel(page), `${id} precisa mostrar o foco`).toBeTruthy();
-    await page.keyboard.press("Enter");
-    await page.keyboard.press("ArrowDown");
-    await page.keyboard.press("Enter");
-    await expect(page.locator(id)).not.toContainText("Escolha uma opção");
+    await escolherPrimeiraOpcao(page, id);
   }
 
   await tabAte(page, 'button:has-text("Enviar relato")');

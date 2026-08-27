@@ -28,7 +28,7 @@
     "corrected_by_task": "01",
     "corrected_at": "2026-08-26"
   },
-  "current_task": "66",
+  "current_task": "67",
   "tasks": [
     {
       "id": "00",
@@ -893,14 +893,17 @@
       "slug": "teste-de-teclado-instavel",
       "phase": 3,
       "order": 66,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [],
-      "notes": "Achado na task 58: e2e/keyboard.spec.ts 'fluxo 2' falhou so no chromium-mobile, no terceiro dos tres selects da etapa 4, e passou duas vezes em isolamento. Corrida do Radix: o teste manda ArrowDown/Enter sem esperar a lista montar no portal. NAO e regressao da 58 - no assistente a usuaria esta logada, e para logada /api/me ja respondia 200.",
-      "started_at": null,
-      "finished_at": null,
+      "notes": "Em vez de aceitar a explicacao da task, MEDI a janela da corrida: instrumentei o teste para cronometrar, a cada abertura, quanto tempo passa entre o Enter e a lista existir de fato. 30 aberturas nos dois viewports: minimo 27 ms, mediana 35 ms, maximo 46 ms. Sao ate 46 ms em que o ArrowDown do codigo antigo era disparado AS CEGAS - numa maquina ociosa quase sempre chegava tarde o bastante, sob a carga de 470 testes as vezes nao. Instrumentacao removida depois de medir. CORRECAO: helper escolherPrimeiraOpcao que espera DOIS sinais, de camadas diferentes de proposito - data-state=open no gatilho (o que a task sugeria) e a listbox visivel no portal. E a segunda que importa para o teclado: e ela que precisa estar montada para a seta ter onde cair; esperar so o atributo seria confiar em que os dois acontecem no mesmo quadro. A mensagem de falha passou a dizer QUAL dos dois passos nao aconteceu. CRITERIO 3: complaint-create.spec.ts mexe nos mesmos tres campos mas por clique, e clique do Playwright ja espera o elemento existir e ficar acionavel - o segundo click E a espera pela montagem. Tecla, ao contrario, vai para onde o foco estiver agora. Varredura por ArrowDown e data-state no resto de e2e/ nao achou outro caso. RESSALVA REGISTRADA NO RELATORIO: --repeat-each=5 passando (30 de 30) NAO prova que a instabilidade acabou - ela aparecia sob carga da suite inteira, nao em isolamento. O que sustenta a correcao e a causa ter sido medida e removida: nao ha mais janela. Suite: 469, sem mudanca.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
       "debug_iterations": 0,
-      "files_changed": []
+      "files_changed": [
+        "e2e/keyboard.spec.ts",
+        "TODO.md"
+      ]
     },
     {
       "id": "67",
