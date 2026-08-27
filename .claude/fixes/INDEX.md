@@ -27,7 +27,7 @@ posterior fica atômico.
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
 | ✅ | `01` | [Higiene do repositório — worktrees stale e arquivos não ignorados](tasks/01-higiene-repositorio.md) | médio | `00` |
-| ⬜ | `02` | [Criar scripts de verificação (typecheck, lint:fix, check)](tasks/02-scripts-de-verificacao.md) | baixo | `01` |
+| ✅ | `02` | [Criar scripts de verificação (typecheck, lint:fix, check)](tasks/02-scripts-de-verificacao.md) | baixo | `01` |
 | ⬜ | `03` | [Triagem do trabalho não commitado](tasks/03-triagem-trabalho-nao-commitado.md) | **alto** | `02` |
 
 ---

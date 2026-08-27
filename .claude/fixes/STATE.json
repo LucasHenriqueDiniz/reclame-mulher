@@ -71,11 +71,18 @@
       "slug": "scripts-de-verificacao",
       "phase": 1,
       "order": 2,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [
         "01"
-      ]
+      ],
+      "started_at": "2026-08-26T21:43:00",
+      "finished_at": "2026-08-26T21:46:00",
+      "debug_iterations": 0,
+      "files_changed": [
+        "package.json"
+      ],
+      "notes": "typecheck, lint:fix e check adicionados; && funciona no Windows via npm"
     },
     {
       "id": "03",
@@ -382,6 +389,12 @@
       "status": "done",
       "report": "reports/01-higiene-repositorio.md",
       "note": "baseline de lint corrigido: 277->45 warnings"
+    },
+    {
+      "task": "02",
+      "at": "2026-08-26",
+      "status": "done",
+      "report": "reports/02-scripts-de-verificacao.md"
     }
   ]
 }
