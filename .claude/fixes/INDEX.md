@@ -65,7 +65,7 @@ ESLint varria as worktrees. Depois de corrigir o escopo e limpar o que restava:
 | ✅ | `08` | [E2E — autenticação nos três perfis](tasks/08-e2e-autenticacao.md) | baixo | `07` |
 | ✅ | `09` | [E2E — criação de reclamação (wizard de 4 etapas)](tasks/09-e2e-nova-reclamacao.md) | baixo | `08` |
 | ✅ | `10` | [E2E — resposta da empresa e transições de status](tasks/10-e2e-resposta-empresa.md) | baixo | `09` |
-| ⬜ | `11` | [Testes de autorização das 32 rotas de API](tasks/11-testes-api-autorizacao.md) | baixo | `10` |
+| ✅ | `11` | [Testes de autorização das 32 rotas de API](tasks/11-testes-api-autorizacao.md) | baixo | `10` |
 
 ---
 
@@ -146,6 +146,7 @@ criar deve registrar aqui e em `STATE.json`.
 | ⬜ | `53` | [Selects do wizard sem rótulo associado](tasks/53-selects-sem-rotulo-associado.md) | baixo | `09` | achado na `09`: `<label for>` aponta para id que o Radix nunca aplica — 3 combobox sem nome acessível |
 | ⬜ | `54` | [Rótulos de status divergentes](tasks/54-rotulos-de-status-divergentes.md) | baixo | `10` | achado na `10`: quatro mapas de rótulo que discordam — "Em réplica" na lista vs "Respondida" no detalhe, "Concluído" para a usuária vs "Resolvida" para a empresa |
 | ⬜ | `55` | [Resolvida não reabre](tasks/55-resolvido-nao-reabre.md) | **alto** | `10` | achado na `10`: depois de `RESOLVED` a resposta da autora é gravada mas o status não muda — ela não consegue contestar o encerramento |
+| ⬜ | `56` | [Conta de empresa do seed é MEMBER](tasks/56-conta-empresa-do-seed-e-member.md) | médio | `11` | achado na `11`: a conta da demonstração recebe 403 ao editar perfil, criar projeto ou convidar usuária — conserto de seed |
 
 **Ordem revisada pela task `00`:** `01` → `02` → `03` → **`50`** → `07` → …
 A `50` sobe na fila por ser defeito confirmado, e cabe antes dos testes para que

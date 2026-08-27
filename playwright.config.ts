@@ -10,6 +10,13 @@ import { defineConfig, devices } from "@playwright/test";
  * em paralelo produz falha intermitente — uma spec apagando o que a outra
  * acabou de criar. Enquanto não houver banco por worker, serial é o correto.
  */
+/**
+ * Endereço do servidor de teste. Exportado porque `e2e/api-authorization.spec.ts`
+ * cria contextos de API próprios (uma jarra de cookie por papel) e precisa da
+ * mesma base que os testes de navegador — sem duplicar a constante.
+ */
+export const BASE_URL = "http://localhost:5000";
+
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: false,
@@ -21,7 +28,7 @@ export default defineConfig({
   reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : [["list"]],
 
   use: {
-    baseURL: "http://localhost:5000",
+    baseURL: BASE_URL,
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
@@ -46,7 +53,7 @@ export default defineConfig({
 
   webServer: {
     command: "npm run dev",
-    url: "http://localhost:5000",
+    url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     // O dev server usa Turbopack e a primeira compilação é lenta no Windows.
     timeout: 120_000,

@@ -12,7 +12,7 @@
     "eslint_errors_note": "0 erros apos ignorar .claude/** no eslint.config.mjs (task 01)",
     "eslint_warnings": 0,
     "eslint_top_rules": {},
-    "automated_tests": 148,
+    "automated_tests": 232,
     "pages": 42,
     "api_routes": 32,
     "components": 95,
@@ -261,11 +261,19 @@
       "slug": "testes-api-autorizacao",
       "phase": 3,
       "order": 11,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [
         "10"
-      ]
+      ],
+      "finished_at": "2026-08-27T00:35:00",
+      "debug_iterations": 0,
+      "files_changed": [
+        "e2e/api-authorization.spec.ts",
+        "playwright.config.ts",
+        "docs/autorizacao.md"
+      ],
+      "notes": "84 testes novos cobrindo 40 endpoints x 5 papeis. NENHUMA ROTA ABERTA: nenhum 200 para quem nao podia, nenhum 5xx sem sessao. Matriz medida em docs/autorizacao.md. O teste varre src/app/api no sistema de arquivos, entao rota nova nasce quebrando ate ser classificada. Expos a mistura de 401/403 (task 17) e o achado 56."
     },
     {
       "id": "12",
@@ -323,7 +331,7 @@
       "depends_on": [
         "11"
       ],
-      "notes": "risco menor que o previsto: guardas e checagem de posse existem; matriz continua necessaria"
+      "notes": "risco menor que o previsto: guardas e checagem de posse existem; matriz continua necessaria | A task 11 deixou a matriz medida em docs/autorizacao.md. Decidir e registrar: o admin de plataforma recebe 401 em toda a area da empresa (getCurrentCompanyContext so olha vinculo) - e intencional?"
     },
     {
       "id": "17",
@@ -335,7 +343,7 @@
       "depends_on": [
         "16"
       ],
-      "notes": "GET /api/me devolve 401 para anonimo, gerando erro de console em toda visita anonima. Avaliar responder 200 com {user:null} - quem sou eu tem resposta valida para ninguem."
+      "notes": "GET /api/me devolve 401 para anonimo, gerando erro de console em toda visita anonima. Avaliar responder 200 com {user:null} - quem sou eu tem resposta valida para ninguem. | Medido na task 11: 401 e 403 misturados. /api/company/* devolve 401 para logada sem vinculo; /api/admin/* devolve 403 para logada sem papel; POST /api/companies devolve 401 na mesma situacao; GET /api/blog/posts?scope=admin devolve 403 para anonima. Causa: getCurrentCompanyContext e getCurrentAdminContext devolvem null nos dois casos. Matriz em docs/autorizacao.md."
     },
     {
       "id": "18",
@@ -407,7 +415,7 @@
       "depends_on": [
         "22"
       ],
-      "notes": "seed precisa de logoUrl nas empresas: hoje as 2 tem NULL e os componentes de logo caem no fallback da letra | Medido na task 09: o seed tem apenas 3 relatos no total."
+      "notes": "seed precisa de logoUrl nas empresas: hoje as 2 tem NULL e os componentes de logo caem no fallback da letra | Medido na task 09: o seed tem apenas 3 relatos no total. | Ver achado 56: a conta de empresa do seed e MEMBER e nao consegue administrar a propria empresa na demonstracao."
     },
     {
       "id": "99",
@@ -471,6 +479,20 @@
       "risk": "alto",
       "depends_on": [],
       "notes": "Achado na task 10. Depois de RESOLVED a resposta da usuaria e gravada mas o status nao muda: ela nao consegue contestar o encerramento. Contraria o TODO.md. Precisa de decisao da Paloma entre reabrir sempre, criar REOPENED ou exigir confirmacao da autora.",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "56",
+      "slug": "conta-empresa-do-seed-e-member",
+      "phase": 9,
+      "order": 56,
+      "status": "pending",
+      "risk": "medio",
+      "depends_on": [],
+      "notes": "Achado na task 11. A conta empresa@construtorax.com tem papel MEMBER e canManageCompany exige OWNER/ADMIN: ela recebe 403 ao editar perfil, criar projeto ou convidar usuaria. Conserto de seed. Efeito colateral: a checagem de posse em /api/company/projects/[id] e inalcancavel por teste.",
       "started_at": null,
       "finished_at": null,
       "debug_iterations": 0,
@@ -594,6 +616,16 @@
         "54",
         "55"
       ]
+    },
+    {
+      "task": "11",
+      "at": "2026-08-27",
+      "status": "done",
+      "report": "reports/11-testes-api-autorizacao.md",
+      "achados_abertos": [
+        "56"
+      ],
+      "resultado": "nenhuma rota aberta"
     }
   ]
 }
