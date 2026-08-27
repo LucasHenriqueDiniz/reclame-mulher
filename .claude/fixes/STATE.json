@@ -669,7 +669,8 @@
         "README.md",
         "scripts/seed-demonstracao.ts",
         "TODO.md"
-      ]
+      ],
+      "commit": "a921253"
     },
     {
       "id": "57",
