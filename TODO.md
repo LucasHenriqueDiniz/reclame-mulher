@@ -66,9 +66,6 @@ Encontrados durante a fila de correções, cada um com investigação escrita.
 - [ ] [`64`](.claude/fixes/tasks/64-home-estatica-congela-os-numeros.md) — os
       números da home congelam no build: a rota é estática e a consulta ao
       banco roda uma vez só.
-- [ ] [`62`](.claude/fixes/tasks/62-limites-de-upload-divergem.md) — o cliente
-      aceita 3 anexos de 5 MB; o servidor aceita 1 de 4 MB. Um arquivo de 4,5 MB
-      passa na validação da tela e é recusado no envio.
 - [ ] [`66`](.claude/fixes/tasks/66-teste-de-teclado-instavel.md) — o teste
       de teclado do assistente falha de vez em quando no celular. É corrida do
       teste com a lista do Radix, não defeito do produto.
@@ -152,8 +149,8 @@ alguém": é feito segundo um número que dá para reproduzir.
       permanente varre todo destino do código contra as rotas de `src/app`. Ver
       [`59`](.claude/fixes/reports/59-esqueceu-a-senha-nao-existe.md).
 - [x] **ESLint zerado** — de 4 erros e 277 avisos para 0 e 0.
-- [x] **Suíte de testes existe** — 458 testes: 18 de unidade, 362 de ponta a
-      ponta, 78 de acessibilidade. Antes: nenhum.
+- [x] **Suíte de testes existe** — 499 testes: 29 de unidade, 398 de ponta a
+      ponta, 72 de acessibilidade. Antes: nenhum.
 - [x] **Acessibilidade WCAG 2.1 AA** — de 523 ocorrências para 0, em 39 páginas
       × 2 viewports. Ver [`docs/acessibilidade.md`](docs/acessibilidade.md).
 - [x] **Responsividade em 375px** — de 8 páginas com scroll horizontal para 0,

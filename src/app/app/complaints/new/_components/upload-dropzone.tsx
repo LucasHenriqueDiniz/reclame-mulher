@@ -4,10 +4,13 @@ import { useCallback, useRef, useState } from "react";
 import { Upload, X, FileText } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-
-const ACCEPT_STR = ".png,.jpg,.jpeg,.pdf";
-const MAX_FILES = 3;
-const MAX_BYTES = 5 * 1024 * 1024; // 5 MB
+import {
+  ANEXO_EXTENSOES,
+  ANEXO_MAX_ARQUIVOS,
+  ANEXO_MAX_MB,
+  MENSAGEM_LIMITE_DE_ARQUIVOS,
+  validarAnexo,
+} from "@/lib/constants/anexos";
 
 export type AttachmentMeta = {
   file_path: string;
@@ -21,17 +24,19 @@ type UploadDropzoneProps = {
   value: AttachmentMeta[];
   onChange: (list: AttachmentMeta[]) => void;
   onUpload?: (file: File) => Promise<{ file_path: string; file_name: string; content_type?: string; size_bytes?: number }>;
-  maxFiles?: number;
-  maxBytesPerFile?: number;
   disabled?: boolean;
 };
 
+/**
+ * O limite não é configurável por quem usa este componente, e é de propósito:
+ * era exatamente assim que a tela e a rota do UploadThing acabaram com números
+ * diferentes (task `62`). Quem precisar mudar o limite muda
+ * `@/lib/constants/anexos`, e os dois lados mudam juntos.
+ */
 export function UploadDropzone({
   value,
   onChange,
   onUpload,
-  maxFiles = MAX_FILES,
-  maxBytesPerFile = MAX_BYTES,
   disabled,
 }: UploadDropzoneProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -39,40 +44,37 @@ export function UploadDropzone({
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const validateFile = useCallback(
-    (file: File): string | null => {
-      if (file.size > maxBytesPerFile) {
-        return `Arquivo muito grande. Máximo ${Math.round(maxBytesPerFile / 1024 / 1024)} MB por arquivo.`;
-      }
-      const type = file.type?.toLowerCase();
-      const allowed = ["image/png", "image/jpg", "image/jpeg", "application/pdf"];
-      if (!type || !allowed.includes(type)) {
-        return "Formato não permitido. Use PNG, JPG, JPEG ou PDF.";
-      }
-      return null;
-    },
-    [maxBytesPerFile]
-  );
-
   const addFiles = useCallback(
     async (files: FileList | null) => {
       if (!files?.length) return;
       setError(null);
+
       const next = [...value];
-      for (let i = 0; i < files.length && next.length < maxFiles; i++) {
+      let recusa: string | null = null;
+      let excedentes = 0;
+
+      for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const err = validateFile(file);
-        if (err) {
-          setError(err);
+
+        // Antes era o `for` que parava no limite, e os arquivos de sobra
+        // sumiam sem aviso nenhum. Agora eles são contados para virar mensagem.
+        if (next.length >= ANEXO_MAX_ARQUIVOS) {
+          excedentes++;
           continue;
         }
+
+        const problema = validarAnexo(file);
+        if (problema) {
+          recusa = recusa ?? problema;
+          continue;
+        }
+
         if (onUpload) {
           setUploading(true);
           try {
-            const meta = await onUpload(file);
-            next.push(meta);
+            next.push(await onUpload(file));
           } catch (e) {
-            setError(e instanceof Error ? e.message : "Falha ao enviar arquivo.");
+            recusa = recusa ?? (e instanceof Error ? e.message : "Falha ao enviar arquivo.");
           } finally {
             setUploading(false);
           }
@@ -86,10 +88,16 @@ export function UploadDropzone({
           });
         }
       }
-      if (next.length > maxFiles) next.length = maxFiles;
+
+      if (recusa) {
+        setError(recusa);
+      } else if (excedentes > 0) {
+        setError(MENSAGEM_LIMITE_DE_ARQUIVOS);
+      }
+
       onChange(next);
     },
-    [value, maxFiles, validateFile, onUpload, onChange]
+    [value, onUpload, onChange]
   );
 
   const removeAt = (index: number) => {
@@ -108,7 +116,7 @@ export function UploadDropzone({
         onDrop={(e) => {
           e.preventDefault();
           setDragActive(false);
-          if (!disabled && value.length < maxFiles) addFiles(e.dataTransfer.files);
+          if (!disabled) addFiles(e.dataTransfer.files);
         }}
         className={cn(
           "rounded-xl border-2 border-dashed p-6 text-center transition-colors",
@@ -119,7 +127,7 @@ export function UploadDropzone({
         <input
           ref={inputRef}
           type="file"
-          accept={ACCEPT_STR}
+          accept={ANEXO_EXTENSOES}
           multiple
           className="hidden"
           onChange={(e) => {
@@ -139,7 +147,7 @@ export function UploadDropzone({
           </button>
         </p>
         <p className="mt-1 text-xs text-muted-foreground">
-          PNG, JPG, JPEG ou PDF. Até {maxFiles} arquivos, máximo {Math.round(maxBytesPerFile / 1024 / 1024)} MB cada.
+          PNG, JPG, JPEG ou PDF. Até {ANEXO_MAX_ARQUIVOS} arquivos, máximo {ANEXO_MAX_MB} MB cada.
         </p>
         {uploading && (
           <p className="mt-2 text-sm text-muted-foreground">Enviando...</p>
@@ -147,7 +155,7 @@ export function UploadDropzone({
       </div>
 
       {error && (
-        <p className="text-sm text-destructive">{error}</p>
+        <p role="alert" className="text-sm text-destructive">{error}</p>
       )}
 
       {value.length > 0 && (

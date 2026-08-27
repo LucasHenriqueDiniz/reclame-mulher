@@ -166,6 +166,48 @@ test.describe("validação", () => {
     await esperarEtapa(page, 2);
   });
 
+  test("etapa 3 recusa arquivo grande na tela, sem chamar o UploadThing", async ({ page }) => {
+    // A divergência da task 62: a tela aceitava 5 MB e a rota aceitava 4 MB, então
+    // um arquivo de 4,5 MB entrava na lista com cara de aceito e só era recusado
+    // no envio — depois de todo o resto preenchido.
+    await abrirWizard(page);
+    await irAteEtapaTres(page, tituloDeTeste("anexo grande demais"));
+
+    // Se um único byte sair para o UploadThing, a recusa não foi do cliente — e
+    // ainda consome cota. Por isso a chamada é vigiada em vez de suposta.
+    const chamadasAoUploadThing: string[] = [];
+    page.on("request", (req) => {
+      if (req.url().includes("uploadthing")) chamadasAoUploadThing.push(req.url());
+    });
+
+    await page.locator('input[type="file"]').setInputFiles({
+      name: "foto-grande.png",
+      mimeType: "image/png",
+      buffer: Buffer.alloc(Math.round(4.5 * 1024 * 1024)),
+    });
+
+    // `p[role="alert"]` e não `getByRole("alert")`: o anunciador de rota do Next
+    // também é um `role="alert"`, e o modo estrito acha os dois.
+    await expect(
+      page.locator('p[role="alert"]'),
+      "a recusa precisa dizer qual é o limite, não só que falhou"
+    ).toContainText(/4 MB/);
+
+    await expect(
+      page.getByRole("button", { name: "Remover anexo" }),
+      "o arquivo recusado não pode entrar na lista de anexos"
+    ).toHaveCount(0);
+
+    expect(
+      chamadasAoUploadThing,
+      "o arquivo recusado não pode sair da máquina de quem está relatando"
+    ).toEqual([]);
+
+    // E o caminho normal continua aberto: o PNG mínimo é aceito pela validação.
+    // Não anexo aqui de propósito — isso subiria arquivo de verdade.
+    await expect(continuarSemFoto(page)).toBeEnabled();
+  });
+
   test("etapa 4 não envia sem categoria, urgência e alcance", async ({ page }) => {
     await abrirWizard(page);
     await irAteEtapaTres(page, tituloDeTeste("classificação obrigatória"));

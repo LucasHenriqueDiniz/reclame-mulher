@@ -113,10 +113,14 @@ Vão para o UploadThing. Duas coisas a saber:
 
 - **Sem ACL.** O arquivo fica acessível por URL a quem tiver a URL. Ver a seção
   "Visibilidade de anexos" em [`autorizacao.md`](autorizacao.md).
-- **Cliente e servidor discordam do limite.** O componente aceita 3 arquivos de
-  até 5 MB; a rota do UploadThing aceita 1 de até 4 MB. Registrado como task
-  `62`. (A documentação de julho dizia "10 MB por arquivo, 50 MB no total" —
-  número que não corresponde a nenhum dos dois.)
+- **Limite: 3 arquivos de até 4 MB cada**, em PNG, JPG, JPEG ou PDF. O número
+  vive em [`src/lib/constants/anexos.ts`](../src/lib/constants/anexos.ts) e é
+  importado pela tela e pela rota do UploadThing. Até a task `62` cada lado
+  tinha o seu — a tela aceitava 5 MB, a rota aceitava 4 — e um arquivo de 4,5 MB
+  só era recusado no fim do formulário. `src/lib/__tests__/anexos.test.ts` falha
+  se algum dos dois voltar a escrever o número na mão.
+- **Um arquivo por requisição.** O envio chama o UploadThing uma vez para cada
+  anexo, então os três não disputam o mesmo `maxFileCount`.
 
 ## Erros de API
 

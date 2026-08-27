@@ -197,9 +197,9 @@ pessoal — seu ou de outra pessoa.
 Se não tiver foto, clique em **Continuar sem foto**. Você não perde nada por
 isso.
 
-> ⚠️ **Atenção ao tamanho.** A tela diz "até 3 arquivos, máximo 5 MB cada", mas
-> nesta versão o envio aceita **1 arquivo de até 4 MB**. Se der erro no envio,
-> tente com um arquivo só e menor. Isso já está registrado para correção.
+> **Sobre o tamanho.** São até **3 arquivos de 4 MB cada**, em PNG, JPG, JPEG
+> ou PDF. Se um arquivo passar do tamanho, a tela avisa na hora e diz o limite —
+> você não descobre só no fim.
 
 ### Etapa 4 — Finalizar
 
@@ -478,7 +478,6 @@ Lista honesta, para você não perder tempo procurando:
 | **Não reabre relato resolvido** | Sua resposta é registrada, mas a etiqueta não muda |
 | **Não tem canal de atendimento** | Não há telefone, e-mail ou chat de suporte |
 | **Não permite mudar a privacidade depois** | As duas chaves da etapa 4 valem para sempre |
-| **Aceita menos anexo do que diz** | A tela promete 3 arquivos de 5 MB; o envio aceita 1 de 4 MB |
 
 Cada um desses pontos está registrado na fila de correções do projeto, em
 [`.claude/fixes/`](../../.claude/fixes/INDEX.md).

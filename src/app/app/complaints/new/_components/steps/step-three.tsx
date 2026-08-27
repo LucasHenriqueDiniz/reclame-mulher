@@ -56,8 +56,6 @@ export function StepThree({ data, onChange, onUpload }: StepThreeProps) {
         value={data.attachments}
         onChange={(attachments) => onChange({ attachments })}
         onUpload={onUpload}
-        maxFiles={3}
-        maxBytesPerFile={5 * 1024 * 1024}
       />
     </div>
   );

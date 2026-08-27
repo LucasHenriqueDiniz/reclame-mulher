@@ -28,7 +28,7 @@
     "corrected_by_task": "01",
     "corrected_at": "2026-08-26"
   },
-  "current_task": "62",
+  "current_task": "64",
   "tasks": [
     {
       "id": "00",
@@ -801,14 +801,28 @@
       "slug": "limites-de-upload-divergem",
       "phase": 2,
       "order": 62,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [],
-      "notes": "Achado na task 21: upload-dropzone aceita 3 arquivos de 5MB, a rota complaintAttachment do UploadThing aceita 1 de 4MB. Um arquivo de 4,5MB passa na tela e e recusado no envio.",
-      "started_at": null,
-      "finished_at": null,
-      "debug_iterations": 0,
-      "files_changed": []
+      "notes": "NAO ERAM DOIS NUMEROS, ERAM QUATRO. A task apontava upload-dropzone.tsx (3 de 5 MB) e core.ts (1 de 4 MB). Faltavam: steps/step-three.tsx passava maxFiles={3} maxBytesPerFile={5*1024*1024} EXPLICITAMENTE - corrigir so o valor padrao do componente nao mudaria nada, o chamador vencia - e complaint-step-three-attachments.tsx, codigo morto que ninguem importa, com o quarto par de numeros. Removido. UMA PARTE DA TASK NAO SE SUSTENTA: o '3 contra 1' era inerte. handleUpload faz uploadFiles(..., {files: [file]}) um por vez, e maxFileCount do UploadThing e POR REQUISICAO - tres chamadas de um arquivo cada satisfazem maxFileCount: 1. So a divergencia de TAMANHO era reproduzivel. Corrigi as duas mesmo assim: o criterio 1 pede um unico valor de quantidade, e maxFileCount que nao bate com a tela e armadilha para quem um dia agrupar os envios. ESCOLHA: 3 arquivos de 4 MB. Tamanho alinha para baixo (teto real do UploadThing), quantidade alinha para cima (e o que a tela sempre ofereceu e o que o Manual promete; maxFileCount e config de rota, sem implicacao de plano). Os dois props que permitiam sobrescrever o limite SAIRAM do componente - eram o mecanismo pelo qual a divergencia entrou. ACHADO AO REESCREVER: o arquivo que passava do limite de quantidade sumia EM SILENCIO (o laco parava e pronto). Agora conta os excedentes e avisa. A mensagem de recusa ganhou role='alert'. TESTES: 11 de unidade em src/lib/__tests__/anexos.test.ts, incluindo uma TRAVA que le core.ts, upload-dropzone.tsx e step-three.tsx do disco e falha se voltarem a escrever o numero na mao - verificada por mutacao. Mais um E2E que anexa 4,5 MB na etapa 3 e exige tres coisas: mensagem dizendo 4 MB, arquivo fora da lista, e NENHUMA requisicao ao UploadThing (vigiando page.on('request')). DUAS ITERACOES: (1) a trava falhou de primeira porque core.ts tem tambem a rota blogImage com o seu proprio '4MB'; passou a checar so o bloco complaintAttachment. Olhando, blogImage nao valida tamanho no cliente - e diferente de ter dois numeros discordando, e nao abri task: e upload de admin, sem promessa quebrada na tela. (2) o E2E falhou por modo estrito - getByRole('alert') acha tambem o anunciador de rota do Next; virou p[role='alert']. Vitest 18 -> 29. Suite 465 -> 467. Capturas do Manual: so as duas da etapa 3 mudaram.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 2,
+      "files_changed": [
+        "src/lib/constants/anexos.ts (novo)",
+        "src/lib/__tests__/anexos.test.ts (novo)",
+        "src/app/api/uploadthing/core.ts",
+        "src/app/app/complaints/new/_components/upload-dropzone.tsx",
+        "src/app/app/complaints/new/_components/steps/step-three.tsx",
+        "src/app/app/complaints/new/_components/complaint-step-three-attachments.tsx (removido)",
+        "e2e/complaint-create.spec.ts",
+        "docs/arquitetura.md",
+        "docs/manual/MANUAL_DE_USO.md",
+        "docs/manual/MANUAL_DE_USO.html",
+        "docs/manual/img/32-etapa-3.png, 32-etapa-3-celular.png",
+        "docs/roteiro-demonstracao.md",
+        "TODO.md"
+      ]
     },
     {
       "id": "63",

@@ -1,4 +1,5 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { ANEXO_MAX_ARQUIVOS, ANEXO_TAMANHO_MAXIMO } from "@/lib/constants/anexos";
 import { getSession } from "@/lib/auth/session";
 import { db } from "@/db/client";
 import { profiles } from "@/db/schema";
@@ -37,8 +38,11 @@ export const ourFileRouter = {
 
   // Rota para upload de anexos de reclamações (usuários logados)
   complaintAttachment: f({
-    image: { maxFileSize: "4MB", maxFileCount: 1 },
-    pdf: { maxFileSize: "4MB", maxFileCount: 1 },
+    // Tamanho e quantidade vêm de `@/lib/constants/anexos`, o mesmo módulo que a
+    // tela usa. Antes da task 62 os dois lados discordavam. O envio é um arquivo
+    // por requisição, mas a rota precisa comportar o que a tela oferece.
+    image: { maxFileSize: ANEXO_TAMANHO_MAXIMO, maxFileCount: ANEXO_MAX_ARQUIVOS },
+    pdf: { maxFileSize: ANEXO_TAMANHO_MAXIMO, maxFileCount: ANEXO_MAX_ARQUIVOS },
   })
     .middleware(async () => {
       const session = await getSession();
