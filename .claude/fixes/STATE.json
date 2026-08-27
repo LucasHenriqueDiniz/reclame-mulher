@@ -943,7 +943,8 @@
         ".claude/fixes/reports/68-perf/reproduzir.mts (novo)",
         ".claude/fixes/reports/68-perf/nova-tentativa.mts (novo)",
         "TODO.md"
-      ]
+      ],
+      "commit": "ea14566"
     },
     {
       "id": "69",
