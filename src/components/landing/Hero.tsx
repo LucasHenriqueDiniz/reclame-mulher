@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,7 +20,21 @@ export function Hero() {
   };
 
   return (
-      <section className="relative w-full min-h-[600px] md:min-h-[700px] overflow-hidden bg-[url('/hero.webp')] bg-cover bg-center">
+    <section className="relative w-full min-h-[600px] md:min-h-[700px] overflow-hidden">
+      {/* A imagem de fundo era `bg-[url('/hero.webp')]`, e por isso o navegador
+          só a descobria depois de baixar e interpretar o CSS. Como ela é o
+          elemento de LCP da home, isso custava caro. Com `next/image` +
+          `priority` ela vira um `<img>` com `<link rel="preload">` no HTML,
+          e o download começa junto com a página. Medido na task 19. */}
+      <Image
+        src="/hero.webp"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center"
+      />
+
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/60 to-black/40" aria-hidden="true" />
 

@@ -169,15 +169,22 @@ export class CompaniesRepo {
   }
 
   static async getStats(companyId: string) {
-    const [totals] = await db.select({
+    // As duas consultas não dependem uma da outra. Em série custavam dois
+    // round trips ao Neon — medido em ~139 ms cada, a partir daqui. Em
+    // paralelo custam um. Ver o relatório da task 19.
+    const [[totals], [projCount]] = await Promise.all([
+      db.select({
       total: count(complaints.id),
       resolved: sql<number>`sum(case when ${complaints.status} = 'RESOLVED' then 1 else 0 end)::int`,
       unanswered: sql<number>`sum(case when ${complaints.status} = 'OPEN' then 1 else 0 end)::int`,
       activeDialogs: sql<number>`sum(case when ${complaints.status} = 'RESPONDED' then 1 else 0 end)::int`,
       avgResponseSec: sql<number>`avg(case when ${complaints.updatedAt} is not null and ${complaints.status} != 'OPEN' then extract(epoch from (${complaints.updatedAt} - ${complaints.createdAt})) else null end)`,
-    }).from(complaints).where(eq(complaints.companyId, companyId));
-
-    const [projCount] = await db.select({ c: count(projects.id) }).from(projects).where(and(eq(projects.companyId, companyId), eq(projects.status, "IN_PROGRESS")));
+      }).from(complaints).where(eq(complaints.companyId, companyId)),
+      db
+        .select({ c: count(projects.id) })
+        .from(projects)
+        .where(and(eq(projects.companyId, companyId), eq(projects.status, "IN_PROGRESS"))),
+    ]);
 
     const total = Number(totals?.total ?? 0);
     const resolved = Number(totals?.resolved ?? 0);
@@ -202,7 +209,9 @@ export class CompaniesRepo {
       return new Map<string, Awaited<ReturnType<typeof CompaniesRepo.getStats>>>();
     }
 
-    const complaintRows = await db
+    // Mesma razão do `getStats`: independentes, então vão juntas.
+    const [complaintRows, projectRows] = await Promise.all([
+      db
       .select({
         companyId: complaints.companyId,
         total: count(complaints.id),
@@ -213,16 +222,16 @@ export class CompaniesRepo {
       })
       .from(complaints)
       .where(inArray(complaints.companyId, companyIds))
-      .groupBy(complaints.companyId);
-
-    const projectRows = await db
-      .select({
-        companyId: projects.companyId,
-        c: count(projects.id),
-      })
-      .from(projects)
-      .where(and(inArray(projects.companyId, companyIds), eq(projects.status, "IN_PROGRESS")))
-      .groupBy(projects.companyId);
+      .groupBy(complaints.companyId),
+      db
+        .select({
+          companyId: projects.companyId,
+          c: count(projects.id),
+        })
+        .from(projects)
+        .where(and(inArray(projects.companyId, companyIds), eq(projects.status, "IN_PROGRESS")))
+        .groupBy(projects.companyId),
+    ]);
 
     const projMap = new Map(projectRows.map((r) => [r.companyId, Number(r.c)]));
 

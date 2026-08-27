@@ -1,0 +1,30 @@
+| viewport | rota | LCP | CLS | FCP | TTFB | total | imagens | maior imagem |
+|---|---|---|---|---|---|---|---|---|
+| desktop | `/` | 164 ms | 0.000 | 164 ms | 7 ms | 1365 kB | 2 (30 kB) | logo.webp 26 kB |
+| desktop | `/companies` | 248 ms | 0.000 | 248 ms | 162 ms | 28 kB | 1 (0 kB) | logo.webp 0 kB |
+| desktop | `/blog` | 860 ms | 0.001 | 108 ms | 7 ms | 403 kB | 5 (245 kB) | blog-image-2.webp 138 kB |
+| desktop | `/company/construtora-x` | 544 ms | 0.000 | 544 ms | 443 ms | 112 kB | 1 (0 kB) | logo.webp 0 kB |
+| desktop | `/app/complaints` | 244 ms | 0.001 | 244 ms | 159 ms | 479 kB | 1 (26 kB) | logo.webp 26 kB |
+| desktop | `/app/company/dashboard` | 532 ms | 0.001 | 532 ms | 433 ms | 491 kB | 1 (26 kB) | logo.webp 26 kB |
+| mobile | `/` | 164 ms | 0.000 | 164 ms | 6 ms | 1354 kB | 2 (30 kB) | logo.webp 26 kB |
+| mobile | `/companies` | 240 ms | 0.000 | 240 ms | 150 ms | 24 kB | 1 (0 kB) | logo.webp 0 kB |
+| mobile | `/blog` | 880 ms | 0.005 | 96 ms | 4 ms | 390 kB | 5 (245 kB) | blog-image-2.webp 138 kB |
+| mobile | `/company/construtora-x` | 560 ms | 0.000 | 560 ms | 432 ms | 108 kB | 1 (0 kB) | logo.webp 0 kB |
+| mobile | `/app/complaints` | 208 ms | 0.000 | 208 ms | 152 ms | 468 kB | 1 (26 kB) | logo.webp 26 kB |
+| mobile | `/app/company/dashboard` | 652 ms | 0.000 | 652 ms | 573 ms | 478 kB | 1 (26 kB) | logo.webp 26 kB |
+
+ELEMENTO DO LCP:
+  desktop /: SECTION.relative w-full min-h-[600px] md:min-h-[700px
+  desktop /companies: H1.font-heading max-w-3xl text-4xl font-bold tex
+  desktop /blog: IMG.object-cover
+  desktop /company/construtora-x: DIV.
+  desktop /app/complaints: P.font-['Poppins'] font-medium text-base text-[
+  desktop /app/company/dashboard: SPAN.font-heading text-xl sm:text-2xl font-bold te
+  mobile /: SECTION.relative w-full min-h-[600px] md:min-h-[700px
+  mobile /companies: H1.font-heading max-w-3xl text-4xl font-bold tex
+  mobile /blog: IMG.object-cover
+  mobile /company/construtora-x: H1.text-[22px] font-bold text-white m-0
+  mobile /app/complaints: P.font-['Poppins'] font-medium text-base text-[
+  mobile /app/company/dashboard: H1.
+
+JSON:[{"viewport":"desktop","rota":"/","lcp":164,"cls":0,"fcp":164,"lcpEl":"SECTION.relative w-full min-h-[600px] md:min-h-[700px","ttfb":6.799999997019768,"bytes":1397696,"bytesImagem":30540,"nImagens":2,"maiorImagem":{"url":"logo.webp","kb":26}},{"viewport":"desktop","rota":"/companies","lcp":248,"cls":0,"fcp":248,"lcpEl":"H1.font-heading max-w-3xl text-4xl font-bold tex","ttfb":162,"bytes":28759,"bytesImagem":300,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":0}},{"viewport":"desktop","rota":"/blog","lcp":860,"cls":0.0011153930664062502,"fcp":108,"lcpEl":"IMG.object-cover","ttfb":7.300000004470348,"bytes":412940,"bytesImagem":250684,"nImagens":5,"maiorImagem":{"url":"blog-image-2.webp","kb":138}},{"viewport":"desktop","rota":"/company/construtora-x","lcp":544,"cls":0,"fcp":544,"lcpEl":"DIV.","ttfb":443,"bytes":114311,"bytesImagem":300,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":0}},{"viewport":"desktop","rota":"/app/complaints","lcp":244,"cls":0.0012112210988998412,"fcp":244,"lcpEl":"P.font-['Poppins'] font-medium text-base text-[","ttfb":159.30000000447035,"bytes":490883,"bytesImagem":26608,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":26}},{"viewport":"desktop","rota":"/app/company/dashboard","lcp":532,"cls":0.0014994552612304687,"fcp":532,"lcpEl":"SPAN.font-heading text-xl sm:text-2xl font-bold te","ttfb":432.79999999701977,"bytes":502969,"bytesImagem":26608,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":26}},{"viewport":"mobile","rota":"/","lcp":164,"cls":0,"fcp":164,"lcpEl":"SECTION.relative w-full min-h-[600px] md:min-h-[700px","ttfb":5.899999998509884,"bytes":1386129,"bytesImagem":30540,"nImagens":2,"maiorImagem":{"url":"logo.webp","kb":26}},{"viewport":"mobile","rota":"/companies","lcp":240,"cls":0,"fcp":240,"lcpEl":"H1.font-heading max-w-3xl text-4xl font-bold tex","ttfb":149.80000000447035,"bytes":24363,"bytesImagem":300,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":0}},{"viewport":"mobile","rota":"/blog","lcp":880,"cls":0.005123941372030382,"fcp":96,"lcpEl":"IMG.object-cover","ttfb":3.7999999970197678,"bytes":399782,"bytesImagem":250684,"nImagens":5,"maiorImagem":{"url":"blog-image-2.webp","kb":138}},{"viewport":"mobile","rota":"/company/construtora-x","lcp":560,"cls":0,"fcp":560,"lcpEl":"H1.text-[22px] font-bold text-white m-0","ttfb":432.29999999701977,"bytes":110371,"bytesImagem":300,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":0}},{"viewport":"mobile","rota":"/app/complaints","lcp":208,"cls":0,"fcp":208,"lcpEl":"P.font-['Poppins'] font-medium text-base text-[","ttfb":151.60000000149012,"bytes":479316,"bytesImagem":26608,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":26}},{"viewport":"mobile","rota":"/app/company/dashboard","lcp":652,"cls":0,"fcp":652,"lcpEl":"H1.","ttfb":573.2000000029802,"bytes":489505,"bytesImagem":26608,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":26}}]

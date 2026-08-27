@@ -440,12 +440,24 @@
       "slug": "performance",
       "phase": 7,
       "order": 19,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [
         "18"
       ],
-      "notes": "next.config.ts tem images.unoptimized=true: next/image NAO otimiza. Decidir se remove antes de medir LCP/banda"
+      "notes": "Medido em build de producao COM Slow 4G + CPU 4x - sem isso a medicao mede a maquina, nao o produto (LCP da home: 164 ms sem limitacao, 7220 ms com). Culpado: hero.webp de 900 kB carregada por background-image de CSS, 66% do peso da home; a task 06 nao pegou porque nao e tag <img>. Duas correcoes medidas em separado: recompressao das imagens de public/ (1291 -> 192 kB, -85%, feita com o encoder do Chromium via canvas para nao acrescentar sharp) valeu 4,2 s; trocar o background por next/image priority valeu outros 2,1 s. LCP da home: 7220 -> 848 ms desktop, 7124 -> 684 ms mobile. LCP de 12/12 rotas dentro do alvo; CLS de 10/12. Confirmado que ja estavam certos: next/font com display swap nas 3 fontes. ACHADO: CLS do /blog 0,163/0,198 - dois `return` completos remontam header e footer; NAO e regressao, so ficou visivel porque a imagem de 900 kB antes nem terminava de baixar -> task 60. HONESTIDADE: paralelizei getStats/getStatsBatch, ganho real no driver (278 -> 138 ms) mas ZERO na pagina em A/B controlado; mantida a mudanca, nao contada como melhoria. TTFB de 0,8-1,1 s e latencia ao Neon (139 ms por round trip) - topologia de deploy, task 20. images.unoptimized continua ligado porque sharp nao esta instalado e mexer no lockfile e da task 20.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 1,
+      "files_changed": [
+        "src/components/landing/Hero.tsx",
+        "src/server/repos/companies.ts",
+        "public/hero.webp",
+        "public/blog-image.webp",
+        "public/blog-image-2.webp",
+        "public/blog-image-3.webp",
+        "public/logo.webp"
+      ]
     },
     {
       "id": "20",
@@ -615,6 +627,22 @@
       "risk": "alto",
       "depends_on": [],
       "notes": "Achado na task 18 (build de producao).",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "60",
+      "slug": "cls-do-blog",
+      "phase": 7,
+      "order": 60,
+      "status": "pending",
+      "risk": "medio",
+      "depends_on": [
+        "19"
+      ],
+      "notes": "Achado na task 19: /blog tem CLS 0,163 (desktop) e 0,198 (mobile) porque page.tsx tem dois return completos e remonta header e footer na troca de loading.",
       "started_at": null,
       "finished_at": null,
       "debug_iterations": 0,
@@ -797,6 +825,12 @@
       "task": "18",
       "event": "done",
       "detail": "Build 31s sem warning, 0 erro de hidratacao, 3 logins ok. Achados 58 e 59. Corrigido rotulo de anonimato no painel da empresa."
+    },
+    {
+      "at": "2026-08-27",
+      "task": "19",
+      "event": "done",
+      "detail": "LCP da home 7220 -> 848 ms. Imagens de public/: 1291 -> 192 kB. LCP 12/12 no alvo. Achado 60 (CLS do /blog)."
     }
   ]
 }

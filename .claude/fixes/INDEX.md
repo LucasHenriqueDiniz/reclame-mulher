@@ -110,7 +110,7 @@ segurança no banco. Plataforma que armazena denúncias identificadas.
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
 | ✅ | `18` | [Build de produção limpo e reprodutível](tasks/18-build-producao.md) | médio | `17` |
-| ⬜ | `19` | [Core Web Vitals das rotas principais](tasks/19-performance.md) | baixo | `18` |
+| ✅ | `19` | [Core Web Vitals das rotas principais](tasks/19-performance.md) | baixo | `18` |
 | ⬜ | `20` | [Ambiente, variáveis e prontidão para deploy](tasks/20-ambiente-e-deploy.md) | médio | `18` |
 
 ---
@@ -150,6 +150,7 @@ criar deve registrar aqui e em `STATE.json`.
 | ⬜ | `57` | [CTA de relato na tela da empresa](tasks/57-cta-de-relato-na-tela-da-empresa.md) | baixo | `15` | achado na `15`: o link passa o *nome* da empresa onde o wizard espera o *id*, e o card convida a empresa a reclamar de si mesma |
 | ⬜ | `58` | [/api/me devolve 401 em toda página anônima](tasks/58-api-me-401-em-toda-pagina.md) | baixo | `17` | achado na `18`: o hook de sessão pergunta "tem alguém logado?" e recebe 401 — erro vermelho no console de todo carregamento anônimo |
 | ⬜ | `59` | ["Esqueceu a senha?" não leva a lugar nenhum](tasks/59-esqueceu-a-senha-nao-existe.md) | **alto** | — | achado na `18`: `/forgot-password` não existe; sem sessão o link devolve 307 para o próprio login, sem mensagem. É o único link interno quebrado do projeto |
+| ⬜ | `60` | [CLS do /blog está no dobro do limite](tasks/60-cls-do-blog.md) | médio | `19` | achado na `19`: dois `return` completos remontam header e footer; 0,198 no celular. Não é regressão — só ficou visível quando a imagem de 900 kB parou de esconder o defeito |
 
 **Ordem revisada pela task `00`:** `01` → `02` → `03` → **`50`** → `07` → …
 A `50` sobe na fila por ser defeito confirmado, e cabe antes dos testes para que

@@ -1,0 +1,30 @@
+| viewport | rota | LCP | CLS | FCP | TTFB | total | imagens | maior imagem |
+|---|---|---|---|---|---|---|---|---|
+| desktop | `/` | 252 ms | 0.000 | 120 ms | 6 ms | 393 kB | 1 (9 kB) | logo.webp 9 kB |
+| desktop | `/companies` | 512 ms | 0.000 | 512 ms | 427 ms | 36 kB | 1 (0 kB) | logo.webp 0 kB |
+| desktop | `/blog` | 108 ms | 0.163 | 108 ms | 4 ms | 307 kB | 5 (159 kB) | hero.webp 89 kB |
+| desktop | `/company/construtora-x` | 532 ms | 0.000 | 532 ms | 426 ms | 34 kB | 1 (0 kB) | logo.webp 0 kB |
+| desktop | `/app/complaints` | 228 ms | 0.014 | 228 ms | 149 ms | 433 kB | 1 (9 kB) | logo.webp 9 kB |
+| desktop | `/app/company/dashboard` | 652 ms | 0.014 | 652 ms | 566 ms | 445 kB | 1 (9 kB) | logo.webp 9 kB |
+| mobile | `/` | 144 ms | 0.000 | 104 ms | 5 ms | 393 kB | 1 (9 kB) | logo.webp 9 kB |
+| mobile | `/companies` | 512 ms | 0.000 | 512 ms | 428 ms | 36 kB | 1 (0 kB) | logo.webp 0 kB |
+| mobile | `/blog` | 848 ms | 0.198 | 108 ms | 6 ms | 307 kB | 5 (159 kB) | hero.webp 89 kB |
+| mobile | `/company/construtora-x` | 528 ms | 0.000 | 528 ms | 424 ms | 34 kB | 1 (0 kB) | logo.webp 0 kB |
+| mobile | `/app/complaints` | 240 ms | 0.021 | 240 ms | 148 ms | 433 kB | 1 (9 kB) | logo.webp 9 kB |
+| mobile | `/app/company/dashboard` | 672 ms | 0.021 | 672 ms | 568 ms | 444 kB | 1 (9 kB) | logo.webp 9 kB |
+
+ELEMENTO DO LCP:
+  desktop /: H2.
+  desktop /companies: H1.font-heading max-w-3xl text-4xl font-bold tex
+  desktop /blog: P.max-w-[917px] font-normal text-base leading-[
+  desktop /company/construtora-x: H1.text-[22px] font-bold text-white m-0
+  desktop /app/complaints: H1.sr-only
+  desktop /app/company/dashboard: SPAN.
+  mobile /: H2.
+  mobile /companies: H1.font-heading max-w-3xl text-4xl font-bold tex
+  mobile /blog: H1.text-[#181A2A] text-3xl sm:text-4xl font-bold
+  mobile /company/construtora-x: H1.text-[22px] font-bold text-white m-0
+  mobile /app/complaints: H1.sr-only
+  mobile /app/company/dashboard: H1.
+
+JSON:[{"viewport":"desktop","rota":"/","lcp":252,"cls":0,"fcp":120,"lcpEl":"H2.","ttfb":5.600000001490116,"bytes":402192,"bytesImagem":9092,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":9}},{"viewport":"desktop","rota":"/companies","lcp":512,"cls":0,"fcp":512,"lcpEl":"H1.font-heading max-w-3xl text-4xl font-bold tex","ttfb":427.3999999985099,"bytes":36530,"bytesImagem":300,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":0}},{"viewport":"desktop","rota":"/blog","lcp":108,"cls":0.1629375,"fcp":108,"lcpEl":"P.max-w-[917px] font-normal text-base leading-[","ttfb":3.5,"bytes":314240,"bytesImagem":162624,"nImagens":5,"maiorImagem":{"url":"hero.webp","kb":89}},{"viewport":"desktop","rota":"/company/construtora-x","lcp":532,"cls":0,"fcp":532,"lcpEl":"H1.text-[22px] font-bold text-white m-0","ttfb":425.8999999985099,"bytes":35313,"bytesImagem":300,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":0}},{"viewport":"desktop","rota":"/app/complaints","lcp":228,"cls":0.013524204254150391,"fcp":228,"lcpEl":"H1.sr-only","ttfb":148.89999999850988,"bytes":443617,"bytesImagem":9092,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":9}},{"viewport":"desktop","rota":"/app/company/dashboard","lcp":652,"cls":0.013513513183593751,"fcp":652,"lcpEl":"SPAN.","ttfb":566.3999999985099,"bytes":455219,"bytesImagem":9092,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":9}},{"viewport":"mobile","rota":"/","lcp":144,"cls":0,"fcp":104,"lcpEl":"H2.","ttfb":5.299999997019768,"bytes":402192,"bytesImagem":9092,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":9}},{"viewport":"mobile","rota":"/companies","lcp":512,"cls":0,"fcp":512,"lcpEl":"H1.font-heading max-w-3xl text-4xl font-bold tex","ttfb":428.40000000596046,"bytes":36530,"bytesImagem":300,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":0}},{"viewport":"mobile","rota":"/blog","lcp":848,"cls":0.19806896551724137,"fcp":108,"lcpEl":"H1.text-[#181A2A] text-3xl sm:text-4xl font-bold","ttfb":6.199999995529652,"bytes":314715,"bytesImagem":162624,"nImagens":5,"maiorImagem":{"url":"hero.webp","kb":89}},{"viewport":"mobile","rota":"/company/construtora-x","lcp":528,"cls":0,"fcp":528,"lcpEl":"H1.text-[22px] font-bold text-white m-0","ttfb":424.29999999701977,"bytes":35313,"bytesImagem":300,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":0}},{"viewport":"mobile","rota":"/app/complaints","lcp":240,"cls":0.020874566235531074,"fcp":240,"lcpEl":"H1.sr-only","ttfb":148.10000000149012,"bytes":443617,"bytesImagem":9092,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":9}},{"viewport":"mobile","rota":"/app/company/dashboard","lcp":672,"cls":0.020816581329321265,"fcp":672,"lcpEl":"H1.","ttfb":568.3999999985099,"bytes":454252,"bytesImagem":9092,"nImagens":1,"maiorImagem":{"url":"logo.webp","kb":9}}]
