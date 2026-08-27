@@ -61,7 +61,7 @@ interface ComplaintDetail {
   isAnonymous: boolean;
   createdAt: string;
   updatedAt: string;
-  author: { name: string | null };
+  author: { name: string | null } | null;
   company: { name: string | null };
   companyId?: string;
   companySlug?: string | null;

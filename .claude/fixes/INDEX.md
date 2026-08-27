@@ -100,7 +100,7 @@ segurança no banco. Plataforma que armazena denúncias identificadas.
 
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
-| ⬜ | `16` | [Documentar e endurecer o modelo de autorização](tasks/16-modelo-autorizacao.md) | **alto** | `11` |
+| ✅ | `16` | [Documentar e endurecer o modelo de autorização](tasks/16-modelo-autorizacao.md) | **alto** | `11` |
 | ⬜ | `17` | [Padronizar validação de entrada e retorno de erro](tasks/17-validacao-e-erros.md) | médio | `16` |
 
 ---

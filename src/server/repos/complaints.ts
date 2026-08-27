@@ -57,7 +57,11 @@ export class ComplaintsRepo {
 
     return {
       ...row.complaint,
-      author: { name: row.authorName },
+      // Relato anônimo não carrega o nome da autora para fora do repositório.
+      // As telas já mostram "Anônima", mas até a task 16 o nome real viajava
+      // no payload da página e aparecia em "ver código-fonte" para qualquer
+      // pessoa logada. Filtrar só na apresentação não é filtrar.
+      author: row.complaint.isAnonymous ? null : { name: row.authorName },
       company: { name: row.companyName },
       project: row.projectName ? { name: row.projectName } : null,
     };
@@ -106,7 +110,9 @@ export class ComplaintsRepo {
 
     return rows.map((r) => ({
       ...r.complaint,
-      author: { name: r.authorName },
+      // Mesma regra do `findById`: nem a empresa recebe o nome de quem
+      // escolheu o anonimato. A lista da empresa já renderiza "Anônima".
+      author: r.complaint.isAnonymous ? null : { name: r.authorName },
       project: r.projectName ? { name: r.projectName } : null,
     }));
   }

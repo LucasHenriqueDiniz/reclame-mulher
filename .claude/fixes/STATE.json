@@ -371,12 +371,22 @@
       "slug": "modelo-autorizacao",
       "phase": 6,
       "order": 16,
-      "status": "pending",
+      "status": "done",
       "risk": "alto",
       "depends_on": [
         "11"
       ],
-      "notes": "risco menor que o previsto: guardas e checagem de posse existem; matriz continua necessaria | A task 11 deixou a matriz medida em docs/autorizacao.md. Decidir e registrar: o admin de plataforma recebe 401 em toda a area da empresa (getCurrentCompanyContext so olha vinculo) - e intencional?"
+      "notes": "Achado principal: o nome real de quem escolhia anonimato viajava no payload da pagina. findById e findByCompany devolviam author sem olhar isAnonymous; as telas escreviam 'Anonima' mas o HTML trazia o nome. Corrigido nas duas, como findPublic ja fazia. Verificado por mutacao: reaplicando o defeito o teste falha. Nova spec e2e/ownership.spec.ts (6 testes x 2) cobre posse com papel certo e id errado. Auditoria das 32 rotas e 4 server actions: nada aberto fora isso. docs/autorizacao.md foi de 190 para 418 linhas com matriz de dominio, regra de posse e as decisoes. PENDENTE DE DECISAO HUMANA: (1) anexo herda visibilidade do relato ou tem a propria; (2) VERIFICAR se o arquivo no UploadThing abre sem sessao - nao ha ACL e o banco tem zero anexos, entao nao deu para medir; bloqueia demonstracao publica com anexo real. Nao centralizei as 4 checagens de admin: refatoracao ampla, retorno baixo, agora coberta por teste.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 1,
+      "files_changed": [
+        "docs/autorizacao.md",
+        "e2e/ownership.spec.ts",
+        "src/server/repos/complaints.ts",
+        "src/app/app/complaints/[id]/_components/complaint-detail-content.tsx",
+        "src/app/app/complaints/new/_components/steps/step-three.tsx"
+      ]
     },
     {
       "id": "17",
@@ -716,6 +726,12 @@
       "task": "15",
       "event": "done",
       "detail": "Suite rapida 288 -> 316. 0 alvos de toque abaixo de 24x24 sem espacamento. Achado 57 registrado."
+    },
+    {
+      "at": "2026-08-27",
+      "task": "16",
+      "event": "done",
+      "detail": "Vazamento de nome em relato anonimo corrigido. Suite 316 -> 328. docs/autorizacao.md completo. 2 decisoes humanas pendentes sobre anexos."
     }
   ]
 }

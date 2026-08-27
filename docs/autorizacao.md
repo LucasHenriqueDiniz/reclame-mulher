@@ -1,9 +1,13 @@
 # Modelo de autorização
 
-> **Documento em construção.** Este arquivo nasceu na task `51` para registrar a
-> decisão sobre persistência do limitador de tentativas. A task `11` acrescentou
-> a matriz medida de rotas de API. Falta a task `16` decidir as questões de
-> modelo que a matriz deixou expostas.
+> **Como este documento foi feito.** Nasceu na task `51`, com a decisão sobre
+> persistência do limitador de tentativas. A task `11` acrescentou a matriz de
+> rotas medida com chamadas reais. A task `16` acrescentou a matriz de domínio,
+> a regra de posse, a auditoria das 32 rotas e das 4 Server Actions, e as
+> decisões de anonimato e de anexo.
+>
+> Nada aqui é aspiracional: cada afirmação foi medida contra o código ou contra
+> a aplicação rodando. O que não foi medido está dito como não medido.
 
 ## Modelo geral
 
@@ -180,11 +184,235 @@ como distinguir. Corrigir é dar a eles um retorno que diferencie os dois casos.
 Registrado na task `17`. O teste aceita 401 ou 403 de propósito, para não travar
 a correção.
 
-## A completar
+## Papéis reais
 
-- [ ] Matriz papel × recurso × operação, na visão de **domínio** e não de rota
-      (task `16`)
-- [ ] Visibilidade de anexos em reclamação pública (task `16`)
-- [ ] Registrar como intencional (ou corrigir) o admin da plataforma não ter
-      acesso à área das empresas (task `16`)
-- [ ] Unificar 401 e 403 (task `17`)
+Dois eixos independentes, e confundi-los é a origem de metade das dúvidas.
+
+### Papel na plataforma — `app_role` (`src/db/schema.ts:16`)
+
+```ts
+pgEnum("app_role", ["USER", "COMPANY", "ADMIN"])
+```
+
+Guardado em `profiles.role`, com padrão `USER`. É um enum do Postgres: valor
+inválido é rejeitado pelo banco.
+
+> Atenção ao nome. Vários documentos deste repositório falam em `PERSON`. **Esse
+> papel não existe.** O valor real é `USER`.
+
+### Papel dentro de uma empresa — `company_users.role` (`src/db/schema.ts:158`)
+
+```ts
+role: text("role").default("MEMBER")
+```
+
+Valores usados no código: `OWNER`, `ADMIN`, `MEMBER`. **Não é enum, é texto
+livre e anulável** — o banco aceita `"owner"`, `"admin "` ou qualquer outra
+coisa, e as checagens comparam com `===`, então qualquer divergência de
+maiúsculas vira negação silenciosa. Vale enumerar isso numa migração futura;
+está registrado como pendência ao final.
+
+Quem decide o quê:
+
+| Função | Onde | Aceita |
+|---|---|---|
+| `isPlatformAdmin` | `src/server/auth/admin.ts` | `profiles.role === "ADMIN"` |
+| `canManageCompany` | `src/server/auth/company.ts` | `OWNER` ou `ADMIN` |
+| `canManageCompanyUsers` | `src/server/auth/company.ts` | `OWNER` ou `ADMIN` |
+
+`getCurrentCompanyContext` usa **o primeiro vínculo** (`memberships[0]`). Quem
+pertence a duas empresas opera sempre na primeira, sem escolher. Hoje não
+acontece; se acontecer, é bug de dado silencioso.
+
+## Matriz papel × recurso × operação
+
+Visão de domínio. A visão por rota, com os códigos HTTP medidos, está mais
+acima.
+
+Legenda: **✔** pode · **✖** não pode · **dona** só sobre o próprio recurso ·
+**—** não se aplica.
+
+| Recurso | Operação | anônima | `USER` | membro da empresa | `ADMIN` |
+|---|---|---|---|---|---|
+| Relato | criar | ✖ | ✔ | ✔ | ✔ |
+| Relato | ler, público | ✖ ¹ | ✔ | ✔ | ✔ |
+| Relato | ler, privado | ✖ | dona | ✖ ² | ✖ ² |
+| Relato | listar os próprios | ✖ | dona | dona | dona |
+| Relato | listar os da empresa | ✖ | ✖ | só a própria empresa | ✖ ³ |
+| Relato | mudar status | ✖ | ✖ | só a própria empresa | ✖ ³ |
+| Mensagem | escrever | ✖ | dona do relato | só a própria empresa | ✖ ³ |
+| Mensagem | ler a conversa | ✖ | dona do relato | só a própria empresa | ✖ ³ |
+| Anexo | enviar | ✖ | ✔ | ✔ | ✔ |
+| Anexo | ler | ✖ | segue o relato ⁴ | segue o relato ⁴ | segue o relato ⁴ |
+| Empresa | criar | ✖ | ✖ | ✖ | ✔ |
+| Empresa | editar perfil | ✖ | ✖ | `OWNER`/`ADMIN` da própria | ✖ ³ |
+| Empresa | verificar | ✖ | ✖ | ✖ | ✔ |
+| Projeto | criar, editar, apagar | ✖ | ✖ | `OWNER`/`ADMIN` da própria | ✖ ³ |
+| Usuária da empresa | convidar, alterar, remover | ✖ | ✖ | `OWNER`/`ADMIN` da própria | ✖ ³ |
+| Post de blog | ler publicado | ✔ | ✔ | ✔ | ✔ |
+| Post de blog | criar, editar, apagar | ✖ | ✖ | ✖ | ✔ |
+| Log de auditoria | ler | ✖ | ✖ | ✖ | ✔ |
+| Perfil próprio | ler, editar, apagar a conta | ✖ | dona | dona | dona |
+
+¹ A página `/app/complaints/[id]` está sob `/app`, que o middleware protege.
+  Relato "público" quer dizer **visível a qualquer pessoa cadastrada**, não
+  visível à internet aberta. Quem não tem sessão é mandada para `/login`. A
+  lista `GET /api/complaints`, essa sim, é aberta e devolve só os públicos.
+
+² O portão é `if (!isPublic && !isAuthor) notFound()`. Nem a empresa reclamada
+  nem o admin abrem um relato privado por essa página.
+
+³ **O admin da plataforma não tem acesso à área das empresas.** Ver a seção
+  própria abaixo.
+
+⁴ Ver "Visibilidade de anexos".
+
+## A regra de posse, que é onde mora o risco
+
+Sem RLS, a posse é verificada por um `if` dentro de cada handler. Se o `if`
+sumir, o banco entrega o dado sem reclamar. As regras, e onde cada uma vive:
+
+| Recurso | Regra | Arquivo |
+|---|---|---|
+| Relato, lado da empresa | `complaint.companyId !== context.companyId` → 403 | `api/company/complaints/[id]/route.ts`, `.../status/route.ts`, `.../messages/route.ts` |
+| Mensagem, lado da pessoa | `!isAuthor && !isCompanyMember` → 403 | `api/complaints/[id]/messages/route.ts` |
+| Relato privado | `!isPublic && !isAuthor` → `notFound()` | `app/app/complaints/[id]/page.tsx` |
+| Lista da pessoa | filtro na **query**: `where(eq(complaints.authorId, userId))` | `repos/complaints.ts` `findByUser` |
+| Lista pública | filtro na **query**: `where(eq(complaints.isPublic, true))` | `repos/complaints.ts` `findPublic` |
+| Lista da empresa | filtro na **query**: `where(eq(complaints.companyId, companyId))` | `repos/complaints.ts` `findByCompany` |
+
+Os três filtros de lista são feitos na consulta, não na apresentação. Isso
+importa: filtro na apresentação significa que o dado saiu do banco e chegou ao
+processo — e às vezes ao navegador — antes de ser descartado.
+
+Estas regras têm teste próprio em **`e2e/ownership.spec.ts`**. Ele não checa
+papel; checa id errado com papel certo, que é o caso que passa despercebido.
+Foi verificado por mutação: removendo o `if` de anonimato, o teste falha.
+
+## Anonimato: corrigido na task `16`
+
+`complaints.isAnonymous` é a promessa que o formulário faz — "Seu nome não
+aparecerá publicamente". Todas as telas cumpriam: `CompanyComplaintList`,
+`company-complaints-content` e `complaint-detail-content` escrevem "Anônima" em
+vez do nome.
+
+**Mas o nome real viajava assim mesmo.** `ComplaintsRepo.findById` devolvia
+`author: { name }` sem olhar `isAnonymous`, e a página serializa isso no payload
+do React. Medido: uma terceira pessoa logada abrindo um relato anônimo público
+recebia, no HTML, literalmente:
+
+```
+"author":{"name":"Maria Silva"}
+```
+
+A tela escrevia "Autor (anônimo)"; o "ver código-fonte" escrevia o nome.
+
+Corrigido em `findById` e `findByCompany`, que agora seguem a mesma regra que
+`findPublic` já seguia:
+
+```ts
+author: row.complaint.isAnonymous ? null : { name: row.authorName },
+```
+
+Nenhuma tela mudou, porque nenhuma tela mostrava o nome. O que mudou é que a
+proteção deixou de depender de a tela lembrar.
+
+A decisão embutida: **nem a empresa reclamada recebe o nome.** É o que as telas
+dela já diziam, e é a leitura conservadora da promessa. Se a intenção for outra
+— a empresa saber com quem fala, e "publicamente" excluir a empresa —, é decisão
+de produto, não de código, e o texto do formulário precisa mudar junto.
+
+## Visibilidade de anexos — decisão pendente
+
+O que está medido hoje:
+
+| Fato | Situação |
+|---|---|
+| O anexo herda a visibilidade do relato | sim, não há visibilidade própria |
+| Quem alcança um relato público | qualquer pessoa **cadastrada**; não a internet aberta |
+| A autora é avisada antes de enviar | **sim, desde a task `16`** — aviso na etapa 3 do formulário |
+| Anexos gravados no banco hoje | **zero** — o caminho nunca foi exercido com dado real |
+| O arquivo em si é protegido? | **não verificado** — ver abaixo |
+
+O aviso acrescentado ao formulário diz o que é verdade e verificável: quem puder
+ver o relato poderá abrir o anexo, e num relato público isso inclui qualquer
+pessoa cadastrada.
+
+**O que falta decidir, e é decisão humana:** anexo herda a visibilidade do
+relato, ou tem visibilidade própria? Um documento pessoal anexado como prova não
+tem o mesmo regime de uma foto de calçada quebrada.
+
+**O que falta verificar antes de qualquer demonstração pública:** os arquivos vão
+para o UploadThing e são referenciados por URL (`file.ufsUrl`). Não há ACL
+configurada em `api/uploadthing/core.ts`. Se a URL for pública — o padrão do
+serviço —, então o anexo é acessível **sem sessão nenhuma** por quem tiver o
+link, e o portão descrito acima protege só a *lista*, não o *arquivo*. Como não
+existe nenhum anexo gravado, isto não pôde ser medido: exige um upload real.
+
+## O admin da plataforma não vê a área das empresas
+
+Medido na task `11` e confirmado aqui: a conta `ADMIN` recebe 401/403 em todo
+`/api/company/*`. `getCurrentCompanyContext` só olha vínculo em `company_users`,
+e o admin não tem nenhum.
+
+**Isto é intencional e fica registrado como tal.** O admin administra a
+*plataforma* — verifica empresas, publica no blog, lê a auditoria. Ele não é
+supervisor das conversas entre uma mulher e uma empresa. Numa plataforma que
+guarda denúncias identificadas, "o admin vê tudo" é um poder que precisa de
+justificativa, e não existe requisito que peça isso.
+
+Consequência prática, que precisa estar clara para quem for operar: **não há
+como um administrador ler um relato para mediar um conflito.** Se essa
+necessidade aparecer, ela vira requisito novo — com registro em auditoria — e
+não um `||  isAdmin` acrescentado a um `if`.
+
+## Onde a checagem vive — auditoria das 32 rotas
+
+Toda rota de API foi conferida. Nenhuma depende de a interface esconder o botão.
+
+| Grupo | Rotas | Como protege |
+|---|---|---|
+| `/api/admin/*` | 3 | `getCurrentAdminContext()` |
+| `/api/company/*` | 9 | `getCurrentCompanyContext()`, mais `canManageCompany`/`canManageCompanyUsers` onde escreve, mais posse por `companyId` |
+| `/api/complaints*`, `/api/user/*`, `/api/auth/change-password` | 5 | `getSession()` mais posse |
+| `/api/blog/posts*` | 2 | `getSession()` mais consulta a `profiles.role === "ADMIN"` inline |
+| Públicas por design | 10 | ver a tabela mais acima |
+| `/api/uploadthing` | 1 | `.middleware()` do próprio UploadThing, com sessão e papel |
+| `/api/me` | 1 | `getSession()`; devolve 401 sem sessão |
+| `/api/search`, `/api/companies/top`, `/api/companies/[id]/projects` | 3 | públicas; só dado já público |
+
+As quatro Server Actions do repositório (`"use server"`) também foram
+conferidas:
+
+| Ação | Checagem |
+|---|---|
+| `createComplaint` | `getSession()`, e o `authorId` vem da sessão — não do corpo |
+| `completeCompanyOnboarding` | `getSession()`, escreve só sob `session.userId` |
+| `updateProfilePerson` | `getSession()`, escreve só sob `session.userId` |
+| `syncProfileFromOAuth` | **nenhuma** — mas o corpo é `return { success: true }`, sem acesso a dado. É código morto sem chamador; ver pendências |
+
+Nenhuma delas aceita id de recurso vindo do cliente para decidir a quem
+pertence a escrita, que é o erro clássico de Server Action.
+
+### Duplicação que sobrou
+
+A checagem de admin aparece de duas formas: `getCurrentAdminContext()` nos
+`/api/admin/*` e `/api/companies`, e uma consulta inline a `profiles.role` nos
+dois handlers de blog. São quatro trechos equivalentes copiados. Não foram
+unificados aqui de propósito: a task avisa que centralizar guardas é refatoração
+ampla, e a suíte de autorização é a rede que a torna segura de fazer. Fica como
+pendência, não como risco — os quatro trechos estão corretos e cobertos por
+teste.
+
+## Pendências
+
+- [ ] Verificar, com um upload real, se o arquivo no UploadThing é acessível sem
+      sessão. **Antes de qualquer demonstração pública.**
+- [ ] Decidir se anexo herda a visibilidade do relato ou tem a própria — decisão
+      de produto (task `16`, aguardando).
+- [ ] Enumerar `company_users.role` numa migração, em vez de `text` anulável.
+- [ ] Unificar 401 e 403 (task `17`).
+- [ ] Unificar as quatro checagens de admin num helper só.
+- [ ] Remover `syncProfileFromOAuth`, que é Server Action exportada sem chamador.
+- [ ] Decidir o que fazer quando alguém pertencer a duas empresas —
+      `getCurrentCompanyContext` hoje usa a primeira, em silêncio.
