@@ -3,6 +3,10 @@
 Visão humana da fila. A fonte de verdade da execução é [`STATE.json`](STATE.json);
 se os dois divergirem, o JSON vence. Protocolo de execução em [`LOOP.md`](LOOP.md).
 
+> **A fila terminou em 27/08/2026.** O fechamento, com antes e depois medidos,
+> as decisões pendentes e o veredito sobre a defesa, está no
+> [**relatório final**](reports/RELATORIO-FINAL.md).
+
 **Legenda de status:** ⬜ pendente · 🔵 em execução · ✅ feita · ⏭️ pulada (não se
 aplicava) · 🔴 bloqueada
 
@@ -129,7 +133,7 @@ segurança no banco. Plataforma que armazena denúncias identificadas.
 
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
-| ⬜ | `99` | [Relatório final](tasks/99-relatorio-final.md) | nenhum | todas |
+| ✅ | `99` | [Relatório final](tasks/99-relatorio-final.md) | nenhum | todas | **[RELATÓRIO FINAL DA FILA](reports/RELATORIO-FINAL.md)** — 45 tasks, 42 feitas, 1 pulada, 1 bloqueada. 0 → 503 testes; 523 → 0 ocorrências de acessibilidade; LCP da home 7 220 → 848 ms; 15 achados fora do plano, 14 corrigidos |
 
 ---
 

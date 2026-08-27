@@ -28,7 +28,7 @@
     "corrected_by_task": "01",
     "corrected_at": "2026-08-26"
   },
-  "current_task": "99",
+  "current_task": null,
   "tasks": [
     {
       "id": "00",
@@ -567,11 +567,19 @@
       "slug": "relatorio-final",
       "phase": 9,
       "order": 99,
-      "status": "pending",
+      "status": "done",
       "risk": "nenhum",
       "depends_on": [
         "23"
-      ]
+      ],
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 0,
+      "files_changed": [
+        ".claude/fixes/reports/RELATORIO-FINAL.md",
+        ".claude/fixes/INDEX.md"
+      ],
+      "notes": "Fila fechada: 45 tasks, 42 feitas, 1 pulada (04), 1 bloqueada (55). Numeros da tabela antes/depois remedidos ao escrever, nao copiados dos relatorios antigos. Duas ressalvas registradas de proposito: axe nao e conformidade AA, e o baseline de 277 warnings do ESLint contava as worktrees."
     },
     {
       "id": "52",
@@ -1238,6 +1246,13 @@
       "report": "reports/69-schema-e-banco-discordam-do-cnpj.md",
       "detail": "PATCH /api/company/profile com cnpj ou name nulo: 500 -> 400, com o teste falhando pelo motivo certo quando o defeito volta. Defeito irmao em name e no onboarding da empresa corrigido junto. Auditoria schema x information_schema virou script: 13 tabelas, 139 colunas, 0 divergencias. Suite 469, 3 pulados.",
       "commit": "f4577d6"
+    },
+    {
+      "at": "2026-08-27",
+      "task": "99",
+      "event": "done",
+      "report": "reports/RELATORIO-FINAL.md",
+      "detail": "Relatorio final com resumo executivo, antes/depois medido, 45 tasks, bloqueio da 55 com caminho de destravamento, 15 achados novos, 5 decisoes humanas e veredito de prontidao para a defesa. Fila encerrada."
     }
   ]
 }
