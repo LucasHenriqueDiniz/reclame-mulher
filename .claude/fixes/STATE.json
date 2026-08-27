@@ -923,7 +923,8 @@
         "src/components/company/CompanyVerificationPanel.tsx",
         "docs/especificacao-de-telas.md",
         "TODO.md"
-      ]
+      ],
+      "commit": "3390ff1"
     },
     {
       "id": "68",
