@@ -75,6 +75,7 @@ interface ComplaintDetail {
     avgResponseHours: number | null;
   } | null;
   project: { name: string } | null;
+  attachments?: { id: string; filePath: string; fileName: string; contentType?: string | null }[];
 }
 
 interface MessageItem {
@@ -295,6 +296,38 @@ export function ComplaintDetailContent({
                 <p style={{ fontSize: 14, color: S.text, lineHeight: 1.6, margin: 0, whiteSpace: "pre-wrap" }}>
                   {complaint.description}
                 </p>
+                {complaint.attachments != null && complaint.attachments.length > 0 && (
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 14 }}>
+                    {complaint.attachments.map((a) =>
+                      a.contentType?.startsWith("image/") ? (
+                        <a
+                          key={a.id}
+                          href={a.filePath}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ display: "block", borderRadius: 10, overflow: "hidden", border: `1px solid ${S.border}` }}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={a.filePath}
+                            alt={a.fileName}
+                            style={{ width: 140, height: 140, objectFit: "cover", display: "block" }}
+                          />
+                        </a>
+                      ) : (
+                        <a
+                          key={a.id}
+                          href={a.filePath}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ fontSize: 13, color: S.primary, fontWeight: 500 }}
+                        >
+                          📎 {a.fileName}
+                        </a>
+                      )
+                    )}
+                  </div>
+                )}
               </div>
 
               {messages.map((msg) => (

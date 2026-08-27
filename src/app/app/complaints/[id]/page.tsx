@@ -66,7 +66,10 @@ export default async function ComplaintDetailPage({
     }
   }
 
-  const messages = canViewThread ? await MessagesRepo.findByComplaint(id) : [];
+  const [messages, attachments] = await Promise.all([
+    canViewThread ? MessagesRepo.findByComplaint(id) : Promise.resolve([]),
+    ComplaintsRepo.findAttachments(id),
+  ]);
 
   const serialized = {
     id: complaint.id,
@@ -91,6 +94,12 @@ export default async function ComplaintDetailPage({
     companyVerified,
     companyStats,
     project: complaint.project,
+    attachments: attachments.map((a) => ({
+      id: a.id,
+      filePath: a.filePath,
+      fileName: a.fileName,
+      contentType: a.contentType,
+    })),
   };
 
   const serializedMessages = messages.map((m) => ({
