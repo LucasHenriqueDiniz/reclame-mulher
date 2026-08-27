@@ -12,7 +12,7 @@
     "eslint_errors_note": "0 erros apos ignorar .claude/** no eslint.config.mjs (task 01)",
     "eslint_warnings": 0,
     "eslint_top_rules": {},
-    "automated_tests": 300,
+    "automated_tests": 366,
     "pages": 42,
     "api_routes": 32,
     "components": 95,
@@ -324,12 +324,23 @@
       "slug": "responsividade-publicas",
       "phase": 5,
       "order": 14,
-      "status": "pending",
+      "status": "done",
       "risk": "medio",
       "depends_on": [
         "12"
       ],
-      "notes": "conferir visualmente as imagens migradas na task 06: /blog (Image fill), /blog/[slug], /company/[slug] - sao client components, so aparecem apos hidratacao"
+      "notes": "8 de 33 paginas rolavam para o lado em 375px; /companies media 645px de conteudo em 375px de tela. TODO.md dizia VALIDADO EM FASE 3 - falso. Causas: Footer com whitespace-nowrap, PageTabs sem overflow-x-auto, grid do /ajuda sem min-w-0, filtros do /search sem flex-wrap. A home escondia o mesmo defeito com overflow-hidden no main; ao remover, apareceu que a seta do carrossel ficava 22px fora da tela. 66 testes novos travam a regressao nos dois viewports.",
+      "finished_at": "2026-08-27T02:15:00",
+      "debug_iterations": 3,
+      "files_changed": [
+        "e2e/responsive.spec.ts",
+        "src/components/landing/Footer.tsx",
+        "src/components/app/PageTabs.tsx",
+        "src/app/ajuda/page.tsx",
+        "src/app/search/page.tsx",
+        "src/app/page.tsx",
+        "src/components/landing/ProcessCarousel.tsx"
+      ]
     },
     {
       "id": "15",
@@ -340,7 +351,8 @@
       "risk": "medio",
       "depends_on": [
         "14"
-      ]
+      ],
+      "notes": "A metade overflow ja foi fechada pela task 14: e2e/responsive.spec.ts cobre 15 rotas autenticadas e todas passam. Resta o resto do escopo: alvos de toque, menu lateral em celular, formularios longos, e o item do menu hamburguer que ficou aberto no aceite da 14."
     },
     {
       "id": "16",
@@ -412,7 +424,7 @@
       "depends_on": [
         "19"
       ],
-      "notes": "MANUAL_PLATAFORMA.md diz 10MB/50MB de anexo; o codigo usa 3 arquivos x 5MB | MANUAL_PLATAFORMA.md diz 10MB por arquivo e 50MB no total; o codigo faz 3 arquivos de 5MB, PNG/JPG/JPEG/PDF. Medido na task 09. | TODO.md descreve IN_PROGRESS (status inexistente) e GET /api/complaints/[id]/messages (handler inexistente). Medido na task 10. | Acessibilidade medida na task 12: 523 ocorrencias. RELATORIO_CORRECOES_ACESSIBILIDADE.md, STATUS_FINAL_PRODUCAO.md (87,5%) e TODO.md (VALIDADA, WCAG AAA) estao todos errados."
+      "notes": "MANUAL_PLATAFORMA.md diz 10MB/50MB de anexo; o codigo usa 3 arquivos x 5MB | MANUAL_PLATAFORMA.md diz 10MB por arquivo e 50MB no total; o codigo faz 3 arquivos de 5MB, PNG/JPG/JPEG/PDF. Medido na task 09. | TODO.md descreve IN_PROGRESS (status inexistente) e GET /api/complaints/[id]/messages (handler inexistente). Medido na task 10. | Acessibilidade medida na task 12: 523 ocorrencias. RELATORIO_CORRECOES_ACESSIBILIDADE.md, STATUS_FINAL_PRODUCAO.md (87,5%) e TODO.md (VALIDADA, WCAG AAA) estao todos errados. | Responsividade medida na task 14: 8 de 33 paginas quebravam em 375px. TODO.md afirma VALIDADO EM FASE 3, o que e falso; STATUS_FINAL_PRODUCAO.md (5%) estava mais perto."
     },
     {
       "id": "22",
@@ -665,6 +677,13 @@
         "52",
         "53"
       ]
+    },
+    {
+      "task": "14",
+      "at": "2026-08-27",
+      "status": "done",
+      "report": "reports/14-responsividade-publicas.md",
+      "medicao": "8 paginas com overflow -> 0"
     }
   ]
 }

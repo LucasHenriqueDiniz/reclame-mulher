@@ -15,7 +15,11 @@ export default async function HomePage() {
   const stats = await ComplaintsRepo.getPlatformStats();
 
   return (
-    <main id="main-content" className="overflow-hidden">
+    // Sem `overflow-hidden`: ele escondia o estouro do rodapé em vez de
+    // corrigi-lo, e por isso a home passava no teste enquanto todas as outras
+    // páginas com o mesmo rodapé falhavam. Se algo voltar a estourar aqui,
+    // é para aparecer.
+    <main id="main-content">
       <MainHeader />
       <Hero />
       <ImpactStats {...stats} />

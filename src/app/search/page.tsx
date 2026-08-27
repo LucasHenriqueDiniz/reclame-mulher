@@ -149,7 +149,7 @@ function SearchContent() {
                 </div>
 
                 {/* Scope Tabs */}
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   {[
                     { value: "all", label: "Tudo", icon: Search },
                     { value: "companies", label: "Empresas", icon: Building2 },

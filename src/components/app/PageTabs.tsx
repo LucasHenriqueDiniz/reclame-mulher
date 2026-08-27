@@ -42,7 +42,14 @@ export function PageTabs({ tabs, activeTab, variant = "underline", className = "
   }
 
   return (
-    <nav className={`flex items-center gap-1 border-b border-[#E5E5ED] ${className}`}>
+    // A barra de abas não cabe em 375px. Rolagem horizontal é a solução padrão
+    // para abas em celular — o que não pode é empurrar a página inteira.
+    // `tabIndex` porque região rolável precisa ser alcançável por teclado.
+    <nav
+      tabIndex={0}
+      aria-label="Seções desta área"
+      className={`flex items-center gap-1 overflow-x-auto border-b border-[#E5E5ED] ${className}`}
+    >
       {tabs.map((tab) => {
         const isActive = activeTab === tab.key;
         const Icon = tab.icon;
@@ -50,7 +57,7 @@ export function PageTabs({ tabs, activeTab, variant = "underline", className = "
           <Link
             key={tab.key}
             href={tab.href}
-            className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
+            className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap px-4 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
               isActive
                 ? "border-[#1565C0] text-[#1565C0]"
                 : "border-transparent text-[#546E7A] hover:text-[#2A3F54]"

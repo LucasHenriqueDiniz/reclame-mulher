@@ -88,7 +88,7 @@ mobile.
 
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
-| ⬜ | `14` | [Páginas públicas em 375px](tasks/14-responsividade-publicas.md) | médio | `12` |
+| ✅ | `14` | [Páginas públicas em 375px](tasks/14-responsividade-publicas.md) | médio | `12` |
 | ⬜ | `15` | [Áreas autenticadas em 375px](tasks/15-responsividade-autenticadas.md) | médio | `14` |
 
 ---

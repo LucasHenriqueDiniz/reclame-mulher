@@ -153,7 +153,7 @@ export function ProcessCarousel() {
           <button
             onClick={prevStep}
             disabled={currentStep === 0}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 md:-translate-x-16 z-10
+            className="absolute left-0 top-1/2 -translate-y-1/2 sm:-translate-x-12 md:-translate-x-16 z-10
                      w-10 h-10 md:w-12 md:h-12 rounded-full
                      bg-white border border-border shadow-lg
                      flex items-center justify-center
@@ -262,7 +262,7 @@ export function ProcessCarousel() {
           <button
             onClick={nextStep}
             disabled={currentStep === steps.length - 1}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 md:translate-x-16 z-10
+            className="absolute right-0 top-1/2 -translate-y-1/2 sm:translate-x-12 md:translate-x-16 z-10
                      w-10 h-10 md:w-12 md:h-12 rounded-full
                      bg-white border border-border shadow-lg
                      flex items-center justify-center

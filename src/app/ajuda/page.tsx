@@ -93,9 +93,12 @@ export default function AjudaPage() {
           </p>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
+        {/* `min-w-0` nas colunas: sem isso o `min-width: auto` do grid deixa a
+            faixa crescer até o min-content do conteúdo mais largo e empurra a
+            página inteira — foram 26px em 375px. */}
+        <div className="grid min-w-0 gap-8 lg:grid-cols-[1fr_380px]">
           {/* Left column — Quick links + info */}
-          <div className="space-y-8">
+          <div className="min-w-0 space-y-8">
             <Card className="border-0 shadow-md">
               <CardHeader>
                 <CardTitle className="font-['Poppins'] text-xl text-[#2A3F54]">
@@ -143,7 +146,7 @@ export default function AjudaPage() {
           </div>
 
           {/* Right column — Test users */}
-          <div>
+          <div className="min-w-0">
             <Card className="border-0 shadow-md">
               <CardHeader>
                 <CardTitle className="font-['Poppins'] text-xl text-[#2A3F54]">

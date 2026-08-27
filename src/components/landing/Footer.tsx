@@ -21,13 +21,15 @@ export function Footer() {
 
   return (
     <footer className="flex flex-col w-full items-start gap-[35px] px-6 md:px-[115px] py-[62px] bg-white">
-      <div className="flex flex-wrap w-full items-center gap-4">
-        <div className="inline-flex gap-4 items-center">
+      <div className="flex flex-col md:flex-row flex-wrap w-full items-start md:items-center gap-4">
+        {/* Em 375px isto precisa empilhar: com `inline-flex` e `whitespace-nowrap`
+            a linha de copyright sozinha media 645px e empurrava a página inteira. */}
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-center">
           <div className="font-bold text-[#190E4F] text-2xl tracking-[-0.29px] leading-[normal]">
             ComunicaMulher
           </div>
 
-          <div className="font-normal text-[#190E4F] text-base tracking-[0] leading-[26px] whitespace-nowrap">
+          <div className="font-normal text-[#190E4F] text-base tracking-[0] leading-[26px]">
             <span className="font-normal text-[#1e0d62] text-base tracking-[0] leading-[26px]">
               © {currentYear}{" "}
             </span>
@@ -38,7 +40,10 @@ export function Footer() {
           </div>
         </div>
 
-        <nav className="flex items-center justify-center gap-[35px] flex-1" aria-label="Footer navigation">
+        <nav
+          className="flex flex-wrap items-center gap-x-6 gap-y-2 md:justify-center md:gap-[35px] md:flex-1"
+          aria-label="Navegação do rodapé"
+        >
           {navigationLinks.map((link, index) => (
             <Link
               key={index}
