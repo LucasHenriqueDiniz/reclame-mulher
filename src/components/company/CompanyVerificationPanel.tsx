@@ -75,8 +75,8 @@ export function CompanyVerificationPanel({
             Verificação em análise
           </div>
           <div style={{ fontSize: 14, color: S.muted }}>
-            Nossa equipe está analisando sua solicitação. Você será notificado
-            por e-mail.
+            Nossa equipe está analisando sua solicitação. Nesta versão não sai
+            aviso por e-mail — volte a esta tela para ver o resultado.
           </div>
         </div>
       )}

@@ -88,7 +88,6 @@ const ROTAS: Rota[] = [
   { caminho: (ids) => `/company/${ids.empresaSlug}`, papel: "publico" },
   { caminho: "/login", papel: "publico" },
   { caminho: "/register", papel: "publico" },
-  { caminho: "/register/success", papel: "publico" },
   { caminho: "/search", papel: "publico" },
   { caminho: "/privacy", papel: "publico" },
   { caminho: "/terms", papel: "publico" },
@@ -97,8 +96,8 @@ const ROTAS: Rota[] = [
   { caminho: "/onboarding/person/step2", papel: "publico" },
   { caminho: "/onboarding/company/step1", papel: "publico" },
   { caminho: "/onboarding/company/step2", papel: "publico" },
-  { caminho: "/auth/verify", papel: "publico" },
-  { caminho: "/auth/verify/check-email", papel: "publico" },
+  // As telas /register/success e /auth/verify saíram na task 61: nada as
+  // linkava e as três falavam de um e-mail que a plataforma não envia.
 
   // ------------------------------------------------------ área da usuária
   { caminho: "/app/complaints", papel: "pessoa" },

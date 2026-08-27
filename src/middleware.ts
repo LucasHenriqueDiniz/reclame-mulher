@@ -59,7 +59,7 @@ function matches(pathname: string, routes: string[]): boolean {
     // "/" é a home, e só ela — sem este caso, o startsWith abaixo casaria com
     // qualquer caminho e deixaria o site inteiro público.
     if (route === "/") return pathname === "/";
-    // Rota terminada em "/" é prefixo ("/auth/" cobre "/auth/verify").
+    // Rota terminada em "/" é prefixo ("/auth/" cobre "/auth/callback").
     if (route.endsWith("/")) return pathname.startsWith(route);
     // As demais casam exatamente, ou como segmento inteiro.
     return pathname === route || pathname.startsWith(`${route}/`);

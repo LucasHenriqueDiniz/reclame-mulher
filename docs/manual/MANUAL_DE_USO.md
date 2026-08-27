@@ -473,6 +473,7 @@ Lista honesta, para você não perder tempo procurando:
 | Não faz | O que isso significa na prática |
 |---|---|
 | **Não envia e-mail** | Nenhum: nem confirmação de cadastro, nem aviso de resposta, nem recuperação de senha. Você precisa entrar e olhar |
+| **Não confere se o e-mail é seu** | O endereço serve para você entrar e para a empresa te achar no relato. Ninguém confirma que ele existe ou que é seu |
 | **Não recupera senha esquecida** | Não há tela de recuperação; só quem administra a plataforma devolve o acesso |
 | **Não reabre relato resolvido** | Sua resposta é registrada, mas a etiqueta não muda |
 | **Não tem canal de atendimento** | Não há telefone, e-mail ou chat de suporte |

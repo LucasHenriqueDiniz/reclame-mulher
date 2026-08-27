@@ -31,14 +31,12 @@ const PUBLICAS = [
   "/terms",
   "/login",
   "/register",
-  "/register/success",
   "/onboarding/role",
   "/onboarding/person/step1",
   "/onboarding/person/step2",
   "/onboarding/company/step1",
   "/onboarding/company/step2",
-  "/auth/verify",
-  "/auth/verify/check-email",
+  // /register/success e /auth/verify saíram na task 61 — ver a11y.spec.ts.
 ];
 
 const AUTENTICADAS: Array<{ caminho: string; papel: Papel }> = [

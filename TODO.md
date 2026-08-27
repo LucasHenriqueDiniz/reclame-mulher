@@ -44,8 +44,14 @@ fazer.
       quantas vezes quiser), e qualquer um dos caminhos mexe na **taxa de
       resolução que aparece no perfil público**.
 - [ ] **Decidir sobre e-mail** — [`61`](.claude/fixes/tasks/61-email-nao-existe.md).
-      Existem quatro modelos HTML e nenhum envio. Ou se implementa, ou se assume
-      e se documenta que a plataforma não manda e-mail.
+      Existem quatro modelos HTML e nenhum envio. A parte que não dependia de
+      decisão já foi feita: **nenhuma tela promete mais e-mail**, e o manual diz
+      que a plataforma não envia nem confere endereço
+      ([relatório](.claude/fixes/reports/61-email-nao-existe.md)). O que falta é
+      a escolha: implementar verificação de cadastro e recuperação de senha
+      (que é o que destrava a task `59`), implementar também o aviso de nova
+      mensagem — o de maior valor para quem usa — ou assumir que a versão não
+      manda e-mail e parar por aqui.
 - [ ] **Decidir a visibilidade dos anexos.** Vão para o UploadThing sem ACL:
       quem tiver a URL abre o arquivo. Ver "Visibilidade de anexos" em
       [`docs/autorizacao.md`](docs/autorizacao.md).
