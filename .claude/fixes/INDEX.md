@@ -64,7 +64,7 @@ ESLint varria as worktrees. Depois de corrigir o escopo e limpar o que restava:
 | ✅ | `07` | [Montar infraestrutura de testes automatizados](tasks/07-infra-de-testes.md) | médio | `03` |
 | ✅ | `08` | [E2E — autenticação nos três perfis](tasks/08-e2e-autenticacao.md) | baixo | `07` |
 | ✅ | `09` | [E2E — criação de reclamação (wizard de 4 etapas)](tasks/09-e2e-nova-reclamacao.md) | baixo | `08` |
-| ⬜ | `10` | [E2E — resposta da empresa e transições de status](tasks/10-e2e-resposta-empresa.md) | baixo | `09` |
+| ✅ | `10` | [E2E — resposta da empresa e transições de status](tasks/10-e2e-resposta-empresa.md) | baixo | `09` |
 | ⬜ | `11` | [Testes de autorização das 32 rotas de API](tasks/11-testes-api-autorizacao.md) | baixo | `10` |
 
 ---
@@ -144,6 +144,8 @@ criar deve registrar aqui e em `STATE.json`.
 | ✅ | `51` | [Rate limiter em memória com bucket compartilhado](tasks/51-rate-limit-em-memoria.md) | médio | `00` | `getClientIp` colapsa em `"unknown"`; conta login bem-sucedido |
 | ⬜ | `52` | [Etapas do wizard fora de tela continuam focáveis](tasks/52-etapas-fora-de-tela-focaveis.md) | médio | `09` | achado na `09`: 11 controles das etapas 2–4 focáveis estando na etapa 1, sem `aria-hidden` nem `inert` |
 | ⬜ | `53` | [Selects do wizard sem rótulo associado](tasks/53-selects-sem-rotulo-associado.md) | baixo | `09` | achado na `09`: `<label for>` aponta para id que o Radix nunca aplica — 3 combobox sem nome acessível |
+| ⬜ | `54` | [Rótulos de status divergentes](tasks/54-rotulos-de-status-divergentes.md) | baixo | `10` | achado na `10`: quatro mapas de rótulo que discordam — "Em réplica" na lista vs "Respondida" no detalhe, "Concluído" para a usuária vs "Resolvida" para a empresa |
+| ⬜ | `55` | [Resolvida não reabre](tasks/55-resolvido-nao-reabre.md) | **alto** | `10` | achado na `10`: depois de `RESOLVED` a resposta da autora é gravada mas o status não muda — ela não consegue contestar o encerramento |
 
 **Ordem revisada pela task `00`:** `01` → `02` → `03` → **`50`** → `07` → …
 A `50` sobe na fila por ser defeito confirmado, e cabe antes dos testes para que

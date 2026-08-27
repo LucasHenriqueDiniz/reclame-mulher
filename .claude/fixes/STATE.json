@@ -12,7 +12,7 @@
     "eslint_errors_note": "0 erros apos ignorar .claude/** no eslint.config.mjs (task 01)",
     "eslint_warnings": 0,
     "eslint_top_rules": {},
-    "automated_tests": 130,
+    "automated_tests": 148,
     "pages": 42,
     "api_routes": 32,
     "components": 95,
@@ -243,12 +243,18 @@
       "slug": "e2e-resposta-empresa",
       "phase": 3,
       "order": 10,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [
         "09"
       ],
-      "notes": "status reais no codigo: OPEN, RESPONDED, RESOLVED, CANCELLED (TODO.md esta errado)"
+      "notes": "18 testes novos. TODO.md errado: IN_PROGRESS nao existe e GET /api/complaints/[id]/messages nunca foi escrito. Maquina real: empresa responde -> RESPONDED; usuaria responde em RESPONDED -> OPEN; em qualquer outro status nao muda nada. Privacidade passou inteira (privado 404/403, publico abre sem a conversa, empresa nao alcanca relato de outra empresa). Achados 54 e 55 abertos.",
+      "finished_at": "2026-08-26T23:55:00",
+      "debug_iterations": 0,
+      "files_changed": [
+        "e2e/complaint-response.spec.ts",
+        "e2e/fixtures/complaints.ts"
+      ]
     },
     {
       "id": "11",
@@ -377,7 +383,7 @@
       "depends_on": [
         "19"
       ],
-      "notes": "MANUAL_PLATAFORMA.md diz 10MB/50MB de anexo; o codigo usa 3 arquivos x 5MB | MANUAL_PLATAFORMA.md diz 10MB por arquivo e 50MB no total; o codigo faz 3 arquivos de 5MB, PNG/JPG/JPEG/PDF. Medido na task 09."
+      "notes": "MANUAL_PLATAFORMA.md diz 10MB/50MB de anexo; o codigo usa 3 arquivos x 5MB | MANUAL_PLATAFORMA.md diz 10MB por arquivo e 50MB no total; o codigo faz 3 arquivos de 5MB, PNG/JPG/JPEG/PDF. Medido na task 09. | TODO.md descreve IN_PROGRESS (status inexistente) e GET /api/complaints/[id]/messages (handler inexistente). Medido na task 10."
     },
     {
       "id": "22",
@@ -437,6 +443,34 @@
       "risk": "baixo",
       "depends_on": [],
       "notes": "Achado na task 09. ComplaintField gera <label for> mas o Radix SelectTrigger nao recebe o id: 3 rotulos orfaos e 3 combobox sem nome acessivel na etapa 4.",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "54",
+      "slug": "rotulos-de-status-divergentes",
+      "phase": 2,
+      "order": 54,
+      "status": "pending",
+      "risk": "baixo",
+      "depends_on": [],
+      "notes": "Achado na task 10. Quatro mapas de rotulo de status que discordam: RESPONDED e \"Em replica\" na listagem e \"Respondida\" no detalhe; RESOLVED e \"Concluido\" para a usuaria e \"Resolvida\" para a empresa. lib/constants/complaint-status.ts existe para isso e nao e usado em toda parte.",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "55",
+      "slug": "resolvido-nao-reabre",
+      "phase": 6,
+      "order": 55,
+      "status": "pending",
+      "risk": "alto",
+      "depends_on": [],
+      "notes": "Achado na task 10. Depois de RESOLVED a resposta da usuaria e gravada mas o status nao muda: ela nao consegue contestar o encerramento. Contraria o TODO.md. Precisa de decisao da Paloma entre reabrir sempre, criar REOPENED ou exigir confirmacao da autora.",
       "started_at": null,
       "finished_at": null,
       "debug_iterations": 0,
@@ -549,6 +583,16 @@
       "achados_abertos": [
         "52",
         "53"
+      ]
+    },
+    {
+      "task": "10",
+      "at": "2026-08-26",
+      "status": "done",
+      "report": "reports/10-e2e-resposta-empresa.md",
+      "achados_abertos": [
+        "54",
+        "55"
       ]
     }
   ]
