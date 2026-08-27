@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import Image from "next/image";
 import { MapPin, BarChart3, FileText } from "lucide-react";
 import { companyTheme as S } from "./theme";
 import type { CompanyBase } from "./utils";
@@ -69,9 +70,11 @@ export function CompanyProfileHero({
             }}
           >
             {company.logoUrl ? (
-              <img
+              <Image
                 src={company.logoUrl}
                 alt=""
+                width={72}
+                height={72}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             ) : (

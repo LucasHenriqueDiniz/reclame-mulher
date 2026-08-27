@@ -10,10 +10,8 @@
     "typescript_errors": 0,
     "eslint_errors": 0,
     "eslint_errors_note": "0 erros apos ignorar .claude/** no eslint.config.mjs (task 01)",
-    "eslint_warnings": 7,
-    "eslint_top_rules": {
-      "@next/next/no-img-element": 7
-    },
+    "eslint_warnings": 0,
+    "eslint_top_rules": {},
     "automated_tests": 0,
     "pages": 42,
     "api_routes": 32,
@@ -177,12 +175,15 @@
       "slug": "next-image",
       "phase": 2,
       "order": 6,
-      "status": "pending",
+      "status": "done",
       "risk": "medio",
       "depends_on": [
         "05"
       ],
-      "notes": "7 ocorrencias reais (nao 42)"
+      "notes": "5 migradas, 2 excecoes documentadas. eslint . = 0 problemas. PENDENTE: prova visual (navegador recusa localhost + 4 dos 5 arquivos sao client components); fecha na task 14.",
+      "started_at": "2026-08-26T22:33:00",
+      "finished_at": "2026-08-26T22:52:00",
+      "debug_iterations": 1
     },
     {
       "id": "07",
@@ -274,7 +275,8 @@
       "risk": "medio",
       "depends_on": [
         "12"
-      ]
+      ],
+      "notes": "conferir visualmente as imagens migradas na task 06: /blog (Image fill), /blog/[slug], /company/[slug] - sao client components, so aparecem apos hidratacao"
     },
     {
       "id": "15",
@@ -331,7 +333,8 @@
       "risk": "baixo",
       "depends_on": [
         "18"
-      ]
+      ],
+      "notes": "next.config.ts tem images.unoptimized=true: next/image NAO otimiza. Decidir se remove antes de medir LCP/banda"
     },
     {
       "id": "20",
@@ -342,7 +345,8 @@
       "risk": "medio",
       "depends_on": [
         "18"
-      ]
+      ],
+      "notes": "decidir sobre images.unoptimized=true - depende do alvo de deploy ter otimizador em runtime"
     },
     {
       "id": "21",
@@ -377,7 +381,8 @@
       "risk": "baixo",
       "depends_on": [
         "22"
-      ]
+      ],
+      "notes": "seed precisa de logoUrl nas empresas: hoje as 2 tem NULL e os componentes de logo caem no fallback da letra"
     },
     {
       "id": "99",
@@ -468,6 +473,13 @@
       "at": "2026-08-26",
       "status": "done",
       "report": "reports/05-lint-unused-vars.md"
+    },
+    {
+      "task": "06",
+      "at": "2026-08-26",
+      "status": "done",
+      "report": "reports/06-next-image.md",
+      "pending": "prova visual -> task 14"
     }
   ]
 }

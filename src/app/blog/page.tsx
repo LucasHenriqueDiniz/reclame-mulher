@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { MainHeader } from "@/components/layout/MainHeader";
 import { Footer } from "@/components/landing/Footer";
@@ -113,10 +114,13 @@ export default function BlogPage() {
         {featuredPost && (
           <div className="flex flex-col items-start self-stretch relative pb-[104px] mb-20">
             <div className="relative w-full h-[600px] rounded-2xl overflow-hidden shadow-2xl">
-              <img
+              <Image
                 src={featuredPost.coverUrl || "/blog-image.webp"}
                 alt={featuredPost.title}
-                className="w-full h-full object-cover"
+                fill
+                sizes="100vw"
+                priority
+                className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
             </div>

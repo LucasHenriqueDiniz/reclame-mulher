@@ -559,6 +559,11 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ slug: s
                   <div className="space-y-3">
                     {featuredImage && (
                       <div className="border-2 border-[#1E88E5] rounded-xl p-2">
+                        {/* featuredImage vem de um Input livre: a autora cola
+                            qualquer URL. next/image lancaria erro em runtime
+                            para host fora de remotePatterns, quebrando o
+                            preview justamente enquanto ela digita. */}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={featuredImage}
                           alt="Preview"

@@ -34,15 +34,22 @@ posterior fica atômico.
 
 ## Fase 2 — Qualidade de código
 
-~~281 problemas de lint.~~ **Corrigido pela task `01`:** o número estava inflado
-porque o ESLint varria as worktrees. O real é **0 erros e 45 warnings** — 38 de
-`no-unused-vars` e 7 de `no-img-element`. A fase ficou bem menor.
+**Fase concluída.** O número inicial (281 problemas) estava inflado porque o
+ESLint varria as worktrees. Depois de corrigir o escopo e limpar o que restava:
+**`npx eslint .` reporta 0 problemas no repositório inteiro.**
+
+| Momento | Erros | Warnings |
+|---|---|---|
+| Início | 4 | 277 |
+| Após `01` | 0 | 45 |
+| Após `05` | 0 | 7 |
+| Após `06` | **0** | **0** |
 
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
 | ⏭️ | `04` | [Zerar os erros de ESLint em `src/`](tasks/04-lint-erros.md) — *sem objeto: os 4 erros eram de um arquivo que só existia na worktree removida* | baixo | `03` |
 | ✅ | `05` | [Remover código morto — 38 warnings de `no-unused-vars`](tasks/05-lint-unused-vars.md) | baixo | `04` |
-| ⬜ | `06` | [Migrar `<img>` para `next/image` (7 ocorrências)](tasks/06-next-image.md) | médio | `05` |
+| ✅ | `06` | [Migrar `<img>` para `next/image` (7 ocorrências)](tasks/06-next-image.md) | médio | `05` |
 
 ---
 

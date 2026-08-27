@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Image from "next/image";
 import {
   MessageCircle,
   BarChart3,
@@ -101,7 +102,7 @@ function CompanyHero({
           {/* Avatar */}
           <div className="w-[72px] h-[72px] rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center text-white text-[28px] font-bold flex-shrink-0 overflow-hidden">
             {company.logoUrl ? (
-              <img src={String(company.logoUrl)} alt="" className="w-full h-full object-cover" />
+              <Image src={String(company.logoUrl)} alt="" width={72} height={72} className="w-full h-full object-cover" />
             ) : (
               String(company.name ?? "E").charAt(0).toUpperCase()
             )}

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { use, useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MainHeader } from "@/components/layout/MainHeader";
@@ -160,9 +161,12 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
           {/* Featured Image */}
           {post.coverUrl && (
             <div className="mb-12 rounded-2xl overflow-hidden shadow-lg">
-              <img
+              <Image
                 src={post.coverUrl}
                 alt={post.title}
+                width={1200}
+                height={400}
+                priority
                 className="w-full h-[400px] object-cover"
               />
             </div>
@@ -201,7 +205,12 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                     {children}
                   </a>
                 ),
+                // Conteudo do post e markdown livre: a URL pode ser de qualquer
+                // host e a dimensao e desconhecida em tempo de build. next/image
+                // exigiria remotePatterns para cada dominio possivel e lancaria
+                // erro em runtime para os nao listados.
                 img: ({ src, alt }) => (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img src={src} alt={alt || ""} className="w-full rounded-xl my-8" />
                 ),
               }}

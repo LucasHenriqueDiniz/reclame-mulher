@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { MapPin, PlusSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -50,9 +51,11 @@ export function ProfileHero({
       {/* Avatar - overlapping banner */}
       <div className="absolute top-[58px] left-[43px] w-[137px] h-[137px] rounded-full border-4 border-white overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm bg-[#1E88E5]">
         {avatarUrl ? (
-          <img
+          <Image
             src={avatarUrl}
             alt={name || "U"}
+            width={137}
+            height={137}
             className="w-full h-full object-cover"
           />
         ) : (
