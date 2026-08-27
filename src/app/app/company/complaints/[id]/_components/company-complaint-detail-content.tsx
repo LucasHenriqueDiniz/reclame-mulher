@@ -479,20 +479,24 @@ export function CompanyComplaintDetailContent({
             </CardContent>
           </Card>
 
-          {/* Card Criar relato */}
-          <Card className="border-0 shadow-md">
-            <CardContent className="p-6">
-              <p className="text-sm text-[#2A3F54] mb-4">
-                Está querendo fazer um relato sobre <strong>{complaint.company.name ?? "esta empresa"}</strong>?
-              </p>
-              <Link href={`/app/complaints/new?company=${complaint.company.name}`}>
-                <Button className="w-full bg-[#1565C0] hover:bg-[#0D47A1] gap-2">
-                  <MessageCircle className="w-4 h-4" />
-                  Criar um relato
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
+          {/*
+            Aqui havia um cartão "Está querendo fazer um relato sobre
+            Construtora X?", com botão. Ele foi removido na task `57`, por dois
+            motivos que se somam.
+
+            Primeiro, o público. Esta página só abre para a empresa dona do
+            relato — `page.tsx` devolve 404 quando `complaint.companyId` não
+            bate com o da sessão. O cartão convidava a empresa a reclamar de si
+            mesma, sempre, sem exceção. A regra certa já existia em
+            `company-profile-content.tsx`, que só monta o convite quando
+            `!isMember`; esta tela não tem `isMember` porque aqui *todo mundo*
+            é membro.
+
+            Segundo, o link estava quebrado. Ele montava
+            `complaints/new?company=` com o **nome** da empresa, e o assistente
+            espera o **id** — era o único dos seis lugares fora do padrão, e o
+            assistente abria sem empresa escolhida.
+          */}
 
           {/* Ações da empresa */}
           <Card className="border-0 shadow-md">

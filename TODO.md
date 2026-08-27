@@ -54,8 +54,6 @@ fazer.
 
 Encontrados durante a fila de correções, cada um com investigação escrita.
 
-- [ ] [`57`](.claude/fixes/tasks/57-cta-de-relato-na-tela-da-empresa.md) — o CTA
-      de relato passa o nome da empresa em vez do id.
 - [ ] [`58`](.claude/fixes/tasks/58-api-me-401-em-toda-pagina.md) — `/api/me`
       devolve 401 em toda página anônima, poluindo o console.
 - [ ] [`59`](.claude/fixes/tasks/59-esqueceu-a-senha-nao-existe.md) —
@@ -129,6 +127,11 @@ alguém": é feito segundo um número que dá para reproduzir.
       que ela **apagava o resto do cadastro** numa atualização parcial;
       corrigido junto. Ver
       [`56`](.claude/fixes/reports/56-conta-empresa-do-seed-e-member.md).
+- [x] **A empresa não é mais convidada a reclamar de si mesma** — a tela do
+      relato visto pela empresa mostrava "Está querendo fazer um relato sobre
+      Construtora X?", com um botão cujo link ainda estava quebrado. Aquela
+      página só abre para a própria empresa. Ver
+      [`57`](.claude/fixes/reports/57-cta-de-relato-na-tela-da-empresa.md).
 - [x] **ESLint zerado** — de 4 erros e 277 avisos para 0 e 0.
 - [x] **Suíte de testes existe** — 458 testes: 18 de unidade, 362 de ponta a
       ponta, 78 de acessibilidade. Antes: nenhum.

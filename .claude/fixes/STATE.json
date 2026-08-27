@@ -677,14 +677,20 @@
       "slug": "cta-de-relato-na-tela-da-empresa",
       "phase": 5,
       "order": 57,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [],
-      "notes": "Achado na task 15. company-complaint-detail-content.tsx:515 monta /app/complaints/new?company= com o NOME da empresa; os outros cinco call sites passam id. Alem disso o card aparece para a propria empresa, convidando-a a reclamar de si mesma; a regra !isMember ja existe em company-profile-content.tsx:568.",
-      "started_at": null,
-      "finished_at": null,
+      "notes": "Os dois problemas da task eram o mesmo visto de dois angulos. page.tsx:31 devolve notFound() quando complaint.companyId nao bate com o da sessao: a pagina SO abre para a empresa dona do relato - nao ha visitante, nao ha autora, e o admin da plataforma nem enxerga a area da empresa. Entao o cartao era, em 100% dos carregamentos, convite para a empresa reclamar de si mesma, e consertar o link seria consertar o destino de um botao que ninguem deveria ver. Cartao removido, com o porque registrado no lugar. NAO copiei o !isMember do perfil publico: aqui nao existe isMember porque todo mundo e membro, e condicao sempre verdadeira e pior que nenhuma - parece que alguem pensou no caso. Dois testes novos: um exige zero links para /app/complaints/new na tela da empresa (conferindo antes que a tela certa carregou, senao pagina em branco passaria), outro cobre o criterio 1 POR COMPORTAMENTO e nao por grep - colhe os convites do perfil publico e exige UUID em company=. Mutacao verificada. MANUAL: o cartao aparecia na figura 62; refiz capturas e HTML. Mudaram 23 das 34 imagens, e nao as 2 esperadas - a razao nao e esta task: o db:seed da 56 gerou UUIDs novos e todo numero de relato impresso mudou. Suite: 469 -> 473.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
       "debug_iterations": 0,
-      "files_changed": []
+      "files_changed": [
+        "src/app/app/company/complaints/[id]/_components/company-complaint-detail-content.tsx",
+        "e2e/convite-de-relato.spec.ts (novo)",
+        "docs/manual/MANUAL_DE_USO.html",
+        "docs/manual/img/ (23 das 34 capturas)",
+        "TODO.md"
+      ]
     },
     {
       "id": "58",
@@ -1043,6 +1049,13 @@
       "event": "done",
       "report": "reports/56-conta-empresa-do-seed-e-member.md",
       "detail": "Seed com MEMBER e OWNER separados, mais OWNER numa segunda empresa. A primeira chamada de PATCH /api/company/profile por uma OWNER devolveu 500 e revelou perda de dado em atualizacao parcial. Suite 461 -> 469."
+    },
+    {
+      "at": "2026-08-27",
+      "task": "57",
+      "event": "done",
+      "report": "reports/57-cta-de-relato-na-tela-da-empresa.md",
+      "detail": "Cartao que convidava a empresa a reclamar de si mesma removido; a pagina so abre para ela. Suite 469 -> 473. Manual refeito."
     }
   ]
 }
