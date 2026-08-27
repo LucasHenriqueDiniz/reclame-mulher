@@ -1,0 +1,146 @@
+# INDEX — Catálogo de Tasks
+
+Visão humana da fila. A fonte de verdade da execução é [`STATE.json`](STATE.json);
+se os dois divergirem, o JSON vence. Protocolo de execução em [`LOOP.md`](LOOP.md).
+
+**Legenda de status:** ⬜ pendente · 🔵 em execução · ✅ feita · ⏭️ pulada (não se
+aplicava) · 🔴 bloqueada
+
+---
+
+## Fase 0 — Investigação
+
+Existe porque a documentação do repo se contradiz e **nenhum documento existente
+pode ser usado como fonte de verdade**. Nada de código muda aqui.
+
+| | ID | Task | Risco | Depende de |
+|---|---|---|---|---|
+| ⬜ | `00` | [Investigação — retrato real do projeto](tasks/00-investigacao.md) | baixo | — |
+
+---
+
+## Fase 1 — Base
+
+Deixar o terreno limpo antes de mexer em código. Sem isso, nenhum commit
+posterior fica atômico.
+
+| | ID | Task | Risco | Depende de |
+|---|---|---|---|---|
+| ⬜ | `01` | [Higiene do repositório — worktrees stale e arquivos não ignorados](tasks/01-higiene-repositorio.md) | médio | `00` |
+| ⬜ | `02` | [Criar scripts de verificação (typecheck, lint:fix, check)](tasks/02-scripts-de-verificacao.md) | baixo | `01` |
+| ⬜ | `03` | [Triagem do trabalho não commitado](tasks/03-triagem-trabalho-nao-commitado.md) | **alto** | `02` |
+
+---
+
+## Fase 2 — Qualidade de código
+
+281 problemas de lint. Enquanto o ruído existir, erro de verdade fica escondido.
+
+| | ID | Task | Risco | Depende de |
+|---|---|---|---|---|
+| ⬜ | `04` | [Zerar os erros de ESLint em `src/`](tasks/04-lint-erros.md) | baixo | `03` |
+| ⬜ | `05` | [Remover código morto — 235 warnings de `no-unused-vars`](tasks/05-lint-unused-vars.md) | baixo | `04` |
+| ⬜ | `06` | [Migrar `<img>` para `next/image` (42 ocorrências)](tasks/06-next-image.md) | médio | `05` |
+
+---
+
+## Fase 3 — Testes
+
+**A maior lacuna real do projeto.** Zero testes automatizados, apesar de vários
+relatórios afirmarem "E2E validado".
+
+| | ID | Task | Risco | Depende de |
+|---|---|---|---|---|
+| ⬜ | `07` | [Montar infraestrutura de testes automatizados](tasks/07-infra-de-testes.md) | médio | `03` |
+| ⬜ | `08` | [E2E — autenticação nos três perfis](tasks/08-e2e-autenticacao.md) | baixo | `07` |
+| ⬜ | `09` | [E2E — criação de reclamação (wizard de 4 etapas)](tasks/09-e2e-nova-reclamacao.md) | baixo | `08` |
+| ⬜ | `10` | [E2E — resposta da empresa e transições de status](tasks/10-e2e-resposta-empresa.md) | baixo | `09` |
+| ⬜ | `11` | [Testes de autorização das 32 rotas de API](tasks/11-testes-api-autorizacao.md) | baixo | `10` |
+
+---
+
+## Fase 4 — Acessibilidade
+
+Tema central desta plataforma. Auditoria original cobriu 6 páginas de 42, e os
+documentos discordam entre 87,5% e "validada".
+
+| | ID | Task | Risco | Depende de |
+|---|---|---|---|---|
+| ⬜ | `12` | [Varredura automatizada (axe) nas 42 páginas](tasks/12-varredura-acessibilidade.md) | baixo | `07` |
+| ⬜ | `13` | [Corrigir as violações encontradas](tasks/13-corrigir-acessibilidade.md) | médio | `12` |
+
+---
+
+## Fase 5 — Responsividade
+
+Contradição direta entre documentos: 5% versus validada. Público majoritariamente
+mobile.
+
+| | ID | Task | Risco | Depende de |
+|---|---|---|---|---|
+| ⬜ | `14` | [Páginas públicas em 375px](tasks/14-responsividade-publicas.md) | médio | `12` |
+| ⬜ | `15` | [Áreas autenticadas em 375px](tasks/15-responsividade-autenticadas.md) | médio | `14` |
+
+---
+
+## Fase 6 — Segurança e dados
+
+Auth própria **sem RLS**: toda proteção é código de aplicação, sem rede de
+segurança no banco. Plataforma que armazena denúncias identificadas.
+
+| | ID | Task | Risco | Depende de |
+|---|---|---|---|---|
+| ⬜ | `16` | [Documentar e endurecer o modelo de autorização](tasks/16-modelo-autorizacao.md) | **alto** | `11` |
+| ⬜ | `17` | [Padronizar validação de entrada e retorno de erro](tasks/17-validacao-e-erros.md) | médio | `16` |
+
+---
+
+## Fase 7 — Build e produção
+
+| | ID | Task | Risco | Depende de |
+|---|---|---|---|---|
+| ⬜ | `18` | [Build de produção limpo e reprodutível](tasks/18-build-producao.md) | médio | `17` |
+| ⬜ | `19` | [Core Web Vitals das rotas principais](tasks/19-performance.md) | baixo | `18` |
+| ⬜ | `20` | [Ambiente, variáveis e prontidão para deploy](tasks/20-ambiente-e-deploy.md) | médio | `18` |
+
+---
+
+## Fase 8 — Documentação e dissertação
+
+| | ID | Task | Risco | Depende de |
+|---|---|---|---|---|
+| ⬜ | `21` | [Consolidar a documentação contraditória da raiz](tasks/21-consolidar-documentacao.md) | baixo | `19` |
+| ⬜ | `22` | [**Manual de Uso** — produto da dissertação](tasks/22-manual-de-uso.md) | baixo | `15`, `21` |
+| ⬜ | `23` | [Checklist de prontidão para a demonstração da defesa](tasks/23-checklist-defesa.md) | baixo | `22` |
+
+---
+
+## Fase 9 — Fechamento
+
+| | ID | Task | Risco | Depende de |
+|---|---|---|---|---|
+| ⬜ | `99` | [Relatório final](tasks/99-relatorio-final.md) | nenhum | todas |
+
+---
+
+## Tasks criadas durante a execução
+
+A faixa `50`–`98` é reservada para problemas descobertos em execução. Quem
+criar deve registrar aqui e em `STATE.json`.
+
+| | ID | Task | Risco | Criada por | Motivo |
+|---|---|---|---|---|---|
+| | | _(nenhuma ainda)_ | | | |
+
+---
+
+## Caminho crítico até a defesa
+
+Se o tempo apertar, esta é a ordem que protege a demonstração de novembro:
+
+```
+00 → 03 → 07 → 08 → 09 → 10 → 11 → 16 → 14 → 15 → 18 → 22 → 23
+```
+
+O que fica de fora nesse corte — `04`, `05`, `06`, `19`, `20`, `21` — é higiene
+e polimento: importa para o projeto, não para a banca.
