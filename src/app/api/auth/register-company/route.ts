@@ -6,7 +6,12 @@ import { eq } from "drizzle-orm";
 import { hashPassword } from "@/lib/auth/password";
 import { setSessionCookie } from "@/lib/auth/session";
 import { CompaniesRepo } from "@/server/repos/companies";
-import { rateLimit } from "@/lib/rate-limit";
+import {
+  clearFailures,
+  enforceRateLimit,
+  getClientIp,
+  registerFailure,
+} from "@/lib/rate-limit";
 
 const schema = z.object({
   company_name: z.string().min(3),
@@ -16,9 +21,6 @@ const schema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  const limit = rateLimit(request);
-  if (limit) return limit;
-
   try {
     const body = await request.json();
     const { company_name, cnpj, email, password } = schema.parse(body);
@@ -26,11 +28,18 @@ export async function POST(request: NextRequest) {
     const emailNorm = email.toLowerCase();
     const cnpjNorm = cnpj.replace(/\D/g, "");
 
+    const target = { scope: "register-company", identifier: emailNorm, ip: getClientIp(request) };
+    const limited = enforceRateLimit(target);
+    if (limited) return limited;
+
     // Check email
     const [existing] = await db.select({ id: users.id }).from(users).where(eq(users.email, emailNorm)).limit(1);
     if (existing) {
+      registerFailure(target);
       return NextResponse.json({ error: "Este email já está cadastrado." }, { status: 409 });
     }
+
+    clearFailures(target);
 
     const passwordHash = await hashPassword(password);
     let userId = "";

@@ -67,6 +67,12 @@ Regra: o número de erros de lint **nunca pode subir** em relação ao registrad
 `STATE.json > baseline`. Warnings podem subir apenas se a task disser que é
 esperado.
 
+> **Não rode `npm run build` com o dev server de pé.** Os dois escrevem em
+> `.next`, e o build sobrescreve o que o dev está usando — a aplicação passa a
+> devolver 500 com `ENOENT ... _buildManifest.js.tmp`, que parece regressão do
+> seu código e não é. Pare o preview antes, ou rode o build e só então suba o
+> servidor. Se já aconteceu: `rm -rf .next` e suba de novo.
+
 Se a task envolve UI, verifique no navegador com as ferramentas de preview
 (`preview_start` com a config `dev-server` de `.claude/launch.json`, depois
 `read_page` / `read_console_messages`). Não peça para o usuário conferir.

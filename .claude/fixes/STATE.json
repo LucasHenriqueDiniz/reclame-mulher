@@ -125,12 +125,23 @@
       "slug": "rate-limit-em-memoria",
       "phase": 6,
       "order": 3.6,
-      "status": "pending",
+      "status": "done",
       "risk": "medio",
       "depends_on": [
         "50"
       ],
-      "notes": "criada pela task 00"
+      "notes": "Chave por identidade (e-mail/userId) + camada por IP; so falha conta; Retry-After; persistencia documentada em docs/autorizacao.md. 6 cenarios verificados a mao.",
+      "started_at": "2026-08-26T22:07:00",
+      "finished_at": "2026-08-26T22:35:00",
+      "debug_iterations": 1,
+      "files_changed": [
+        "src/lib/rate-limit.ts",
+        "src/app/api/auth/login/route.ts",
+        "src/app/api/auth/register/route.ts",
+        "src/app/api/auth/register-company/route.ts",
+        "src/app/api/auth/change-password/route.ts",
+        "docs/autorizacao.md"
+      ]
     },
     {
       "id": "04",
@@ -177,7 +188,8 @@
       "risk": "medio",
       "depends_on": [
         "03"
-      ]
+      ],
+      "notes": "usar __resetRateLimitStore() para isolar testes do limitador; 6 cenarios descritos em reports/51"
     },
     {
       "id": "08",
@@ -431,6 +443,12 @@
       "at": "2026-08-26",
       "status": "done",
       "report": "reports/50-middleware-nao-protege.md"
+    },
+    {
+      "task": "51",
+      "at": "2026-08-26",
+      "status": "done",
+      "report": "reports/51-rate-limit-em-memoria.md"
     }
   ]
 }

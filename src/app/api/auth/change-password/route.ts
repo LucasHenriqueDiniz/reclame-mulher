@@ -6,7 +6,12 @@ import { getSession, setSessionCookie } from "@/lib/auth/session";
 import { db } from "@/db/client";
 import { users } from "@/db/schema";
 import { hashPassword, verifyPassword } from "@/lib/auth/password";
-import { rateLimit } from "@/lib/rate-limit";
+import {
+  clearFailures,
+  enforceRateLimit,
+  getClientIp,
+  registerFailure,
+} from "@/lib/rate-limit";
 
 const ChangePasswordDto = z.object({
   currentPassword: z.string().min(1),
@@ -14,14 +19,16 @@ const ChangePasswordDto = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  const limit = rateLimit(request);
-  if (limit) return limit;
-
   try {
     const session = await getSession();
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    // Aqui já sabemos quem é: a cota é da conta, não do IP compartilhado.
+    const target = { scope: "change-password", identifier: session.userId, ip: getClientIp(request) };
+    const limited = enforceRateLimit(target);
+    if (limited) return limited;
 
     const body = await request.json().catch(() => ({}));
     const parsed = ChangePasswordDto.parse(body);
@@ -33,8 +40,11 @@ export async function POST(request: NextRequest) {
       .limit(1);
 
     if (!user || !(await verifyPassword(parsed.currentPassword, user.passwordHash))) {
+      registerFailure(target);
       return NextResponse.json({ error: "Senha atual inválida" }, { status: 400 });
     }
+
+    clearFailures(target);
 
     await db
       .update(users)

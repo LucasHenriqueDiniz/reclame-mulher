@@ -5,7 +5,12 @@ import { users, profiles } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { hashPassword } from "@/lib/auth/password";
 import { setSessionCookie } from "@/lib/auth/session";
-import { rateLimit } from "@/lib/rate-limit";
+import {
+  clearFailures,
+  enforceRateLimit,
+  getClientIp,
+  registerFailure,
+} from "@/lib/rate-limit";
 
 const schema = z.object({
   name: z.string().min(3),
@@ -15,9 +20,6 @@ const schema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  const limit = rateLimit(request);
-  if (limit) return limit;
-
   try {
     const body = await request.json();
     const { name, email, password, cpf } = schema.parse(body);
@@ -25,17 +27,25 @@ export async function POST(request: NextRequest) {
     const emailNorm = email.toLowerCase();
     const cpfNorm = cpf.replace(/\D/g, "");
 
+    const target = { scope: "register", identifier: emailNorm, ip: getClientIp(request) };
+    const limited = enforceRateLimit(target);
+    if (limited) return limited;
+
     // Check if email already exists
     const [existing] = await db.select({ id: users.id }).from(users).where(eq(users.email, emailNorm)).limit(1);
     if (existing) {
+      registerFailure(target);
       return NextResponse.json({ error: "Este email já está cadastrado." }, { status: 409 });
     }
 
     // Check CPF uniqueness
     const [existingCpf] = await db.select({ userId: profiles.userId }).from(profiles).where(eq(profiles.cpf, cpfNorm)).limit(1);
     if (existingCpf) {
+      registerFailure(target);
       return NextResponse.json({ error: "Este CPF já está cadastrado." }, { status: 409 });
     }
+
+    clearFailures(target);
 
     const passwordHash = await hashPassword(password);
     let userId = "";

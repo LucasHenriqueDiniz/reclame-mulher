@@ -5,7 +5,12 @@ import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { verifyPassword } from "@/lib/auth/password";
 import { setSessionCookie } from "@/lib/auth/session";
-import { rateLimit } from "@/lib/rate-limit";
+import {
+  clearFailures,
+  enforceRateLimit,
+  getClientIp,
+  registerFailure,
+} from "@/lib/rate-limit";
 
 const schema = z.object({
   email: z.string().email(),
@@ -13,18 +18,26 @@ const schema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  const limit = rateLimit(request);
-  if (limit) return limit;
-
   try {
     const body = await request.json();
     const { email, password } = schema.parse(body);
 
+    // A cota é por e-mail tentado, com o IP como camada extra. O corpo precisa
+    // ser lido antes para sabermos qual identidade está sendo tentada — mas
+    // nada caro (consulta ao banco, hash de senha) acontece antes desta trava.
+    const target = { scope: "login", identifier: email, ip: getClientIp(request) };
+    const limited = enforceRateLimit(target);
+    if (limited) return limited;
+
     const [user] = await db.select().from(users).where(eq(users.email, email.toLowerCase())).limit(1);
 
     if (!user || !(await verifyPassword(password, user.passwordHash))) {
+      registerFailure(target);
       return NextResponse.json({ error: "Email ou senha inválidos" }, { status: 401 });
     }
+
+    // Deu certo: a usuária provou quem é, então o contador dela zera.
+    clearFailures(target);
 
     const response = NextResponse.json({
       success: true,
