@@ -2,9 +2,7 @@
 
 import { useState, useMemo } from "react";
 import {
-  Home,
   MessageCircle,
-  Info,
   BarChart3,
   Clock,
   Check,
@@ -13,7 +11,6 @@ import {
   Shield,
 } from "lucide-react";
 import {
-  companyTheme as S,
   CompanyAboutCard,
   CompanyContactsCard,
   CompanyAreasCard,

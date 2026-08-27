@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+
 import Link from "next/link";
 
 export type PageTabItem = {

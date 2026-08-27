@@ -54,7 +54,7 @@ export class BlogRepo {
     }
   }
 
-  static async findBySlug(slug: string, _includeTags = false) {
+  static async findBySlug(slug: string) {
     const [post] = await db
       .select()
       .from(blogPosts)
@@ -170,7 +170,7 @@ export class BlogRepo {
     return post ?? null;
   }
 
-  static async findAll(page = 1, limit = 10, _includeTags = false) {
+  static async findAll(page = 1, limit = 10) {
     const [{ total }] = await db.select({ total: count() }).from(blogPosts);
     const posts = await db
       .select()
@@ -182,7 +182,7 @@ export class BlogRepo {
     return { posts, total };
   }
 
-  static async getAllTags(_publicOnly = false) {
+  static async getAllTags() {
     return db.select().from(blogTags).orderBy(blogTags.name);
   }
 

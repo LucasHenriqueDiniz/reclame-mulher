@@ -40,8 +40,8 @@ porque o ESLint varria as worktrees. O real é **0 erros e 45 warnings** — 38 
 
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
-| ⬜ | `04` | [Zerar os erros de ESLint em `src/`](tasks/04-lint-erros.md) — *já cumprida pela `01`; vira `skipped`* | baixo | `03` |
-| ⬜ | `05` | [Remover código morto — 38 warnings de `no-unused-vars`](tasks/05-lint-unused-vars.md) | baixo | `04` |
+| ⏭️ | `04` | [Zerar os erros de ESLint em `src/`](tasks/04-lint-erros.md) — *sem objeto: os 4 erros eram de um arquivo que só existia na worktree removida* | baixo | `03` |
+| ✅ | `05` | [Remover código morto — 38 warnings de `no-unused-vars`](tasks/05-lint-unused-vars.md) | baixo | `04` |
 | ⬜ | `06` | [Migrar `<img>` para `next/image` (7 ocorrências)](tasks/06-next-image.md) | médio | `05` |
 
 ---

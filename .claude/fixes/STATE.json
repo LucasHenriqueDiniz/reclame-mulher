@@ -10,9 +10,8 @@
     "typescript_errors": 0,
     "eslint_errors": 0,
     "eslint_errors_note": "0 erros apos ignorar .claude/** no eslint.config.mjs (task 01)",
-    "eslint_warnings": 45,
+    "eslint_warnings": 7,
     "eslint_top_rules": {
-      "@typescript-eslint/no-unused-vars": 38,
       "@next/next/no-img-element": 7
     },
     "automated_tests": 0,
@@ -148,24 +147,30 @@
       "slug": "lint-erros",
       "phase": 2,
       "order": 4,
-      "status": "pending",
+      "status": "skipped",
       "risk": "baixo",
       "depends_on": [
         "03"
       ],
-      "notes": "objetivo ja cumprido pela task 01 (eslint . = 0 erros); marcar skipped na proxima iteracao"
+      "notes": "objetivo ja cumprido pela task 01 (eslint . = 0 erros); marcar skipped na proxima iteracao",
+      "started_at": "2026-08-26T22:16:00",
+      "finished_at": "2026-08-26T22:17:00",
+      "skip_reason": "Sem objeto: eslint src ja da 0 erros. Os 4 erros vinham de src/app/ajuda/recursos/page.tsx dentro de uma worktree - arquivo que nao existe no projeto. Resolvido pela task 01."
     },
     {
       "id": "05",
       "slug": "lint-unused-vars",
       "phase": 2,
       "order": 5,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [
         "04"
       ],
-      "notes": "38 ocorrencias reais (nao 235)"
+      "notes": "45 -> 7 warnings; no-unused-vars zerado. showMetrics e description removidas apos rastrear call site; blog.ts investigado, nao ha vazamento de rascunho.",
+      "started_at": "2026-08-26T22:18:00",
+      "finished_at": "2026-08-26T22:40:00",
+      "debug_iterations": 0
     },
     {
       "id": "06",
@@ -212,7 +217,8 @@
       "risk": "baixo",
       "depends_on": [
         "08"
-      ]
+      ],
+      "notes": "limite REAL de upload: 3 arquivos x 5MB (upload-dropzone.tsx), nao 10MB/50MB como diz o manual"
     },
     {
       "id": "10",
@@ -347,7 +353,8 @@
       "risk": "baixo",
       "depends_on": [
         "19"
-      ]
+      ],
+      "notes": "MANUAL_PLATAFORMA.md diz 10MB/50MB de anexo; o codigo usa 3 arquivos x 5MB"
     },
     {
       "id": "22",
@@ -449,6 +456,18 @@
       "at": "2026-08-26",
       "status": "done",
       "report": "reports/51-rate-limit-em-memoria.md"
+    },
+    {
+      "task": "04",
+      "at": "2026-08-26",
+      "status": "skipped",
+      "report": "reports/04-lint-erros.md"
+    },
+    {
+      "task": "05",
+      "at": "2026-08-26",
+      "status": "done",
+      "report": "reports/05-lint-unused-vars.md"
     }
   ]
 }

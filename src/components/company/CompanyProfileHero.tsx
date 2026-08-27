@@ -15,7 +15,6 @@ export function CompanyProfileHero({
   activeTab,
   onTabChange,
   isMember,
-  showMetrics = false,
   dashboardLink,
   publicProfileLink,
   complaintCtaHref,
@@ -26,7 +25,6 @@ export function CompanyProfileHero({
   activeTab: string;
   onTabChange: (key: string) => void;
   isMember?: boolean;
-  showMetrics?: boolean;
   dashboardLink?: string;
   publicProfileLink?: string;
   /** Link para "Iniciar um relato" (perfil público) */

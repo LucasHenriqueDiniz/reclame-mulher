@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, BarChart2, PlusSquare } from "lucide-react";
+import { MapPin, PlusSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { PageTabs, type PageTabItem } from "./PageTabs";

@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   MessageCircle,
   Settings as SettingsIcon,
-  PlusSquare,
   ChevronRight,
   Clock,
   Meh,
