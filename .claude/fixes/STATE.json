@@ -579,7 +579,8 @@
         ".claude/fixes/reports/RELATORIO-FINAL.md",
         ".claude/fixes/INDEX.md"
       ],
-      "notes": "Fila fechada: 45 tasks, 42 feitas, 1 pulada (04), 1 bloqueada (55). Numeros da tabela antes/depois remedidos ao escrever, nao copiados dos relatorios antigos. Duas ressalvas registradas de proposito: axe nao e conformidade AA, e o baseline de 277 warnings do ESLint contava as worktrees."
+      "notes": "Fila fechada: 45 tasks, 42 feitas, 1 pulada (04), 1 bloqueada (55). Numeros da tabela antes/depois remedidos ao escrever, nao copiados dos relatorios antigos. Duas ressalvas registradas de proposito: axe nao e conformidade AA, e o baseline de 277 warnings do ESLint contava as worktrees.",
+      "commit": "b74e16c"
     },
     {
       "id": "52",
@@ -1252,7 +1253,8 @@
       "task": "99",
       "event": "done",
       "report": "reports/RELATORIO-FINAL.md",
-      "detail": "Relatorio final com resumo executivo, antes/depois medido, 45 tasks, bloqueio da 55 com caminho de destravamento, 15 achados novos, 5 decisoes humanas e veredito de prontidao para a defesa. Fila encerrada."
+      "detail": "Relatorio final com resumo executivo, antes/depois medido, 45 tasks, bloqueio da 55 com caminho de destravamento, 15 achados novos, 5 decisoes humanas e veredito de prontidao para a defesa. Fila encerrada.",
+      "commit": "b74e16c"
     }
   ]
 }
