@@ -1,0 +1,1038 @@
+{
+  "paginas": {
+    "desktop|/": {
+      "papel": "publico",
+      "ocorrencias": 5,
+      "violacoes": [
+        {
+          "id": "aria-progressbar-name",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "ARIA progressbar nodes must have an accessible name"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 4,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/ajuda": {
+      "papel": "publico",
+      "ocorrencias": 15,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 13,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        },
+        {
+          "id": "link-in-text-block",
+          "impacto": "serious",
+          "ocorrencias": 2,
+          "descricao": "Links must be distinguishable without relying on color"
+        }
+      ]
+    },
+    "desktop|/blog": {
+      "papel": "publico",
+      "ocorrencias": 1,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/blog/all": {
+      "papel": "publico",
+      "ocorrencias": 1,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/blog/:slug": {
+      "papel": "publico",
+      "ocorrencias": 1,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/companies": {
+      "papel": "publico",
+      "ocorrencias": 12,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 12,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/company/:slug": {
+      "papel": "publico",
+      "ocorrencias": 14,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 14,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/login": {
+      "papel": "publico",
+      "ocorrencias": 5,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 1,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 4,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/register": {
+      "papel": "publico",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "desktop|/register/success": {
+      "papel": "publico",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "desktop|/search": {
+      "papel": "publico",
+      "ocorrencias": 5,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 5,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/privacy": {
+      "papel": "publico",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "desktop|/terms": {
+      "papel": "publico",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "desktop|/onboarding/role": {
+      "papel": "publico",
+      "ocorrencias": 1,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/onboarding/person/step1": {
+      "papel": "publico",
+      "ocorrencias": 3,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 2,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/onboarding/person/step2": {
+      "papel": "publico",
+      "ocorrencias": 5,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 1,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 4,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/onboarding/company/step1": {
+      "papel": "publico",
+      "ocorrencias": 3,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 2,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/onboarding/company/step2": {
+      "papel": "publico",
+      "ocorrencias": 5,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 1,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 4,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/auth/verify": {
+      "papel": "publico",
+      "ocorrencias": 5,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 1,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 4,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/auth/verify/check-email": {
+      "papel": "publico",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "desktop|/app/complaints": {
+      "papel": "pessoa",
+      "ocorrencias": 23,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 23,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/app/complaints/:id": {
+      "papel": "pessoa",
+      "ocorrencias": 11,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 11,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/app/complaints/new": {
+      "papel": "pessoa",
+      "ocorrencias": 11,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 3,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 8,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/app/settings": {
+      "papel": "pessoa",
+      "ocorrencias": 14,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 3,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 11,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/app/settings/account": {
+      "papel": "pessoa",
+      "ocorrencias": 14,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 3,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 11,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/app/settings/security": {
+      "papel": "pessoa",
+      "ocorrencias": 14,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 3,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 11,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/app/company/dashboard": {
+      "papel": "empresa",
+      "ocorrencias": 16,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 16,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/app/company/inbox": {
+      "papel": "empresa",
+      "ocorrencias": 16,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 16,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/app/company/complaints": {
+      "papel": "empresa",
+      "ocorrencias": 23,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 23,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/app/company/complaints/:id": {
+      "papel": "empresa",
+      "ocorrencias": 13,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 12,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        },
+        {
+          "id": "select-name",
+          "impacto": "critical",
+          "ocorrencias": 1,
+          "descricao": "Select element must have an accessible name"
+        }
+      ]
+    },
+    "desktop|/app/company/profile": {
+      "papel": "empresa",
+      "ocorrencias": 7,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 7,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/app/company/projects": {
+      "papel": "empresa",
+      "ocorrencias": 10,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 10,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/app/company/verification": {
+      "papel": "empresa",
+      "ocorrencias": 9,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 8,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        },
+        {
+          "id": "link-in-text-block",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Links must be distinguishable without relying on color"
+        }
+      ]
+    },
+    "desktop|/app/admin": {
+      "papel": "admin",
+      "ocorrencias": 1,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/app/admin/audit": {
+      "papel": "admin",
+      "ocorrencias": 3,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        },
+        {
+          "id": "label",
+          "impacto": "critical",
+          "ocorrencias": 2,
+          "descricao": "Form elements must have labels"
+        }
+      ]
+    },
+    "desktop|/app/admin/blog": {
+      "papel": "admin",
+      "ocorrencias": 5,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 5,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/app/admin/blog/help": {
+      "papel": "admin",
+      "ocorrencias": 4,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        },
+        {
+          "id": "scrollable-region-focusable",
+          "impacto": "serious",
+          "ocorrencias": 3,
+          "descricao": "Scrollable region must have keyboard access"
+        }
+      ]
+    },
+    "desktop|/app/admin/companies": {
+      "papel": "admin",
+      "ocorrencias": 1,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "desktop|/blog/:slug/edit": {
+      "papel": "admin",
+      "ocorrencias": 8,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 2,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 6,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/": {
+      "papel": "publico",
+      "ocorrencias": 4,
+      "violacoes": [
+        {
+          "id": "aria-progressbar-name",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "ARIA progressbar nodes must have an accessible name"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 3,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/ajuda": {
+      "papel": "publico",
+      "ocorrencias": 14,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 12,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        },
+        {
+          "id": "link-in-text-block",
+          "impacto": "serious",
+          "ocorrencias": 2,
+          "descricao": "Links must be distinguishable without relying on color"
+        }
+      ]
+    },
+    "mobile|/blog": {
+      "papel": "publico",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "mobile|/blog/all": {
+      "papel": "publico",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "mobile|/blog/:slug": {
+      "papel": "publico",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "mobile|/companies": {
+      "papel": "publico",
+      "ocorrencias": 11,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 11,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/company/:slug": {
+      "papel": "publico",
+      "ocorrencias": 13,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 13,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/login": {
+      "papel": "publico",
+      "ocorrencias": 5,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 1,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 4,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/register": {
+      "papel": "publico",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "mobile|/register/success": {
+      "papel": "publico",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "mobile|/search": {
+      "papel": "publico",
+      "ocorrencias": 4,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 4,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/privacy": {
+      "papel": "publico",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "mobile|/terms": {
+      "papel": "publico",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "mobile|/onboarding/role": {
+      "papel": "publico",
+      "ocorrencias": 1,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/onboarding/person/step1": {
+      "papel": "publico",
+      "ocorrencias": 3,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 2,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/onboarding/person/step2": {
+      "papel": "publico",
+      "ocorrencias": 5,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 1,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 4,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/onboarding/company/step1": {
+      "papel": "publico",
+      "ocorrencias": 3,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 2,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/onboarding/company/step2": {
+      "papel": "publico",
+      "ocorrencias": 5,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 1,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 4,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/auth/verify": {
+      "papel": "publico",
+      "ocorrencias": 5,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 1,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 4,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/auth/verify/check-email": {
+      "papel": "publico",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "mobile|/app/complaints": {
+      "papel": "pessoa",
+      "ocorrencias": 19,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 19,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/app/complaints/:id": {
+      "papel": "pessoa",
+      "ocorrencias": 9,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 9,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/app/complaints/new": {
+      "papel": "pessoa",
+      "ocorrencias": 11,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 3,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 8,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/app/settings": {
+      "papel": "pessoa",
+      "ocorrencias": 12,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 3,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 9,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/app/settings/account": {
+      "papel": "pessoa",
+      "ocorrencias": 12,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 3,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 9,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/app/settings/security": {
+      "papel": "pessoa",
+      "ocorrencias": 12,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 3,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 9,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/app/company/dashboard": {
+      "papel": "empresa",
+      "ocorrencias": 13,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 13,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/app/company/inbox": {
+      "papel": "empresa",
+      "ocorrencias": 13,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 13,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/app/company/complaints": {
+      "papel": "empresa",
+      "ocorrencias": 21,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 21,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/app/company/complaints/:id": {
+      "papel": "empresa",
+      "ocorrencias": 11,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 10,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        },
+        {
+          "id": "select-name",
+          "impacto": "critical",
+          "ocorrencias": 1,
+          "descricao": "Select element must have an accessible name"
+        }
+      ]
+    },
+    "mobile|/app/company/profile": {
+      "papel": "empresa",
+      "ocorrencias": 5,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 5,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/app/company/projects": {
+      "papel": "empresa",
+      "ocorrencias": 8,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 8,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/app/company/verification": {
+      "papel": "empresa",
+      "ocorrencias": 7,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 6,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        },
+        {
+          "id": "link-in-text-block",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Links must be distinguishable without relying on color"
+        }
+      ]
+    },
+    "mobile|/app/admin": {
+      "papel": "admin",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "mobile|/app/admin/audit": {
+      "papel": "admin",
+      "ocorrencias": 3,
+      "violacoes": [
+        {
+          "id": "label",
+          "impacto": "critical",
+          "ocorrencias": 2,
+          "descricao": "Form elements must have labels"
+        },
+        {
+          "id": "scrollable-region-focusable",
+          "impacto": "serious",
+          "ocorrencias": 1,
+          "descricao": "Scrollable region must have keyboard access"
+        }
+      ]
+    },
+    "mobile|/app/admin/blog": {
+      "papel": "admin",
+      "ocorrencias": 4,
+      "violacoes": [
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 4,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    },
+    "mobile|/app/admin/blog/help": {
+      "papel": "admin",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "mobile|/app/admin/companies": {
+      "papel": "admin",
+      "ocorrencias": 0,
+      "violacoes": []
+    },
+    "mobile|/blog/:slug/edit": {
+      "papel": "admin",
+      "ocorrencias": 6,
+      "violacoes": [
+        {
+          "id": "button-name",
+          "impacto": "critical",
+          "ocorrencias": 2,
+          "descricao": "Buttons must have discernible text"
+        },
+        {
+          "id": "color-contrast",
+          "impacto": "serious",
+          "ocorrencias": 4,
+          "descricao": "Elements must meet minimum color contrast ratio thresholds"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21a",
+    "wcag21aa"
+  ],
+  "naoVarridas": {
+    "/app": "só redireciona (para /login ou para a área do papel) — não tem conteúdo próprio",
+    "/empresas": "só redireciona para /companies",
+    "/auth/callback": "só redireciona para /app; o spinner some antes de qualquer análise"
+  },
+  "aviso": "A varredura automática cobre entre 30% e 40% dos critérios WCAG. Zero violação aqui não é conformidade AA."
+}

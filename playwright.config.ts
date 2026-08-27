@@ -37,12 +37,33 @@ export default defineConfig({
   projects: [
     {
       name: "chromium-desktop",
+      testIgnore: /a11y\.spec\.ts/,
       use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 800 } },
     },
     {
       // 375x812 é o alvo das tasks 14 e 15 — a tela de celular mais comum
       // entre as usuárias da plataforma.
       name: "chromium-mobile",
+      testIgnore: /a11y\.spec\.ts/,
+      use: {
+        ...devices["Desktop Chrome"],
+        viewport: { width: 375, height: 812 },
+        hasTouch: true,
+      },
+    },
+    // A varredura de acessibilidade carrega 39 páginas em dois viewports e leva
+    // minutos. Fica em projetos próprios em vez de variável de ambiente: assim
+    // roda igual no PowerShell e no bash, e `npx playwright test` continua
+    // sendo a suíte rápida.
+    //   npm run test:a11y
+    {
+      name: "a11y-desktop",
+      testMatch: /a11y\.spec\.ts/,
+      use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 800 } },
+    },
+    {
+      name: "a11y-mobile",
+      testMatch: /a11y\.spec\.ts/,
       use: {
         ...devices["Desktop Chrome"],
         viewport: { width: 375, height: 812 },

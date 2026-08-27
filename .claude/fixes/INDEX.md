@@ -76,7 +76,7 @@ documentos discordam entre 87,5% e "validada".
 
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
-| ⬜ | `12` | [Varredura automatizada (axe) nas 42 páginas](tasks/12-varredura-acessibilidade.md) | baixo | `07` |
+| ✅ | `12` | [Varredura automatizada (axe) nas 42 páginas](tasks/12-varredura-acessibilidade.md) | baixo | `07` |
 | ⬜ | `13` | [Corrigir as violações encontradas](tasks/13-corrigir-acessibilidade.md) | médio | `12` |
 
 ---
