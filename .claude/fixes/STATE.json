@@ -28,7 +28,7 @@
     "corrected_by_task": "01",
     "corrected_at": "2026-08-26"
   },
-  "current_task": "69",
+  "current_task": "99",
   "tasks": [
     {
       "id": "00",
@@ -951,14 +951,22 @@
       "slug": "schema-e-banco-discordam-do-cnpj",
       "phase": 2,
       "order": 69,
-      "status": "pending",
+      "status": "done",
       "risk": "medio",
       "depends_on": [],
-      "notes": "Achado na task 65: companies.cnpj e NOT NULL no banco e opcional em src/db/schema.ts. PATCH /api/company/profile com {'cnpj': null} - caminho que a task 56 abriu de proposito - vira UPDATE SET cnpj = NULL e devolve 500. O projeto usa db:push, que nao gera migracao.",
-      "started_at": null,
-      "finished_at": null,
-      "debug_iterations": 0,
-      "files_changed": []
+      "notes": "O banco estava certo: cnpj ganhou .notNull(). O mesmo defeito valia para name, tambem NOT NULL, e para o INSERT/UPDATE do onboarding da empresa, que o tsc so encontrou depois de o tipo virar verdade. PATCH com null: 500 -> 400, provado nos dois sentidos. Criterio 3 virou script (scripts/conferir-schema-vs-banco.ts): 13 tabelas, 139 colunas, nenhuma outra divergencia.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 1,
+      "files_changed": [
+        "src/db/schema.ts",
+        "src/server/dto/companies.ts",
+        "src/app/api/company/profile/route.ts",
+        "src/app/onboarding/company/step2/actions.ts",
+        "src/app/app/company/profile/page.tsx",
+        "e2e/ownership.spec.ts",
+        "scripts/conferir-schema-vs-banco.ts"
+      ]
     }
   ],
   "task_fields": {
@@ -1221,6 +1229,13 @@
       "created": [
         "67"
       ]
+    },
+    {
+      "at": "2026-08-27",
+      "task": "69",
+      "event": "done",
+      "report": "reports/69-schema-e-banco-discordam-do-cnpj.md",
+      "detail": "PATCH /api/company/profile com cnpj ou name nulo: 500 -> 400, com o teste falhando pelo motivo certo quando o defeito volta. Defeito irmao em name e no onboarding da empresa corrigido junto. Auditoria schema x information_schema virou script: 13 tabelas, 139 colunas, 0 divergencias. Suite 469, 3 pulados."
     }
   ]
 }

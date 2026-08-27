@@ -36,6 +36,43 @@ const opcional = <T extends z.ZodTypeAny>(
 
 const nullableTrimmedString = opcional(z.string());
 
+/**
+ * Campo que o **banco** exige, e que por isso não pode ser limpo.
+ *
+ * O `opcional()` acima existe para distinguir "não mandei" de "quero limpar".
+ * Só que limpar não vale para toda coluna: `companies.name` e `companies.cnpj`
+ * são `NOT NULL`, e mandar `null` neles produzia `UPDATE ... SET cnpj = NULL`,
+ * que o Postgres recusa — a rota devolvia **500** onde devia devolver 400. Ver
+ * task `69`.
+ *
+ * O comportamento aqui é o de sempre para chave ausente, e recusa explícita
+ * para `null` e para texto em branco:
+ *
+ * - **chave ausente** → `undefined`, "não mexe";
+ * - **`null`** → erro de validação (o Zod recusa antes, por tipo);
+ * - **texto vazio ou só espaço** → erro de validação.
+ */
+const obrigatorioSeEnviado = (mensagem: string) =>
+  z
+    .string()
+    .optional()
+    .transform((valor) => (valor === undefined ? undefined : valor.trim()))
+    .refine((valor) => valor === undefined || valor.length > 0, mensagem);
+
+/**
+ * O CNPJ chega com pontuação e é guardado só com dígitos — a mesma
+ * normalização que `POST /api/auth/register-company` faz. A validação roda
+ * depois de normalizar, senão `12.345.678/0001-99` reprovaria por "tamanho".
+ */
+const cnpjObrigatorioSeEnviado = z
+  .string()
+  .optional()
+  .transform((valor) => (valor === undefined ? undefined : valor.replace(/\D/g, "")))
+  .refine(
+    (valor) => valor === undefined || valor.length === 14,
+    "CNPJ deve ter 14 dígitos"
+  );
+
 const nullableEmail = opcional(z.string().email("E-mail inválido"), (value) =>
   value.trim().toLowerCase()
 );
@@ -74,9 +111,10 @@ export const VerifyCompanyDto = z.object({
 });
 
 export const UpdateCompanyProfileDto = z.object({
-  name: nullableTrimmedString,
+  // `name` e `cnpj` são `NOT NULL` no banco — ver `obrigatorioSeEnviado`.
+  name: obrigatorioSeEnviado("Nome da empresa não pode ficar em branco"),
   corporateName: nullableTrimmedString,
-  cnpj: nullableTrimmedString,
+  cnpj: cnpjObrigatorioSeEnviado,
   description: nullableTrimmedString,
   phone: nullableTrimmedString,
   email: nullableEmail,

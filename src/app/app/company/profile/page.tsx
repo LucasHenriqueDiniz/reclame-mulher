@@ -11,7 +11,7 @@ import { CompanyPageShell } from "@/components/app/CompanyPageShell";
 import { CompanyPageHeader } from "@/components/app/CompanyPageHeader";
 import { ContentCard } from "@/components/app/ContentCard";
 import type { CompanyNavTab } from "@/components/app/CompanyPageHeader";
-import { mensagemDeErro } from "@/lib/http/erro";
+import { camposComErro, mensagemDeErro } from "@/lib/http/erro";
 
 const COMPANY_TABS: CompanyNavTab[] = [
   { key: "dashboard", label: "Painel", href: "/app/company/dashboard", icon: LayoutDashboard },
@@ -102,7 +102,15 @@ export default function CompanyProfilePage() {
 
       if (!response.ok) {
         const data = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(mensagemDeErro(data, "Não foi possível salvar o perfil."));
+
+        // Erro de validação chega com a explicação por campo — e é ela que diz
+        // o que fazer. O `message` de cima é genérico ("Dados inválidos"), e
+        // mostrar só ele deixaria quem apagou o nome sem saber o porquê da
+        // recusa. Ver task `69`.
+        const porCampo = Object.values(camposComErro(data))[0];
+        throw new Error(
+          porCampo ?? mensagemDeErro(data, "Não foi possível salvar o perfil.")
+        );
       }
 
       toast({

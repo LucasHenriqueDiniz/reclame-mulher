@@ -112,6 +112,28 @@ test.describe("papel e posse dentro da empresa", () => {
       "MEMBER não administra a empresa"
     ).toBe(403);
 
+    // Campos que o **banco** exige não podem ser limpos. Antes da task `69` o
+    // DTO aceitava `null` neles, o `UPDATE` batia na restrição `NOT NULL` e a
+    // rota devolvia **500** — erro de quem manda tratado como erro do servidor.
+    for (const campo of ["cnpj", "name"] as const) {
+      const resposta = await dona.patch("/api/company/profile", {
+        data: { [campo]: null },
+      });
+
+      expect(
+        resposta.status(),
+        `limpar ${campo} precisa ser recusado com 400, e nunca virar 500 — ver task 69`
+      ).toBe(400);
+
+      const corpo = await resposta.json();
+      expect(corpo.error, `a recusa de ${campo} precisa vir no envelope de erro`).toBeTruthy();
+    }
+
+    // E a empresa continua inteira: a recusa não pode ter escrito nada.
+    const depois = await (await dona.get("/api/company/profile")).json();
+    expect(depois.company.cnpj, "o CNPJ não pode ter sido apagado").toBe(daDona.company.cnpj);
+    expect(depois.company.name, "o nome não pode ter sido apagado").toBe(daDona.company.name);
+
     const corpoDoProjeto = {
       name: tituloDeTeste("projeto de papel"),
       description: "Projeto criado pelo teste de papel. É apagado no fim.",

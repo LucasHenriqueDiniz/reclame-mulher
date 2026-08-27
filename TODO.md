@@ -60,10 +60,6 @@ fazer.
 
 Encontrados durante a fila de correções, cada um com investigação escrita.
 
-- [ ] [`69`](.claude/fixes/tasks/69-schema-e-banco-discordam-do-cnpj.md) — o
-      banco exige CNPJ (`NOT NULL`) e o `src/db/schema.ts` diz que é opcional.
-      `PATCH /api/company/profile` com `{"cnpj": null}` bate nessa divergência
-      e devolve 500.
 - [ ] Registrar em `audit_logs` mais do que verificação de empresa. Hoje é a
       única ação auditada — mudança de status de relato, moderação e alteração
       de perfil de empresa não deixam rastro.

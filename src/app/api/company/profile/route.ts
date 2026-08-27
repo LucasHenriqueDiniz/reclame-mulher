@@ -25,10 +25,9 @@ export async function PATCH(req: NextRequest) {
     // `UPDATE`. Escrever `cnpj: ... : null` incondicionalmente apagava o CNPJ
     // de quem mandasse qualquer outro campo — ver o comentário longo em
     // `src/server/dto/companies.ts` e a task `56`.
+    // O CNPJ já sai do DTO só com dígitos, e `name` e `cnpj` já foram recusados
+    // se vierem nulos ou em branco: os dois são `NOT NULL` no banco (task `69`).
     const alteracoes: Record<string, unknown> = { ...parsed };
-    if (parsed.cnpj !== undefined) {
-      alteracoes.cnpj = parsed.cnpj ? parsed.cnpj.replace(/\D/g, "") : null;
-    }
     if (parsed.foundationDate !== undefined) {
       alteracoes.foundationDate = parsed.foundationDate
         ? new Date(parsed.foundationDate)

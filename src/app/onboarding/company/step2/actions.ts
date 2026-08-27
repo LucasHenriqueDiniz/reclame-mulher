@@ -99,7 +99,10 @@ export async function completeCompanyOnboarding(input: {
         .update(companies)
         .set({
           name: companyName,
-          cnpj,
+          // Só mexe no CNPJ quando há um: a coluna é `NOT NULL`, e escrever
+          // `null` aqui apagaria o CNPJ de uma empresa que já o tem. Ver
+          // task `69`.
+          ...(cnpj ? { cnpj } : {}),
           slug,
           phone: input.phone,
           address: input.address,
@@ -110,6 +113,16 @@ export async function completeCompanyOnboarding(input: {
         })
         .where(eq(companies.id, companyId));
     } else {
+      // Criar empresa sem CNPJ é impossível: a coluna é `NOT NULL` no banco, e
+      // `POST /api/auth/register-company` exige 14 dígitos. Se o metadado
+      // sumiu, o banco recusaria com um 500 sem explicação — melhor dizer o que
+      // aconteceu. Ver task `69`.
+      if (!cnpj) {
+        throw new Error(
+          "Não encontramos o CNPJ do cadastro. Refaça o cadastro da empresa ou fale com quem administra a plataforma."
+        );
+      }
+
       const [company] = await tx
         .insert(companies)
         .values({

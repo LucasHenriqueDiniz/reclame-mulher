@@ -110,7 +110,9 @@ export const companies = pgTable(
   {
     id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
-    cnpj: text("cnpj").unique(),
+    // `NOT NULL` no banco desde sempre; a declaração é que estava atrás.
+    // Ver task `69`.
+    cnpj: text("cnpj").notNull().unique(),
     corporateName: text("corporate_name"),
     sector: text("sector"),
     description: text("description"),
