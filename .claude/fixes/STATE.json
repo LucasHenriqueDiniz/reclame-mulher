@@ -648,14 +648,28 @@
       "slug": "conta-empresa-do-seed-e-member",
       "phase": 9,
       "order": 56,
-      "status": "pending",
+      "status": "done",
       "risk": "medio",
       "depends_on": [],
-      "notes": "Achado na task 11. A conta empresa@construtorax.com tem papel MEMBER e canManageCompany exige OWNER/ADMIN: ela recebe 403 ao editar perfil, criar projeto ou convidar usuaria. Conserto de seed. Efeito colateral: a checagem de posse em /api/company/projects/[id] e inalcancavel por teste.",
-      "started_at": null,
-      "finished_at": null,
-      "debug_iterations": 0,
-      "files_changed": []
+      "notes": "Opcao 2 da task (duas contas, nao promover a existente) mais UMA TERCEIRA que a task nao pedia: sem uma OWNER na SEGUNDA empresa o criterio de aceite 4 e impossivel, porque a Transportes Sul nao tinha nenhuma conta vinculada. O ACHADO PRINCIPAL nao estava na task: o primeiro teste do criterio 2 falhou com 500. O transform do Zod roda TAMBEM para chave ausente, e os tres helpers de src/server/dto/companies.ts escreviam 'if (value == null) return null' - o == casa undefined. Medido: UpdateCompanyProfileDto.parse({}) devolvia 18 chaves TODAS null, incluindo name, que e NOT NULL. Na pratica: PATCH com corpo vazio ou parcial dava 500, e PATCH com name+description APAGAVA cnpj, telefone, cidade, e-mail, site e razao social. Perda de dado, e ninguem tinha visto porque a rota exige OWNER e nenhuma conta do seed era OWNER - rota que conta nenhuma alcanca nao esta protegida, esta sem testar. Conserto preserva as tres respostas de um PATCH: chave ausente nao mexe, null explicito limpa, texto vazio limpa; as tres cobertas por teste, inclusive a de limpar (senao 'nunca apague nada' passaria). Conferi os outros seis arquivos de src/server/dto/: o padrao so existia em companies.ts. e2e/segredos.spec.ts passou a derivar os e-mails de CONTAS em vez de lista escrita a mao - escrita a mao ele continuaria verde protegendo 4 contas de um seed com 6. Suite: 461 -> 469 passando, 3 pulados; nada quebrou com o seed novo.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 1,
+      "files_changed": [
+        "scripts/seed.ts",
+        "src/server/dto/companies.ts",
+        "src/app/api/company/profile/route.ts",
+        "src/app/ajuda/_components/ajuda-content.tsx",
+        "e2e/fixtures/auth.ts",
+        "e2e/fixtures/db.ts",
+        "e2e/ownership.spec.ts",
+        "e2e/api-authorization.spec.ts",
+        "e2e/segredos.spec.ts",
+        "docs/autorizacao.md",
+        "README.md",
+        "scripts/seed-demonstracao.ts",
+        "TODO.md"
+      ]
     },
     {
       "id": "57",
@@ -1021,6 +1035,13 @@
       "event": "blocked",
       "report": "reports/55-resolvido-nao-reabre.md",
       "detail": "Decisao de produto e da Paloma. Bloqueio produtivo: medido que a opcao 1 nao tira o encerramento unilateral (a empresa reencerra sem limite) e que a taxa de resolucao publica se move nas tres opcoes."
+    },
+    {
+      "at": "2026-08-27",
+      "task": "56",
+      "event": "done",
+      "report": "reports/56-conta-empresa-do-seed-e-member.md",
+      "detail": "Seed com MEMBER e OWNER separados, mais OWNER numa segunda empresa. A primeira chamada de PATCH /api/company/profile por uma OWNER devolveu 500 e revelou perda de dado em atualizacao parcial. Suite 461 -> 469."
     }
   ]
 }

@@ -54,9 +54,6 @@ fazer.
 
 Encontrados durante a fila de correções, cada um com investigação escrita.
 
-- [ ] [`56`](.claude/fixes/tasks/56-conta-empresa-do-seed-e-member.md) — a conta
-      de empresa do seed entra como `MEMBER`, então a demonstração não alcança
-      as telas que exigem `OWNER`/`ADMIN`. **Bloqueia a task `23`.**
 - [ ] [`57`](.claude/fixes/tasks/57-cta-de-relato-na-tela-da-empresa.md) — o CTA
       de relato passa o nome da empresa em vez do id.
 - [ ] [`58`](.claude/fixes/tasks/58-api-me-401-em-toda-pagina.md) — `/api/me`
@@ -125,6 +122,13 @@ alguém": é feito segundo um número que dá para reproduzir.
       detalhe e *Concluído* quando encerrado; hoje lê **Aberta**, **Respondida**,
       **Resolvida** ou **Cancelada** em toda tela. Ver
       [`54`](.claude/fixes/reports/54-rotulos-de-status-divergentes.md).
+- [x] **O seed tem conta que administra a empresa** — antes só existia uma
+      conta `MEMBER`, e as cinco rotas de administração respondiam 403 para a
+      única conta que havia. Agora há `MEMBER` e `OWNER` na mesma empresa, mais
+      uma `OWNER` numa segunda. Ao alcançar a rota pela primeira vez apareceu
+      que ela **apagava o resto do cadastro** numa atualização parcial;
+      corrigido junto. Ver
+      [`56`](.claude/fixes/reports/56-conta-empresa-do-seed-e-member.md).
 - [x] **ESLint zerado** — de 4 erros e 277 avisos para 0 e 0.
 - [x] **Suíte de testes existe** — 458 testes: 18 de unidade, 362 de ponta a
       ponta, 78 de acessibilidade. Antes: nenhum.

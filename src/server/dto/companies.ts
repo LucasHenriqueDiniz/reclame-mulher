@@ -1,31 +1,46 @@
 import { z } from "zod";
 
-const nullableTrimmedString = z
-  .union([z.string(), z.null()])
-  .optional()
-  .transform((value) => {
-    if (value == null) return null;
-    const trimmed = value.trim();
-    return trimmed.length > 0 ? trimmed : null;
-  });
+/**
+ * Campo opcional de atualização parcial.
+ *
+ * A distinção que estes três helpers precisam preservar, e que até a task `56`
+ * eles apagavam:
+ *
+ * - **chave ausente** → `undefined`, "não mexe neste campo";
+ * - **`null` explícito** → `null`, "limpa este campo";
+ * - **texto vazio ou só espaço** → `null`, pela mesma razão.
+ *
+ * Os três escreviam `if (value == null) return null`, e `==` casa `undefined`
+ * junto. Como o `transform` do Zod roda **também para chave ausente** quando o
+ * schema é opcional, `UpdateCompanyProfileDto.parse({})` devolvia dezoito
+ * campos, todos `null` — inclusive `name`, que é `NOT NULL` no banco.
+ *
+ * Na prática: qualquer atualização parcial do perfil da empresa apagava todo
+ * campo não enviado, e um corpo vazio devolvia 500. Ninguém tinha visto porque
+ * a rota exige `OWNER` e a única conta de empresa do seed era `MEMBER` — o
+ * próprio achado `56`. Havia rota que conta nenhuma alcançava.
+ */
+const opcional = <T extends z.ZodTypeAny>(
+  schema: T,
+  normalizar: (value: string) => string = (value) => value.trim()
+) =>
+  z
+    .union([schema, z.null()])
+    .optional()
+    .transform((value) => {
+      if (value === undefined) return undefined;
+      if (value === null) return null;
+      const trimmed = normalizar(String(value));
+      return trimmed.length > 0 ? trimmed : null;
+    });
 
-const nullableEmail = z
-  .union([z.string().email("E-mail inválido"), z.null()])
-  .optional()
-  .transform((value) => {
-    if (value == null) return null;
-    const trimmed = value.trim().toLowerCase();
-    return trimmed.length > 0 ? trimmed : null;
-  });
+const nullableTrimmedString = opcional(z.string());
 
-const nullableUrl = z
-  .union([z.string().url("URL inválida"), z.null()])
-  .optional()
-  .transform((value) => {
-    if (value == null) return null;
-    const trimmed = value.trim();
-    return trimmed.length > 0 ? trimmed : null;
-  });
+const nullableEmail = opcional(z.string().email("E-mail inválido"), (value) =>
+  value.trim().toLowerCase()
+);
+
+const nullableUrl = opcional(z.string().url("URL inválida"));
 
 export const CreateCompanyDto = z.object({
   name: z.string().min(1, "Nome da empresa é obrigatório"),

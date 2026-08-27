@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { SENHA } from "./fixtures/auth";
+import { CONTAS, SENHA } from "./fixtures/auth";
 
 /**
  * Nenhuma rota pública entrega credencial.
@@ -57,12 +57,11 @@ test("a página de apoio não lista e-mail de conta", async ({ page }) => {
 
   // Os e-mails das contas do seed também saem: juntos com a senha eles são o
   // par completo, e sozinhos ainda dizem quem existe e como se chama o admin.
-  for (const conta of [
-    "maria@exemplo.com",
-    "ana@exemplo.com",
-    "empresa@construtorax.com",
-    "admin@comunicamulher.com.br",
-  ]) {
+  //
+  // A lista vem de `CONTAS`, e não escrita à mão: conta nova no seed passa a ser
+  // conferida sozinha. Escrita à mão, este teste continuaria verde protegendo
+  // quatro contas de um seed que tem seis — foi o que quase aconteceu na `56`.
+  for (const conta of Object.values(CONTAS).map((conta) => conta.email)) {
     expect(texto, `a página de apoio ainda mostra ${conta}`).not.toContain(conta);
   }
 });

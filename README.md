@@ -175,5 +175,12 @@ Criadas por `pnpm db:seed`. Senha de todas: `senha123`.
 |---|---|
 | `maria@exemplo.com` | pessoa |
 | `ana@exemplo.com` | pessoa (segunda, para testar acesso de terceiros) |
-| `empresa@construtorax.com` | empresa |
+| `empresa@construtorax.com` | Construtora X — **MEMBER**: lê e responde relatos |
+| `dona@construtorax.com` | Construtora X — **OWNER**: administra a empresa, cria projeto, convida |
+| `dona@transportessul.com` | Transportes Sul — **OWNER** (segunda empresa, para testar posse) |
 | `admin@comunicamulher.com.br` | administração da plataforma |
+
+As duas contas da Construtora X existem separadas de propósito: a diferença
+entre `MEMBER` e `OWNER` é funcionalidade do produto, e com uma conta só ela não
+dá para mostrar nem para testar. Ver
+[`docs/autorizacao.md`](docs/autorizacao.md).

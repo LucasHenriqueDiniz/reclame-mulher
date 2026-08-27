@@ -53,12 +53,12 @@ import { limparRelatosDeTeste, tituloDeTeste } from "./fixtures/db";
  * senão manda a usuária logada de volta para uma tela que ela já passou.
  */
 
-type Papel = "anonimo" | "pessoa" | "pessoa2" | "empresa" | "admin";
+type Papel = "anonimo" | "pessoa" | "pessoa2" | "empresa" | "empresaDona" | "admin";
 
-const PAPEIS: Papel[] = ["anonimo", "pessoa", "pessoa2", "empresa", "admin"];
+const PAPEIS: Papel[] = ["anonimo", "pessoa", "pessoa2", "empresa", "empresaDona", "admin"];
 
 const TODOS: Papel[] = PAPEIS;
-const LOGADOS: Papel[] = ["pessoa", "pessoa2", "empresa", "admin"];
+const LOGADOS: Papel[] = ["pessoa", "pessoa2", "empresa", "empresaDona", "admin"];
 
 type Ids = {
   empresa: string;
@@ -202,8 +202,14 @@ const ENDPOINTS: Endpoint[] = [
     metodo: "PATCH",
     caminho: () => "/api/company/profile",
     corpo: {},
-    // A conta de empresa do seed é MEMBER, e `canManageCompany` exige
-    // OWNER ou ADMIN — por isso ela também é negada aqui. Ver achado 56.
+    // Os dois lados da mesma empresa: `empresa` é MEMBER e `empresaDona` é
+    // OWNER. `canManageCompany` exige OWNER ou ADMIN, então a mesma rota
+    // responde 403 para uma e 200 para a outra. Até a task `56` o seed só tinha
+    // a MEMBER, e esta linha só sabia negar.
+    //
+    // O corpo vazio é de propósito: o DTO tem todos os campos opcionais, então
+    // a chamada permitida responde 200 sem alterar nada da empresa do seed.
+    permite: ["empresaDona"],
     nega: ["anonimo", "pessoa", "pessoa2", "admin", "empresa"],
   },
   {
@@ -226,6 +232,7 @@ const ENDPOINTS: Endpoint[] = [
     caminho: () => "/api/company/projects",
     corpo: {},
     nega: ["anonimo", "pessoa", "pessoa2", "admin", "empresa"],
+    nota: "OWNER é coberta em ownership.spec.ts, com corpo válido e limpeza depois",
   },
   {
     rotulo: "PATCH /api/company/projects/[id]",
@@ -233,6 +240,7 @@ const ENDPOINTS: Endpoint[] = [
     caminho: (ids) => `/api/company/projects/${ids.projeto}`,
     corpo: {},
     nega: ["anonimo", "pessoa", "pessoa2", "admin", "empresa"],
+    nota: "OWNER é coberta em ownership.spec.ts, inclusive contra projeto de outra empresa",
   },
   {
     rotulo: "DELETE /api/company/projects/[id]",
@@ -254,6 +262,7 @@ const ENDPOINTS: Endpoint[] = [
     caminho: () => "/api/company/users",
     corpo: {},
     nega: ["anonimo", "pessoa", "pessoa2", "admin", "empresa"],
+    nota: "destrutivo para OWNER: convidar cria conta, e o seed é o banco da demonstração",
   },
   {
     rotulo: "PATCH /api/company/users/[userId]",
@@ -261,6 +270,7 @@ const ENDPOINTS: Endpoint[] = [
     caminho: (ids) => `/api/company/users/${ids.membro}`,
     corpo: {},
     nega: ["anonimo", "pessoa", "pessoa2", "admin", "empresa"],
+    nota: "destrutivo para OWNER: mudaria o papel da conta MEMBER da demonstração",
   },
   {
     rotulo: "DELETE /api/company/users/[userId]",

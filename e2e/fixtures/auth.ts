@@ -12,6 +12,14 @@ export const CONTAS = {
   pessoa: { email: "maria@exemplo.com", destino: "/app/complaints" },
   pessoa2: { email: "ana@exemplo.com", destino: "/app/complaints" },
   empresa: { email: "empresa@construtorax.com", destino: "/app/company/dashboard" },
+  // `empresa` é MEMBER da Construtora X e `empresaDona` é OWNER da mesma
+  // empresa: é o par que deixa testar a diferença entre os dois papéis, que
+  // até a task `56` não existia no seed. `empresaOutra` é OWNER de outra
+  // empresa, e existe para exercer a checagem de posse — sem ela, a comparação
+  // de `companyId` nas rotas de projeto é inalcançável, porque a checagem de
+  // papel barra antes.
+  empresaDona: { email: "dona@construtorax.com", destino: "/app/company/dashboard" },
+  empresaOutra: { email: "dona@transportessul.com", destino: "/app/company/dashboard" },
   admin: { email: "admin@comunicamulher.com.br", destino: "/app/admin" },
 } as const;
 

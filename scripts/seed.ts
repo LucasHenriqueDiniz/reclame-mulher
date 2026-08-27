@@ -73,15 +73,26 @@ async function main() {
         email: "admin@comunicamulher.com.br",
         passwordHash,
       },
+      // As duas contas OWNER. Ver o comentário em "Company users", abaixo.
+      {
+        email: "dona@construtorax.com",
+        passwordHash,
+      },
+      {
+        email: "dona@transportessul.com",
+        passwordHash,
+      },
     ])
     .returning({ id: schema.users.id });
 
-  const [user1, user2, user3, adminUser] = usersInserted;
-  if (!user1 || !user2 || !user3 || !adminUser) {
+  const [user1, user2, user3, adminUser, donaX, donaSul] = usersInserted;
+  if (!user1 || !user2 || !user3 || !adminUser || !donaX || !donaSul) {
     throw new Error("Falha ao criar users");
   }
 
-  console.log("✓ Users criados (maria, empresa@construtorax, ana, admin)");
+  console.log(
+    "✓ Users criados (maria, empresa@construtorax, ana, admin, dona@construtorax, dona@transportessul)"
+  );
 
   // ─── Profiles ───────────────────────────────────────────────────────────
   await db.insert(schema.profiles).values([
@@ -134,6 +145,30 @@ async function main() {
       onboardingCompletedAt: now,
       acceptedTermsAt: now,
     },
+    {
+      userId: donaX.id,
+      name: "Helena Marques",
+      role: "COMPANY",
+      email: "dona@construtorax.com",
+      phone: "(11) 3333-4455",
+      address: "Rua das Obras, 100",
+      city: "São Paulo",
+      state: "SP",
+      onboardingCompletedAt: now,
+      acceptedTermsAt: now,
+    },
+    {
+      userId: donaSul.id,
+      name: "Rita Alves",
+      role: "COMPANY",
+      email: "dona@transportessul.com",
+      phone: "(51) 5555-6677",
+      address: "Av. dos Caminhões, 500",
+      city: "Porto Alegre",
+      state: "RS",
+      onboardingCompletedAt: now,
+      acceptedTermsAt: now,
+    },
   ]);
   console.log("✓ Profiles criados");
   console.log(`✓ Admin seed: admin@comunicamulher.com.br / ${defaultPassword}`);
@@ -183,11 +218,30 @@ async function main() {
 
   console.log("✓ Empresas criadas (Construtora X, Transportes Sul)");
 
-  // ─── Company users (João = Construtora X) ────────────────────────────────
+  // ─── Company users ───────────────────────────────────────────────────────
+  //
+  // Duas contas na Construtora X, de propósito, e não uma promovida.
+  //
+  // Até a task `56` só existia a do João, com papel MEMBER, e `canManageCompany`
+  // exige OWNER ou ADMIN: a única conta de empresa do seed recebia 403 ao editar
+  // o perfil, criar projeto ou convidar alguém. O código estava certo — o dado
+  // é que não servia para o uso pretendido.
+  //
+  // Promover o João resolveria a demonstração e apagaria a distinção entre os
+  // papéis, que é funcionalidade real do produto. Com as duas contas dá para
+  // mostrar as duas coisas, e o teste consegue exercer os dois lados.
+  //
+  // A Rita existe para uma terceira razão: sem uma OWNER numa **segunda**
+  // empresa, a checagem de posse de `/api/company/projects/[id]` — a que compara
+  // o `companyId` do projeto com o da sessão — é inalcançável por teste, porque
+  // a checagem de papel barra antes.
   await db.insert(schema.companyUsers).values([
     { userId: user2.id, companyId: company1.id, role: "MEMBER" },
+    { userId: donaX.id, companyId: company1.id, role: "OWNER" },
+    { userId: donaSul.id, companyId: company2.id, role: "OWNER" },
   ]);
-  console.log("✓ Company user: empresa@construtorax.com → Construtora X");
+  console.log("✓ Company users: João (MEMBER) e Helena (OWNER) → Construtora X");
+  console.log("✓ Company user: Rita (OWNER) → Transportes Sul");
 
   // ─── Projects ───────────────────────────────────────────────────────────
   const [proj1, _proj2, _proj3] = await db
@@ -603,7 +657,9 @@ Esse futuro começa com sua participação hoje.
   console.log("\n✅ Seed concluído.\n");
   console.log("Logins para teste (senha para todos: senha123):");
   console.log("  - maria@exemplo.com (pessoa)");
-  console.log("  - empresa@construtorax.com (empresa – Construtora X)");
+  console.log("  - empresa@construtorax.com (Construtora X – MEMBER: lê e responde relatos)");
+  console.log("  - dona@construtorax.com (Construtora X – OWNER: administra a empresa)");
+  console.log("  - dona@transportessul.com (Transportes Sul – OWNER)");
   console.log("  - ana@exemplo.com (pessoa)");
   console.log("  - admin@comunicamulher.com.br (admin)");
   console.log("\nPerfil público da empresa: /company/construtora-x");

@@ -109,23 +109,33 @@ Legenda: `—` = não chamado de propósito (motivo na última coluna).
 
 ### Área da empresa — exigem vínculo com a empresa
 
-| Rota | anônimo | pessoa | outra pessoa | empresa | admin | Observação |
-|---|---|---|---|---|---|---|
-| `GET /api/company/complaints` | 401 | 401 | 401 | 200 | 401 | |
-| `GET /api/company/complaints/[id]` | 401 | 401 | 401 | 200 | 401 | 403 se o relato for de outra empresa (task `10`) |
-| `POST /api/company/complaints/[id]/messages` | 401 | 401 | 401 | — | 401 | resposta coberta em `complaint-response.spec.ts` |
-| `PATCH /api/company/complaints/[id]/status` | 401 | 401 | 401 | — | 401 | idem |
-| `GET /api/company/profile` | 401 | 401 | 401 | 200 | 401 | |
-| `PATCH /api/company/profile` | 401 | 401 | 401 | **403** | 401 | exige OWNER/ADMIN — ver achado `56` |
-| `DELETE /api/company/profile` | 401 | 401 | 401 | — | 401 | destrutivo |
-| `GET /api/company/projects` | 401 | 401 | 401 | 200 | 401 | |
-| `POST /api/company/projects` | 401 | 401 | 401 | **403** | 401 | exige OWNER/ADMIN |
-| `PATCH /api/company/projects/[id]` | 401 | 401 | 401 | **403** | 401 | exige OWNER/ADMIN |
-| `DELETE /api/company/projects/[id]` | 401 | 401 | 401 | — | 401 | destrutivo |
-| `GET /api/company/users` | 401 | 401 | 401 | 200 | 401 | |
-| `POST /api/company/users` | 401 | 401 | 401 | **403** | 401 | exige OWNER/ADMIN |
-| `PATCH /api/company/users/[userId]` | 401 | 401 | 401 | **403** | 401 | exige OWNER/ADMIN |
-| `DELETE /api/company/users/[userId]` | 401 | 401 | 401 | — | 401 | destrutivo |
+A coluna **empresa** é a conta `MEMBER` e **dona da empresa** é a `OWNER` da
+*mesma* empresa. Elas existem separadas no seed desde a task `56`: antes só
+havia a `MEMBER`, e por isso toda linha de administração aqui só sabia dizer
+"nega", sem nunca provar que alguém consegue.
+
+| Rota | anônimo | pessoa | outra pessoa | empresa (MEMBER) | dona da empresa (OWNER) | admin | Observação |
+|---|---|---|---|---|---|---|---|
+| `GET /api/company/complaints` | 401 | 401 | 401 | 200 | 200 | 401 | |
+| `GET /api/company/complaints/[id]` | 401 | 401 | 401 | 200 | 200 | 401 | 403 se o relato for de outra empresa (task `10`) |
+| `POST /api/company/complaints/[id]/messages` | 401 | 401 | 401 | — | — | 401 | resposta coberta em `complaint-response.spec.ts` |
+| `PATCH /api/company/complaints/[id]/status` | 401 | 401 | 401 | — | — | 401 | idem |
+| `GET /api/company/profile` | 401 | 401 | 401 | 200 | 200 | 401 | |
+| `PATCH /api/company/profile` | 401 | 401 | 401 | **403** | **200** | 401 | exige OWNER/ADMIN |
+| `DELETE /api/company/profile` | 401 | 401 | 401 | **403** | — | 401 | destrutivo para a OWNER: apagaria a empresa |
+| `GET /api/company/projects` | 401 | 401 | 401 | 200 | 200 | 401 | |
+| `POST /api/company/projects` | 401 | 401 | 401 | **403** | **201** | 401 | exige OWNER/ADMIN |
+| `PATCH /api/company/projects/[id]` | 401 | 401 | 401 | **403** | **200** | 401 | 403 se o projeto for de outra empresa |
+| `DELETE /api/company/projects/[id]` | 401 | 401 | 401 | **403** | **200** | 401 | 403 se o projeto for de outra empresa |
+| `GET /api/company/users` | 401 | 401 | 401 | 200 | 200 | 401 | |
+| `POST /api/company/users` | 401 | 401 | 401 | **403** | — | 401 | destrutivo para a OWNER: convidar cria conta |
+| `PATCH /api/company/users/[userId]` | 401 | 401 | 401 | **403** | — | 401 | destrutivo: mudaria o papel da conta MEMBER |
+| `DELETE /api/company/users/[userId]` | 401 | 401 | 401 | **403** | — | 401 | destrutivo |
+
+As linhas com `201`/`200` para a OWNER e as duas que dizem "403 se o projeto for
+de outra empresa" são medidas em `e2e/ownership.spec.ts`, com projeto criado e
+apagado dentro do teste — o seed é o banco da demonstração e não pode acumular
+lixo.
 
 **O admin da plataforma não enxerga a área da empresa.** Ele recebe 401 em tudo
 aqui, porque `getCurrentCompanyContext` só olha vínculo, não papel de
@@ -223,6 +233,14 @@ Quem decide o quê:
 `getCurrentCompanyContext` usa **o primeiro vínculo** (`memberships[0]`). Quem
 pertence a duas empresas opera sempre na primeira, sem escolher. Hoje não
 acontece; se acontecer, é bug de dado silencioso.
+
+> **O que uma rota inalcançável esconde.** Até a task `56` nenhuma conta do seed
+> era `OWNER`, então `PATCH /api/company/profile` nunca tinha respondido outra
+> coisa senão 403. Na primeira vez que uma OWNER a chamou, ela devolveu **500**:
+> `UpdateCompanyProfileDto` transformava chave ausente em `null`, e mandar só a
+> descrição apagava nome, CNPJ e o resto — com `name` sendo `NOT NULL`, virava
+> erro de servidor. Corrigido junto, e travado por teste. A lição fica: *rota que
+> conta nenhuma alcança não está protegida, está sem testar*.
 
 ## Matriz papel × recurso × operação
 

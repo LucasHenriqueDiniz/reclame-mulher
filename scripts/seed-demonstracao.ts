@@ -659,7 +659,9 @@ async function main() {
         userId: idPorEmail.get(e.responsavel.email)!,
         companyId: empresa.id,
         // OWNER de propósito: quem responde pela empresa na demonstração
-        // precisa alcançar as telas de perfil e de obras. Ver achado `56`.
+        // precisa alcançar as telas de perfil e de obras. O seed base resolveu
+        // isto na task `56` criando contas separadas para MEMBER e OWNER; aqui
+        // há uma conta por empresa, e ela é a dona.
         role: "OWNER",
       });
     }

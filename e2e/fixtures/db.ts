@@ -31,6 +31,31 @@ export function tituloDeTeste(assunto: string): string {
 }
 
 /**
+ * Apaga os projetos deixados por testes.
+ *
+ * Existe pela mesma razão que a limpeza de relatos: os testes de papel da task
+ * `56` criam projeto de verdade — é a única forma de exercer `POST` com corpo
+ * válido — e o seed é o banco da demonstração. O nome passa por
+ * `tituloDeTeste`, então a marca `[e2e]` é o que a busca procura.
+ */
+export async function limparProjetosDeTeste(): Promise<number> {
+  if (!url) {
+    throw new Error(
+      "DATABASE_URL não definida — a limpeza dos projetos de teste não pode rodar. " +
+        "Confira o .env antes de rodar a suíte."
+    );
+  }
+
+  const sql = neon(url);
+  const apagados = await sql`
+    DELETE FROM projects
+    WHERE name LIKE ${`${MARCA_E2E}%`}
+    RETURNING id
+  `;
+  return apagados.length;
+}
+
+/**
  * Apaga os relatos deixados por testes. Anexos e mensagens somem junto, por
  * `ON DELETE CASCADE`.
  *

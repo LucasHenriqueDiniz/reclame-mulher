@@ -21,14 +21,21 @@ export async function PATCH(req: NextRequest) {
     const body = await req.json().catch(() => ({}));
     const parsed = UpdateCompanyProfileDto.parse(body);
 
-    const company = await CompaniesRepo.update(
-      context.companyId,
-      {
-        ...parsed,
-        cnpj: parsed.cnpj ? parsed.cnpj.replace(/\D/g, "") : null,
-        foundationDate: parsed.foundationDate ? new Date(parsed.foundationDate) : null,
-      } as never
-    );
+    // `PATCH` é atualização parcial: campo que não veio no corpo não entra no
+    // `UPDATE`. Escrever `cnpj: ... : null` incondicionalmente apagava o CNPJ
+    // de quem mandasse qualquer outro campo — ver o comentário longo em
+    // `src/server/dto/companies.ts` e a task `56`.
+    const alteracoes: Record<string, unknown> = { ...parsed };
+    if (parsed.cnpj !== undefined) {
+      alteracoes.cnpj = parsed.cnpj ? parsed.cnpj.replace(/\D/g, "") : null;
+    }
+    if (parsed.foundationDate !== undefined) {
+      alteracoes.foundationDate = parsed.foundationDate
+        ? new Date(parsed.foundationDate)
+        : null;
+    }
+
+    const company = await CompaniesRepo.update(context.companyId, alteracoes);
 
     return NextResponse.json({ company });
   } catch (error) {

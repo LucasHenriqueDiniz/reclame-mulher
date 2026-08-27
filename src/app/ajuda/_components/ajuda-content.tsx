@@ -48,8 +48,16 @@ const PAPEIS_DO_SEED = [
     bg: "bg-blue-50",
   },
   {
-    papel: "Empresa",
-    descricao: "Vinculada à Construtora X. Lê e responde relatos.",
+    papel: "Empresa (MEMBER)",
+    descricao: "Vinculada à Construtora X. Lê e responde relatos, mas não administra.",
+    icon: Building2,
+    color: "text-emerald-600",
+    bg: "bg-emerald-50",
+  },
+  {
+    papel: "Empresa (OWNER)",
+    descricao:
+      "Duas: uma da Construtora X e outra da Transportes Sul. Editam o perfil, criam projeto e convidam a equipe.",
     icon: Building2,
     color: "text-emerald-600",
     bg: "bg-emerald-50",
