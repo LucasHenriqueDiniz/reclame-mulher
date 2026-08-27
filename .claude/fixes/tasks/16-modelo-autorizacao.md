@@ -59,7 +59,16 @@ denúncias identificadas de mulheres.
    - `src/server/repos/complaints.ts` está entre os arquivos modificados não
      commitados — revise com atenção redobrada.
 
-5. Cada correção feita aqui vira um teste na task `11`.
+5. **Anexos em reclamação pública** — questão aberta trazida pela task `03`.
+   A tela de detalhe passou a exibir os anexos, e o portão de acesso é
+   `if (!isPublic && !isAuthor) notFound()`. Ou seja: em reclamação marcada
+   como pública, **qualquer visitante vê as fotos e documentos anexados**.
+   Para foto de uma calçada quebrada, tudo bem. Para um documento pessoal que
+   a autora anexou como prova, não. Decida e documente: os anexos herdam a
+   visibilidade da reclamação, ou têm visibilidade própria? Se herdarem, a
+   interface de upload precisa avisar a autora disso **antes** do envio.
+
+6. Cada correção feita aqui vira um teste na task `11`.
 
 ## Critérios de aceite
 

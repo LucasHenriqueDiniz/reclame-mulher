@@ -15,9 +15,15 @@ que roda em produção.
 
 ## Evidência
 
-O `npm run build` usa `next build --turbopack`. O `next.config.ts` está entre os
-18 arquivos modificados **não commitados** — ou seja, a configuração de build
-atual não está versionada e ninguém sabe o que mudou nela.
+O `npm run build` usa `next build --turbopack`.
+
+> **Corrigido pelas tasks `00` e `03`.** A evidência original dizia que o
+> `next.config.ts` estava modificado sem commit. Verificado: a diferença era de
+> **29 bytes, só fim de linha CRLF/LF**, sem nenhuma mudança semântica —
+> `git diff` e `git diff -w` saíam os dois vazios. A modificação foi descartada
+> na task `03`. Confirmado também que **não existem** `ignoreBuildErrors` nem
+> `ignoreDuringBuilds`, e que `npm run build` passa do zero. Sobra desta task
+> verificar `npm run start` e erros de hidratação.
 
 Verifique também se o `next.config.ts` contém alguma escapatória do tipo:
 

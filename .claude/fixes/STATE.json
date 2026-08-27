@@ -19,7 +19,7 @@
     "pages": 42,
     "api_routes": 32,
     "components": 95,
-    "uncommitted_files": 19,
+    "uncommitted_files": 0,
     "stale_worktrees": 4,
     "production_build_verified": true,
     "responsiveness_measured": false,
@@ -89,11 +89,16 @@
       "slug": "triagem-trabalho-nao-commitado",
       "phase": 1,
       "order": 3,
-      "status": "pending",
+      "status": "done",
       "risk": "alto",
       "depends_on": [
         "02"
-      ]
+      ],
+      "started_at": "2026-08-26T21:47:00",
+      "finished_at": "2026-08-26T22:05:00",
+      "debug_iterations": 0,
+      "commit": "9a78077,95563c0,86161ad",
+      "notes": "18 arquivos mantidos em 3 commits tematicos; next.config.ts descartado (so CRLF). Tema dominante: dados falsos -> dados reais. 0 incertos."
     },
     {
       "id": "50",
@@ -395,6 +400,22 @@
       "at": "2026-08-26",
       "status": "done",
       "report": "reports/02-scripts-de-verificacao.md"
+    },
+    {
+      "task": "03",
+      "at": "2026-08-26",
+      "status": "done",
+      "report": "reports/03-triagem-trabalho-nao-commitado.md",
+      "commits": [
+        "9a78077",
+        "95563c0",
+        "86161ad"
+      ],
+      "propagated": [
+        "16",
+        "18",
+        "23"
+      ]
     }
   ]
 }

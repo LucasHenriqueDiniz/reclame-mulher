@@ -36,6 +36,13 @@ não é ela estar incompleta — é ela quebrar na frente da banca.
    num ponto bom para demonstrar — reclamações com histórico, empresas com
    perfil preenchido, nada de texto de teste na tela.
 
+   > **Isto ficou urgente depois da task `03`.** A homepage deixou de exibir
+   > números inventados e passou a consultar o banco. Com o seed atual ela
+   > mostra **2 mulheres ouvidas, 13% de taxa de resolução e 1 empresa em
+   > diálogo**. Está correto, e voltar ao número falso não é opção — mas para
+   > a banca a home vai parecer vazia. A solução é um seed de demonstração mais
+   > rico, não um número fixo no front.
+
 4. Plano B para o que costuma falhar ao vivo:
    - internet ruim → capturas ou gravação de tela como fallback;
    - upload de anexo dependendo de serviço externo (UploadThing) → tenha um
