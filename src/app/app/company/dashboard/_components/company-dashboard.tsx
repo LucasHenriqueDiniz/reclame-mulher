@@ -44,6 +44,7 @@ type Complaint = {
   status: string;
   createdAt: string;
   updatedAt?: string;
+  isAnonymous?: boolean;
   author?: { name: string | null } | null;
   project?: { name: string } | null;
 };
@@ -117,6 +118,10 @@ function ReclamacoesTab({
           title: c.title,
           status: c.status,
           createdAt: c.createdAt,
+          // `isAnonymous` precisa vir junto: sem ele a lista cai no
+          // `author?.name ?? "—"` e mostra um travessão onde deveria dizer
+          // "Autora anônima". Achado no build de produção, na task 18.
+          isAnonymous: c.isAnonymous,
           author: c.author,
           project: c.project,
         }))}

@@ -36,6 +36,26 @@ author: row.complaint.isAnonymous ? null : { name: row.authorName },
 Nenhuma tela mudou, porque nenhuma tela mostrava o nome. O que mudou é que a
 proteção deixou de depender de a tela lembrar.
 
+> **Correção (task `18`).** O parágrafo acima está errado num ponto, e o erro
+> torna o achado **mais** grave, não menos. Subindo o build de produção, a lista
+> de reclamações do painel da empresa mostrava, na tela, o travessão onde antes
+> aparecia **"Ana Santos"** — o nome real da autora de um relato anônimo do
+> seed.
+>
+> A causa: `company-dashboard.tsx` monta as props da lista com um `.map` que
+> **descartava `isAnonymous`**. O `CompanyComplaintList` tem a ramificação
+> `isAnonymous ? "Autora anônima" : author?.name`, mas recebia `undefined` e
+> caía no nome.
+>
+> Ou seja: o vazamento não era só de payload. Estava **impresso na tela** da
+> empresa reclamada. A correção da `16` já o havia estancado; a `18` restaurou
+> o rótulo certo, passando `isAnonymous` adiante.
+>
+> Eu havia concluído "nenhuma tela mostrava o nome" a partir dos `grep` por
+> `author?.name`, que de fato mostraram a ramificação correta em todos os
+> renderizadores. O que o grep não mostra é **quem esquece de passar a prop**.
+> Ler o componente não bastava; foi preciso subir a aplicação e olhar.
+
 ### A prova de que o teste pega
 
 Um teste que passa depois da correção não prova nada sozinho. Reapliquei o

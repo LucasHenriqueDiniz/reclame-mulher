@@ -422,12 +422,18 @@
       "slug": "build-producao",
       "phase": 7,
       "order": 18,
-      "status": "pending",
+      "status": "done",
       "risk": "medio",
       "depends_on": [
         "17"
       ],
-      "notes": "build ja passa sem ignoreBuildErrors; escopo reduzido a npm run start e hidratacao"
+      "notes": "Build limpo: 31s do zero, 0 warnings, 64 paginas estaticas, sem ignoreBuildErrors nem ignoreDuringBuilds. Nenhum erro de hidratacao em 4 telas do build de producao; os 3 logins funcionam, um deles pela interface. O valor da task veio de subir a aplicacao: (1) o painel da empresa imprimia 'Ana Santos' - nome real de autora anonima - porque o .map do dashboard descartava isAnonymous; corrigido, e o relatorio da task 16 recebeu nota de correcao porque eu havia afirmado que nenhuma tela mostrava o nome; (2) 'Esqueceu a senha?' aponta para /forgot-password, que nao existe -> task 59, e a varredura de todos os hrefs internos mostrou que e o UNICO link quebrado; (3) /api/me devolve 401 em toda pagina anonima e suja o console -> task 58. Medido para a task 19: /login tem 78,8 kB (15x o /register) por causa de react-hook-form + zod; images.unoptimized continua ligado.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 0,
+      "files_changed": [
+        "src/app/app/company/dashboard/_components/company-dashboard.tsx"
+      ]
     },
     {
       "id": "19",
@@ -579,6 +585,36 @@
       "risk": "baixo",
       "depends_on": [],
       "notes": "Achado na task 15. company-complaint-detail-content.tsx:515 monta /app/complaints/new?company= com o NOME da empresa; os outros cinco call sites passam id. Alem disso o card aparece para a propria empresa, convidando-a a reclamar de si mesma; a regra !isMember ja existe em company-profile-content.tsx:568.",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "58",
+      "slug": "api-me-401-em-toda-pagina",
+      "phase": 6,
+      "order": 58,
+      "status": "pending",
+      "risk": "baixo",
+      "depends_on": [
+        "17"
+      ],
+      "notes": "Achado na task 18 (build de producao).",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "59",
+      "slug": "esqueceu-a-senha-nao-existe",
+      "phase": 2,
+      "order": 59,
+      "status": "pending",
+      "risk": "alto",
+      "depends_on": [],
+      "notes": "Achado na task 18 (build de producao).",
       "started_at": null,
       "finished_at": null,
       "debug_iterations": 0,
@@ -755,6 +791,12 @@
       "task": "17",
       "event": "done",
       "detail": "34 formatos de erro -> 1. Mensagens em ingles na tela: ~64 -> 0. Suite 328 -> 362."
+    },
+    {
+      "at": "2026-08-27",
+      "task": "18",
+      "event": "done",
+      "detail": "Build 31s sem warning, 0 erro de hidratacao, 3 logins ok. Achados 58 e 59. Corrigido rotulo de anonimato no painel da empresa."
     }
   ]
 }
