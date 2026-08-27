@@ -15,7 +15,7 @@ pode ser usado como fonte de verdade**. Nada de código muda aqui.
 
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
-| ⬜ | `00` | [Investigação — retrato real do projeto](tasks/00-investigacao.md) | baixo | — |
+| ✅ | `00` | [Investigação — retrato real do projeto](tasks/00-investigacao.md) | baixo | — |
 
 ---
 
@@ -130,7 +130,18 @@ criar deve registrar aqui e em `STATE.json`.
 
 | | ID | Task | Risco | Criada por | Motivo |
 |---|---|---|---|---|---|
-| | | _(nenhuma ainda)_ | | | |
+| ⬜ | `50` | [Middleware não protege `/app/*`](tasks/50-middleware-nao-protege.md) | **alto** | `00` | `/app/complaints`, `/app/complaints/new` e `/app/settings` respondem 200 sem sessão |
+| ⬜ | `51` | [Rate limiter em memória com bucket compartilhado](tasks/51-rate-limit-em-memoria.md) | médio | `00` | `getClientIp` colapsa em `"unknown"`; conta login bem-sucedido |
+
+**Ordem revisada pela task `00`:** `01` → `02` → `03` → **`50`** → `07` → …
+A `50` sobe na fila por ser defeito confirmado, e cabe antes dos testes para que
+a task `08` já asserte o comportamento correto.
+
+**Resultado da investigação:** [`reports/00-investigacao.md`](reports/00-investigacao.md).
+Build de produção passa por mérito, `eslint src` já está em 0 erros, e a camada
+de autorização das APIs é sólida. Responsividade e acessibilidade **não foram
+medidas** — o navegador embutido recusou `localhost`, então o veredito fica com
+as tasks `12` e `14`, que montam Playwright.
 
 ---
 
