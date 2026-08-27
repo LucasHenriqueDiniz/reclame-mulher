@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { getCurrentCompanyContext } from "@/server/auth/company";
 import { ComplaintsRepo } from "@/server/repos/complaints";
+import { CompaniesRepo } from "@/server/repos/companies";
 import { MessagesRepo } from "@/server/repos/messages";
 import { CompanyComplaintDetailContent } from "./_components/company-complaint-detail-content";
 
@@ -31,10 +32,26 @@ export default async function CompanyComplaintDetailPage({
     notFound();
   }
 
-  const messages = await MessagesRepo.findByComplaint(id);
+  const [messages, company, stats, attachments] = await Promise.all([
+    MessagesRepo.findByComplaint(id),
+    CompaniesRepo.findById(companyContext.companyId),
+    CompaniesRepo.getStats(companyContext.companyId),
+    ComplaintsRepo.findAttachments(id),
+  ]);
 
   return (
     <CompanyComplaintDetailContent
+      companyProfile={{
+        slug: company.slug ?? null,
+        verified: company.verifiedAt != null,
+      }}
+      companyStats={{
+        resolutionRate: stats.resolutionRate,
+        activeDialogsCount: stats.activeDialogsCount,
+        resolvedCases: stats.resolvedCases,
+        activeProjectsCount: stats.activeProjectsCount,
+        avgResponseHours: stats.avgResponseHours,
+      }}
       complaint={{
         id: complaint.id,
         title: complaint.title,
@@ -53,6 +70,12 @@ export default async function CompanyComplaintDetailPage({
         author: complaint.author ?? null,
         company: complaint.company,
         project: complaint.project,
+        attachments: attachments.map((a) => ({
+          id: a.id,
+          filePath: a.filePath,
+          fileName: a.fileName,
+          contentType: a.contentType,
+        })),
       }}
       messages={messages.map((message) => ({
         id: message.id,

@@ -30,22 +30,28 @@ function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string
   return <span ref={ref}>0{suffix}</span>;
 }
 
-export function ImpactStats() {
+export interface ImpactStatsProps {
+  womenHeard: number;
+  resolutionRate: number;
+  companiesEngaged: number;
+}
+
+export function ImpactStats({ womenHeard, resolutionRate, companiesEngaged }: ImpactStatsProps) {
   const statsData = [
     {
-      number: 3247,
+      number: womenHeard,
       suffix: "",
       description: "mulheres ouvidas",
     },
     {
-      number: 87,
+      number: resolutionRate,
       suffix: "%",
-      description: "satisfação e confiança",
+      description: "taxa de resolução",
     },
     {
-      number: 156,
+      number: companiesEngaged,
       suffix: "",
-      description: "comunidades transformadas",
+      description: "empresas em diálogo",
     },
   ];
 

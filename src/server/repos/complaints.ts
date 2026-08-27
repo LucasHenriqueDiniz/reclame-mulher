@@ -1,7 +1,7 @@
 import "server-only";
 import { db } from "@/db/client";
 import { complaints, complaintAttachments, profiles, companies, projects } from "@/db/schema";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, count, sql } from "drizzle-orm";
 import { CreateComplaintInput, UpdateComplaintInput, UpdateComplaintStatusInput } from "../dto/complaints";
 
 export class ComplaintsRepo {
@@ -83,6 +83,14 @@ export class ComplaintsRepo {
     }));
   }
 
+  static async findAttachments(complaintId: string) {
+    return db
+      .select()
+      .from(complaintAttachments)
+      .where(eq(complaintAttachments.complaintId, complaintId))
+      .orderBy(complaintAttachments.createdAt);
+  }
+
   static async findByCompany(companyId: string) {
     const rows = await db
       .select({
@@ -154,5 +162,29 @@ export class ComplaintsRepo {
 
   static async delete(id: string) {
     await db.delete(complaints).where(eq(complaints.id, id));
+  }
+
+  /**
+   * Números reais para a seção "Nosso impacto" da homepage — nada de
+   * valores fixos no front, tudo consultado do banco.
+   */
+  static async getPlatformStats() {
+    const [row] = await db
+      .select({
+        totalComplaints: count(complaints.id),
+        resolved: sql<number>`sum(case when ${complaints.status} = 'RESOLVED' then 1 else 0 end)::int`,
+        womenHeard: sql<number>`count(distinct ${complaints.authorId})::int`,
+        companiesEngaged: sql<number>`count(distinct ${complaints.companyId})::int`,
+      })
+      .from(complaints);
+
+    const total = Number(row?.totalComplaints ?? 0);
+    const resolved = Number(row?.resolved ?? 0);
+
+    return {
+      womenHeard: Number(row?.womenHeard ?? 0),
+      resolutionRate: total > 0 ? Math.round((resolved / total) * 100) : 0,
+      companiesEngaged: Number(row?.companiesEngaged ?? 0),
+    };
   }
 }

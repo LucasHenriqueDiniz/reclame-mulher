@@ -103,6 +103,7 @@ type ComplaintDetail = {
   author: { name: string | null } | null;
   company: { name: string | null };
   project: { name: string } | null;
+  attachments?: { id: string; filePath: string; fileName: string; contentType?: string | null }[];
 };
 
 type MessageItem = {
@@ -127,12 +128,29 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
+type CompanyProfile = {
+  slug: string | null;
+  verified: boolean;
+};
+
+type CompanyStats = {
+  resolutionRate: number;
+  activeDialogsCount: number;
+  resolvedCases: number;
+  activeProjectsCount: number;
+  avgResponseHours: number | null;
+};
+
 export function CompanyComplaintDetailContent({
   complaint,
   messages,
+  companyProfile,
+  companyStats,
 }: {
   complaint: ComplaintDetail;
   messages: MessageItem[];
+  companyProfile: CompanyProfile;
+  companyStats: CompanyStats;
 }) {
   const [response, setResponse] = useState("");
   const [status, setStatus] = useState(complaint.status);
@@ -212,11 +230,11 @@ export function CompanyComplaintDetailContent({
 
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div>
-              <h1 className="font-['Poppins'] text-2xl font-bold text-white mb-1">
+              <h1 className="font-heading text-2xl font-bold text-white mb-1">
                 {complaint.title}
               </h1>
               <p className="text-sm text-white/80 font-['Poppins']">
-                Relato <span className="font-mono font-semibold">#{protocolId(complaint.id)}</span>
+                Relato <span className="font-mono font-semibold">{protocolId(complaint.id)}</span>
               </p>
             </div>
             <StatusBadge status={complaint.status} />
@@ -329,9 +347,6 @@ export function CompanyComplaintDetailContent({
                           <div className="flex items-center justify-between mb-2">
                             <span className="font-semibold text-sm text-[#2A3F54]">
                               {message.author?.name ?? (isCompany ? "Sua empresa" : "Reclamante")}
-                              {isCompany && (
-                                <span className="font-normal text-gray-400 ml-1">— Coordenador de Relações Comunitárias</span>
-                              )}
                             </span>
                             <span className="text-xs text-gray-400">
                               {formatDateTime(message.createdAt)}
@@ -340,6 +355,38 @@ export function CompanyComplaintDetailContent({
                           <p className="text-[#2A3F54] whitespace-pre-wrap leading-relaxed text-sm">
                             {message.content}
                           </p>
+                          {isFirst && complaint.attachments != null && complaint.attachments.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-3">
+                              {complaint.attachments.map((a) =>
+                                a.contentType?.startsWith("image/") ? (
+                                  <a
+                                    key={a.id}
+                                    href={a.filePath}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block rounded-lg overflow-hidden border border-gray-200"
+                                  >
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                      src={a.filePath}
+                                      alt={a.fileName}
+                                      className="w-[120px] h-[120px] object-cover block"
+                                    />
+                                  </a>
+                                ) : (
+                                  <a
+                                    key={a.id}
+                                    href={a.filePath}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-xs text-[#1E88E5] font-medium"
+                                  >
+                                    📎 {a.fileName}
+                                  </a>
+                                )
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -408,20 +455,22 @@ export function CompanyComplaintDetailContent({
               <h3 className="font-['Poppins'] font-semibold text-[#2A3F54] text-lg mb-1">
                 {complaint.company.name ?? "Empresa"}
               </h3>
-              <Badge className="bg-[#1E88E5]/10 text-[#1E88E5] hover:bg-[#1E88E5]/10 mb-4">
-                <Shield className="w-3 h-3 mr-1" />
-                VERIFICADA
-              </Badge>
+              {companyProfile.verified && (
+                <Badge className="bg-[#1E88E5]/10 text-[#1E88E5] hover:bg-[#1E88E5]/10 mb-4">
+                  <Shield className="w-3 h-3 mr-1" />
+                  VERIFICADA
+                </Badge>
+              )}
 
               {/* Stats */}
               <div className="space-y-3 text-left">
                 <div>
                   <div className="flex items-center justify-between text-xs mb-1">
                     <span className="text-gray-500">Taxa de resolução</span>
-                    <span className="font-semibold text-[#2A3F54]">92%</span>
+                    <span className="font-semibold text-[#2A3F54]">{companyStats.resolutionRate}%</span>
                   </div>
                   <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-green-500 rounded-full" style={{ width: "92%" }} />
+                    <div className="h-full bg-green-500 rounded-full" style={{ width: `${companyStats.resolutionRate}%` }} />
                   </div>
                 </div>
 
@@ -429,31 +478,35 @@ export function CompanyComplaintDetailContent({
                   <div className="flex items-center gap-2">
                     <MessageCircle className="w-4 h-4 text-[#1E88E5]" />
                     <span className="text-xs text-gray-600">
-                      <strong className="text-[#2A3F54]">27</strong> diálogos ativos
+                      <strong className="text-[#2A3F54]">{companyStats.activeDialogsCount}</strong> diálogos ativos
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-green-500" />
                     <span className="text-xs text-gray-600">
-                      <strong className="text-[#2A3F54]">143</strong> casos resolvidos
+                      <strong className="text-[#2A3F54]">{companyStats.resolvedCases}</strong> casos resolvidos
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <BarChart3 className="w-4 h-4 text-[#1E88E5]" />
-                    <span className="text-xs text-gray-600">3 projetos em andamento</span>
+                    <span className="text-xs text-gray-600">{companyStats.activeProjectsCount} projetos em andamento</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4 text-[#1E88E5]" />
-                    <span className="text-xs text-gray-600">Resposta em 43h</span>
+                    <span className="text-xs text-gray-600">
+                      {companyStats.avgResponseHours != null ? `Resposta em ${companyStats.avgResponseHours}h` : "Sem histórico de resposta"}
+                    </span>
                   </div>
                 </div>
               </div>
 
-              <Link href={`/company/${complaint.company.name?.toLowerCase().replace(/\s+/g, "-") ?? ""}`}>
-                <Button variant="link" className="mt-4 text-[#1E88E5]">
-                  Ver página da empresa →
-                </Button>
-              </Link>
+              {companyProfile.slug && (
+                <Link href={`/company/${companyProfile.slug}`}>
+                  <Button variant="link" className="mt-4 text-[#1E88E5]">
+                    Ver página da empresa →
+                  </Button>
+                </Link>
+              )}
             </CardContent>
           </Card>
 

@@ -3,6 +3,7 @@ import { MainHeader } from "@/components/layout/MainHeader";
 import { Hero } from "@/components/landing/Hero";
 import { ImpactStats } from "@/components/landing/ImpactStats";
 import { Wave } from "@/components/landing/Wave";
+import { ComplaintsRepo } from "@/server/repos/complaints";
 
 const ProcessCarousel = dynamic(() => import("@/components/landing/ProcessCarousel").then((m) => m.ProcessCarousel));
 const ImpactCategories = dynamic(() => import("@/components/landing/ImpactCategories").then((m) => m.ImpactCategories));
@@ -10,12 +11,14 @@ const PartnersSection = dynamic(() => import("@/components/landing/PartnersSecti
 const BlogCards = dynamic(() => import("@/components/landing/BlogCards").then((m) => m.BlogCards));
 const Footer = dynamic(() => import("@/components/landing/Footer").then((m) => m.Footer));
 
-export default function HomePage() {
+export default async function HomePage() {
+  const stats = await ComplaintsRepo.getPlatformStats();
+
   return (
     <main id="main-content" className="overflow-hidden">
       <MainHeader />
       <Hero />
-      <ImpactStats />
+      <ImpactStats {...stats} />
       <Wave variant={1}/>
       <ProcessCarousel />
       
