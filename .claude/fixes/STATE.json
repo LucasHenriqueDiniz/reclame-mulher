@@ -28,7 +28,7 @@
     "corrected_by_task": "01",
     "corrected_at": "2026-08-26"
   },
-  "current_task": "67",
+  "current_task": "68",
   "tasks": [
     {
       "id": "00",
@@ -911,14 +911,19 @@
       "slug": "endereco-de-suporte-nao-verificado",
       "phase": 2,
       "order": 67,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [],
-      "notes": "Achado na task 59: verification/page.tsx manda escrever para suporte@reclame-mulher.com.br, unica mencao no repositorio e num dominio usado em nenhum outro lugar - nem o admin do seed usa (e @comunicamulher.com.br). Somado ao achado 61 (nao ha envio de e-mail) e ao Manual dizendo que nao existe canal de atendimento, e provavel promessa vazia. Nenhum teste pega: mailto sai do produto, e se a caixa responde e fato do mundo. Precisa de resposta humana.",
-      "started_at": null,
-      "finished_at": null,
+      "notes": "A TASK ESPERAVA UMA DECISAO E A PERGUNTA TINHA RESPOSTA. Antes de bloquear, perguntei ao DNS: reclame-mulher.com.br e NXDOMAIN no resolvedor local e em 8.8.8.8 e 1.1.1.1, com controle positivo (uergs.edu.br devolve MX normalmente). Sem dominio registrado nao ha servidor de e-mail nem caixa. Criterio 1 respondido por medicao, sem precisar de humano. E NAO ERA UM ENDERECO, ERAM TRES DOMINIOS, todos NXDOMAIN: reclame-mulher.com.br (o da task), comunicamulher.com.br (verificacao@, nas instrucoes de verificacao) e reclamemulher.com.br (docs/especificacao-de-telas.md). O segundo e o que pesa: era o UNICO caminho documentado para uma empresa se verificar, mandava anexar Cartao CNPJ e documento do responsavel a uma caixa inexistente, e prometia analise em 5 dias uteis. Nao e link morto - e pedido de documento pessoal para lugar nenhum. O caminho real esta no codigo: quem verifica e a administracao, pelo painel. DETALHE QUE SO APARECE LENDO O COMPONENTE: o estado 'Verificacao rejeitada' dizia 'entre em contato pelo e-mail abaixo' e nao havia e-mail abaixo - o endereco ficava no ramo status === 'none', que nao renderiza quando rejeitada. A frase apontava para o vazio antes do dominio entrar na conversa. O prazo de 5 dias uteis saiu junto. Nenhum endereco novo escrito, mesma razao da task 59. FICOU DE PROPOSITO: admin@comunicamulher.com.br (identificador de login, nao promessa de contato) e o mailto: de CompanyContactsCard, que usa o e-mail da PROPRIA empresa - dado de perfil, nao canal da plataforma.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
       "debug_iterations": 0,
-      "files_changed": []
+      "files_changed": [
+        "src/app/app/company/verification/page.tsx",
+        "src/components/company/CompanyVerificationPanel.tsx",
+        "docs/especificacao-de-telas.md",
+        "TODO.md"
+      ]
     },
     {
       "id": "68",

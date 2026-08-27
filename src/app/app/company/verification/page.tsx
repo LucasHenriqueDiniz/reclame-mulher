@@ -83,14 +83,14 @@ export default function CompanyVerificationPage() {
           </Button>
         </div>
 
+        {/*
+          Aqui havia `mailto:suporte@reclame-mulher.com.br`. O domínio não
+          existe — NXDOMAIN em três resolvedores —, então a mensagem não sairia
+          do lugar. Ver task `67`.
+        */}
         <p className="text-sm text-neutral-500 mt-8">
-          Precisa de ajuda?{" "}
-          <a
-            href="mailto:suporte@reclame-mulher.com.br"
-            className="text-[#1976D2] underline"
-          >
-            Entre em contato
-          </a>
+          Precisa de ajuda? Nesta versão não há canal de atendimento — fale com
+          quem administra a plataforma.
         </p>
       </ContentCard>
     </CompanyPageShell>

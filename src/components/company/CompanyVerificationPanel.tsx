@@ -101,7 +101,7 @@ export function CompanyVerificationPanel({
             Verificação rejeitada
           </div>
           <div style={{ fontSize: 14, color: S.muted }}>
-            Entre em contato pelo e-mail abaixo para mais informações.
+            Peça mais informações a quem administra a plataforma.
           </div>
         </div>
       )}
@@ -152,12 +152,11 @@ export function CompanyVerificationPanel({
           >
             <li>Preencha todos os dados da empresa (CNPJ, endereço, responsável)</li>
             <li>
-              Envie e-mail para{" "}
-              <strong>verificacao@comunicamulher.com.br</strong> com o assunto{" "}
-              <em>Verificação de empresa</em>
+              Avise <strong>quem administra a plataforma</strong>. Nesta versão a
+              verificação é feita direto pela administração: não há caixa de
+              e-mail para onde mandar
             </li>
-            <li>Anexe cópia do Cartão CNPJ e documento do responsável</li>
-            <li>Nossa equipe analisará em até 5 dias úteis</li>
+            <li>Tenha à mão o Cartão CNPJ e o documento do responsável</li>
           </ol>
         </>
       )}

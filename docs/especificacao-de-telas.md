@@ -993,10 +993,15 @@ R: Atualmente não (1 role por conta). Crie segunda conta se necessário.
 
 ## Contato e Suporte
 
-- **Email**: suporte@reclamemulher.com.br
-- **WhatsApp**: (11) 9XXXX-XXXX
-- **Redes Sociais**: @reclamemulher (Instagram, Twitter)
-- **Página de Ajuda**: https://reclamemulher.com.br/ajuda
+**Não existe nenhum destes canais.** Esta seção descrevia um endereço, um
+WhatsApp com número de exemplo, perfis de rede social e uma página de ajuda que
+nunca foram criados — e os três domínios citados no projeto
+(`reclamemulher.com.br`, `reclame-mulher.com.br`, `comunicamulher.com.br`)
+**não estão registrados**: os três devolvem NXDOMAIN. Medido na task `67`.
+
+O que existe hoje: quem administra a plataforma, pela conta de administração.
+As telas que mandavam escrever para essas caixas foram corrigidas; esta seção
+fica como registro do que foi planejado e não feito.
 
 ---
 
