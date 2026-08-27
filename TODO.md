@@ -35,6 +35,14 @@ fazer.
 - [ ] **Decidir onde hospedar.** Três coisas dependem disso: a região do banco
       (139 ms por consulta a partir do Brasil), se `images.unoptimized` pode ser
       desligado, e se `sharp` precisa ser instalado.
+- [ ] **Decidir o que acontece quando a usuária discorda do encerramento** —
+      [`55`](.claude/fixes/reports/55-resolvido-nao-reabre.md). Hoje a empresa
+      marca *Resolvida*, a autora responde "não foi resolvido" e **nada
+      acontece**. São três caminhos possíveis, e a escolha é da Paloma: é
+      desenho da pesquisa. Duas coisas medidas que pesam na conversa: reabrir
+      sempre **não** tira da empresa o poder de encerrar sozinha (ela reencerra
+      quantas vezes quiser), e qualquer um dos caminhos mexe na **taxa de
+      resolução que aparece no perfil público**.
 - [ ] **Decidir sobre e-mail** — [`61`](.claude/fixes/tasks/61-email-nao-existe.md).
       Existem quatro modelos HTML e nenhum envio. Ou se implementa, ou se assume
       e se documenta que a plataforma não manda e-mail.
@@ -46,9 +54,6 @@ fazer.
 
 Encontrados durante a fila de correções, cada um com investigação escrita.
 
-- [ ] [`55`](.claude/fixes/tasks/55-resolvido-nao-reabre.md) — relato marcado
-      como resolvido não reabre quando a usuária responde. A documentação de
-      julho afirmava o contrário.
 - [ ] [`56`](.claude/fixes/tasks/56-conta-empresa-do-seed-e-member.md) — a conta
       de empresa do seed entra como `MEMBER`, então a demonstração não alcança
       as telas que exigem `OWNER`/`ADMIN`. **Bloqueia a task `23`.**

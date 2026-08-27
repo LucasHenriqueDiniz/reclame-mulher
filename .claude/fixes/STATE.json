@@ -633,14 +633,15 @@
       "slug": "resolvido-nao-reabre",
       "phase": 6,
       "order": 55,
-      "status": "pending",
+      "status": "blocked",
       "risk": "alto",
       "depends_on": [],
-      "notes": "Achado na task 10. Depois de RESOLVED a resposta da usuaria e gravada mas o status nao muda: ela nao consegue contestar o encerramento. Contraria o TODO.md. Precisa de decisao da Paloma entre reabrir sempre, criar REOPENED ou exigir confirmacao da autora.",
-      "started_at": null,
-      "finished_at": null,
+      "notes": "Defeito confirmado, intacto. Em vez de so bloquear, medi o que a decisao custa. TRES FATOS QUE A TASK NAO TINHA: (1) src/app/api/complaints/[id]/ tem UM unico subdiretorio, messages/ - a autora nao tem nenhuma alavanca de status, nenhuma; (2) a rota de status da empresa nao valida transicao, aceita qualquer status vindo de qualquer status, entao a OPCAO 1 NAO devolve a ultima palavra a usuaria: devolve um vaivem que a empresa sempre vence reencerrando. So a opcao 3 tira o encerramento unilateral; (3) resolutionRate = RESOLVED/total contado AGORA, sem historico, e e publico - as tres opcoes mexem no numero, e a 3 o transformaria em 'resolucao confirmada pela autora'. Somado ao achado 61 (nao ha e-mail), a opcao 2 e a unica em que a fila da empresa MOSTRA que aquilo e contestacao. CRITERIO 4 JA ESTAVA CUMPRIDO: o TODO.md foi corrigido na task 21; a afirmacao falsa era do TODO de julho. NAO editei CHANGELOG.md:111 e :194, que ainda afirmam 'reabertura automatica' - e registro historico, e se corrige pela frente.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
       "debug_iterations": 0,
-      "files_changed": []
+      "files_changed": [],
+      "blocked_reason": "Primeiro criterio de aceite da propria task: 'Decisao registrada aqui, com data e quem decidiu', e a task diz em negrito que QUEM DECIDE E A PALOMA - escolher entre reabrir sempre, criar REOPENED ou exigir confirmacao da autora e desenho da pesquisa, nao implementacao. Os outros tres criterios dependem desse. Codigo nao foi tocado."
     },
     {
       "id": "56",
@@ -1013,6 +1014,13 @@
       "event": "done",
       "detail": "Cinco mapas de rotulo viraram um. Suite 459 -> 461. Manual refeito: 16 das 34 capturas. Contraste de 1,7:1 no selo da empresa corrigido de carona.",
       "report": "reports/54-rotulos-de-status-divergentes.md"
+    },
+    {
+      "at": "2026-08-27",
+      "task": "55",
+      "event": "blocked",
+      "report": "reports/55-resolvido-nao-reabre.md",
+      "detail": "Decisao de produto e da Paloma. Bloqueio produtivo: medido que a opcao 1 nao tira o encerramento unilateral (a empresa reencerra sem limite) e que a taxa de resolucao publica se move nas tres opcoes."
     }
   ]
 }
