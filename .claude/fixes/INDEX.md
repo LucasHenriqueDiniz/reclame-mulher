@@ -132,7 +132,7 @@ criar deve registrar aqui e em `STATE.json`.
 
 | | ID | Task | Risco | Criada por | Motivo |
 |---|---|---|---|---|---|
-| ⬜ | `50` | [Middleware não protege `/app/*`](tasks/50-middleware-nao-protege.md) | **alto** | `00` | `/app/complaints`, `/app/complaints/new` e `/app/settings` respondem 200 sem sessão |
+| ✅ | `50` | [Middleware não protege `/app/*`](tasks/50-middleware-nao-protege.md) | **alto** | `00` | ~~200 sem sessão~~ **resolvido:** o arquivo estava na raiz, mas com `src/` o Next só lê `src/middleware.ts` — era código morto |
 | ⬜ | `51` | [Rate limiter em memória com bucket compartilhado](tasks/51-rate-limit-em-memoria.md) | médio | `00` | `getClientIp` colapsa em `"unknown"`; conta login bem-sucedido |
 
 **Ordem revisada pela task `00`:** `01` → `02` → `03` → **`50`** → `07` → …

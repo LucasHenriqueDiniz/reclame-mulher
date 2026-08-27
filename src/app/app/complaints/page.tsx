@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
 import { ComplaintsRepo } from "@/server/repos/complaints";
 import { ProfilesRepo } from "@/server/repos/profiles";
@@ -5,7 +6,7 @@ import { ComplaintsContent } from "./_components/complaints-content";
 
 export default async function ComplaintsPage() {
   const session = await getSession();
-  if (!session) return null;
+  if (!session) redirect("/login");
 
   const [rawComplaints, profile] = await Promise.all([
     ComplaintsRepo.findByUser(session.userId),

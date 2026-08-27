@@ -105,12 +105,20 @@
       "slug": "middleware-nao-protege",
       "phase": 6,
       "order": 3.5,
-      "status": "pending",
+      "status": "done",
       "risk": "alto",
       "depends_on": [
         "03"
       ],
-      "notes": "criada pela task 00"
+      "notes": "Causa-raiz: middleware.ts na raiz, mas projeto usa src/ - Next so le src/middleware.ts. Era codigo morto. Lista de rotas publicas tambem estava errada (/companies, /api/complaints, /api/search, /api/uploadthing).",
+      "started_at": "2026-08-26T21:56:00",
+      "finished_at": "2026-08-26T22:25:00",
+      "debug_iterations": 1,
+      "files_changed": [
+        "src/middleware.ts",
+        "src/app/app/complaints/page.tsx",
+        "src/app/app/settings/page.tsx"
+      ]
     },
     {
       "id": "51",
@@ -180,7 +188,8 @@
       "risk": "baixo",
       "depends_on": [
         "07"
-      ]
+      ],
+      "notes": "asserir tambem que as 17 paginas publicas e 6 APIs publicas seguem abertas (regressao da task 50)"
     },
     {
       "id": "09",
@@ -416,6 +425,12 @@
         "18",
         "23"
       ]
+    },
+    {
+      "task": "50",
+      "at": "2026-08-26",
+      "status": "done",
+      "report": "reports/50-middleware-nao-protege.md"
     }
   ]
 }

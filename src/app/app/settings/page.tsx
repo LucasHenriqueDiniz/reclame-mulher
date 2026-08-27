@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
 import { ProfilesRepo } from "@/server/repos/profiles";
 import { SettingsContent } from "./_components/settings-content";
@@ -8,7 +9,7 @@ export default async function SettingsPage({
   searchParams: Promise<{ forcePasswordChange?: string }>;
 }) {
   const session = await getSession();
-  if (!session) return null;
+  if (!session) redirect("/login");
   const { forcePasswordChange } = await searchParams;
 
   const profile = await ProfilesRepo.findById(session.userId);
