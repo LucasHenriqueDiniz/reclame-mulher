@@ -766,7 +766,8 @@
         "src/components/blog/BlogPostCardSkeleton.tsx (removido)",
         ".claude/fixes/reports/60-perf/ (cls.mjs, diagnostico.mjs)",
         "TODO.md"
-      ]
+      ],
+      "commit": "d3a9530"
     },
     {
       "id": "61",
