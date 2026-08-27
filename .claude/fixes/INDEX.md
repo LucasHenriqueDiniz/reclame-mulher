@@ -55,12 +55,13 @@ ESLint varria as worktrees. Depois de corrigir o escopo e limpar o que restava:
 
 ## Fase 3 — Testes
 
-**A maior lacuna real do projeto.** Zero testes automatizados, apesar de vários
-relatórios afirmarem "E2E validado".
+~~**A maior lacuna real do projeto.** Zero testes automatizados.~~
+**Infraestrutura montada pela task `07`:** Vitest (18 testes) e Playwright
+(desktop + mobile 375×812), com `npm run check` rodando typecheck + lint + test.
 
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
-| ⬜ | `07` | [Montar infraestrutura de testes automatizados](tasks/07-infra-de-testes.md) | médio | `03` |
+| ✅ | `07` | [Montar infraestrutura de testes automatizados](tasks/07-infra-de-testes.md) | médio | `03` |
 | ⬜ | `08` | [E2E — autenticação nos três perfis](tasks/08-e2e-autenticacao.md) | baixo | `07` |
 | ⬜ | `09` | [E2E — criação de reclamação (wizard de 4 etapas)](tasks/09-e2e-nova-reclamacao.md) | baixo | `08` |
 | ⬜ | `10` | [E2E — resposta da empresa e transições de status](tasks/10-e2e-resposta-empresa.md) | baixo | `09` |

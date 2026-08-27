@@ -12,7 +12,7 @@
     "eslint_errors_note": "0 erros apos ignorar .claude/** no eslint.config.mjs (task 01)",
     "eslint_warnings": 0,
     "eslint_top_rules": {},
-    "automated_tests": 0,
+    "automated_tests": 24,
     "pages": 42,
     "api_routes": 32,
     "components": 95,
@@ -190,12 +190,15 @@
       "slug": "infra-de-testes",
       "phase": 3,
       "order": 7,
-      "status": "pending",
+      "status": "done",
       "risk": "medio",
       "depends_on": [
         "03"
       ],
-      "notes": "usar __resetRateLimitStore() para isolar testes do limitador; 6 cenarios descritos em reports/51"
+      "notes": "Vitest (18 testes) + Playwright (6, desktop+mobile). Projeto e pnpm, nao npm. vite-tsconfig-paths removido (Vite resolve nativo).",
+      "started_at": "2026-08-26T22:44:00",
+      "finished_at": "2026-08-26T22:55:00",
+      "debug_iterations": 2
     },
     {
       "id": "08",
@@ -310,7 +313,8 @@
       "risk": "medio",
       "depends_on": [
         "16"
-      ]
+      ],
+      "notes": "GET /api/me devolve 401 para anonimo, gerando erro de console em toda visita anonima. Avaliar responder 200 com {user:null} - quem sou eu tem resposta valida para ninguem."
     },
     {
       "id": "18",
@@ -346,7 +350,7 @@
       "depends_on": [
         "18"
       ],
-      "notes": "decidir sobre images.unoptimized=true - depende do alvo de deploy ter otimizador em runtime"
+      "notes": "decidir sobre images.unoptimized=true - depende do alvo de deploy ter otimizador em runtime | LOCKFILES DUPLICADOS: package-lock.json (abr) + pnpm-lock.yaml (jul) e sem campo packageManager. node_modules e do pnpm; npm install falha com EACCES nos symlinks. Decidir e declarar."
     },
     {
       "id": "21",
@@ -480,6 +484,12 @@
       "status": "done",
       "report": "reports/06-next-image.md",
       "pending": "prova visual -> task 14"
+    },
+    {
+      "task": "07",
+      "at": "2026-08-26",
+      "status": "done",
+      "report": "reports/07-infra-de-testes.md"
     }
   ]
 }

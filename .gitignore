@@ -52,3 +52,10 @@ next-env.d.ts
 
 # logs de dev server
 dev-server*.log
+
+# artefatos de teste
+/test-results
+/playwright-report
+/blob-report
+/.playwright
+/coverage
