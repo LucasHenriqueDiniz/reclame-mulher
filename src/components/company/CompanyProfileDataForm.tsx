@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { companyTheme as S } from "./theme";
 import { formatCnpj } from "./utils";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 type CompanyData = {
   name?: string | null;
@@ -91,7 +92,7 @@ export function CompanyProfileDataForm({
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setErr(data.error ?? "Erro ao salvar");
+        setErr(mensagemDeErro(data, "Não foi possível salvar."));
         return;
       }
       setMsg("Dados atualizados com sucesso!");

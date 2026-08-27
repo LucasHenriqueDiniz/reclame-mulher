@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getCurrentCompanyContext } from "@/server/auth/company";
+import { exigirEmpresa } from "@/server/auth/company";
 import { ComplaintsRepo } from "@/server/repos/complaints";
+import { erroInterno } from "@/server/http/respond";
 
 function serializeComplaint(
   complaint: Awaited<ReturnType<typeof ComplaintsRepo.findByCompany>>[number]
@@ -28,10 +29,8 @@ function serializeComplaint(
 
 export async function GET(request: NextRequest) {
   try {
-    const context = await getCurrentCompanyContext();
-    if (!context) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const context = await exigirEmpresa();
+    if (context instanceof NextResponse) return context;
 
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
@@ -50,7 +49,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(filtered.map(serializeComplaint));
   } catch (error) {
-    console.error("Error fetching company complaints:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "company/complaints");
   }
 }

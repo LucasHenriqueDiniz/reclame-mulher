@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { BlogRepo } from "@/server/repos/blog";
+import { erroInterno } from "@/server/http/respond";
 
 function estimateReadTime(content: string | null | undefined) {
   const words = content?.trim().split(/\s+/).filter(Boolean).length ?? 0;
@@ -33,7 +34,6 @@ export async function GET() {
       })
     );
   } catch (error) {
-    console.error("Error fetching featured blog posts:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "blog/featured");
   }
 }

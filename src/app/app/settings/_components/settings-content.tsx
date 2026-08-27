@@ -23,6 +23,7 @@ import { ContentCard } from "@/components/app/ContentCard";
 import { SubTabs } from "@/components/app/SubTabs";
 import type { PageTabItem } from "@/components/app/PageTabs";
 import type { SubTabItem } from "@/components/app/SubTabs";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 interface Props {
   email: string;
@@ -456,7 +457,7 @@ export function SettingsContent({
                         } else {
                           toast({
                             title: "Erro ao alterar senha",
-                            description: data.error || "Nao foi possivel alterar sua senha.",
+                            description: mensagemDeErro(data, "Não foi possível alterar sua senha."),
                             variant: "destructive",
                           });
                         }

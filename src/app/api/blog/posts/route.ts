@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { BlogRepo } from "@/server/repos/blog";
 import { CreatePostDto } from "@/server/dto/blog";
 import { z } from "zod";
+import { erroInterno, invalido, naoAutenticada, semPermissao } from "@/server/http/respond";
 
 // GET /api/blog/posts - Listar posts públicos
 export async function GET(request: NextRequest) {
@@ -31,8 +32,14 @@ export async function GET(request: NextRequest) {
 
     let result;
     if (scope === "admin") {
+      // 401 e 403 dizem coisas diferentes: sem sessão é "entre na sua conta",
+      // com sessão e sem papel é "esta área não é sua". Esta rota é pública no
+      // middleware, então a distinção precisa ser feita aqui.
+      if (!session) {
+        return naoAutenticada();
+      }
       if (!isAdmin) {
-        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+        return semPermissao("Esta área é da administração da plataforma.");
       }
 
       result = await BlogRepo.findAll(page, limit);
@@ -58,11 +65,7 @@ export async function GET(request: NextRequest) {
       limit,
     });
   } catch (error) {
-    console.error("Error fetching blog posts:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch blog posts" },
-      { status: 500 }
-    );
+    return erroInterno(error, "blog/posts");
   }
 }
 
@@ -71,7 +74,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getSession();
     if (!session?.userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return naoAutenticada();
     }
 
     // Verificar se é ADMIN
@@ -82,7 +85,7 @@ export async function POST(request: NextRequest) {
       .limit(1);
 
     if (profile?.role !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return semPermissao();
     }
 
     const body = await request.json();
@@ -95,15 +98,9 @@ export async function POST(request: NextRequest) {
     console.error("Error creating blog post:", error);
     
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Validation error", details: error.issues },
-        { status: 400 }
-      );
+      return invalido(error);
     }
 
-    return NextResponse.json(
-      { error: "Failed to create blog post" },
-      { status: 500 }
-    );
+    return erroInterno(error, "blog/posts");
   }
 }

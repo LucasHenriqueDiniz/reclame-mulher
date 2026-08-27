@@ -19,6 +19,7 @@ import { CompanyPageShell } from "@/components/app/CompanyPageShell";
 import { CompanyPageHeader } from "@/components/app/CompanyPageHeader";
 import { ContentCard } from "@/components/app/ContentCard";
 import type { CompanyNavTab } from "@/components/app/CompanyPageHeader";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 const COMPANY_TABS: CompanyNavTab[] = [
   { key: "dashboard", label: "Painel", href: "/app/company/dashboard", icon: LayoutDashboard },
@@ -96,7 +97,7 @@ export default function CompanyProjectsPage() {
 
       if (!response.ok) {
         const data = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(data?.error || "Nao foi possivel criar o projeto.");
+        throw new Error(mensagemDeErro(data, "Não foi possível criar o projeto."));
       }
 
       toast({
@@ -127,7 +128,7 @@ export default function CompanyProjectsPage() {
 
       if (!response.ok) {
         const data = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(data?.error || "Nao foi possivel excluir o projeto.");
+        throw new Error(mensagemDeErro(data, "Não foi possível excluir o projeto."));
       }
 
       toast({

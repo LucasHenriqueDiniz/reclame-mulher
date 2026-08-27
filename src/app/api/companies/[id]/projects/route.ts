@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ProjectsRepo } from "@/server/repos/projects";
+import { ehUuid, erroInterno, naoEncontrado } from "@/server/http/respond";
 
 export async function GET(
   _request: NextRequest,
@@ -7,13 +8,10 @@ export async function GET(
 ) {
   try {
     const { id: companyId } = await params;
+    if (!ehUuid(companyId)) return naoEncontrado();
     const projects = await ProjectsRepo.findByCompany(companyId);
     return NextResponse.json(projects);
   } catch (error) {
-    console.error("Error fetching company projects:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return erroInterno(error, "companies/[id]/projects");
   }
 }

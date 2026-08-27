@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CompaniesRepo } from "@/server/repos/companies";
 import { CreateCompanyDto } from "@/server/dto/companies";
-import { getCurrentAdminContext } from "@/server/auth/admin";
+import { exigirAdmin } from "@/server/auth/admin";
+import { erroInterno, invalido } from "@/server/http/respond";
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,20 +14,14 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(companies);
   } catch (error) {
-    console.error("Error fetching companies:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return erroInterno(error, "companies");
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const admin = await getCurrentAdminContext();
-    if (!admin) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const admin = await exigirAdmin();
+    if (admin instanceof NextResponse) return admin;
 
     const body = await request.json();
     const validatedData = CreateCompanyDto.parse(body);
@@ -39,16 +34,10 @@ export async function POST(request: NextRequest) {
 
     if (error instanceof Error && "issues" in error) {
       const zodError = error as { issues: unknown[] };
-      return NextResponse.json(
-        { error: "Validation error", details: zodError.issues },
-        { status: 400 }
-      );
+      return invalido(zodError);
     }
 
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return erroInterno(error, "companies");
   }
 }
 

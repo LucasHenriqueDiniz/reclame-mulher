@@ -393,12 +393,29 @@
       "slug": "validacao-e-erros",
       "phase": 6,
       "order": 17,
-      "status": "pending",
+      "status": "done",
       "risk": "medio",
       "depends_on": [
         "16"
       ],
-      "notes": "GET /api/me devolve 401 para anonimo, gerando erro de console em toda visita anonima. Avaliar responder 200 com {user:null} - quem sou eu tem resposta valida para ninguem. | Medido na task 11: 401 e 403 misturados. /api/company/* devolve 401 para logada sem vinculo; /api/admin/* devolve 403 para logada sem papel; POST /api/companies devolve 401 na mesma situacao; GET /api/blog/posts?scope=admin devolve 403 para anonima. Causa: getCurrentCompanyContext e getCurrentAdminContext devolvem null nos dois casos. Matriz em docs/autorizacao.md."
+      "notes": "128 retornos de erro em 34 formatos viraram um envelope so: { error: { code, message, fields? } }. O achado que importa: o front mostra data.error direto na tela, entao a API exibia 'Unauthorized' e 'Internal server error' para usuarias brasileiras - ~64 ocorrencias em ingles, agora zero. Corrigido 401 vs 403 com exigirEmpresa/exigirAdmin (13 rotas); a matriz da task 11 deixou de aceitar '401 ou 403' e passou a exigir o valor exato. Dois defeitos achados pelo teste estrito: o middleware respondia noutro formato (contrato movido para src/lib/http/contrato.ts, sem dependencias, para o runtime Edge), e id malformado devolvia 500 com a query no log (9 rotas ganharam ehUuid -> 404). Ja estava certo, ao contrario do que a task supunha: Zod em todas as 19 rotas com corpo, nenhum stack trace vazando, nenhum 'as' em entrada nao confiavel. DESVIO DELIBERADO: a task pedia 404 para 'sem permissao de ver'; mantive 403, porque os ids sao UUID v4 (nao ha enumeracao) e 403 ja esta documentado e testado desde a task 16.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 2,
+      "files_changed": [
+        "docs/api-erros.md",
+        "src/lib/http/contrato.ts",
+        "src/lib/http/erro.ts",
+        "src/server/http/respond.ts",
+        "src/server/auth/company.ts",
+        "src/server/auth/admin.ts",
+        "src/middleware.ts",
+        "src/lib/rate-limit.ts",
+        "e2e/api-erros.spec.ts",
+        "e2e/api-authorization.spec.ts",
+        "32 route.ts",
+        "22 telas"
+      ]
     },
     {
       "id": "18",
@@ -732,6 +749,12 @@
       "task": "16",
       "event": "done",
       "detail": "Vazamento de nome em relato anonimo corrigido. Suite 316 -> 328. docs/autorizacao.md completo. 2 decisoes humanas pendentes sobre anexos."
+    },
+    {
+      "at": "2026-08-27",
+      "task": "17",
+      "event": "done",
+      "detail": "34 formatos de erro -> 1. Mensagens em ingles na tela: ~64 -> 0. Suite 328 -> 362."
     }
   ]
 }

@@ -11,6 +11,7 @@ import {
   getClientIp,
   registerFailure,
 } from "@/lib/rate-limit";
+import { erroInterno, invalido, naoAutenticada } from "@/server/http/respond";
 
 const schema = z.object({
   email: z.string().email(),
@@ -33,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     if (!user || !(await verifyPassword(password, user.passwordHash))) {
       registerFailure(target);
-      return NextResponse.json({ error: "Email ou senha inválidos" }, { status: 401 });
+      return naoAutenticada("E-mail ou senha inválidos.");
     }
 
     // Deu certo: a usuária provou quem é, então o contador dela zera.
@@ -47,9 +48,8 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
+      return invalido(error);
     }
-    console.error("Login error:", error);
-    return NextResponse.json({ error: "Erro interno" }, { status: 500 });
+    return erroInterno(error, "auth/login");
   }
 }

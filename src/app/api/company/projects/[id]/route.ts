@@ -1,23 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ProjectsRepo } from "@/server/repos/projects";
 import { UpdateProjectDto } from "@/server/dto/projects";
-import { canManageCompany, getCurrentCompanyContext } from "@/server/auth/company";
+import { exigirEmpresaComGestao } from "@/server/auth/company";
+import { ehUuid, erroInterno, invalido, naoEncontrado, semPermissao } from "@/server/http/respond";
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const context = await getCurrentCompanyContext();
-    if (!context) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    if (!canManageCompany(context.role)) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
+    const context = await exigirEmpresaComGestao();
+    if (context instanceof NextResponse) return context;
 
     const { id } = await params;
+    if (!ehUuid(id)) return naoEncontrado();
     const project = await ProjectsRepo.findByIdOrNull(id);
     if (!project) {
-      return NextResponse.json({ error: "Project not found" }, { status: 404 });
+      return naoEncontrado("Este projeto não existe ou foi removido.");
     }
     if (project.companyId !== context.companyId) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return semPermissao();
     }
 
     const body = await req.json().catch(() => ({}));
@@ -27,21 +26,20 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json({ project: updated });
   } catch (error) {
     if (error instanceof Error && "issues" in error) {
-      return NextResponse.json({ error: "Validation error" }, { status: 400 });
+      return invalido(error);
     }
-    console.error("Error updating project:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "company/projects/[id]");
   }
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const context = await getCurrentCompanyContext();
-  if (!context) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!canManageCompany(context.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const context = await exigirEmpresaComGestao();
+  if (context instanceof NextResponse) return context;
   const { id } = await params;
+  if (!ehUuid(id)) return naoEncontrado();
   const proj = await ProjectsRepo.findByIdOrNull(id);
-  if (!proj) return NextResponse.json({ error: "Project not found" }, { status: 404 });
-  if (proj.companyId !== context.companyId) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!proj) return naoEncontrado("Este projeto não existe ou foi removido.");
+  if (proj.companyId !== context.companyId) return semPermissao();
   await ProjectsRepo.delete(id);
   return NextResponse.json({ ok: true });
 }

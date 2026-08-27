@@ -3,25 +3,25 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/client";
 import { complaints } from "@/db/schema";
 import { CreateMessageDto } from "@/server/dto/messages";
-import { getCurrentCompanyContext } from "@/server/auth/company";
+import { exigirEmpresa } from "@/server/auth/company";
 import { ComplaintsRepo } from "@/server/repos/complaints";
 import { MessagesRepo } from "@/server/repos/messages";
 import { eq } from "drizzle-orm";
+import { ehUuid, erroInterno, invalido, naoEncontrado, semPermissao } from "@/server/http/respond";
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const context = await getCurrentCompanyContext();
-    if (!context) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const context = await exigirEmpresa();
+    if (context instanceof NextResponse) return context;
 
     const { id } = await params;
+    if (!ehUuid(id)) return naoEncontrado();
     const complaint = await ComplaintsRepo.findById(id);
     if (complaint.companyId !== context.companyId) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return semPermissao();
     }
 
     const body = await request.json().catch(() => ({}));
@@ -54,12 +54,11 @@ export async function POST(
     }, { status: 201 });
   } catch (error) {
     if (error instanceof Error && "issues" in error) {
-      return NextResponse.json({ error: "Validation error" }, { status: 400 });
+      return invalido(error);
     }
     if (error instanceof Error && error.message === "Complaint not found") {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return naoEncontrado();
     }
-    console.error("Error creating company complaint message:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "company/complaints/[id]/messages");
   }
 }

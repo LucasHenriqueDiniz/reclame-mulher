@@ -40,14 +40,17 @@ import { limparRelatosDeTeste, tituloDeTeste } from "./fixtures/db";
  * validação ainda barraria antes de tocar no banco. O teste falha alto de
  * qualquer jeito, mas sem estrago.
  *
- * ## Negado é 401 ou 403
+ * ## Negado é 401 para anônima e 403 para logada
  *
- * O código devolve **401 para papel logado mas sem permissão** em boa parte das
- * rotas (`getCurrentCompanyContext` e `getCurrentAdminContext` devolvem `null`
- * tanto para anônimo quanto para papel errado). 401 quer dizer "não sei quem é
- * você" e 403 quer dizer "sei quem é você e não pode" — a distinção importa
- * para o cliente. Está registrado na task `17`; aqui a asserção aceita os dois,
- * para não travar aquela correção. O que **nunca** é aceito é 200 e 5xx.
+ * Até a task `17` a asserção aceitava qualquer um dos dois, porque o código
+ * misturava: `getCurrentCompanyContext` e `getCurrentAdminContext` devolviam
+ * `null` tanto para "sem sessão" quanto para "papel errado", e o handler não
+ * tinha como distinguir.
+ *
+ * Agora tem, e a asserção é exata. 401 quer dizer "não sei quem é você —
+ * autentique-se"; 403 quer dizer "sei quem é você e você não pode". Um cliente
+ * que trate 401 mandando para o login precisa que a diferença seja verdadeira,
+ * senão manda a usuária logada de volta para uma tela que ela já passou.
  */
 
 type Papel = "anonimo" | "pessoa" | "pessoa2" | "empresa" | "admin";
@@ -449,12 +452,23 @@ for (const endpoint of ENDPOINTS) {
   test(endpoint.rotulo, async () => {
     for (const papel of endpoint.nega ?? []) {
       const resposta = await chamar(papel, endpoint);
+      const esperado = papel === "anonimo" ? 401 : 403;
       expect
         .soft(
-          [401, 403],
-          `${endpoint.rotulo} deveria negar ${papel}, mas devolveu ${resposta.status()}`
+          resposta.status(),
+          `${endpoint.rotulo} deveria negar ${papel} com ${esperado} ` +
+            `(401 = sem sessão, 403 = sem permissão), mas devolveu ${resposta.status()}`
         )
-        .toContain(resposta.status());
+        .toBe(esperado);
+
+      // O corpo também faz parte do contrato — ver docs/api-erros.md.
+      const corpo = await resposta.json().catch(() => null);
+      expect
+        .soft(
+          typeof corpo?.error?.code === "string" && typeof corpo?.error?.message === "string",
+          `${endpoint.rotulo} negou ${papel} fora do envelope { error: { code, message } }`
+        )
+        .toBe(true);
     }
 
     for (const papel of endpoint.permite ?? []) {

@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getSessionFromRequest } from "@/lib/auth/session";
+import { corpoDeErro, STATUS_HTTP } from "@/lib/http/contrato";
 
 /**
  * Portão grosso de autenticação.
@@ -76,7 +77,9 @@ export async function middleware(request: NextRequest) {
     // `response.json()` do front quebraria, e o tratamento de erro nunca
     // veria a falha de autenticação.
     if (pathname.startsWith("/api/")) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json(corpoDeErro("UNAUTHENTICATED"), {
+        status: STATUS_HTTP.UNAUTHENTICATED,
+      });
     }
 
     const redirectUrl = request.nextUrl.clone();

@@ -8,6 +8,7 @@ import { CreateMessageDto } from "@/server/dto/messages";
 import { CompanyUsersRepo } from "@/server/repos/company-users";
 import { ComplaintsRepo } from "@/server/repos/complaints";
 import { MessagesRepo } from "@/server/repos/messages";
+import { ehUuid, erroInterno, invalido, naoAutenticada, naoEncontrado, semPermissao } from "@/server/http/respond";
 
 export async function POST(
   request: NextRequest,
@@ -16,17 +17,18 @@ export async function POST(
   try {
     const session = await getSession();
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return naoAutenticada();
     }
 
     const { id } = await params;
+    if (!ehUuid(id)) return naoEncontrado();
     const complaint = await ComplaintsRepo.findById(id);
     const memberships = await CompanyUsersRepo.findByUser(session.userId);
     const isCompanyMember = memberships.some((membership) => membership.company.id === complaint.companyId);
     const isAuthor = complaint.authorId === session.userId;
 
     if (!isAuthor && !isCompanyMember) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return semPermissao();
     }
 
     const senderType = isCompanyMember ? "COMPANY" : "USER";
@@ -64,12 +66,11 @@ export async function POST(
     }, { status: 201 });
   } catch (error) {
     if (error instanceof Error && "issues" in error) {
-      return NextResponse.json({ error: "Validation error" }, { status: 400 });
+      return invalido(error);
     }
     if (error instanceof Error && error.message === "Complaint not found") {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return naoEncontrado();
     }
-    console.error("Error creating complaint message:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "complaints/[id]/messages");
   }
 }

@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { companyTheme as S } from "./theme";
 import { ModalShell } from "./ModalShell";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 const REASONS = [
   "Informações falsas",
@@ -41,7 +42,7 @@ export function CompanyReportModal({
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setErr(data.error ?? "Erro ao enviar denúncia");
+        setErr(mensagemDeErro(data, "Não foi possível enviar a denúncia."));
         return;
       }
       setDone(true);

@@ -12,6 +12,7 @@ import {
   getClientIp,
   registerFailure,
 } from "@/lib/rate-limit";
+import { erro, erroInterno, invalido, naoAutenticada } from "@/server/http/respond";
 
 const ChangePasswordDto = z.object({
   currentPassword: z.string().min(1),
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getSession();
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return naoAutenticada();
     }
 
     // Aqui já sabemos quem é: a cota é da conta, não do IP compartilhado.
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
 
     if (!user || !(await verifyPassword(parsed.currentPassword, user.passwordHash))) {
       registerFailure(target);
-      return NextResponse.json({ error: "Senha atual inválida" }, { status: 400 });
+      return erro("VALIDATION_ERROR", "A senha atual não confere.", { current_password: "Senha incorreta." });
     }
 
     clearFailures(target);
@@ -61,9 +62,8 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
+      return invalido(error);
     }
-    console.error("Change password error:", error);
-    return NextResponse.json({ error: "Erro interno" }, { status: 500 });
+    return erroInterno(error, "auth/change-password");
   }
 }

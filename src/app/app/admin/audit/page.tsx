@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 interface AuditLogItem {
   id: string;
@@ -62,7 +63,7 @@ export default function AdminAuditPage() {
         const data = (await response.json().catch(() => null)) as AuditResponse | { error?: string } | null;
 
         if (!response.ok) {
-          throw new Error(data && "error" in data ? data.error : "Erro ao carregar auditoria");
+          throw new Error(mensagemDeErro(data, "Não foi possível carregar a auditoria."));
         }
 
         if (!cancelled && data && "logs" in data) {

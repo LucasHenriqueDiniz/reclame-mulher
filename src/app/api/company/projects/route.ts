@@ -1,22 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ProjectsRepo } from "@/server/repos/projects";
 import { CreateProjectDto } from "@/server/dto/projects";
-import { canManageCompany, getCurrentCompanyContext } from "@/server/auth/company";
+import { exigirEmpresa, exigirEmpresaComGestao } from "@/server/auth/company";
+import { erroInterno, invalido } from "@/server/http/respond";
 
 export async function GET() {
-  const context = await getCurrentCompanyContext();
-  if (!context) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const context = await exigirEmpresa();
+  if (context instanceof NextResponse) return context;
   const projects = await ProjectsRepo.findByCompany(context.companyId);
   return NextResponse.json({ projects });
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const context = await getCurrentCompanyContext();
-    if (!context) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    if (!canManageCompany(context.role)) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
+    const context = await exigirEmpresaComGestao();
+    if (context instanceof NextResponse) return context;
 
     const body = await req.json().catch(() => ({}));
     const parsed = CreateProjectDto.parse({
@@ -28,9 +26,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ project }, { status: 201 });
   } catch (error) {
     if (error instanceof Error && "issues" in error) {
-      return NextResponse.json({ error: "Validation error" }, { status: 400 });
+      return invalido(error);
     }
-    console.error("Error creating project:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "company/projects");
   }
 }

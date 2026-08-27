@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { corpoDeErro, STATUS_HTTP } from "@/lib/http/contrato";
 
 /**
  * Limite de tentativas para as rotas de autenticação.
@@ -68,12 +69,22 @@ function peek(key: string): Entry | null {
 
 function tooManyResponse(retryAfterSeconds: number): NextResponse {
   const minutes = Math.max(1, Math.ceil(retryAfterSeconds / 60));
+  // Mesmo envelope de todo erro da API (`docs/api-erros.md`). O
+  // `retryAfterSeconds` vai fora do envelope de propósito: não é uma
+  // explicação do erro, é um dado que o cliente usa para agendar a próxima
+  // tentativa — assim como o cabeçalho `Retry-After` ao lado.
   return NextResponse.json(
     {
-      error: `Muitas tentativas. Tente novamente em ${minutes} ${minutes === 1 ? "minuto" : "minutos"}.`,
+      ...corpoDeErro(
+        "RATE_LIMITED",
+        `Muitas tentativas. Tente de novo em ${minutes} ${minutes === 1 ? "minuto" : "minutos"}.`
+      ),
       retryAfterSeconds,
     },
-    { status: 429, headers: { "Retry-After": String(retryAfterSeconds) } }
+    {
+      status: STATUS_HTTP.RATE_LIMITED,
+      headers: { "Retry-After": String(retryAfterSeconds) },
+    }
   );
 }
 

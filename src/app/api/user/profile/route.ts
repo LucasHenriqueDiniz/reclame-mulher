@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getSession } from "@/lib/auth/session";
 import { ProfilesRepo } from "@/server/repos/profiles";
+import { erroInterno, invalido, naoAutenticada } from "@/server/http/respond";
 
 const UpdateProfileDto = z.object({
   name: z.string().min(1).optional(),
@@ -15,7 +16,7 @@ export async function PATCH(request: NextRequest) {
   try {
     const session = await getSession();
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return naoAutenticada();
     }
 
     const body = await request.json().catch(() => ({}));
@@ -26,9 +27,8 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ success: true, profile: updated });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
+      return invalido(error);
     }
-    console.error("Update profile error:", error);
-    return NextResponse.json({ error: "Erro interno" }, { status: 500 });
+    return erroInterno(error, "user/profile");
   }
 }

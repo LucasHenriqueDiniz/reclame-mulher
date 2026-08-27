@@ -4,13 +4,14 @@ import { db } from "@/db/client";
 import { profiles, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { CompanyUsersRepo } from "@/server/repos/company-users";
+import { erroInterno, naoAutenticada } from "@/server/http/respond";
 
 export async function GET() {
   try {
     const session = await getSession();
 
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return naoAutenticada();
     }
 
     const [profile] = await db
@@ -33,10 +34,7 @@ export async function GET() {
     } catch {}
 
     if (!user || !profile) {
-      const response = NextResponse.json(
-        { error: "Session out of sync" },
-        { status: 401 }
-      );
+      const response = naoAutenticada("Sua sessão expirou. Entre de novo.");
       await clearSessionCookie(response);
       return response;
     }
@@ -58,7 +56,6 @@ export async function GET() {
         : null,
     });
   } catch (error) {
-    console.error("Error fetching user data:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "me");
   }
 }

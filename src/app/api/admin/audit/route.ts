@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getCurrentAdminContext } from "@/server/auth/admin";
+import { exigirAdmin } from "@/server/auth/admin";
 import { AuditFiltersDto } from "@/server/dto/audit";
 import { AuditRepo } from "@/server/repos/audit";
+import { erroInterno, invalido } from "@/server/http/respond";
 
 export async function GET(request: NextRequest) {
   try {
-    const admin = await getCurrentAdminContext();
-    if (!admin) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
+    const admin = await exigirAdmin();
+    if (admin instanceof NextResponse) return admin;
 
     const filters = AuditFiltersDto.parse({
       entity: request.nextUrl.searchParams.get("entity") ?? undefined,
@@ -35,9 +34,8 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     if (error instanceof Error && "issues" in error) {
-      return NextResponse.json({ error: "Validation error" }, { status: 400 });
+      return invalido(error);
     }
-    console.error("Error fetching audit logs:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "admin/audit");
   }
 }

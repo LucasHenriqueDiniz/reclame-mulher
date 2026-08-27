@@ -28,6 +28,7 @@ import { uploadFiles } from "@/lib/uploadthing";
 
 // Success card
 import { ComplaintSuccessCard } from "./complaint-success-card";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 const TOTAL_STEPS = 4;
 
@@ -195,7 +196,7 @@ export function NewComplaintContent({
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setSubmitError(data.error ?? "Erro ao criar relato.");
+        setSubmitError(mensagemDeErro(data, "Não foi possível criar o relato."));
         return;
       }
       setCreatedComplaint({

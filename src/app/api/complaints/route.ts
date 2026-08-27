@@ -4,6 +4,7 @@ import { CompaniesRepo } from "@/server/repos/companies";
 import { ComplaintsRepo } from "@/server/repos/complaints";
 import { ProjectsRepo } from "@/server/repos/projects";
 import { CreateComplaintDto } from "@/server/dto/complaints";
+import { erroInterno, invalido, naoAutenticada, naoEncontrado, semPermissao } from "@/server/http/respond";
 
 function serializeComplaintSummary(
   complaint: {
@@ -60,7 +61,7 @@ export async function GET(request: NextRequest) {
 
     if (mine) {
       if (!session) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        return naoAutenticada();
       }
       complaints = await ComplaintsRepo.findByUser(session.userId);
     } else if (companyId) {
@@ -71,8 +72,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(complaints.map(serializeComplaintSummary));
   } catch (error) {
-    console.error("Error fetching complaints:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "complaints");
   }
 }
 
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     const session = await getSession();
 
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return naoAutenticada();
     }
 
     const body = await request.json();
@@ -89,20 +89,17 @@ export async function POST(request: NextRequest) {
 
     const company = await CompaniesRepo.findByIdOrNull(validatedData.company_id);
     if (!company) {
-      return NextResponse.json({ error: "Company not found" }, { status: 404 });
+      return naoEncontrado("Esta empresa não existe ou foi removida.");
     }
 
     if (validatedData.project_id) {
       const project = await ProjectsRepo.findByIdOrNull(validatedData.project_id);
       if (!project) {
-        return NextResponse.json({ error: "Project not found" }, { status: 404 });
+        return naoEncontrado("Este projeto não existe ou foi removido.");
       }
 
       if (project.companyId !== validatedData.company_id) {
-        return NextResponse.json(
-          { error: "Project does not belong to company" },
-          { status: 400 }
-        );
+        return semPermissao("Este projeto não é da sua empresa.");
       }
     }
 
@@ -114,12 +111,9 @@ export async function POST(request: NextRequest) {
 
     if (error instanceof Error && "issues" in error) {
       const zodError = error as { issues: unknown[] };
-      return NextResponse.json(
-        { error: "Validation error", details: zodError.issues },
-        { status: 400 }
-      );
+      return invalido(zodError);
     }
 
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "complaints");
   }
 }

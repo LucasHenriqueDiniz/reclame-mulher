@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { PasswordField } from "@/components/PasswordField";
 import { useAuthState } from "@/hooks/use-auth-state";
 import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 const loginSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -53,7 +54,7 @@ export default function LoginPage() {
 
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
-      setErr(body.error || "Email ou senha inválidos");
+      setErr(mensagemDeErro(body, "E-mail ou senha inválidos."));
     } else {
       await refresh();
       router.push("/app");

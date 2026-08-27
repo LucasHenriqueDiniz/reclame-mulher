@@ -3,6 +3,7 @@ import { CompaniesRepo } from "@/server/repos/companies";
 import { db } from "@/db/client";
 import { complaints, companies, profiles, projects } from "@/db/schema";
 import { ilike, and, eq, desc, or, count, sql, inArray } from "drizzle-orm";
+import { erroInterno } from "@/server/http/respond";
 
 export async function GET(request: NextRequest) {
   try {
@@ -140,10 +141,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(results);
   } catch (error) {
-    console.error("Search error:", error);
-    return NextResponse.json(
-      { error: "Erro ao buscar" },
-      { status: 500 }
-    );
+    return erroInterno(error, "search");
   }
 }

@@ -11,6 +11,7 @@ import {
   getClientIp,
   registerFailure,
 } from "@/lib/rate-limit";
+import { conflito, erroInterno, invalido } from "@/server/http/respond";
 
 const schema = z.object({
   name: z.string().min(3),
@@ -35,14 +36,14 @@ export async function POST(request: NextRequest) {
     const [existing] = await db.select({ id: users.id }).from(users).where(eq(users.email, emailNorm)).limit(1);
     if (existing) {
       registerFailure(target);
-      return NextResponse.json({ error: "Este email já está cadastrado." }, { status: 409 });
+      return conflito("Este e-mail já está cadastrado.");
     }
 
     // Check CPF uniqueness
     const [existingCpf] = await db.select({ userId: profiles.userId }).from(profiles).where(eq(profiles.cpf, cpfNorm)).limit(1);
     if (existingCpf) {
       registerFailure(target);
-      return NextResponse.json({ error: "Este CPF já está cadastrado." }, { status: 409 });
+      return conflito("Este CPF já está cadastrado.");
     }
 
     clearFailures(target);
@@ -76,9 +77,8 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
+      return invalido(error);
     }
-    console.error("Register error:", error);
-    return NextResponse.json({ error: "Erro ao criar conta. Tente novamente." }, { status: 500 });
+    return erroInterno(error, "auth/register");
   }
 }

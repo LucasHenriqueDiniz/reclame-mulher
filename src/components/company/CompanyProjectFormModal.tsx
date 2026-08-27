@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { companyTheme as S } from "./theme";
 import { ModalShell } from "./ModalShell";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 export type ProjectFormValues = {
   name: string;
@@ -87,7 +88,7 @@ export function CompanyProjectFormModal({
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setErr(data.error ?? "Erro ao salvar");
+        setErr(mensagemDeErro(data, "Não foi possível salvar o projeto."));
         return;
       }
       onSuccess?.(data.project ?? data);

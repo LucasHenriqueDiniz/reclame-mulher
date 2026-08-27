@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getCurrentAdminContext } from "@/server/auth/admin";
+import { exigirAdmin } from "@/server/auth/admin";
 import { CompaniesRepo } from "@/server/repos/companies";
+import { erroInterno } from "@/server/http/respond";
 
 export async function GET(request: NextRequest) {
   try {
-    const admin = await getCurrentAdminContext();
-    if (!admin) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
+    const admin = await exigirAdmin();
+    if (admin instanceof NextResponse) return admin;
 
     const statusParam = request.nextUrl.searchParams.get("status");
     const status =
@@ -27,7 +26,6 @@ export async function GET(request: NextRequest) {
       })),
     });
   } catch (error) {
-    console.error("Error fetching admin companies:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "admin/companies");
   }
 }

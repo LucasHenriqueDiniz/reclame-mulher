@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { BlogRepo } from "@/server/repos/blog";
 import { UpdatePostDto } from "@/server/dto/blog";
 import { z } from "zod";
+import { ehUuid, erroInterno, invalido, naoAutenticada, naoEncontrado, semPermissao } from "@/server/http/respond";
 
 // GET /api/blog/posts/[id] - Ver post específico
 export async function GET(
@@ -14,6 +15,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    if (!ehUuid(id)) return naoEncontrado();
     const session = await getSession();
     let isAdmin = false;
 
@@ -30,7 +32,7 @@ export async function GET(
     const post = await BlogRepo.findByIdentifier(id, isAdmin);
 
     if (!post) {
-      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+      return naoEncontrado("Este artigo não existe ou foi removido.");
     }
 
     // Buscar tags do post
@@ -38,11 +40,7 @@ export async function GET(
 
     return NextResponse.json({ ...post, tags });
   } catch (error) {
-    console.error("Error fetching blog post:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch blog post" },
-      { status: 500 }
-    );
+    return erroInterno(error, "blog/posts/[id]");
   }
 }
 
@@ -54,7 +52,7 @@ export async function PUT(
   try {
     const session = await getSession();
     if (!session?.userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return naoAutenticada();
     }
 
     // Verificar se é ADMIN
@@ -65,17 +63,18 @@ export async function PUT(
       .limit(1);
 
     if (profile?.role !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return semPermissao();
     }
 
     const { id } = await params;
+    if (!ehUuid(id)) return naoEncontrado();
     const body = await request.json();
     const validated = UpdatePostDto.parse(body);
 
     const post = await BlogRepo.update(id, validated);
 
     if (!post) {
-      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+      return naoEncontrado("Este artigo não existe ou foi removido.");
     }
 
     return NextResponse.json(post);
@@ -83,16 +82,10 @@ export async function PUT(
     console.error("Error updating blog post:", error);
 
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Validation error", details: error.issues },
-        { status: 400 }
-      );
+      return invalido(error);
     }
 
-    return NextResponse.json(
-      { error: "Failed to update blog post" },
-      { status: 500 }
-    );
+    return erroInterno(error, "blog/posts/[id]");
   }
 }
 
@@ -104,7 +97,7 @@ export async function DELETE(
   try {
     const session = await getSession();
     if (!session?.userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return naoAutenticada();
     }
 
     // Verificar se é ADMIN
@@ -115,22 +108,19 @@ export async function DELETE(
       .limit(1);
 
     if (profile?.role !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return semPermissao();
     }
 
     const { id } = await params;
+    if (!ehUuid(id)) return naoEncontrado();
 
     const deleted = await BlogRepo.delete(id);
     if (!deleted) {
-      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+      return naoEncontrado("Este artigo não existe ou foi removido.");
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting blog post:", error);
-    return NextResponse.json(
-      { error: "Failed to delete blog post" },
-      { status: 500 }
-    );
+    return erroInterno(error, "blog/posts/[id]");
   }
 }

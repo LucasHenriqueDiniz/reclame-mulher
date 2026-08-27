@@ -14,6 +14,7 @@ import { PasswordField } from "@/components/PasswordField";
 import { maskCNPJ } from "@/lib/masks";
 import { Loader2 } from "lucide-react";
 import { useAuthState } from "@/hooks/use-auth-state";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 const schema = z
   .object({
@@ -76,7 +77,7 @@ export default function CompanyStep1() {
       const body = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        setError(body.error || "Erro ao criar conta. Tente novamente.");
+        setError(mensagemDeErro(body, "Não foi possível criar a conta. Tente de novo."));
         setLoading(false);
         return;
       }

@@ -1,18 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 
-import { getCurrentCompanyContext, canManageCompanyUsers } from "@/server/auth/company";
+import { exigirEmpresa, exigirEmpresaComGestaoDeEquipe } from "@/server/auth/company";
 import { CompanyUsersRepo } from "@/server/repos/company-users";
 import { CreateCompanyMemberDto } from "@/server/dto/company-users";
 import { db } from "@/db/client";
 import { users, profiles, companyUsers } from "@/db/schema";
 import { generateTemporaryPassword, hashPassword } from "@/lib/auth/password";
+import { conflito, erroInterno, invalido } from "@/server/http/respond";
 
 export async function GET() {
-  const context = await getCurrentCompanyContext();
-  if (!context) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const context = await exigirEmpresa();
+  if (context instanceof NextResponse) return context;
 
   const members = await CompanyUsersRepo.findByCompany(context.companyId);
 
@@ -29,14 +28,8 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const context = await getCurrentCompanyContext();
-    if (!context) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    if (!canManageCompanyUsers(context.role)) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
+    const context = await exigirEmpresaComGestaoDeEquipe();
+    if (context instanceof NextResponse) return context;
 
     const body = await request.json().catch(() => ({}));
     const parsed = CreateCompanyMemberDto.parse(body);
@@ -52,16 +45,10 @@ export async function POST(request: NextRequest) {
       const existingMembership = await CompanyUsersRepo.findMembership(existingUser.id);
 
       if (existingMembership) {
-        return NextResponse.json(
-          { error: "Este usuário já está vinculado a uma empresa." },
-          { status: 409 }
-        );
+        return conflito("Esta pessoa já está vinculada a uma empresa.");
       }
 
-      return NextResponse.json(
-        { error: "Este e-mail já está em uso." },
-        { status: 409 }
-      );
+      return conflito("Este e-mail já está em uso.");
     }
 
     const temporaryPassword = generateTemporaryPassword();
@@ -108,10 +95,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     if (error instanceof Error && "issues" in error) {
-      return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
+      return invalido(error);
     }
 
-    console.error("Create company user error:", error);
-    return NextResponse.json({ error: "Erro interno" }, { status: 500 });
+    return erroInterno(error, "company/users");
   }
 }

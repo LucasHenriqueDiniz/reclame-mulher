@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CompaniesRepo } from "@/server/repos/companies";
 import { UpdateCompanyProfileDto } from "@/server/dto/companies";
-import { canManageCompany, getCurrentCompanyContext } from "@/server/auth/company";
+import { exigirEmpresa, exigirEmpresaComGestao } from "@/server/auth/company";
+import { erroInterno, invalido } from "@/server/http/respond";
 
 export async function GET() {
-  const context = await getCurrentCompanyContext();
-  if (!context) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const context = await exigirEmpresa();
+  if (context instanceof NextResponse) return context;
   const companyId = context.companyId;
   const company = await CompaniesRepo.findById(companyId);
   const stats = await CompaniesRepo.getStats(companyId);
@@ -14,11 +15,8 @@ export async function GET() {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const context = await getCurrentCompanyContext();
-    if (!context) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    if (!canManageCompany(context.role)) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
+    const context = await exigirEmpresaComGestao();
+    if (context instanceof NextResponse) return context;
 
     const body = await req.json().catch(() => ({}));
     const parsed = UpdateCompanyProfileDto.parse(body);
@@ -35,19 +33,15 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ company });
   } catch (error) {
     if (error instanceof Error && "issues" in error) {
-      return NextResponse.json({ error: "Validation error" }, { status: 400 });
+      return invalido(error);
     }
-    console.error("Error updating company profile:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "company/profile");
   }
 }
 
 export async function DELETE() {
-  const context = await getCurrentCompanyContext();
-  if (!context) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!canManageCompany(context.role)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  const context = await exigirEmpresaComGestao();
+  if (context instanceof NextResponse) return context;
   await CompaniesRepo.softDelete(context.companyId);
   return NextResponse.json({ ok: true });
 }

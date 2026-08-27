@@ -26,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { formatDateTime } from "@/lib/utils";
 import { protocolId } from "@/components/company/utils";
 import { CompanyPageShell } from "@/components/app/CompanyPageShell";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; border: string; icon: React.ReactNode }> = {
   OPEN: {
@@ -170,7 +171,7 @@ export function CompanyComplaintDetailContent({
 
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setFeedback({ type: "error", message: data.error ?? "Não foi possível enviar a resposta." });
+        setFeedback({ type: "error", message: mensagemDeErro(data, "Não foi possível enviar a resposta.") });
         return;
       }
 
@@ -191,7 +192,7 @@ export function CompanyComplaintDetailContent({
 
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setFeedback({ type: "error", message: data.error ?? "Não foi possível mudar o status." });
+        setFeedback({ type: "error", message: mensagemDeErro(data, "Não foi possível mudar o status.") });
         return;
       }
 

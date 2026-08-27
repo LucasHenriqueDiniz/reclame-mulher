@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { companyTheme as S } from "./theme";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 type Member = {
   userId: string;
@@ -51,7 +52,7 @@ export function CompanyTeamManagement() {
       const data = (await response.json().catch(() => ({}))) as Partial<MembersResponse> & { error?: string };
 
       if (!response.ok) {
-        throw new Error(data.error ?? "Não foi possível carregar a equipe.");
+        throw new Error(mensagemDeErro(data, "Não foi possível carregar a equipe."));
       }
 
       setMembers(data.members ?? []);
@@ -86,7 +87,7 @@ export function CompanyTeamManagement() {
       };
 
       if (!response.ok) {
-        throw new Error(data.error ?? "Não foi possível criar o usuário.");
+        throw new Error(mensagemDeErro(data, "Não foi possível criar o usuário."));
       }
 
       setName("");
@@ -114,7 +115,7 @@ export function CompanyTeamManagement() {
 
       const data = (await response.json().catch(() => ({}))) as { error?: string };
       if (!response.ok) {
-        throw new Error(data.error ?? "Não foi possível atualizar o papel.");
+        throw new Error(mensagemDeErro(data, "Não foi possível atualizar o papel."));
       }
 
       setMessage("Papel atualizado com sucesso.");
@@ -134,7 +135,7 @@ export function CompanyTeamManagement() {
 
       const data = (await response.json().catch(() => ({}))) as { error?: string };
       if (!response.ok) {
-        throw new Error(data.error ?? "Não foi possível remover o membro.");
+        throw new Error(mensagemDeErro(data, "Não foi possível remover o membro."));
       }
 
       setMessage("Membro removido com sucesso.");

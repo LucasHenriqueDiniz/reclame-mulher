@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { companyTheme as S } from "./theme";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 const inputStyle = {
   width: "100%" as const,
@@ -49,7 +50,7 @@ export function CompanyPasswordForm() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setErr(data.error ?? "Erro ao alterar senha");
+        setErr(mensagemDeErro(data, "Não foi possível alterar a senha."));
         return;
       }
       setMsg("Senha alterada com sucesso!");

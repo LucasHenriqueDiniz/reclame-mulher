@@ -22,6 +22,7 @@ import { formatDateTime } from "@/lib/utils";
 import { protocolId } from "@/components/company/utils";
 import { companyTheme as S } from "@/components/company/theme";
 import { Button } from "@/components/ui/button";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 const STATUS_LABELS: Record<string, string> = {
   OPEN: "Em aberto",
@@ -128,7 +129,7 @@ export function ComplaintDetailContent({
 
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setFeedback({ type: "error", message: data.error ?? "Erro ao enviar resposta." });
+        setFeedback({ type: "error", message: mensagemDeErro(data, "Não foi possível enviar a resposta.") });
         return;
       }
 

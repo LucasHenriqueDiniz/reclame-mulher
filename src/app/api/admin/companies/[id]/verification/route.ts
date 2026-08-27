@@ -1,24 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getCurrentAdminContext } from "@/server/auth/admin";
+import { exigirAdmin } from "@/server/auth/admin";
 import { VerifyCompanyDto } from "@/server/dto/companies";
 import { AuditRepo } from "@/server/repos/audit";
 import { CompaniesRepo } from "@/server/repos/companies";
+import { ehUuid, erroInterno, invalido, naoEncontrado } from "@/server/http/respond";
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const admin = await getCurrentAdminContext();
-    if (!admin) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
+    const admin = await exigirAdmin();
+    if (admin instanceof NextResponse) return admin;
 
     const { id } = await params;
+    if (!ehUuid(id)) return naoEncontrado();
     const company = await CompaniesRepo.findByIdOrNull(id);
     if (!company) {
-      return NextResponse.json({ error: "Company not found" }, { status: 404 });
+      return naoEncontrado("Esta empresa não existe ou foi removida.");
     }
 
     const body = await request.json().catch(() => ({}));
@@ -41,9 +41,8 @@ export async function PATCH(
     });
   } catch (error) {
     if (error instanceof Error && "issues" in error) {
-      return NextResponse.json({ error: "Validation error" }, { status: 400 });
+      return invalido(error);
     }
-    console.error("Error updating company verification:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "admin/companies/[id]/verification");
   }
 }

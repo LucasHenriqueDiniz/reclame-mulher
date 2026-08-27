@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getCurrentCompanyContext } from "@/server/auth/company";
+import { exigirEmpresa } from "@/server/auth/company";
 import { ComplaintsRepo } from "@/server/repos/complaints";
 import { MessagesRepo } from "@/server/repos/messages";
+import { ehUuid, erroInterno, naoEncontrado, semPermissao } from "@/server/http/respond";
 
 function serializeComplaintDetail(
   complaint: Awaited<ReturnType<typeof ComplaintsRepo.findById>>
@@ -39,16 +40,15 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const context = await getCurrentCompanyContext();
-    if (!context) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const context = await exigirEmpresa();
+    if (context instanceof NextResponse) return context;
 
     const { id } = await params;
+    if (!ehUuid(id)) return naoEncontrado();
     const complaint = await ComplaintsRepo.findById(id);
 
     if (complaint.companyId !== context.companyId) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return semPermissao();
     }
 
     const messages = await MessagesRepo.findByComplaint(id);
@@ -66,9 +66,8 @@ export async function GET(
     });
   } catch (error) {
     if (error instanceof Error && error.message === "Complaint not found") {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return naoEncontrado();
     }
-    console.error("Error fetching company complaint:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "company/complaints/[id]");
   }
 }

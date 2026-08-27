@@ -3,12 +3,13 @@ import { eq } from "drizzle-orm";
 import { getSession, clearSessionCookie } from "@/lib/auth/session";
 import { db } from "@/db/client";
 import { users, profiles, complaints } from "@/db/schema";
+import { erroInterno, naoAutenticada } from "@/server/http/respond";
 
 export async function DELETE() {
   try {
     const session = await getSession();
     if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return naoAutenticada();
     }
 
     // Delete user data in transaction
@@ -29,7 +30,6 @@ export async function DELETE() {
 
     return response;
   } catch (error) {
-    console.error("Delete account error:", error);
-    return NextResponse.json({ error: "Erro interno" }, { status: 500 });
+    return erroInterno(error, "user/account");
   }
 }

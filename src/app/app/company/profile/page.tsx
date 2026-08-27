@@ -11,6 +11,7 @@ import { CompanyPageShell } from "@/components/app/CompanyPageShell";
 import { CompanyPageHeader } from "@/components/app/CompanyPageHeader";
 import { ContentCard } from "@/components/app/ContentCard";
 import type { CompanyNavTab } from "@/components/app/CompanyPageHeader";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 const COMPANY_TABS: CompanyNavTab[] = [
   { key: "dashboard", label: "Painel", href: "/app/company/dashboard", icon: LayoutDashboard },
@@ -101,7 +102,7 @@ export default function CompanyProfilePage() {
 
       if (!response.ok) {
         const data = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(data?.error || "Nao foi possivel salvar o perfil.");
+        throw new Error(mensagemDeErro(data, "Não foi possível salvar o perfil."));
       }
 
       toast({

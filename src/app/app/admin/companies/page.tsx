@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Building2, CheckCircle2, Clock3 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { mensagemDeErro } from "@/lib/http/erro";
 
 type AdminCompany = {
   id: string;
@@ -43,7 +44,7 @@ export default function AdminCompaniesPage() {
         | null;
 
       if (!response.ok) {
-        throw new Error(data?.error || "Nao foi possivel carregar as empresas.");
+        throw new Error(mensagemDeErro(data, "Não foi possível carregar as empresas."));
       }
 
       setCompanies(data?.companies ?? []);
@@ -70,7 +71,7 @@ export default function AdminCompaniesPage() {
         | null;
 
       if (!response.ok) {
-        throw new Error(data?.error || "Nao foi possivel atualizar a verificacao.");
+        throw new Error(mensagemDeErro(data, "Não foi possível atualizar a verificação."));
       }
 
       const updated = data?.company;

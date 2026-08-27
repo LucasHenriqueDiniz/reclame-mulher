@@ -4,11 +4,12 @@ import { db } from "@/db/client";
 import { reports } from "@/db/schema";
 import { CreateCompanyReportDto } from "@/server/dto/companies";
 import { CompaniesRepo } from "@/server/repos/companies";
+import { erroInterno, invalido, naoAutenticada, naoEncontrado } from "@/server/http/respond";
 
 export async function POST(req: NextRequest) {
   try {
     const session = await getSession();
-    if (!session) return NextResponse.json({ error: "Login necessário para denunciar" }, { status: 401 });
+    if (!session) return naoAutenticada("Entre na sua conta para denunciar.");
 
     const body = await req.json().catch(() => ({}));
     const parsed = CreateCompanyReportDto.parse(body);
@@ -30,12 +31,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ report }, { status: 201 });
   } catch (error) {
     if (error instanceof Error && "issues" in error) {
-      return NextResponse.json({ error: "Validation error" }, { status: 400 });
+      return invalido(error);
     }
     if (error instanceof Error && error.message === "Company not found") {
-      return NextResponse.json({ error: "Empresa não encontrada" }, { status: 404 });
+      return naoEncontrado("Esta empresa não existe ou foi removida.");
     }
-    console.error("Error creating company report:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return erroInterno(error, "company/report");
   }
 }
