@@ -122,6 +122,25 @@ Vão para o UploadThing. Duas coisas a saber:
 - **Um arquivo por requisição.** O envio chama o UploadThing uma vez para cada
   anexo, então os três não disputam o mesmo `maxFileCount`.
 
+## Renderização das páginas públicas
+
+O `next build` classifica cada rota: `ƒ` é renderizada a cada visita, `○` é
+pré-renderizada. **Página `○` que consulta o banco roda a consulta uma vez, no
+build**, e serve o resultado congelado até o próximo deploy — foi o defeito que
+a task `64` corrigiu na home, onde a seção "Nosso impacto em números" mostrava
+o que era verdade no dia do deploy.
+
+- **Home (`/`)**: `export const revalidate = 300`. Continua pré-renderizada, mas
+  se refaz a cada cinco minutos. Escolhida em vez de `force-dynamic` porque é a
+  página mais visitada e a latência até o Neon é de 139 ms (task `19`);
+  escolhida em vez de `revalidatePath("/")` porque o `db:seed:demo` escreve
+  direto no banco, sem passar por rota nenhuma.
+- **Todas as outras onze páginas de servidor que leem do banco** saem `ƒ`, por
+  lerem a sessão. `src/lib/__tests__/rotas-que-leem-o-banco.test.ts` mantém a
+  lista e falha quando uma página nova entra nela sem ser classificada.
+
+A coluna `Revalidate` do `next build` é o lugar de conferir isto de relance.
+
 ## Erros de API
 
 Um formato só, documentado e testado em [`api-erros.md`](api-erros.md). Antes da

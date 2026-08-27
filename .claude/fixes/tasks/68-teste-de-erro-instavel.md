@@ -43,6 +43,35 @@ faz login de verdade) ou uma falha de banco no momento — a suíte roda sem
 `DATABASE_URL`, pela conexão direta, e o próprio servidor avisa em toda
 execução que isso não passa pelo pooler.
 
+## A falha voltou, e desta vez deixou rastro
+
+Na verificação da task `64`, com `--reporter=list` — que é justamente o que esta
+task recomenda:
+
+```
+1) [chromium-desktop] › e2e/auth.spec.ts:115:7 › acesso cruzado entre papéis ›
+   empresa não entra na administração
+
+   Error: apiRequestContext.post: read ECONNRESET
+   Call log:
+     - → POST http://localhost:5000/api/auth/login
+   at entrarViaApi (e2e/fixtures/auth.ts:41)
+```
+
+Não é asserção falhando: é a **conexão sendo derrubada** no `POST /api/auth/login`
+do preparo da sessão. E isso muda o diagnóstico do caso original: a suspeita
+registrada abaixo era exatamente essa — *"o que sobra como suspeita é o preparo
+da sessão"* —, e agora há evidência de que o preparo da sessão morre no
+transporte, sem chegar a virar resposta HTTP.
+
+Os dois casos têm a mesma forma: teste que começa com login por API, falhando
+sozinho no meio de uma suíte de ~470 testes que passa inteira na execução
+seguinte. O servidor de desenvolvimento avisa, em toda execução, que está usando
+`DIRECT_URL` em vez do pooler do Neon.
+
+Isto reduz a task a uma pergunta mais concreta: **por que o servidor derruba
+uma conexão de login sob a carga da suíte?**
+
 ## Por que importa
 
 Duas coisas, e a segunda é a que pega mais:
@@ -50,22 +79,29 @@ Duas coisas, e a segunda é a que pega mais:
 1. A suíte não é determinística. Este é o segundo caso registrado, depois do
    `66` (teste de teclado). Suíte que falha de vez em quando ensina quem a roda
    a ignorar falha — e aí a falha de verdade passa.
-2. **A falha não deixou rastro.** Rodar 480 testes por 28 minutos e não guardar
-   o motivo da única falha é o defeito mais barato de corrigir aqui.
+2. **A primeira falha não deixou rastro.** Rodar 480 testes por 28 minutos e
+   não guardar o motivo da única falha era o defeito mais barato de corrigir
+   aqui — e já foi: o reporter mudou, e a segunda falha veio com o erro
+   completo.
 
 ## O que fazer
 
-- [ ] Usar um reporter que preserve o detalhe da falha nas execuções longas
+- [x] Usar um reporter que preserve o detalhe da falha nas execuções longas
       (`--reporter=list`, ou `html`/`json` gravado em arquivo). O `line` serve
-      para rodar olhando; não serve para rodar em segundo plano.
-- [ ] Se a falha voltar, capturar corpo e status antes de concluir qualquer
-      coisa — e só então decidir se é o preparo da sessão, o banco ou a rota.
+      para rodar olhando; não serve para rodar em segundo plano. **Feito a
+      partir da task `62`** — e foi o que capturou o `ECONNRESET`.
+- [ ] Descobrir por que o servidor derruba a conexão do login sob a carga da
+      suíte. Duas pistas para começar: a suíte roda sem `DATABASE_URL`, pela
+      conexão direta ao Neon, e o servidor de desenvolvimento é o único
+      atendendo ~470 testes em sequência.
 
 ## Critérios de aceite
 
-- [ ] Uma execução completa da suíte deixa registrado o motivo de cada falha.
-- [ ] Este teste ou volta a falhar com evidência, ou é declarado estável depois
-      de execuções repetidas.
+- [x] **Uma execução completa da suíte deixa registrado o motivo de cada
+      falha** — resolvido trocando o reporter; foi assim que o `ECONNRESET`
+      acima apareceu.
+- [ ] A causa do `ECONNRESET` no login está identificada, ou a suíte passa
+      várias execuções seguidas sem ele.
 
 ## Nota
 

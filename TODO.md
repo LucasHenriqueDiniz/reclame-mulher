@@ -63,9 +63,6 @@ Encontrados durante a fila de correções, cada um com investigação escrita.
 - [ ] [`65`](.claude/fixes/tasks/65-companies-estoura-com-mais-empresas.md) —
       `/companies` volta a rolar para o lado em 375 px quando há mais de duas
       empresas no banco. A correção da task `14` não cobria nome longo.
-- [ ] [`64`](.claude/fixes/tasks/64-home-estatica-congela-os-numeros.md) — os
-      números da home congelam no build: a rota é estática e a consulta ao
-      banco roda uma vez só.
 - [ ] [`66`](.claude/fixes/tasks/66-teste-de-teclado-instavel.md) — o teste
       de teclado do assistente falha de vez em quando no celular. É corrida do
       teste com a lista do Radix, não defeito do produto.

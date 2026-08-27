@@ -28,7 +28,7 @@
     "corrected_by_task": "01",
     "corrected_at": "2026-08-26"
   },
-  "current_task": "64",
+  "current_task": "65",
   "tasks": [
     {
       "id": "00",
@@ -852,13 +852,20 @@
       "phase": 7,
       "order": 64,
       "risk": "medio",
-      "notes": "Achado na task 23: a rota / sai estatica do build e consulta o banco. A consulta roda uma vez, no build, e o resultado e servido congelado. Medido: 54% servido contra 52% no banco no mesmo instante.",
-      "status": "pending",
+      "notes": "Defeito reproduzido antes de mexer, com script proprio (.claude/fixes/reports/64-perf/medir.mts) que le os dois lados: os numeros que o servidor entrega (da carga do React no HTML, mesma extracao do ensaio da task 23) e os que o banco diz no instante. Criei um relato aberto (taxa cai de 33% para 25%) e acompanhei 150s: NUNCA bateram. ESCOLHA: revalidate = 300, a opcao 1 da task. Nao force-dynamic porque a home e a pagina mais visitada e a latencia ate o Neon medida na task 19 e de 139 ms. Nao revalidatePath('/') nas rotas de relato porque o db:seed:demo escreve DIRETO no banco, sem passar por rota nenhuma - e o cenario da defesa e exatamente esse, entao so a revalidacao por tempo o cobre. Motivos escritos no proprio src/app/page.tsx e em docs/arquitetura.md. DEPOIS: convergiu em 309s. Os 9 segundos a mais sao o stale-while-revalidate do Next, nao erro de medicao: passados os 300s a primeira requisicao ainda recebe a pagina velha e dispara a reconstrucao; a leitura seguinte pegou a nova. O next build passou a mostrar a coluna Revalidate com 5m na rota /. CRITERIO 3: cruzei as 12 rotas que saem estaticas com as 11 paginas de servidor que leem do banco. So a home estava nas duas listas; as outras 10 ja saem dinamicas por lerem sessao. TRAVA em src/lib/__tests__/rotas-que-leem-o-banco.test.ts: mantem a lista das 11 (pagina nova que le do banco faz o teste falhar e obriga a classificar) e exige que a home declare revalidate ou dynamic - verificada por mutacao. Registrei explicitamente o limite: NENHUM teste de arquivo sabe se uma rota vai sair estatica; quem decide e o Next no build, e a conferencia de verdade e a coluna Revalidate. A SUITE FALHOU UMA VEZ, e desta vez COM EVIDENCIA: ECONNRESET no POST /api/auth/login do preparo da sessao (auth.spec.ts:115). Nao tem relacao com a task, e a execucao seguinte voltou aos 467 - mas e exatamente a evidencia que a task 68 pedia, capturada gracas ao --reporter=list adotado na 62. A 68 foi atualizada com o erro completo. Vitest 29 -> 31.",
+      "status": "done",
       "depends_on": [],
-      "started_at": null,
-      "finished_at": null,
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
       "debug_iterations": 0,
-      "files_changed": []
+      "files_changed": [
+        "src/app/page.tsx",
+        "src/lib/__tests__/rotas-que-leem-o-banco.test.ts (novo)",
+        ".claude/fixes/reports/64-perf/medir.mts (novo)",
+        "docs/arquitetura.md",
+        ".claude/fixes/tasks/68-teste-de-erro-instavel.md (evidência nova)",
+        "TODO.md"
+      ]
     },
     {
       "id": "65",

@@ -11,6 +11,25 @@ const PartnersSection = dynamic(() => import("@/components/landing/PartnersSecti
 const BlogCards = dynamic(() => import("@/components/landing/BlogCards").then((m) => m.BlogCards));
 const Footer = dynamic(() => import("@/components/landing/Footer").then((m) => m.Footer));
 
+/**
+ * A home é reconstruída a cada cinco minutos.
+ *
+ * Sem isto a rota sai **estática** do `next build` e a consulta de
+ * `getPlatformStats` roda uma vez só, no build: a seção "Nosso impacto em
+ * números" mostrava o que era verdade no dia do deploy e não mudava mais, por
+ * mais relatos que chegassem. Medido na task `23` e corrigido na `64`.
+ *
+ * Por que revalidação por tempo e não `force-dynamic`: a home é a página mais
+ * visitada, e a latência até o Neon medida na task `19` é de 139 ms — pagar
+ * isso em toda visita para adiantar um número que ninguém confere ao segundo
+ * seria caro. Cinco minutos é o intervalo; mudar é uma linha.
+ *
+ * `revalidatePath("/")` nas rotas que mexem em relato foi considerado e
+ * descartado: o `db:seed:demo` escreve direto no banco, sem passar por rota
+ * nenhuma, e é justamente o caso em que a home precisa acompanhar.
+ */
+export const revalidate = 300;
+
 export default async function HomePage() {
   const stats = await ComplaintsRepo.getPlatformStats();
 
