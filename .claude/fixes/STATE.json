@@ -865,7 +865,8 @@
         "docs/arquitetura.md",
         ".claude/fixes/tasks/68-teste-de-erro-instavel.md (evidência nova)",
         "TODO.md"
-      ]
+      ],
+      "commit": "86c4cd3"
     },
     {
       "id": "65",
