@@ -63,6 +63,12 @@ Encontrados durante a fila de correções, cada um com investigação escrita.
       único link interno quebrado do projeto.
 - [ ] [`60`](.claude/fixes/tasks/60-cls-do-blog.md) — CLS do `/blog` em 0,198,
       quase o dobro do limite de 0,1.
+- [ ] [`65`](.claude/fixes/tasks/65-companies-estoura-com-mais-empresas.md) —
+      `/companies` volta a rolar para o lado em 375 px quando há mais de duas
+      empresas no banco. A correção da task `14` não cobria nome longo.
+- [ ] [`64`](.claude/fixes/tasks/64-home-estatica-congela-os-numeros.md) — os
+      números da home congelam no build: a rota é estática e a consulta ao
+      banco roda uma vez só.
 - [ ] [`63`](.claude/fixes/tasks/63-pagina-ajuda-expoe-credenciais.md) — **`/ajuda`
       entrega a senha do administrador a quem não está logado.** Página de
       depuração, pública, sem trava de ambiente. **Resolver antes de qualquer
@@ -108,7 +114,6 @@ O trabalho técnico está catalogado em
 [`.claude/fixes/INDEX.md`](.claude/fixes/INDEX.md), com uma task por assunto e
 um relatório medido por task. O que falta lá:
 
-- [ ] `23` — checklist de prontidão para a demonstração da defesa.
 - [ ] `99` — relatório final.
 
 ## Feito, e verificado
@@ -141,6 +146,9 @@ alguém": é feito segundo um número que dá para reproduzir.
       atrasado ao lado do `pnpm-lock.yaml`.
 - [x] **Onboarding persistido** — `onboardingCompletedAt` é gravado pelas server
       actions das duas trilhas.
+- [x] **Roteiro da demonstração** escrito e ensaiado inteiro sobre o build de
+      produção, em 36 s de máquina e sem tropeço —
+      [`docs/roteiro-demonstracao.md`](docs/roteiro-demonstracao.md).
 - [x] **Manual de Uso** escrito, com 16 telas fotografadas em computador e
       celular — [`docs/manual/MANUAL_DE_USO.md`](docs/manual/MANUAL_DE_USO.md).
 - [x] **Documentação consolidada** — de 21 arquivos na raiz que se contradiziam

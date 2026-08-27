@@ -23,6 +23,7 @@
     "db:studio": "drizzle-kit studio",
     "db:push": "drizzle-kit push",
     "db:seed": "node --import tsx scripts/seed.ts",
+    "db:seed:demo": "node --import tsx scripts/seed-demonstracao.ts",
     "email:sync": "node --import tsx scripts/sync-email-templates.ts",
     "manual:capturas": "node --import tsx scripts/capturas-do-manual.ts",
     "manual:html": "node --import tsx scripts/manual-html.ts",

@@ -544,12 +544,23 @@
       "slug": "checklist-defesa",
       "phase": 8,
       "order": 23,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [
         "22"
       ],
-      "notes": "seed precisa de logoUrl nas empresas: hoje as 2 tem NULL e os componentes de logo caem no fallback da letra | Medido na task 09: o seed tem apenas 3 relatos no total. | Ver achado 56: a conta de empresa do seed e MEMBER e nao consegue administrar a propria empresa na demonstracao."
+      "notes": "Roteiro de 14 passos em 5 atos, EXECUTADO inteiro sobre o build de producao: 36s de maquina, zero tropecos. Em vez de rodar a mao uma vez e anotar numeros que ninguem confere, escrevi um ensaio que percorre os mesmos passos pela interface e cronometra - roda de novo antes da defesa e falha se algo quebrou. Cenario de demonstracao: a home saiu de 2 mulheres/33%/1 empresa para 11/52%/4, com 23 relatos e 9 obras. E ficcao declarada, num script separado e re-executavel; pnpm db:seed continua sendo o estado dos testes. Distribuicao montada como um cenario real se distribui: relato antigo resolvido, relato recente aberto. Promovi a conta de empresa da DEMONSTRACAO a OWNER (metade do achado 56); o seed base segue MEMBER. O ensaio encontrou tres coisas: (64) a home e ESTATICA e os numeros congelam no build - servido 54% contra 52% no banco no mesmo instante; (65) /companies volta a rolar para o lado em 375px com 5 empresas, e todos os cartoes estouram, inclusive os curtos do seed base - a correcao da task 14 estava certa para os dados que existiam; e a contagem da home leva 7s de animacao, o que me fez achar por um momento que ela estava quebrada. Verifiquei o cenario de demonstracao com as duas varreduras: acessibilidade 78/78, responsividade 93/94 (a que falha e o 65). Depois restaurei o seed base e rodei a suite inteira: 359 passando, 3 pulados. PRECISA DO USUARIO: ensaiar uma vez em voz alta - o ensaio prova o caminho, nao a narrativa.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 4,
+      "files_changed": [
+        "docs/roteiro-demonstracao.md (novo)",
+        "scripts/seed-demonstracao.ts (novo)",
+        "scripts/ensaio-da-demonstracao.ts (novo)",
+        "package.json",
+        "README.md",
+        "TODO.md"
+      ]
     },
     {
       "id": "99",
@@ -729,6 +740,34 @@
       "risk": "alto",
       "depends_on": [],
       "notes": "Achado na task 22: /ajuda e publica, nao tem trava de ambiente, e imprime as contas do seed e a senha padrao com botao de copiar - inclusive a conta de admin. Confirmado com curl no build de producao.",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "64",
+      "slug": "home-estatica-congela-os-numeros",
+      "phase": 7,
+      "order": 64,
+      "risk": "medio",
+      "notes": "Achado na task 23: a rota / sai estatica do build e consulta o banco. A consulta roda uma vez, no build, e o resultado e servido congelado. Medido: 54% servido contra 52% no banco no mesmo instante.",
+      "status": "pending",
+      "depends_on": [],
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "65",
+      "slug": "companies-estoura-com-mais-empresas",
+      "phase": 2,
+      "order": 65,
+      "risk": "medio",
+      "notes": "Achado na task 23: com 5 empresas no banco, /companies mede 399px numa tela de 375. Todos os cartoes estouram, inclusive os do seed base. Item de grade nasce com min-width auto e o conteudo mais largo empurra todas as faixas.",
+      "status": "pending",
+      "depends_on": [],
       "started_at": null,
       "finished_at": null,
       "debug_iterations": 0,
@@ -935,6 +974,12 @@
       "task": "22",
       "event": "done",
       "detail": "Manual de Uso com 8 secoes e 16 telas, capturas automatizadas contra o build de producao, HTML distribuivel de arquivo unico. Achado 63: /ajuda entrega a senha do admin publicamente."
+    },
+    {
+      "at": "2026-08-27",
+      "task": "23",
+      "event": "done",
+      "detail": "Roteiro executado inteiro sobre o build de producao em 36s, sem tropecos. Cenario de demonstracao com 23 relatos. Achados 64 (home estatica congela os numeros) e 65 (/companies estoura com mais empresas)."
     }
   ]
 }

@@ -91,10 +91,12 @@ Sobe em `http://localhost:5000`.
 | `pnpm test:e2e` | Suíte E2E (Playwright), ~15 min |
 | `pnpm test:a11y` | Varredura de acessibilidade em 39 páginas, ~6 min |
 | `pnpm db:push` | Aplica o schema no banco |
-| `pnpm db:seed` | Popula dados de demonstração |
+| `pnpm db:seed` | Popula o cenário base. **Os testes dependem dele** |
+| `pnpm db:seed:demo` | Acrescenta o cenário rico da demonstração da defesa |
 | `pnpm db:studio` | Interface do Drizzle para inspecionar o banco |
 | `pnpm manual:capturas` | Refaz as capturas de tela do Manual de Uso |
 | `pnpm manual:html` | Gera a versão distribuível do manual, em arquivo único |
+| `node --import tsx scripts/ensaio-da-demonstracao.ts` | Ensaia o roteiro da defesa inteiro e cronometra |
 
 > `npx playwright test` **sem `--project`** roda tudo, E2E e acessibilidade
 > juntos, e leva mais de 20 minutos. Prefira os scripts acima.
@@ -148,6 +150,7 @@ Itens que dependem de decisão e não de código:
 | Arquivo | Conteúdo |
 |---|---|
 | [`docs/manual/MANUAL_DE_USO.md`](docs/manual/MANUAL_DE_USO.md) | **Manual de Uso** — voltado à usuária, com telas ilustradas |
+| [`docs/roteiro-demonstracao.md`](docs/roteiro-demonstracao.md) | roteiro da demonstração da defesa, cronometrado, com plano B |
 | [`docs/arquitetura.md`](docs/arquitetura.md) | stack, estrutura de pastas, banco, domínios |
 | [`docs/autorizacao.md`](docs/autorizacao.md) | quem pode o quê, regra de posse, anonimato |
 | [`docs/api-erros.md`](docs/api-erros.md) | contrato de erro da API |

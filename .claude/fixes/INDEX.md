@@ -121,7 +121,7 @@ segurança no banco. Plataforma que armazena denúncias identificadas.
 |---|---|---|---|---|
 | ✅ | `21` | [Consolidar a documentação contraditória da raiz](tasks/21-consolidar-documentacao.md) | baixo | `19` |
 | ✅ | `22` | [**Manual de Uso** — produto da dissertação](tasks/22-manual-de-uso.md) | baixo | `15`, `21` |
-| ⬜ | `23` | [Checklist de prontidão para a demonstração da defesa](tasks/23-checklist-defesa.md) | baixo | `22` |
+| ✅ | `23` | [Checklist de prontidão para a demonstração da defesa](tasks/23-checklist-defesa.md) | baixo | `22` |
 
 ---
 
@@ -154,6 +154,8 @@ criar deve registrar aqui e em `STATE.json`.
 | ⬜ | `61` | [A plataforma não envia e-mail](tasks/61-email-nao-existe.md) | médio | — | achado na `20`: 4 modelos HTML, um script que só valida arquivos, e três telas que pedem para conferir um e-mail que nunca chega |
 | ⬜ | `62` | [Cliente e servidor discordam do limite de anexo](tasks/62-limites-de-upload-divergem.md) | baixo | — | achado na `21`: a tela aceita 3 arquivos de 5 MB, a rota aceita 1 de 4 MB |
 | ⬜ | `63` | [`/ajuda` entrega a senha do administrador a quem não está logado](tasks/63-pagina-ajuda-expoe-credenciais.md) | **alto** | — | achado na `22`: página de depuração pública, sem trava de ambiente. **Antes de qualquer deploy** |
+| ⬜ | `64` | [Os números da home congelam no build](tasks/64-home-estatica-congela-os-numeros.md) | médio | — | achado na `23`: a rota `/` é estática e a consulta ao banco roda uma vez só |
+| ⬜ | `65` | [`/companies` volta a rolar para o lado com mais empresas](tasks/65-companies-estoura-com-mais-empresas.md) | médio | — | achado na `23`: 399 px numa tela de 375 assim que o banco tem cinco empresas |
 
 **Ordem revisada pela task `00`:** `01` → `02` → `03` → **`50`** → `07` → …
 A `50` sobe na fila por ser defeito confirmado, e cabe antes dos testes para que
