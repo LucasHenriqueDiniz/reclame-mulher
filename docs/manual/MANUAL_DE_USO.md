@@ -22,7 +22,7 @@ ponto aparecer uma palavra que você não conhece, ela está explicada no
 2. [Criar sua conta](#2-criar-sua-conta)
 3. [Registrar um relato](#3-registrar-um-relato)
 4. [Acompanhar seu relato e conversar com a empresa](#4-acompanhar-seu-relato-e-conversar-com-a-empresa)
-5. [Quando o relato é concluído](#5-quando-o-relato-é-concluído)
+5. [Quando o relato é resolvido](#5-quando-o-relato-é-resolvido)
 6. [Para empresas: receber e responder](#6-para-empresas-receber-e-responder)
 7. [Perguntas frequentes](#7-perguntas-frequentes)
 8. [Onde buscar ajuda](#8-onde-buscar-ajuda)
@@ -263,13 +263,8 @@ No celular a mesma página fica em uma coluna só:
 |---|---|
 | **Aberta** | A empresa ainda não respondeu |
 | **Respondida** | A empresa respondeu. É sua vez, se quiser continuar |
-| **Resolvida** ou **Concluído** | A empresa marcou o caso como encerrado |
+| **Resolvida** | A empresa marcou o caso como encerrado |
 | **Cancelada** | O relato foi cancelado |
-
-> A plataforma ainda usa palavras diferentes para a mesma situação em telas
-> diferentes: *Resolvida* na lista, *Concluído* na página do relato, *Em aberto*
-> na tela da empresa. É a mesma coisa. Isso está registrado para ser
-> padronizado.
 
 ### Abrir um relato
 
@@ -302,21 +297,21 @@ Você pode responder quantas vezes precisar. Tudo fica registrado, na ordem.
 
 ---
 
-## 5. Quando o relato é concluído
+## 5. Quando o relato é resolvido
 
 Quem encerra o caso é a empresa. Quando ela faz isso, sua página muda:
 
-![Página de um relato concluído. A etiqueta no alto é Concluído, em verde. Depois do texto do relato, uma faixa azul com um sinal de confirmação e as palavras "Chamado Concluído — Equipe Construtora X", com a data.](img/50-relato-resolvido.png)
+![Página de um relato resolvido. A etiqueta no alto é Resolvida, em verde. Depois do texto do relato, uma faixa azul com um sinal de confirmação e as palavras "Reclamação resolvida — Equipe Construtora X", com a data.](img/50-relato-resolvido.png)
 
-*Um relato concluído. A faixa azul diz quem encerrou e quando.*
+*Um relato resolvido. A faixa azul diz quem encerrou e quando.*
 
 ### E se o problema não foi resolvido de verdade?
 
-Acontece: a empresa marca como concluído e o barulho continua.
+Acontece: a empresa marca como resolvida e o barulho continua.
 
-Nesta versão da plataforma, **responder num relato concluído não o reabre**. A
+Nesta versão da plataforma, **responder num relato resolvido não o reabre**. A
 caixa de resposta continua ali e sua mensagem é registrada — a empresa vai ler —
-mas a etiqueta continua "Concluído".
+mas a etiqueta continua "Resolvida".
 
 O que fazer:
 
@@ -359,7 +354,7 @@ sobre a empresa.
 
 Clique em **Ver detalhes** em qualquer relato da lista.
 
-![Página de um relato vista pela empresa. Faixa azul com o título e a etiqueta "Em aberto". No corpo, os dados do relato e o texto de Maria Silva. Abaixo, a caixa Enviar resposta, com a opção Anexar arquivo. No lado direito, um quadro chamado Ações da empresa, com uma lista para mudar o status e o botão Salvar.](img/62-responder-relato.png)
+![Página de um relato vista pela empresa. Faixa azul com o título e a etiqueta "Aberta". No corpo, os dados do relato e o texto de Maria Silva. Abaixo, a caixa Enviar resposta, com a opção Anexar arquivo. No lado direito, um quadro chamado Ações da empresa, com uma lista para mudar o status e o botão Salvar.](img/62-responder-relato.png)
 
 *A tela de resposta da empresa. À direita, em **Ações da empresa**, fica a
 mudança de situação.*
@@ -477,7 +472,7 @@ Lista honesta, para você não perder tempo procurando:
 |---|---|
 | **Não envia e-mail** | Nenhum: nem confirmação de cadastro, nem aviso de resposta, nem recuperação de senha. Você precisa entrar e olhar |
 | **Não recupera senha esquecida** | O link "Esqueceu a senha?" não leva a lugar nenhum |
-| **Não reabre relato concluído** | Sua resposta é registrada, mas a etiqueta não muda |
+| **Não reabre relato resolvido** | Sua resposta é registrada, mas a etiqueta não muda |
 | **Não tem canal de atendimento** | Não há telefone, e-mail ou chat de suporte |
 | **Não permite mudar a privacidade depois** | As duas chaves da etapa 4 valem para sempre |
 | **Aceita menos anexo do que diz** | A tela promete 3 arquivos de 5 MB; o envio aceita 1 de 4 MB |

@@ -1,4 +1,4 @@
-import { expect, test, type APIRequestContext } from "@playwright/test";
+import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
 
 import { entrarViaApi } from "./fixtures/auth";
 import { limparRelatosDeTeste } from "./fixtures/db";
@@ -219,6 +219,90 @@ test.describe("privacidade da conversa", () => {
     expect(pelaTela?.status()).toBe(404);
   });
 });
+
+/**
+ * Vocabulário de status.
+ *
+ * Nasceu da task `54`. Antes dela o mesmo relato era "Em réplica" na lista e
+ * "Respondida" no detalhe; quando a empresa encerrava, a usuária lia
+ * "Concluído" e a empresa lia "Resolvida". Havia quatro mapas de rótulo
+ * discordando entre si.
+ *
+ * O teste percorre os quatro status e confere os três lugares onde o status
+ * aparece. Ele também exige que as palavras aposentadas não voltem por
+ * nenhuma porta — é o que pega um mapa novo nascendo em algum componente.
+ */
+const ROTULO: Record<string, string> = {
+  OPEN: "Aberta",
+  RESPONDED: "Respondida",
+  RESOLVED: "Resolvida",
+  CANCELLED: "Cancelada",
+};
+
+/** Palavras que a task `54` tirou do produto. Nenhuma tela pode trazê-las de volta. */
+const APOSENTADOS = ["Em aberto", "Em réplica", "Concluído", "Chamado"];
+
+test.describe("o status tem um nome só", () => {
+  test("lista, detalhe e painel da empresa leem igual nos quatro status", async ({
+    page,
+    request,
+  }) => {
+    const empresaId = await empresaComSessao(request);
+    await entrarViaApi(request, "pessoa");
+    const { id } = await criarRelato(request, { empresaId, assunto: "rotulo de status" });
+
+    for (const status of ["OPEN", "RESPONDED", "RESOLVED", "CANCELLED"]) {
+      if (status !== "OPEN") {
+        await marcarStatusComoEmpresa(request, id, status);
+      }
+      const esperado = ROTULO[status];
+
+      // 1. A lista da autora. O cartão é recortado pelo href, senão o texto de
+      // outro relato da mesma conta entraria na conta.
+      await entrarViaApi(page.request, "pessoa");
+      await page.goto("/app/complaints");
+      const cartao = page.locator(`a[href="/app/complaints/${id}"]`);
+      await expect(cartao, `o relato sumiu da lista em ${status}`).toBeVisible();
+      expect(
+        await cartao.innerText(),
+        `na lista, ${status} deveria ler "${esperado}"`
+      ).toContain(esperado);
+
+      // 2. O detalhe da autora.
+      await page.goto(`/app/complaints/${id}`);
+      await expect(
+        page.getByRole("status"),
+        `no detalhe da autora, ${status} deveria ler "${esperado}"`
+      ).toHaveText(esperado);
+      await conferirAposentados(page, `detalhe da autora em ${status}`);
+
+      // 3. O painel da empresa.
+      await entrarViaApi(page.request, "empresa");
+      await page.goto(`/app/company/complaints/${id}`);
+      await expect(
+        page.getByRole("status"),
+        `no painel da empresa, ${status} deveria ler "${esperado}"`
+      ).toHaveText(esperado);
+      await conferirAposentados(page, `painel da empresa em ${status}`);
+    }
+  });
+});
+
+/**
+ * Nenhuma palavra aposentada em lugar nenhum da tela.
+ *
+ * Página inteira, e não só o selo: "Chamado Concluído" era o título da faixa de
+ * encerramento, longe do selo, e é justamente o tipo de sobra que passa
+ * despercebida numa conferência pontual. A lista de mudança de status do painel
+ * da empresa entra no `innerText` junto com as opções, mas as opções são os
+ * rótulos unificados — nenhuma palavra desta lista aparece lá.
+ */
+async function conferirAposentados(page: Page, onde: string) {
+  const texto = await page.locator("body").innerText();
+  for (const palavra of APOSENTADOS) {
+    expect(texto, `${onde}: a palavra "${palavra}" voltou à tela`).not.toContain(palavra);
+  }
+}
 
 /** Loga o contexto como empresa e devolve o id da empresa dela. */
 async function empresaComSessao(request: APIRequestContext) {

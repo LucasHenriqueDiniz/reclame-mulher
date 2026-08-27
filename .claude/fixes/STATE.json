@@ -606,14 +606,27 @@
       "slug": "rotulos-de-status-divergentes",
       "phase": 2,
       "order": 54,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [],
-      "notes": "Achado na task 10. Quatro mapas de rotulo de status que discordam: RESPONDED e \"Em replica\" na listagem e \"Respondida\" no detalhe; RESOLVED e \"Concluido\" para a usuaria e \"Resolvida\" para a empresa. lib/constants/complaint-status.ts existe para isso e nao e usado em toda parte.",
-      "started_at": null,
-      "finished_at": null,
+      "notes": "Eram CINCO mapas de rotulo, e nao quatro como a task supunha: os tres que ela listava, mais COMPLAINT_LABELS em components/company/StatusBadge.tsx, mais formatComplaintStatus em lib/utils.ts - esta ultima morta, ninguem a chamava nem os testes. Viraram um: Aberta/Respondida/Resolvida/Cancelada, concordando com 'reclamacao'. O modulo compartilhado passou a carregar tambem cor, borda e icone (componente do lucide, nao JSX, para o arquivo seguir .ts e servir servidor e cliente) e a derivar as opcoes do select da empresa do proprio mapa. formatComplaintStatus foi APAGADA em vez de religada: utils.ts exporta o cn e e importado em quase todo componente, entao religa-la arrastaria o lucide-react junto. Fora dos mapas, 'Chamado Concluido' das duas faixas de encerramento virou 'Reclamacao resolvida'. GANHO NAO PREVISTO: o selo da empresa desenhava RESPONDED com #EAB308 sobre #FEFCE8, ~1,7:1 - a varredura de acessibilidade nunca pegou porque o relato que ela abre esta OPEN; herdando a paleta compartilhada passou a cumprir contraste nos quatro status. NAO MEXI nas abas de filtro: 'Concluidas' agrupa RESOLVED E CANCELLED, renomear seria trocar inconsistencia por erro. Teste novo em complaint-response.spec.ts percorre os quatro status x tres telas e exige que as palavras aposentadas nao voltem em nenhum ponto do corpo da pagina; verificado por mutacao (devolvendo 'Em replica' o teste falha). Os dois selos de detalhe ganharam role=status + aria-label, mesma marcacao que company/StatusBadge.tsx ja usava. MANUAL REFEITO: 16 das 34 capturas mudaram e as outras 18 sairam identicas - prova de que o banco estava no mesmo estado da task 22. A nota do manual que avisava sobre a divergencia foi apagada porque deixou de ser verdade, e a linha 'Etiquetas divergem' saiu da tabela de limitacoes do roteiro. Suite inteira: 461 passando, 3 pulados.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
       "debug_iterations": 0,
-      "files_changed": []
+      "files_changed": [
+        "src/lib/constants/complaint-status.ts",
+        "src/app/app/complaints/[id]/_components/complaint-detail-content.tsx",
+        "src/app/app/company/complaints/[id]/_components/company-complaint-detail-content.tsx",
+        "src/components/company/StatusBadge.tsx",
+        "src/lib/utils.ts",
+        "e2e/complaint-response.spec.ts",
+        "docs/manual/MANUAL_DE_USO.md",
+        "docs/manual/MANUAL_DE_USO.html",
+        "docs/manual/img/ (16 das 34 capturas)",
+        "docs/roteiro-demonstracao.md",
+        "TODO.md"
+      ],
+      "commit": "24ea7b5"
     },
     {
       "id": "55",
@@ -993,6 +1006,13 @@
       "task": "63",
       "event": "done",
       "detail": "Senha e e-mails saem do codigo e a rota deixa de existir em producao. curl /ajuda: 404. senha123 no HTML servido: 0. 22 testes novos travam 10 rotas publicas."
+    },
+    {
+      "at": "2026-08-27",
+      "task": "54",
+      "event": "done",
+      "detail": "Cinco mapas de rotulo viraram um. Suite 459 -> 461. Manual refeito: 16 das 34 capturas. Contraste de 1,7:1 no selo da empresa corrigido de carona.",
+      "report": "reports/54-rotulos-de-status-divergentes.md"
     }
   ]
 }

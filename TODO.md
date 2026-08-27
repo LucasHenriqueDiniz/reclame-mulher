@@ -46,8 +46,6 @@ fazer.
 
 Encontrados durante a fila de correções, cada um com investigação escrita.
 
-- [ ] [`54`](.claude/fixes/tasks/54-rotulos-de-status-divergentes.md) — rótulos
-      de status divergentes entre telas.
 - [ ] [`55`](.claude/fixes/tasks/55-resolvido-nao-reabre.md) — relato marcado
       como resolvido não reabre quando a usuária responde. A documentação de
       julho afirmava o contrário.
@@ -117,6 +115,11 @@ um relatório medido por task. O que falta lá:
 Cada linha aqui tem medição em `.claude/fixes/reports/`. Não é "feito segundo
 alguém": é feito segundo um número que dá para reproduzir.
 
+- [x] **Um nome só para cada status** — cinco mapas de rótulo discordando
+      viraram um. O mesmo relato lia *Em réplica* na lista, *Respondida* no
+      detalhe e *Concluído* quando encerrado; hoje lê **Aberta**, **Respondida**,
+      **Resolvida** ou **Cancelada** em toda tela. Ver
+      [`54`](.claude/fixes/reports/54-rotulos-de-status-divergentes.md).
 - [x] **ESLint zerado** — de 4 erros e 277 avisos para 0 e 0.
 - [x] **Suíte de testes existe** — 458 testes: 18 de unidade, 362 de ponta a
       ponta, 78 de acessibilidade. Antes: nenhum.

@@ -1,21 +1,17 @@
 "use client";
 
 import { companyTheme as S } from "./theme";
+import { complaintStatusLabel } from "@/lib/constants/complaint-status";
 
-const COMPLAINT_LABELS: Record<string, string> = {
-  OPEN: "Aberta",
-  RESPONDED: "Respondida",
-  RESOLVED: "Resolvida",
-  CANCELLED: "Cancelada",
-  PENDING: "Pendente",
-};
-
+// Só as cores ficam aqui: este selo é o desenho do tema da empresa, mais
+// suave que o do detalhe da reclamação. O texto vem de
+// `@/lib/constants/complaint-status`, que é o único mapa de rótulos do
+// repositório desde a task `54`.
 const COMPLAINT_COLORS: Record<string, string> = {
   OPEN: S.muted,
   RESPONDED: S.yellow,
   RESOLVED: S.green,
   CANCELLED: S.orange,
-  PENDING: S.muted,
 };
 
 const PROJECT_LABELS: Record<string, string> = {
@@ -41,9 +37,11 @@ export function StatusBadge({
   status: string;
   variant?: Variant;
 }) {
-  const labels = variant === "complaint" ? COMPLAINT_LABELS : PROJECT_LABELS;
   const colors = variant === "complaint" ? COMPLAINT_COLORS : PROJECT_COLORS;
-  const label = labels[status] ?? status;
+  const label =
+    variant === "complaint"
+      ? complaintStatusLabel(status)
+      : (PROJECT_LABELS[status] ?? status);
   const color = colors[status] ?? S.muted;
 
   return (

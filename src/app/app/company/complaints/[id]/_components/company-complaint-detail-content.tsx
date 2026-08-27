@@ -9,7 +9,6 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
-  XCircle,
   Send,
   Shield,
   Building2,
@@ -27,44 +26,10 @@ import { formatDateTime } from "@/lib/utils";
 import { protocolId } from "@/components/company/utils";
 import { CompanyPageShell } from "@/components/app/CompanyPageShell";
 import { mensagemDeErro } from "@/lib/http/erro";
-
-const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; border: string; icon: React.ReactNode }> = {
-  OPEN: {
-    label: "Em aberto",
-    color: "#9A4B00",
-    bg: "#FFF7ED",
-    border: "#FDBA74",
-    icon: <AlertCircle className="w-4 h-4" />,
-  },
-  RESPONDED: {
-    label: "Respondida",
-    color: "#EAB308",
-    bg: "#FEFCE8",
-    border: "#FDE047",
-    icon: <MessageCircle className="w-4 h-4" />,
-  },
-  RESOLVED: {
-    label: "Resolvida",
-    color: "#22C55E",
-    bg: "#F0FDF4",
-    border: "#86EFAC",
-    icon: <CheckCircle2 className="w-4 h-4" />,
-  },
-  CANCELLED: {
-    label: "Cancelada",
-    color: "#94A3B8",
-    bg: "#F8FAFC",
-    border: "#CBD5E1",
-    icon: <XCircle className="w-4 h-4" />,
-  },
-};
-
-const STATUS_OPTIONS = [
-  { value: "OPEN", label: "Em aberto" },
-  { value: "RESPONDED", label: "Respondida" },
-  { value: "RESOLVED", label: "Resolvida" },
-  { value: "CANCELLED", label: "Cancelada" },
-];
+import {
+  COMPLAINT_STATUS_OPTIONS,
+  getComplaintStatusConfig,
+} from "@/lib/constants/complaint-status";
 
 const CATEGORY_LABELS: Record<string, string> = {
   meio_ambiente: "Meio Ambiente",
@@ -113,13 +78,20 @@ type MessageItem = {
 };
 
 function StatusBadge({ status }: { status: string }) {
-  const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.OPEN;
+  const config = getComplaintStatusConfig(status);
+  const Icone = config.icon;
   return (
     <span
+      role="status"
+      aria-label={`Status: ${config.label}`}
       className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
-      style={{ backgroundColor: config.bg, color: config.color, border: `1px solid ${config.border}` }}
+      style={{
+        backgroundColor: config.bgColor,
+        color: config.color,
+        border: `1px solid ${config.borderColor}`,
+      }}
     >
-      {config.icon}
+      <Icone className="w-4 h-4" />
       {config.label}
     </span>
   );
@@ -403,7 +375,7 @@ export function CompanyComplaintDetailContent({
                         <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-3">
                           <CheckCircle2 className="w-8 h-8 text-white" />
                         </div>
-                        <p className="font-['Poppins'] text-lg font-semibold">Chamado Concluído</p>
+                        <p className="font-['Poppins'] text-lg font-semibold">Reclamação resolvida</p>
                       </div>
                     </div>
                   </div>
@@ -541,7 +513,7 @@ export function CompanyComplaintDetailContent({
                       disabled={pending}
                       onChange={(e) => setStatus(e.target.value)}
                     >
-                      {STATUS_OPTIONS.map((option) => (
+                      {COMPLAINT_STATUS_OPTIONS.map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
                         </option>

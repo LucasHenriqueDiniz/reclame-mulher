@@ -23,13 +23,7 @@ import { protocolId } from "@/components/company/utils";
 import { companyTheme as S } from "@/components/company/theme";
 import { Button } from "@/components/ui/button";
 import { mensagemDeErro } from "@/lib/http/erro";
-
-const STATUS_LABELS: Record<string, string> = {
-  OPEN: "Em aberto",
-  RESPONDED: "Respondida",
-  RESOLVED: "Concluído",
-  CANCELLED: "Cancelada",
-};
+import { complaintStatusLabel } from "@/lib/constants/complaint-status";
 
 const CATEGORY_LABELS: Record<string, string> = {
   meio_ambiente: "Meio Ambiente",
@@ -105,7 +99,7 @@ export function ComplaintDetailContent({
   const [feedback, setFeedback] = useState<{ type: "error" | "success"; message: string } | null>(null);
   const [pending, startTransition] = useTransition();
   const router = useRouter();
-  const statusLabel = STATUS_LABELS[complaint.status] ?? complaint.status;
+  const statusLabel = complaintStatusLabel(complaint.status);
   const isResolved = complaint.status === "RESOLVED";
   const categories = [
     complaint.impactCategory ? (CATEGORY_LABELS[complaint.impactCategory] ?? complaint.impactCategory) : null,
@@ -182,6 +176,8 @@ export function ComplaintDetailContent({
             </p>
           </div>
           <span
+            role="status"
+            aria-label={`Status: ${statusLabel}`}
             style={{
               background: isResolved ? S.green : "rgba(0,0,0,0.2)",
               color: S.white,
@@ -378,7 +374,7 @@ export function ComplaintDetailContent({
                 >
                   <span style={{ fontSize: 24 }}>✓</span>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: 15 }}>Chamado Concluído</div>
+                    <div style={{ fontWeight: 700, fontSize: 15 }}>Reclamação resolvida</div>
                     <div style={{ fontSize: 12, opacity: 0.9 }}>
                       Equipe {complaint.company?.name ?? "empresa"} · {formatDateTime(complaint.updatedAt)}
                     </div>
