@@ -966,7 +966,8 @@
         "src/app/app/company/profile/page.tsx",
         "e2e/ownership.spec.ts",
         "scripts/conferir-schema-vs-banco.ts"
-      ]
+      ],
+      "commit": "f4577d6"
     }
   ],
   "task_fields": {
@@ -1235,7 +1236,8 @@
       "task": "69",
       "event": "done",
       "report": "reports/69-schema-e-banco-discordam-do-cnpj.md",
-      "detail": "PATCH /api/company/profile com cnpj ou name nulo: 500 -> 400, com o teste falhando pelo motivo certo quando o defeito volta. Defeito irmao em name e no onboarding da empresa corrigido junto. Auditoria schema x information_schema virou script: 13 tabelas, 139 colunas, 0 divergencias. Suite 469, 3 pulados."
+      "detail": "PATCH /api/company/profile com cnpj ou name nulo: 500 -> 400, com o teste falhando pelo motivo certo quando o defeito volta. Defeito irmao em name e no onboarding da empresa corrigido junto. Auditoria schema x information_schema virou script: 13 tabelas, 139 colunas, 0 divergencias. Suite 469, 3 pulados.",
+      "commit": "f4577d6"
     }
   ]
 }
