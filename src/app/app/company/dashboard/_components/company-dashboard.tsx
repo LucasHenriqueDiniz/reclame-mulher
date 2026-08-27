@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { MessageSquare, CheckCircle2, AlertTriangle, TrendingUp, FolderKanban } from "lucide-react";
 import {
   companyTheme as S,
   CompanyProfileHero,
@@ -475,16 +476,19 @@ export function CompanyDashboard({
           <MetricCard
             label="Reclamações recebidas"
             value={stats.totalComplaints}
+            icon={<MessageSquare size={18} />}
           />
           <MetricCard
             label="Casos resolvidos"
             value={stats.resolvedCases}
             color={S.green}
+            icon={<CheckCircle2 size={18} />}
           />
           <MetricCard
             label="Sem resposta"
             value={stats.unansweredCount}
             color={stats.unansweredCount > 0 ? S.red : undefined}
+            icon={<AlertTriangle size={18} />}
           />
           <MetricCard
             label="Taxa de resolução"
@@ -495,11 +499,13 @@ export function CompanyDashboard({
                 : undefined
             }
             color={stats.resolutionRate >= 70 ? S.green : S.orange}
+            icon={<TrendingUp size={18} />}
           />
           <MetricCard
             label="Projetos ativos"
             value={stats.activeProjectsCount}
             color={S.primary}
+            icon={<FolderKanban size={18} />}
           />
         </div>
       </div>

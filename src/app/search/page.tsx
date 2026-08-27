@@ -112,7 +112,7 @@ function SearchContent() {
             </p>
           </div>
           
-          <h1 className="font-['Poppins'] max-w-3xl text-4xl font-bold text-white sm:text-5xl leading-tight">
+          <h1 className="font-heading max-w-3xl text-4xl font-bold text-white sm:text-5xl leading-tight">
             Encontre empresas e relatos
           </h1>
 

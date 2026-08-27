@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { MapPin } from "lucide-react";
 import { companyTheme as S } from "./theme";
 import { StatusBadge } from "./StatusBadge";
 import { protocolId, formatDate } from "./utils";
@@ -178,7 +179,7 @@ export function CompanyRecentComplaintsCard({
                     fontFamily: "Poppins, sans-serif",
                   }}
                 >
-                  <span style={{ fontSize: 12 }}>📍</span>
+                  <MapPin size={12} style={{ flexShrink: 0 }} />
                   {c.location}
                 </div>
               )}

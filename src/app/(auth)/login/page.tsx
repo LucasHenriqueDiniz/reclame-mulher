@@ -79,7 +79,7 @@ export default function LoginPage() {
             ComunicaMulher
           </p>
 
-          <h1 className="max-w-[540px] text-4xl font-extrabold leading-tight mb-6 sm:text-5xl lg:text-[3.35rem]">
+          <h1 className="font-heading max-w-[540px] text-4xl font-extrabold leading-tight mb-6 sm:text-5xl lg:text-[3.35rem]">
             Conectando vozes
             <br />
             que{" "}

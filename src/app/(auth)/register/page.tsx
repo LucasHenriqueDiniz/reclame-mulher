@@ -32,7 +32,7 @@ export default function RegisterPage() {
             <span className="text-[#3BA5FF]">Mulher</span>
           </div>
 
-          <h1 className="text-[30px] font-bold tracking-[-0.03em] sm:text-[38px] lg:text-[44px]">
+          <h1 className="font-heading text-[30px] font-bold tracking-[-0.03em] sm:text-[38px] lg:text-[44px]">
             Como você vai usar a plataforma?
           </h1>
 
@@ -57,7 +57,7 @@ export default function RegisterPage() {
                   <Users className="h-8 w-8 sm:h-9 sm:w-9" />
                 </div>
 
-                <h2 className="mt-8 text-[26px] font-bold tracking-[-0.03em] text-white sm:text-[30px]">
+                <h2 className="font-heading mt-8 text-[26px] font-bold tracking-[-0.03em] text-white sm:text-[30px]">
                   Pessoa
                 </h2>
 
@@ -91,7 +91,7 @@ export default function RegisterPage() {
                   <Building2 className="h-8 w-8 sm:h-9 sm:w-9" />
                 </div>
 
-                <h2 className="mt-8 text-[26px] font-bold tracking-[-0.03em] text-white sm:text-[30px]">
+                <h2 className="font-heading mt-8 text-[26px] font-bold tracking-[-0.03em] text-white sm:text-[30px]">
                   Empresa
                 </h2>
 

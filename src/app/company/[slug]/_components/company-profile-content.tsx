@@ -85,9 +85,6 @@ function CompanyHero({
   isVerified,
   dashboardLink,
   complaintCtaHref,
-  tabs,
-  activeTab,
-  onTabChange,
 }: {
   company: Company;
   stats: CompanyStats;
@@ -95,18 +92,15 @@ function CompanyHero({
   isVerified: boolean;
   dashboardLink?: string;
   complaintCtaHref?: string;
-  tabs: { key: string; label: string; count?: number }[];
-  activeTab: string;
-  onTabChange: (key: string) => void;
 }) {
   const region = company.region ?? ([company.city, company.state].filter(Boolean).join(", ") || null);
   const projectsCount = stats.activeProjectsCount ?? 0;
 
   return (
     <div className="bg-gradient-to-br from-[#1E88E5] to-[#1565C0]">
-      <div className="max-w-[960px] mx-auto px-6 pt-8 pb-4">
+      <div className="max-w-[960px] mx-auto px-6 pt-8 pb-8">
         {/* Header row */}
-        <div className="flex items-start gap-5 flex-wrap mb-6">
+        <div className="flex items-start gap-5 flex-wrap">
           {/* Avatar */}
           <div className="w-[72px] h-[72px] rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center text-white text-[28px] font-bold flex-shrink-0 overflow-hidden">
             {company.logoUrl ? (
@@ -172,27 +166,51 @@ function CompanyHero({
             )}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
 
-        {/* Tabs */}
-        <div className="flex gap-1 flex-wrap items-center">
+// ─── NAVEGAÇÃO DO PERFIL PÚBLICO ────────────────────────────────────────────
+// Estilo "sublinhado" (comum em perfis públicos) em vez das abas em caixa do
+// painel interno da empresa — deixa claro que isto é uma visão pública, não
+// uma ferramenta de gestão.
+function PublicProfileTabs({
+  tabs,
+  activeTab,
+  onTabChange,
+}: {
+  tabs: { key: string; label: string; count?: number }[];
+  activeTab: string;
+  onTabChange: (key: string) => void;
+}) {
+  return (
+    <div className="bg-white border-b border-gray-200">
+      <div className="max-w-[960px] mx-auto px-6">
+        <div className="flex gap-6 overflow-x-auto">
           {tabs.map((t) => (
             <button
               key={t.key}
               type="button"
               onClick={() => onTabChange(t.key)}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 text-[13px] font-semibold rounded-t-xl transition-all cursor-pointer border-none ${
+              className={`relative flex items-center gap-2 py-4 text-[14px] font-semibold whitespace-nowrap transition-colors cursor-pointer border-none bg-transparent ${
                 activeTab === t.key
-                  ? "bg-white text-[#1E88E5]"
-                  : "bg-transparent text-white/85 hover:text-white"
+                  ? "text-[#1E88E5]"
+                  : "text-gray-500 hover:text-[#2A3F54]"
               }`}
             >
               {t.label}
               {t.count != null && (
-                <span className={`text-[11px] px-1.5 py-0.5 rounded-full font-bold ${
-                  activeTab === t.key ? "bg-[#1E88E5]/10 text-[#1E88E5]" : "bg-white/20 text-white"
-                }`}>
+                <span
+                  className={`text-[11px] px-1.5 py-0.5 rounded-full font-bold ${
+                    activeTab === t.key ? "bg-[#1E88E5]/10 text-[#1E88E5]" : "bg-gray-100 text-gray-500"
+                  }`}
+                >
                   {t.count}
                 </span>
+              )}
+              {activeTab === t.key && (
+                <span className="absolute left-0 right-0 -bottom-px h-[2px] bg-[#1E88E5] rounded-full" />
               )}
             </button>
           ))}
@@ -550,10 +568,9 @@ export function CompanyProfileContent({
           isVerified={isVerified}
           dashboardLink={isMember ? "/app/company/dashboard" : undefined}
           complaintCtaHref={!isMember ? `/app/complaints/new?company=${company.id}` : undefined}
-          tabs={publicTabs}
-          activeTab={tab}
-          onTabChange={setTab}
         />
+
+        <PublicProfileTabs tabs={publicTabs} activeTab={tab} onTabChange={setTab} />
 
         <MetricsBar stats={stats} />
 

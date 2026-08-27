@@ -4,7 +4,7 @@ export const companyTheme = {
   purple: "#1E0F62",
   text: "#2E435B",
   muted: "#3E4A57", // Increased from #6E8195 for 4.5:1 contrast ratio (WCAG AA)
-  border: "#6B7683", // Increased from #D9E3EC for better accessibility
+  border: "#C7CDD6", // Contraste suficiente p/ separação visual (bordas decorativas não exigem 3:1 do WCAG 1.4.11, só componentes de UI/foco)
   white: "#FFFFFF",
   green: "#1CA85B",
   yellow: "#E0A800",
