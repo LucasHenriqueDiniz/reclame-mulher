@@ -54,9 +54,6 @@ fazer.
 
 Encontrados durante a fila de correções, cada um com investigação escrita.
 
-- [ ] [`59`](.claude/fixes/tasks/59-esqueceu-a-senha-nao-existe.md) —
-      "Esqueceu a senha?" aponta para `/forgot-password`, que não existe. É o
-      único link interno quebrado do projeto.
 - [ ] [`60`](.claude/fixes/tasks/60-cls-do-blog.md) — CLS do `/blog` em 0,198,
       quase o dobro do limite de 0,1.
 - [ ] [`65`](.claude/fixes/tasks/65-companies-estoura-com-mais-empresas.md) —
@@ -71,6 +68,9 @@ Encontrados durante a fila de correções, cada um com investigação escrita.
 - [ ] [`66`](.claude/fixes/tasks/66-teste-de-teclado-instavel.md) — o teste
       de teclado do assistente falha de vez em quando no celular. É corrida do
       teste com a lista do Radix, não defeito do produto.
+- [ ] [`67`](.claude/fixes/tasks/67-endereco-de-suporte-nao-verificado.md) — a
+      tela de verificação manda a empresa escrever para
+      `suporte@reclame-mulher.com.br`. Ninguém sabe se essa caixa existe.
 
 ## Backlog de produto
 
@@ -139,6 +139,11 @@ alguém": é feito segundo um número que dá para reproduzir.
       tudo nulo, a lista foi apagada, e no build de produção a home deslogada não
       imprime **mensagem nenhuma**. Ver
       [`58`](.claude/fixes/reports/58-api-me-401-em-toda-pagina.md).
+- [x] **Nenhum link interno aponta para rota que não existe** — a tela de
+      entrada prometia "Esqueceu a senha?" e recarregava a mesma página, porque
+      `/forgot-password` nunca existiu. Hoje ela diz a verdade, e um teste
+      permanente varre todo destino do código contra as rotas de `src/app`. Ver
+      [`59`](.claude/fixes/reports/59-esqueceu-a-senha-nao-existe.md).
 - [x] **ESLint zerado** — de 4 erros e 277 avisos para 0 e 0.
 - [x] **Suíte de testes existe** — 458 testes: 18 de unidade, 362 de ponta a
       ponta, 78 de acessibilidade. Antes: nenhum.

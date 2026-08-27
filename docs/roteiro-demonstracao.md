@@ -241,7 +241,7 @@ falta é mais forte do que ser pego.
 | Não faz | Resposta curta | Registro |
 |---|---|---|
 | **Não envia e-mail** | quatro modelos escritos, nenhum envio implementado. A usuária precisa entrar para ver resposta | task `61` |
-| **Não recupera senha** | o link existe e não leva a lugar nenhum. É o único link interno quebrado do projeto | task `59` |
+| **Não recupera senha** | depende de e-mail, que a plataforma não envia. A tela de entrada diz isso em vez de prometer um link que não existia | task `59` |
 | **Relato concluído não reabre** | a resposta é registrada, a etiqueta não muda | task `55` |
 | **Anexo: a tela promete mais do que o envio aceita** | tela diz 3 arquivos de 5 MB, servidor aceita 1 de 4 MB | task `62` |
 | **Anexos não têm controle de acesso** | vão para o UploadThing por URL. Quem tem a URL abre | `docs/autorizacao.md` |

@@ -112,8 +112,8 @@ O que preencher:
 Marque a caixa aceitando os termos de uso e clique em **Continuar**.
 
 > ⚠️ **Guarde sua senha em lugar seguro.** Nesta versão da plataforma **não é
-> possível recuperar a senha esquecida**. O link "Esqueceu a senha?" na tela de
-> entrada ainda não leva a lugar nenhum.
+> possível recuperar a senha esquecida** sozinha. A tela de entrada diz isso
+> abertamente e manda procurar quem administra a plataforma.
 
 ### Passo 3 — Entre na plataforma
 
@@ -415,8 +415,10 @@ plataforma.
 Não nesta versão. Decida antes de clicar em **Enviar relato**.
 
 **Esqueci minha senha. E agora?**
-Nesta versão não há recuperação de senha. Você precisará de outra conta, com
-outro e-mail. É uma limitação conhecida e está registrada para correção.
+Nesta versão não há recuperação automática — ela depende de envio de e-mail, e a
+plataforma ainda não envia nenhum. Procure quem administra a plataforma: só essa
+pessoa consegue devolver o acesso. É uma limitação conhecida e está registrada
+para correção.
 
 **Quanto tempo a empresa tem para responder?**
 A plataforma não impõe prazo. O que ela faz é **mostrar**: o número "Sem
@@ -471,7 +473,7 @@ Lista honesta, para você não perder tempo procurando:
 | Não faz | O que isso significa na prática |
 |---|---|
 | **Não envia e-mail** | Nenhum: nem confirmação de cadastro, nem aviso de resposta, nem recuperação de senha. Você precisa entrar e olhar |
-| **Não recupera senha esquecida** | O link "Esqueceu a senha?" não leva a lugar nenhum |
+| **Não recupera senha esquecida** | Não há tela de recuperação; só quem administra a plataforma devolve o acesso |
 | **Não reabre relato resolvido** | Sua resposta é registrada, mas a etiqueta não muda |
 | **Não tem canal de atendimento** | Não há telefone, e-mail ou chat de suporte |
 | **Não permite mudar a privacidade depois** | As duas chaves da etapa 4 valem para sempre |

@@ -148,15 +148,22 @@ export default function LoginPage() {
 
                 {/* Password */}
                 <div>
-                  <div className="flex items-center justify-between mb-1.5">
+                  <div className="mb-1.5">
                     <label className="text-sm font-medium text-gray-800">Senha</label>
-                    <Link
-                      href="/forgot-password"
-                      className="text-xs text-[#1976D2] hover:underline"
-                    >
-                      Esqueceu a senha?
-                    </Link>
                   </div>
+                  {/*
+                      Aqui havia um link "Esqueceu a senha?" apontando para
+                      `/forgot-password`, rota que **não existe**. Sem sessão o
+                      middleware devolvia 307 para o próprio `/login`: quem
+                      estava trancada para fora clicava e voltava para a mesma
+                      tela, sem mensagem — a leitura natural é "cliquei errado",
+                      e a pessoa tenta de novo.
+
+                      Não dá para implementar a recuperação hoje: ela depende de
+                      e-mail, e o projeto **não envia e-mail nenhum** (achado
+                      `61`). Enquanto isso, o texto abaixo diz a verdade. Ele sai
+                      no dia em que a recuperação existir. Ver task `59`.
+                  */}
                   <PasswordField
                     placeholder="Sua senha"
                     {...register("password")}
@@ -166,6 +173,10 @@ export default function LoginPage() {
                   {errors.password && (
                     <p className="text-xs text-red-600 mt-1">{errors.password.message}</p>
                   )}
+                  <p className="text-xs text-gray-500 mt-1.5">
+                    Esqueceu a senha? Nesta versão não há recuperação automática — peça a
+                    quem administra a plataforma.
+                  </p>
                 </div>
 
                 {/* Submit */}
