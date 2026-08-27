@@ -153,7 +153,7 @@ criar deve registrar aqui e em `STATE.json`.
 | ⬜ | `60` | [CLS do /blog está no dobro do limite](tasks/60-cls-do-blog.md) | médio | `19` | achado na `19`: dois `return` completos remontam header e footer; 0,198 no celular. Não é regressão — só ficou visível quando a imagem de 900 kB parou de esconder o defeito |
 | ⬜ | `61` | [A plataforma não envia e-mail](tasks/61-email-nao-existe.md) | médio | — | achado na `20`: 4 modelos HTML, um script que só valida arquivos, e três telas que pedem para conferir um e-mail que nunca chega |
 | ⬜ | `62` | [Cliente e servidor discordam do limite de anexo](tasks/62-limites-de-upload-divergem.md) | baixo | — | achado na `21`: a tela aceita 3 arquivos de 5 MB, a rota aceita 1 de 4 MB |
-| ⬜ | `63` | [`/ajuda` entrega a senha do administrador a quem não está logado](tasks/63-pagina-ajuda-expoe-credenciais.md) | **alto** | — | achado na `22`: página de depuração pública, sem trava de ambiente. **Antes de qualquer deploy** |
+| ✅ | `63` | [`/ajuda` entrega a senha do administrador a quem não está logado](tasks/63-pagina-ajuda-expoe-credenciais.md) | **alto** | — | achado na `22`: página de depuração pública, sem trava de ambiente. **Antes de qualquer deploy** |
 | ⬜ | `64` | [Os números da home congelam no build](tasks/64-home-estatica-congela-os-numeros.md) | médio | — | achado na `23`: a rota `/` é estática e a consulta ao banco roda uma vez só |
 | ⬜ | `65` | [`/companies` volta a rolar para o lado com mais empresas](tasks/65-companies-estoura-com-mais-empresas.md) | médio | — | achado na `23`: 399 px numa tela de 375 assim que o banco tem cinco empresas |
 

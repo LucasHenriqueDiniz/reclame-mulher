@@ -33,6 +33,9 @@ const PUBLIC_PAGES = [
   "/company/",
   "/privacy",
   "/terms",
+  // `/ajuda` é ferramenta de desenvolvimento e precisa ser alcançável sem
+  // sessão — é de lá que se vai para o login. Em produção ela não existe:
+  // `src/app/ajuda/page.tsx` devolve 404 no servidor. Ver task `63`.
   "/ajuda",
 ];
 

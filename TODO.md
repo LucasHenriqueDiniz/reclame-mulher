@@ -69,10 +69,6 @@ Encontrados durante a fila de correções, cada um com investigação escrita.
 - [ ] [`64`](.claude/fixes/tasks/64-home-estatica-congela-os-numeros.md) — os
       números da home congelam no build: a rota é estática e a consulta ao
       banco roda uma vez só.
-- [ ] [`63`](.claude/fixes/tasks/63-pagina-ajuda-expoe-credenciais.md) — **`/ajuda`
-      entrega a senha do administrador a quem não está logado.** Página de
-      depuração, pública, sem trava de ambiente. **Resolver antes de qualquer
-      deploy.**
 - [ ] [`62`](.claude/fixes/tasks/62-limites-de-upload-divergem.md) — o cliente
       aceita 3 anexos de 5 MB; o servidor aceita 1 de 4 MB. Um arquivo de 4,5 MB
       passa na validação da tela e é recusado no envio.
@@ -146,6 +142,9 @@ alguém": é feito segundo um número que dá para reproduzir.
       atrasado ao lado do `pnpm-lock.yaml`.
 - [x] **Onboarding persistido** — `onboardingCompletedAt` é gravado pelas server
       actions das duas trilhas.
+- [x] **Nenhuma rota pública entrega credencial.** `/ajuda` imprimia a senha do
+      administrador com botão de copiar; agora não existe em produção e não tem
+      credencial em lugar nenhum, com 22 testes travando isso.
 - [x] **Roteiro da demonstração** escrito e ensaiado inteiro sobre o build de
       produção, em 36 s de máquina e sem tropeço —
       [`docs/roteiro-demonstracao.md`](docs/roteiro-demonstracao.md).

@@ -248,18 +248,16 @@ falta é mais forte do que ser pego.
 | **Anexos não têm controle de acesso** | vão para o UploadThing por URL. Quem tem a URL abre | `docs/autorizacao.md` |
 | **Auditoria registra só um tipo de ação** | verificação de empresa. O resto não deixa rastro | `TODO.md` |
 | **Números da home congelam no build** | a rota é estática; a consulta roda no build | task `64` |
-| **`/ajuda` expõe credenciais** | página de depuração pública. **Não abra na demonstração** | task `63` |
 | **`/companies` rola para o lado em celular** | com cinco empresas no banco, a lista estoura 24 px em 375 px. Em 1280 px, que é a tela da apresentação, passa | task `65` |
 | **Não há canal de atendimento** | sem telefone, e-mail ou chat | `MANUAL_DE_USO.md`, seção 8 |
 
 ### Se perguntarem "isso está pronto para produção?"
 
-A resposta honesta é: **está pronto para ser usado por um piloto, e há três
+A resposta honesta é: **está pronto para ser usado por um piloto, e há duas
 coisas a resolver antes de abrir ao público.**
 
-1. A task `63` — a página que expõe credenciais.
-2. A `DATABASE_URL` com pooler, hoje ausente do ambiente.
-3. A decisão sobre e-mail (`61`), porque metade do fluxo de conta depende dela.
+1. A `DATABASE_URL` com pooler, hoje ausente do ambiente.
+2. A decisão sobre e-mail (`61`), porque metade do fluxo de conta depende dela.
 
 Tudo o mais que falta está catalogado, com medição, em
 [`.claude/fixes/INDEX.md`](../.claude/fixes/INDEX.md). Essa catalogação é parte
