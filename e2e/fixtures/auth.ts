@@ -26,6 +26,28 @@ export const CONTAS = {
 export type Papel = keyof typeof CONTAS;
 
 /**
+ * Quantas vezes o login é tentado quando a **conexão** falha.
+ *
+ * Duas ocorrências em nove execuções da suíte terminaram com
+ * `apiRequestContext.post: read ECONNRESET` neste `POST` — sempre no preparo da
+ * sessão, sempre passando na execução seguinte. A task `68` tentou reproduzir
+ * de propósito, com 664 logins dirigidos em três formatos diferentes
+ * (conexão reaproveitada no limite do `keep-alive`, rajada de conexões novas, e
+ * pelo navegador como a suíte faz), e **não conseguiu nenhuma vez**.
+ *
+ * Sem causa identificada, a escolha é: sobreviver a um tropeço de conexão, e
+ * **avisar quando ele acontecer**. O `console.warn` abaixo é o que transforma
+ * um intermitente invisível em evento contado — sem ele, a nova tentativa
+ * esconderia justamente o dado que falta para achar a causa.
+ */
+const TENTATIVAS_DE_LOGIN = 2;
+
+/** Primeira linha do erro: o resto é pilha, e polui o log da suíte. */
+function primeiraLinha(erro: unknown): string {
+  return String(erro instanceof Error ? erro.message : erro).split("\n")[0];
+}
+
+/**
  * Login pela API, não pela interface.
  *
  * De propósito: o objetivo aqui é *ter* uma sessão para testar outra coisa. O
@@ -38,16 +60,42 @@ export type Papel = keyof typeof CONTAS;
  * sessão fica no lugar errado e a página continua deslogada.
  */
 export async function entrarViaApi(request: APIRequestContext, papel: Papel) {
-  const resposta = await request.post("/api/auth/login", {
-    data: { email: CONTAS[papel].email, password: SENHA },
-  });
-  if (!resposta.ok()) {
-    throw new Error(
-      `Login de ${papel} falhou com ${resposta.status()}. ` +
-        `O banco foi populado? Rode: npm run db:seed`
-    );
+  let ultimoErroDeTransporte: unknown;
+
+  for (let tentativa = 1; tentativa <= TENTATIVAS_DE_LOGIN; tentativa++) {
+    let resposta;
+
+    try {
+      resposta = await request.post("/api/auth/login", {
+        data: { email: CONTAS[papel].email, password: SENHA },
+      });
+    } catch (erro) {
+      // Erro de **transporte**: a conexão morreu antes de virar resposta HTTP.
+      // É outra categoria de falha, e por isso é a única que ganha nova
+      // tentativa — resposta com status ruim continua estourando na hora.
+      ultimoErroDeTransporte = erro;
+      console.warn(
+        `[e2e] login de ${papel}, tentativa ${tentativa} de ${TENTATIVAS_DE_LOGIN}: ` +
+          `${primeiraLinha(erro)}`
+      );
+      await new Promise((f) => setTimeout(f, 250));
+      continue;
+    }
+
+    if (!resposta.ok()) {
+      throw new Error(
+        `Login de ${papel} falhou com ${resposta.status()}. ` +
+          `O banco foi populado? Rode: npm run db:seed`
+      );
+    }
+
+    return resposta;
   }
-  return resposta;
+
+  throw new Error(
+    `Login de ${papel} não chegou a virar resposta HTTP em ${TENTATIVAS_DE_LOGIN} tentativas: ` +
+      `${primeiraLinha(ultimoErroDeTransporte)}. O servidor de desenvolvimento caiu? Ver task 68.`
+  );
 }
 
 /** Login pela interface — usado pelos testes do próprio fluxo de login. */

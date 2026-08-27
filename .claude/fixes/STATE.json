@@ -28,7 +28,7 @@
     "corrected_by_task": "01",
     "corrected_at": "2026-08-26"
   },
-  "current_task": "68",
+  "current_task": "69",
   "tasks": [
     {
       "id": "00",
@@ -931,14 +931,19 @@
       "slug": "teste-de-erro-instavel",
       "phase": 2,
       "order": 68,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [],
-      "notes": "Achado na task 60: api-erros.spec.ts:152 ('id inexistente devolve NOT_FOUND') falhou uma vez em chromium-mobile e nao se reproduz. O detalhe da falha se perdeu porque a execucao usava --reporter=line, que reescreve a mesma linha. Segundo caso de suite nao deterministica depois da 66.",
-      "started_at": null,
-      "finished_at": null,
-      "debug_iterations": 0,
-      "files_changed": []
+      "notes": "CRITERIO 1 (registrar o motivo de cada falha) ja tinha sido cumprido na task 62, trocando --reporter=line por list - e foi essa troca que capturou o segundo caso, com o erro completo: ECONNRESET no POST /api/auth/login. Erro de TRANSPORTE, nao de aplicacao. Os dois casos (task 60 em api-erros e task 64 em auth) passam por entrarViaApi, entao sao o mesmo ponto do codigo. TENTEI REPRODUZIR E NAO CONSEGUI - e o 'nao' tem tamanho: tres hipoteses, tres experimentos, 664 logins dirigidos, ZERO resets. A) conexao keep-alive fechada no meio, esperas de 0 a 7 s cobrindo os 5 s do padrao do Node: 144 logins. B) portas efemeras/TIME_WAIT no Windows, rajadas de 40 conexoes novas: 320 logins. C) pela pilha de rede do CHROMIUM, contexto novo por iteracao, que e o formato exato do caso real - A e B nem passavam por la: 200 logins. Descartei tambem servidor caindo e voltando: nenhum marcador de reinicio no log, e o aviso de ambiente aparece 183 vezes na execucao que falhou contra 184 numa limpa. SEM CAUSA IDENTIFICADA, duas acoes: (1) entrarViaApi sobrevive a UM tropeco, tentando de novo SO quando a falha e excecao de transporte - status ruim continua estourando na hora, sem nova tentativa, senao a correcao viraria 'repete ate dar certo' e esconderia defeito real do login; (2) cada nova tentativa imprime '[e2e] login de <papel>, tentativa N de 2', que e o que transforma um intermitente invisivel em evento contado. Sem o aviso, a suite passando deixaria de responder se o tropeco aconteceu. As tres decisoes estao PROVADAS por injecao de erro em reports/68-perf/nova-tentativa.mts (o erro real nao se reproduz), 9 de 9 conferencias. A CAUSA CONTINUA DESCONHECIDA, e esta escrito assim no relatorio. O criterio foi fechado pela segunda metade: cinco execucoes completas seguidas sem ocorrencia. Nesta ultima, zero linhas '[e2e] login de'.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 1,
+      "files_changed": [
+        "e2e/fixtures/auth.ts",
+        ".claude/fixes/reports/68-perf/reproduzir.mts (novo)",
+        ".claude/fixes/reports/68-perf/nova-tentativa.mts (novo)",
+        "TODO.md"
+      ]
     },
     {
       "id": "69",

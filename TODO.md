@@ -60,10 +60,6 @@ fazer.
 
 Encontrados durante a fila de correções, cada um com investigação escrita.
 
-- [ ] [`68`](.claude/fixes/tasks/68-teste-de-erro-instavel.md) — a suíte
-      derruba a conexão do login (`ECONNRESET` no `POST /api/auth/login`) de vez
-      em quando, sob carga. Duas ocorrências, sempre no preparo da sessão,
-      sempre passando na execução seguinte.
 - [ ] [`69`](.claude/fixes/tasks/69-schema-e-banco-discordam-do-cnpj.md) — o
       banco exige CNPJ (`NOT NULL`) e o `src/db/schema.ts` diz que é opcional.
       `PATCH /api/company/profile` com `{"cnpj": null}` bate nessa divergência
