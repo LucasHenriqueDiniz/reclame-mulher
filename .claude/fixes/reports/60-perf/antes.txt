@@ -1,0 +1,25 @@
+
+=== /blog · desktop · CLS 0.0013 OK
+   0.0002 em 1240 ms
+      DIV.hidden md:flex items-center flex-1 justify-center   [20,40] -> [20,40]
+      DIV.hidden md:flex items-center space-x-3  [18,52] -> [18,52]
+   0.0011 em 4032 ms
+      DIV.flex flex-col items-start bg-white absolute bottom  [545,255] -> [553,247]
+
+=== /blog · celular · CLS 0.0051 OK
+   0.0051 em 3950 ms
+      DIV.flex flex-col items-start bg-white absolute bottom  [545,267] -> [558,254]
+
+=== /blog/all · desktop · CLS 0.0005 OK
+   0.0002 em 1262 ms
+      DIV.hidden md:flex items-center flex-1 justify-center   [20,40] -> [20,40]
+      DIV.hidden md:flex items-center space-x-3  [18,52] -> [18,52]
+   0.0003 em 4100 ms
+      DIV.mb-10 space-y-4  [305,96] -> [309,92]
+      DIV.relative  [305,56] -> [307,58]
+
+=== /blog/all · celular · CLS 0.0378 OK
+   0.0378 em 4060 ms
+      DIV.grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap  [441,371] -> [479,333]
+      DIV.mb-10 space-y-4  [305,96] -> [357,92]
+      DIV.relative  [305,56] -> [355,58]

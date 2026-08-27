@@ -54,8 +54,6 @@ fazer.
 
 Encontrados durante a fila de correções, cada um com investigação escrita.
 
-- [ ] [`60`](.claude/fixes/tasks/60-cls-do-blog.md) — CLS do `/blog` em 0,198,
-      quase o dobro do limite de 0,1.
 - [ ] [`65`](.claude/fixes/tasks/65-companies-estoura-com-mais-empresas.md) —
       `/companies` volta a rolar para o lado em 375 px quando há mais de duas
       empresas no banco. A correção da task `14` não cobria nome longo.
@@ -68,6 +66,9 @@ Encontrados durante a fila de correções, cada um com investigação escrita.
 - [ ] [`66`](.claude/fixes/tasks/66-teste-de-teclado-instavel.md) — o teste
       de teclado do assistente falha de vez em quando no celular. É corrida do
       teste com a lista do Radix, não defeito do produto.
+- [ ] [`68`](.claude/fixes/tasks/68-teste-de-erro-instavel.md) — um teste de
+      formato de erro falhou uma vez e não se reproduz. O detalhe da falha se
+      perdeu: a execução usava um reporter que não guarda o motivo.
 - [ ] [`67`](.claude/fixes/tasks/67-endereco-de-suporte-nao-verificado.md) — a
       tela de verificação manda a empresa escrever para
       `suporte@reclame-mulher.com.br`. Ninguém sabe se essa caixa existe.

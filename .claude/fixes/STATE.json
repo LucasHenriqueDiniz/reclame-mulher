@@ -28,7 +28,7 @@
     "corrected_by_task": "01",
     "corrected_at": "2026-08-26"
   },
-  "current_task": null,
+  "current_task": "61",
   "tasks": [
     {
       "id": "00",
@@ -748,16 +748,25 @@
       "slug": "cls-do-blog",
       "phase": 7,
       "order": 60,
-      "status": "pending",
+      "status": "done",
       "risk": "medio",
       "depends_on": [
         "19"
       ],
-      "notes": "Achado na task 19: /blog tem CLS 0,163 (desktop) e 0,198 (mobile) porque page.tsx tem dois return completos e remonta header e footer na troca de loading.",
-      "started_at": null,
-      "finished_at": null,
-      "debug_iterations": 0,
-      "files_changed": []
+      "notes": "O NUMERO DA TASK NAO SE REPRODUZ MAIS. Medi antes de mexer, tres vezes, no mesmo metodo da 19: /blog 0,0013 (desktop) e 0,0051 (celular); /blog/all 0,0005 e 0,0378. A task dizia 0,163 e 0,198. Motivo, provado com reports/60-perf/diagnostico.mjs: CLS so conta deslocamento DENTRO da janela. A troca esqueleto->conteudo continuava mudando a altura de 6198 para 3396 px no celular, mas aos 800 ms o rodape ja estava a 5661 px do topo. O y=281 que a 19 capturou era o estado de antes do CSS. Ou seja: sintoma sumiu, causa intacta - e o criterio 2 fala da causa, nao de numero. Corrigi assim mesmo. NAO SEGUI O PASSO 1 DA TASK (unificar os dois return com um esqueleto so): calibrar altura de esqueleto para altura de conteudo se desregula na primeira publicacao. Tirei o carregamento do caminho: as duas telas viraram componente de servidor (page.tsx busca via BlogRepo.findPublic + getPostTagsBatch, a mesma combinacao que a rota /api/blog/posts fazia) com um componente cliente so de apresentacao. Nao ha mais if (loading), nao ha segunda arvore, MainHeader e Footer aparecem uma vez - o criterio 2 da para LER no arquivo. force-dynamic nas duas, senao a lista congelaria no build (o defeito do achado 64). BlogPostCardSkeleton removido: existia so para o carregamento que deixou de existir. DEPOIS: 0,0003 / 0,0000 / 0,0002 / 0,0000, e nenhum .animate-pulse no traco. UMA MEDICAO INVALIDA NO MEIO: a primeira rodada deu 0,0000 nas quatro e estava errada - o TaskStop matou o processo pai mas nao o next start filho, que seguiu escutando na 5001 com o .next apagado. O que denunciou nao foi o zero, foi conferir o HTML por curl: vinha 'Nenhum post disponivel'. Pagina vazia nao desloca nada. REGRA QUE FICA: conferir que a pagina tem conteudo antes de acreditar no numero. SUITE: a primeira execucao deu 1 falha em api-erros.spec.ts:152 que nao se reproduz (3 de 3 isolado, e a suite inteira de novo voltou aos 477). Nao e regressao - a mudanca nao toca rota de API. Abriu a 68, junto com a licao de que --reporter=line nao guarda o detalhe da falha.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 2,
+      "files_changed": [
+        "src/app/blog/page.tsx",
+        "src/app/blog/_lib/posts.ts (novo)",
+        "src/app/blog/_components/blog-content.tsx (novo)",
+        "src/app/blog/all/page.tsx",
+        "src/app/blog/all/_components/all-posts-content.tsx (novo)",
+        "src/components/blog/BlogPostCardSkeleton.tsx (removido)",
+        ".claude/fixes/reports/60-perf/ (cls.mjs, diagnostico.mjs)",
+        "TODO.md"
+      ]
     },
     {
       "id": "61",
@@ -859,6 +868,20 @@
       "risk": "baixo",
       "depends_on": [],
       "notes": "Achado na task 59: verification/page.tsx manda escrever para suporte@reclame-mulher.com.br, unica mencao no repositorio e num dominio usado em nenhum outro lugar - nem o admin do seed usa (e @comunicamulher.com.br). Somado ao achado 61 (nao ha envio de e-mail) e ao Manual dizendo que nao existe canal de atendimento, e provavel promessa vazia. Nenhum teste pega: mailto sai do produto, e se a caixa responde e fato do mundo. Precisa de resposta humana.",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "68",
+      "slug": "teste-de-erro-instavel",
+      "phase": 2,
+      "order": 68,
+      "status": "pending",
+      "risk": "baixo",
+      "depends_on": [],
+      "notes": "Achado na task 60: api-erros.spec.ts:152 ('id inexistente devolve NOT_FOUND') falhou uma vez em chromium-mobile e nao se reproduz. O detalhe da falha se perdeu porque a execucao usava --reporter=line, que reescreve a mesma linha. Segundo caso de suite nao deterministica depois da 66.",
       "started_at": null,
       "finished_at": null,
       "debug_iterations": 0,
