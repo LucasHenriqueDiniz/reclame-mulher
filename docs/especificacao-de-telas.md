@@ -1,5 +1,11 @@
 # Manual da Plataforma ReclameMulher
 
+> **Isto é uma especificação de telas, não um manual de uso.** Descreve os
+> elementos de cada tela na linguagem de quem construiu o sistema. O manual
+> voltado à usuária é o [`manual/MANUAL_DE_USO.md`](manual/MANUAL_DE_USO.md),
+> escrito na task `22`. Este arquivo continua útil como inventário.
+
+
 **Guia Completo de Fluxos e Funcionalidades**
 
 ---

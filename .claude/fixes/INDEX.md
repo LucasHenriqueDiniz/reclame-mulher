@@ -120,7 +120,7 @@ segurança no banco. Plataforma que armazena denúncias identificadas.
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
 | ✅ | `21` | [Consolidar a documentação contraditória da raiz](tasks/21-consolidar-documentacao.md) | baixo | `19` |
-| ⬜ | `22` | [**Manual de Uso** — produto da dissertação](tasks/22-manual-de-uso.md) | baixo | `15`, `21` |
+| ✅ | `22` | [**Manual de Uso** — produto da dissertação](tasks/22-manual-de-uso.md) | baixo | `15`, `21` |
 | ⬜ | `23` | [Checklist de prontidão para a demonstração da defesa](tasks/23-checklist-defesa.md) | baixo | `22` |
 
 ---
@@ -153,6 +153,7 @@ criar deve registrar aqui e em `STATE.json`.
 | ⬜ | `60` | [CLS do /blog está no dobro do limite](tasks/60-cls-do-blog.md) | médio | `19` | achado na `19`: dois `return` completos remontam header e footer; 0,198 no celular. Não é regressão — só ficou visível quando a imagem de 900 kB parou de esconder o defeito |
 | ⬜ | `61` | [A plataforma não envia e-mail](tasks/61-email-nao-existe.md) | médio | — | achado na `20`: 4 modelos HTML, um script que só valida arquivos, e três telas que pedem para conferir um e-mail que nunca chega |
 | ⬜ | `62` | [Cliente e servidor discordam do limite de anexo](tasks/62-limites-de-upload-divergem.md) | baixo | — | achado na `21`: a tela aceita 3 arquivos de 5 MB, a rota aceita 1 de 4 MB |
+| ⬜ | `63` | [`/ajuda` entrega a senha do administrador a quem não está logado](tasks/63-pagina-ajuda-expoe-credenciais.md) | **alto** | — | achado na `22`: página de depuração pública, sem trava de ambiente. **Antes de qualquer deploy** |
 
 **Ordem revisada pela task `00`:** `01` → `02` → `03` → **`50`** → `07` → …
 A `50` sobe na fila por ser defeito confirmado, e cabe antes dos testes para que

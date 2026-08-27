@@ -24,6 +24,8 @@
     "db:push": "drizzle-kit push",
     "db:seed": "node --import tsx scripts/seed.ts",
     "email:sync": "node --import tsx scripts/sync-email-templates.ts",
+    "manual:capturas": "node --import tsx scripts/capturas-do-manual.ts",
+    "manual:html": "node --import tsx scripts/manual-html.ts",
     "evidencias:check": "node --import tsx scripts/evidencias-demo-check.ts",
     "evidencias:docx": "node --import tsx scripts/generate-evidencias-docx.ts",
     "test:demo": "node --import tsx scripts/demo-tests.ts"

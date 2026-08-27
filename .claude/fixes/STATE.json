@@ -515,12 +515,29 @@
       "slug": "manual-de-uso",
       "phase": 8,
       "order": 22,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [
         "15",
         "21"
-      ]
+      ],
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 3,
+      "files_changed": [
+        "docs/manual/MANUAL_DE_USO.md (novo)",
+        "docs/manual/MANUAL_DE_USO.html (novo)",
+        "docs/manual/img/ (34 capturas)",
+        "scripts/capturas-do-manual.ts (novo)",
+        "scripts/manual-html.ts (novo)",
+        "docs/especificacao-de-telas.md (era MANUAL_PLATAFORMA.md)",
+        "docs/historico/MANUAL_PLATAFORMA.html",
+        "README.md",
+        "TODO.md",
+        "docs/arquitetura.md",
+        "package.json"
+      ],
+      "notes": "Manual de 8 secoes com 16 telas ilustradas, em voz de segunda pessoa. As capturas NAO foram feitas a mao: scripts/capturas-do-manual.ts entra com as contas do seed, percorre os fluxos e fotografa 34 telas (17 x computador e celular) contra o servidor de PRODUCAO - o dev server desenha um indicador do Next que apareceria em toda imagem. deviceScaleFactor 1 e nao 2: a 2x o conjunto passava de 12 MB e o manual precisa ser enviavel por e-mail. As etapas do assistente sao recortadas no cartao (locator.screenshot), senao o texto sai pequeno demais. O manual diz o que a plataforma NAO faz - seis limitacoes (54, 55, 59, 61, 62, e a falta de canal de atendimento) aparecem tanto numa tabela propria quanto no ponto onde a pessoa esbarra nelas. Escrever o manual do produto pretendido nao se sustenta num documento que uma banca vai ler ao lado da aplicacao rodando. ACHADO GRAVE (task 63): a secao 8 ia apontar para /ajuda. Fotografei DESLOGADO e a pagina lista as contas do seed, inclusive a de admin, e imprime a senha padrao com botao de copiar. Publica no middleware, sem trava de ambiente, e nao linkada de lugar nenhum. Confirmado com curl no build de producao. Apaguei as duas capturas e tirei a pagina do script. HTML distribuivel: arquivo unico de 4,7 MB com as imagens em base64 e folha de impressao. O conversor de Markdown e caseiro para nao acrescentar dependencia; duas armadilhas de ancora com acento so apareceram porque conferi o HTML gerado em vez de confiar nele. Verificacao: 16 figuras / 16 legendas / 0 alt curto / 0 ancora quebrada / sem rolagem lateral em 375px; 183 links internos conferidos, 0 quebrados; check e build ok. PRECISA DO USUARIO: titulo, formato de entrega, se inclui area administrativa e identidade visual da UERGS - assumi um padrao em cada uma. E a task 63 antes de qualquer deploy."
     },
     {
       "id": "23",
@@ -698,6 +715,20 @@
       "risk": "baixo",
       "depends_on": [],
       "notes": "Achado na task 21: upload-dropzone aceita 3 arquivos de 5MB, a rota complaintAttachment do UploadThing aceita 1 de 4MB. Um arquivo de 4,5MB passa na tela e e recusado no envio.",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "63",
+      "slug": "pagina-ajuda-expoe-credenciais",
+      "phase": 2,
+      "order": 63,
+      "status": "pending",
+      "risk": "alto",
+      "depends_on": [],
+      "notes": "Achado na task 22: /ajuda e publica, nao tem trava de ambiente, e imprime as contas do seed e a senha padrao com botao de copiar - inclusive a conta de admin. Confirmado com curl no build de producao.",
       "started_at": null,
       "finished_at": null,
       "debug_iterations": 0,
@@ -898,6 +929,12 @@
       "task": "21",
       "event": "done",
       "detail": "21 .md na raiz -> 5. TODO.md reescrito (63 itens mentiam). 18 arquivos para docs/historico/ sem editar. 3 novos documentos vivos. 154 links conferidos, 0 quebrados. Achado 62 (limites de upload divergem)."
+    },
+    {
+      "at": "2026-08-27",
+      "task": "22",
+      "event": "done",
+      "detail": "Manual de Uso com 8 secoes e 16 telas, capturas automatizadas contra o build de producao, HTML distribuivel de arquivo unico. Achado 63: /ajuda entrega a senha do admin publicamente."
     }
   ]
 }

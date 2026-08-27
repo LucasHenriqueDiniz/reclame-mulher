@@ -93,6 +93,8 @@ Sobe em `http://localhost:5000`.
 | `pnpm db:push` | Aplica o schema no banco |
 | `pnpm db:seed` | Popula dados de demonstração |
 | `pnpm db:studio` | Interface do Drizzle para inspecionar o banco |
+| `pnpm manual:capturas` | Refaz as capturas de tela do Manual de Uso |
+| `pnpm manual:html` | Gera a versão distribuível do manual, em arquivo único |
 
 > `npx playwright test` **sem `--project`** roda tudo, E2E e acessibilidade
 > juntos, e leva mais de 20 minutos. Prefira os scripts acima.
@@ -145,6 +147,7 @@ Itens que dependem de decisão e não de código:
 
 | Arquivo | Conteúdo |
 |---|---|
+| [`docs/manual/MANUAL_DE_USO.md`](docs/manual/MANUAL_DE_USO.md) | **Manual de Uso** — voltado à usuária, com telas ilustradas |
 | [`docs/arquitetura.md`](docs/arquitetura.md) | stack, estrutura de pastas, banco, domínios |
 | [`docs/autorizacao.md`](docs/autorizacao.md) | quem pode o quê, regra de posse, anonimato |
 | [`docs/api-erros.md`](docs/api-erros.md) | contrato de erro da API |
@@ -152,6 +155,7 @@ Itens que dependem de decisão e não de código:
 | [`docs/acessibilidade.md`](docs/acessibilidade.md) | conformidade WCAG: o que foi medido e o que se mantém |
 | [`docs/acessibilidade-inclusiva.md`](docs/acessibilidade-inclusiva.md) | diretrizes para baixa alfabetização e baixa familiaridade digital |
 | [`TODO.md`](TODO.md) | o único backlog vivo |
+| [`docs/especificacao-de-telas.md`](docs/especificacao-de-telas.md) | inventário de telas, na linguagem de quem construiu |
 | [`docs/historico/`](docs/historico/README.md) | documentos datados, congelados. Não são o estado atual |
 | [`.claude/fixes/`](.claude/fixes/INDEX.md) | plano de correção, relatórios e medições |
 

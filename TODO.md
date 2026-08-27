@@ -63,6 +63,10 @@ Encontrados durante a fila de correções, cada um com investigação escrita.
       único link interno quebrado do projeto.
 - [ ] [`60`](.claude/fixes/tasks/60-cls-do-blog.md) — CLS do `/blog` em 0,198,
       quase o dobro do limite de 0,1.
+- [ ] [`63`](.claude/fixes/tasks/63-pagina-ajuda-expoe-credenciais.md) — **`/ajuda`
+      entrega a senha do administrador a quem não está logado.** Página de
+      depuração, pública, sem trava de ambiente. **Resolver antes de qualquer
+      deploy.**
 - [ ] [`62`](.claude/fixes/tasks/62-limites-de-upload-divergem.md) — o cliente
       aceita 3 anexos de 5 MB; o servidor aceita 1 de 4 MB. Um arquivo de 4,5 MB
       passa na validação da tela e é recusado no envio.
@@ -104,7 +108,6 @@ O trabalho técnico está catalogado em
 [`.claude/fixes/INDEX.md`](.claude/fixes/INDEX.md), com uma task por assunto e
 um relatório medido por task. O que falta lá:
 
-- [ ] `22` — **Manual de Uso da Plataforma**. Produto da dissertação.
 - [ ] `23` — checklist de prontidão para a demonstração da defesa.
 - [ ] `99` — relatório final.
 
@@ -138,6 +141,8 @@ alguém": é feito segundo um número que dá para reproduzir.
       atrasado ao lado do `pnpm-lock.yaml`.
 - [x] **Onboarding persistido** — `onboardingCompletedAt` é gravado pelas server
       actions das duas trilhas.
+- [x] **Manual de Uso** escrito, com 16 telas fotografadas em computador e
+      celular — [`docs/manual/MANUAL_DE_USO.md`](docs/manual/MANUAL_DE_USO.md).
 - [x] **Documentação consolidada** — de 21 arquivos na raiz que se contradiziam
       para 5, com o resto separado entre vivo (`docs/`) e histórico
       (`docs/historico/`).

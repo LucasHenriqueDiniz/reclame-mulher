@@ -131,5 +131,7 @@ task `17` havia 34 formatos diferentes.
 | contrato de erro | [`api-erros.md`](api-erros.md) |
 | como rodar os testes | [`testes.md`](testes.md) |
 | acessibilidade | [`acessibilidade.md`](acessibilidade.md) |
+| como a usuária usa a plataforma | [`manual/MANUAL_DE_USO.md`](manual/MANUAL_DE_USO.md) |
+| inventário de telas | [`especificacao-de-telas.md`](especificacao-de-telas.md) |
 | o que ainda falta | [`../TODO.md`](../TODO.md) |
 | como cada correção foi medida | [`../.claude/fixes/INDEX.md`](../.claude/fixes/INDEX.md) |
