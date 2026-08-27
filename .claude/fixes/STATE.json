@@ -5,31 +5,31 @@
   "project": "reclame-mulher",
   "branch": "master",
   "baseline": {
-    "$comment": "Medido em 2026-08-26 antes da fila começar. A task 00 deve reconfirmar e corrigir estes números. O protocolo do loop usa isto como trava de regressão.",
+    "$comment": "Corrigido pela task 01: os numeros originais contavam as worktrees em .claude/worktrees, que o ESLint varria. Estes sao os numeros reais de src/.",
     "measured_at": "2026-08-26",
     "typescript_errors": 0,
-    "eslint_errors": 4,
-    "eslint_errors_note": "todos em .claude/worktrees, nenhum em src/",
-    "eslint_warnings": 277,
+    "eslint_errors": 0,
+    "eslint_errors_note": "0 erros apos ignorar .claude/** no eslint.config.mjs (task 01)",
+    "eslint_warnings": 45,
     "eslint_top_rules": {
-      "@typescript-eslint/no-unused-vars": 235,
-      "@next/next/no-img-element": 42,
-      "react/no-unescaped-entities": 2,
-      "@next/next/no-html-link-for-pages": 2
+      "@typescript-eslint/no-unused-vars": 38,
+      "@next/next/no-img-element": 7
     },
     "automated_tests": 0,
     "pages": 42,
     "api_routes": 32,
     "components": 95,
-    "uncommitted_files": 18,
-    "stale_worktrees": 5,
+    "uncommitted_files": 19,
+    "stale_worktrees": 4,
     "production_build_verified": true,
     "responsiveness_measured": false,
     "a11y_measured": false,
     "confirmed_by_task": "00",
     "eslint_errors_src": 0,
     "responsiveness_note": "nao medido: navegador embutido recusou localhost; decidir na task 14",
-    "a11y_note": "nao medido: idem; decidir na task 12"
+    "a11y_note": "nao medido: idem; decidir na task 12",
+    "corrected_by_task": "01",
+    "corrected_at": "2026-08-26"
   },
   "current_task": null,
   "tasks": [
@@ -51,11 +51,20 @@
       "slug": "higiene-repositorio",
       "phase": 1,
       "order": 1,
-      "status": "pending",
+      "status": "done",
       "risk": "medio",
       "depends_on": [
         "00"
-      ]
+      ],
+      "started_at": "2026-08-26T21:36:00",
+      "finished_at": "2026-08-26T21:50:00",
+      "debug_iterations": 0,
+      "files_changed": [
+        ".gitignore",
+        "eslint.config.mjs",
+        "docs/historico/test-validation-results.txt"
+      ],
+      "notes": "1 worktree removida (0 commits exclusivos); 4 mantidas. Lint caiu de 277 para 45 warnings, 0 erros."
     },
     {
       "id": "02",
@@ -113,7 +122,7 @@
       "depends_on": [
         "03"
       ],
-      "notes": "eslint src ja da 0 erros; provavel skip apos a task 01"
+      "notes": "objetivo ja cumprido pela task 01 (eslint . = 0 erros); marcar skipped na proxima iteracao"
     },
     {
       "id": "05",
@@ -124,7 +133,8 @@
       "risk": "baixo",
       "depends_on": [
         "04"
-      ]
+      ],
+      "notes": "38 ocorrencias reais (nao 235)"
     },
     {
       "id": "06",
@@ -135,7 +145,8 @@
       "risk": "medio",
       "depends_on": [
         "05"
-      ]
+      ],
+      "notes": "7 ocorrencias reais (nao 42)"
     },
     {
       "id": "07",
@@ -364,6 +375,13 @@
         "50",
         "51"
       ]
+    },
+    {
+      "task": "01",
+      "at": "2026-08-26",
+      "status": "done",
+      "report": "reports/01-higiene-repositorio.md",
+      "note": "baseline de lint corrigido: 277->45 warnings"
     }
   ]
 }

@@ -1,4 +1,4 @@
-# [05] Remover código morto — 235 warnings de `no-unused-vars`
+# [05] Remover código morto — 38 warnings de `no-unused-vars`
 
 | Campo | Valor |
 |---|---|
@@ -15,7 +15,12 @@ de esconder problema de verdade.
 
 ## Evidência
 
-235 de 277 warnings são `@typescript-eslint/no-unused-vars`. Exemplos reais:
+> **Corrigido pela task `01`.** O número original (235 de 277) estava inflado
+> porque o ESLint varria as 5 worktrees em `.claude/worktrees/`, contando o
+> mesmo arquivo várias vezes. Depois de ignorá-las, o número real é **38**,
+> em `src/`. A task ficou muito menor do que parecia.
+
+38 warnings `@typescript-eslint/no-unused-vars`. Exemplos reais:
 
 ```
 src/app/company/[slug]/_components/company-profile-content.tsx:5   'Home' não usado
@@ -32,8 +37,8 @@ src/server/repos/blog.ts:185            '_publicOnly' nunca usado
 
 ## Passos
 
-1. Faça em **lotes por pasta**, não tudo de uma vez:
-   `src/components/` → `src/app/` → `src/server/`. Commite por lote.
+1. Com 38 ocorrências, um lote só resolve. Ainda assim, separe o commit de
+   remoção mecânica do commit de decisão sobre props (passo 3).
 2. Para imports não usados: remova.
 3. Para **props** não usadas (`showMetrics` em `CompanyProfileHero`): pare e
    pense. Prop declarada e ignorada geralmente é feature pela metade, não lixo.
@@ -49,7 +54,7 @@ src/server/repos/blog.ts:185            '_publicOnly' nunca usado
 
 ## Critérios de aceite
 
-- [ ] `npx eslint src` reporta menos de 20 warnings de `no-unused-vars`.
+- [ ] `npx eslint .` reporta menos de 5 warnings de `no-unused-vars`.
 - [ ] `npm run typecheck` continua limpo.
 - [ ] Nenhuma prop foi removida sem checar quem a passa.
 - [ ] O comportamento de `src/server/repos/blog.ts` foi verificado, não apenas

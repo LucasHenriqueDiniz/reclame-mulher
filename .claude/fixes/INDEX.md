@@ -26,7 +26,7 @@ posterior fica atômico.
 
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
-| ⬜ | `01` | [Higiene do repositório — worktrees stale e arquivos não ignorados](tasks/01-higiene-repositorio.md) | médio | `00` |
+| ✅ | `01` | [Higiene do repositório — worktrees stale e arquivos não ignorados](tasks/01-higiene-repositorio.md) | médio | `00` |
 | ⬜ | `02` | [Criar scripts de verificação (typecheck, lint:fix, check)](tasks/02-scripts-de-verificacao.md) | baixo | `01` |
 | ⬜ | `03` | [Triagem do trabalho não commitado](tasks/03-triagem-trabalho-nao-commitado.md) | **alto** | `02` |
 
@@ -34,13 +34,15 @@ posterior fica atômico.
 
 ## Fase 2 — Qualidade de código
 
-281 problemas de lint. Enquanto o ruído existir, erro de verdade fica escondido.
+~~281 problemas de lint.~~ **Corrigido pela task `01`:** o número estava inflado
+porque o ESLint varria as worktrees. O real é **0 erros e 45 warnings** — 38 de
+`no-unused-vars` e 7 de `no-img-element`. A fase ficou bem menor.
 
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
-| ⬜ | `04` | [Zerar os erros de ESLint em `src/`](tasks/04-lint-erros.md) | baixo | `03` |
-| ⬜ | `05` | [Remover código morto — 235 warnings de `no-unused-vars`](tasks/05-lint-unused-vars.md) | baixo | `04` |
-| ⬜ | `06` | [Migrar `<img>` para `next/image` (42 ocorrências)](tasks/06-next-image.md) | médio | `05` |
+| ⬜ | `04` | [Zerar os erros de ESLint em `src/`](tasks/04-lint-erros.md) — *já cumprida pela `01`; vira `skipped`* | baixo | `03` |
+| ⬜ | `05` | [Remover código morto — 38 warnings de `no-unused-vars`](tasks/05-lint-unused-vars.md) | baixo | `04` |
+| ⬜ | `06` | [Migrar `<img>` para `next/image` (7 ocorrências)](tasks/06-next-image.md) | médio | `05` |
 
 ---
 

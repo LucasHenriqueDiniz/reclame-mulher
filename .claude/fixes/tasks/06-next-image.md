@@ -1,4 +1,4 @@
-# [06] Migrar `<img>` para `next/image` (42 ocorrências)
+# [06] Migrar `<img>` para `next/image` (7 ocorrências)
 
 | Campo | Valor |
 |---|---|
@@ -6,7 +6,7 @@
 | **Fase** | `2 — Qualidade de código` |
 | **Risco** | médio (mexe em layout) |
 | **Depende de** | `05` |
-| **Estimativa** | longa |
+| **Estimativa** | média |
 
 ## Objetivo
 
@@ -15,7 +15,10 @@ são exatamente as métricas cobradas na task `19`.
 
 ## Evidência
 
-42 warnings `@next/next/no-img-element`, incluindo em páginas de alto tráfego:
+> **Corrigido pela task `01`.** O número original (42) contava as worktrees
+> em `.claude/worktrees/`. O real é **7**, em `src/`.
+
+7 warnings `@next/next/no-img-element`, em páginas de alto tráfego:
 
 ```
 src/app/blog/page.tsx:116
@@ -28,7 +31,8 @@ src/components/company/CompanyProfileHero.tsx:74
 
 ## Passos
 
-1. Faça em lotes: blog → perfis → componentes compartilhados. Commite por lote.
+1. Com 7 ocorrências, faça em um lote só, mas verifique cada página no
+   navegador antes de fechar.
 2. Para cada `<img>`:
    - imagem de dimensão conhecida → `<Image width={} height={} alt="" />`;
    - imagem que preenche container → `<Image fill />` com o pai em

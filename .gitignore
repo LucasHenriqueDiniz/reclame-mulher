@@ -46,3 +46,9 @@ next-env.d.ts
 
 # IDE
 .vscode/
+
+# agentes / worktrees temporarias
+.claude/worktrees/
+
+# logs de dev server
+dev-server*.log
