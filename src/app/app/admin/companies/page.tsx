@@ -118,7 +118,7 @@ export default function AdminCompaniesPage() {
           </p>
         </div>
         <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <Building2 className="mb-3 h-6 w-6 text-[#1E88E5]" />
+          <Building2 className="mb-3 h-6 w-6 text-[#1565C0]" />
           <h2 className="mb-1 font-semibold text-[#2A3F54]">Fonte de verdade</h2>
           <p className="text-sm text-gray-600">
             O status e controlado por `verifiedAt` no cadastro da empresa.

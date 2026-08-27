@@ -65,7 +65,7 @@ function InfoRow({
   if (value == null || value === "") return null;
   return (
     <div className="flex gap-3 pb-3 border-b border-gray-100 mb-3 last:border-0 last:mb-0 last:pb-0">
-      <div className="w-32 text-xs text-gray-400 flex-shrink-0 font-medium">
+      <div className="w-32 text-xs text-gray-500 flex-shrink-0 font-medium">
         {label}
       </div>
       <div className="text-sm text-[#2A3F54] font-medium flex-1">
@@ -95,7 +95,7 @@ function CompanyHero({
   const projectsCount = stats.activeProjectsCount ?? 0;
 
   return (
-    <div className="bg-gradient-to-br from-[#1E88E5] to-[#1565C0]">
+    <div className="bg-gradient-to-br from-[#1565C0] to-[#1565C0]">
       <div className="max-w-[960px] mx-auto px-6 pt-8 pb-8">
         {/* Header row */}
         <div className="flex items-start gap-5 flex-wrap">
@@ -156,7 +156,7 @@ function CompanyHero({
             )}
             {complaintCtaHref && (
               <Link href={complaintCtaHref}>
-                <Button className="bg-white text-[#1E88E5] hover:bg-gray-100 text-sm font-semibold gap-2">
+                <Button className="bg-white text-[#1565C0] hover:bg-gray-100 text-sm font-semibold gap-2">
                   <FileText className="w-4 h-4" />
                   Reclamar
                 </Button>
@@ -193,7 +193,7 @@ function PublicProfileTabs({
               onClick={() => onTabChange(t.key)}
               className={`relative flex items-center gap-2 py-4 text-[14px] font-semibold whitespace-nowrap transition-colors cursor-pointer border-none bg-transparent ${
                 activeTab === t.key
-                  ? "text-[#1E88E5]"
+                  ? "text-[#1565C0]"
                   : "text-gray-500 hover:text-[#2A3F54]"
               }`}
             >
@@ -201,14 +201,14 @@ function PublicProfileTabs({
               {t.count != null && (
                 <span
                   className={`text-[11px] px-1.5 py-0.5 rounded-full font-bold ${
-                    activeTab === t.key ? "bg-[#1E88E5]/10 text-[#1E88E5]" : "bg-gray-100 text-gray-500"
+                    activeTab === t.key ? "bg-[#1565C0]/10 text-[#1565C0]" : "bg-gray-100 text-gray-500"
                   }`}
                 >
                   {t.count}
                 </span>
               )}
               {activeTab === t.key && (
-                <span className="absolute left-0 right-0 -bottom-px h-[2px] bg-[#1E88E5] rounded-full" />
+                <span className="absolute left-0 right-0 -bottom-px h-[2px] bg-[#1565C0] rounded-full" />
               )}
             </button>
           ))}
@@ -225,21 +225,21 @@ function MetricsBar({ stats }: { stats: CompanyStats }) {
       label: "Tempo médio de resposta",
       value: stats.avgResponseHours != null ? `${stats.avgResponseHours}h` : "-",
       icon: <Clock className="w-4 h-4" />,
-      color: "#1E88E5",
+      color: "#1565C0",
       bg: "#E3F2FD",
     },
     {
       label: "Taxa de resolução",
       value: `${stats.resolutionRate}%`,
       icon: <Check className="w-4 h-4" />,
-      color: stats.resolutionRate >= 70 ? "#22C55E" : "#F97316",
+      color: stats.resolutionRate >= 70 ? "#22C55E" : "#9A4B00",
       bg: stats.resolutionRate >= 70 ? "#F0FDF4" : "#FFF7ED",
     },
     {
       label: "Diálogos ativos",
       value: stats.activeDialogsCount,
       icon: <MessageCircle className="w-4 h-4" />,
-      color: "#1E88E5",
+      color: "#1565C0",
       bg: "#E3F2FD",
     },
     {
@@ -350,7 +350,7 @@ function InformacoesTab({ company }: { company: Company }) {
   return (
     <Card className="border-0 shadow-md max-w-xl">
       <CardContent className="p-6">
-        <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
+        <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
           Informações cadastrais
         </h2>
         <InfoRow label="Nome fantasia" value={company.name ? String(company.name) : null} />
@@ -420,7 +420,7 @@ function ProjetosTab({
               onClick={() => setStatusFilter(o.key)}
               className={`px-4 py-2 rounded-full text-[13px] font-medium cursor-pointer transition-all border ${
                 statusFilter === o.key
-                  ? "bg-[#1E88E5] text-white border-[#1E88E5] shadow-md"
+                  ? "bg-[#1565C0] text-white border-[#1565C0] shadow-md"
                   : "bg-white text-[#2A3F54] border-gray-200 hover:bg-gray-50"
               }`}
             >
@@ -480,7 +480,7 @@ function ReclamacoesTab({
             onClick={() => setFilter(f.key)}
             className={`px-4 py-2 rounded-full text-[13px] font-medium cursor-pointer transition-all border ${
               filter === f.key
-                ? "bg-[#1E88E5] text-white border-[#1E88E5] shadow-md"
+                ? "bg-[#1565C0] text-white border-[#1565C0] shadow-md"
                 : "bg-white text-[#2A3F54] border-gray-200 hover:bg-gray-50"
             }`}
           >
@@ -489,7 +489,7 @@ function ReclamacoesTab({
         ))}
         {isLoggedIn && (
           <Link href={`/app/complaints/new?company=${companyId}`} className="ml-auto">
-            <Button className="bg-[#1E88E5] hover:bg-[#1976D2] text-sm gap-1">
+            <Button className="bg-[#1565C0] hover:bg-[#0D47A1] text-sm gap-1">
               <MessageCircle className="w-4 h-4" />
               Reclamar
             </Button>

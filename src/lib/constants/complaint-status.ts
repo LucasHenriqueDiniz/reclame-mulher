@@ -15,7 +15,7 @@ export interface ComplaintStatusConfig {
 export const COMPLAINT_STATUS: Record<ComplaintStatus, ComplaintStatusConfig> = {
   OPEN: {
     label: "Aberta",
-    color: "#F57C00", // Laranja escuro
+    color: "#8A4B00", // Laranja escuro
     bgColor: "#FFF3E0", // Laranja claro
     borderColor: "#FFB74D",
   },
@@ -27,7 +27,7 @@ export const COMPLAINT_STATUS: Record<ComplaintStatus, ComplaintStatusConfig> = 
   },
   RESOLVED: {
     label: "Resolvida",
-    color: "#2E7D32", // Verde escuro
+    color: "#1B5E20", // Verde escuro
     bgColor: "#C8E6C9", // Verde claro
     borderColor: "#81C784",
   },

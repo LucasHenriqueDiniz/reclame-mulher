@@ -24,14 +24,14 @@ export function MainNav() {
           <NavigationMenuItem>
             <Link
               href="/"
-              className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium text-[#2A3F54] transition-colors hover:bg-gray-100 hover:text-[#1E88E5] focus:bg-gray-100 focus:text-[#1E88E5] focus:outline-none disabled:pointer-events-none disabled:opacity-50 font-['Poppins']"
+              className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-medium text-[#2A3F54] transition-colors hover:bg-gray-100 hover:text-[#1565C0] focus:bg-gray-100 focus:text-[#1565C0] focus:outline-none disabled:pointer-events-none disabled:opacity-50 font-['Poppins']"
             >
               Home
             </Link>
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="font-['Poppins'] text-[#2A3F54] hover:text-[#1E88E5]">
+            <NavigationMenuTrigger className="font-['Poppins'] text-[#2A3F54] hover:text-[#1565C0]">
               Empresas
             </NavigationMenuTrigger>
             <NavigationMenuContent>
@@ -40,7 +40,7 @@ export function MainNav() {
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="font-['Poppins'] text-[#2A3F54] hover:text-[#1E88E5]">
+            <NavigationMenuTrigger className="font-['Poppins'] text-[#2A3F54] hover:text-[#1565C0]">
               Blog
             </NavigationMenuTrigger>
             <NavigationMenuContent>
@@ -51,7 +51,7 @@ export function MainNav() {
           <NavigationMenuItem>
             <button
               onClick={() => setSearchOpen(true)}
-              className="group inline-flex h-10 w-max items-center justify-center gap-2 rounded-md bg-transparent px-4 py-2 text-sm font-medium text-[#2A3F54] transition-colors hover:bg-gray-100 hover:text-[#1E88E5] focus:bg-gray-100 focus:text-[#1E88E5] focus:outline-none disabled:pointer-events-none disabled:opacity-50 font-['Poppins']"
+              className="group inline-flex h-10 w-max items-center justify-center gap-2 rounded-md bg-transparent px-4 py-2 text-sm font-medium text-[#2A3F54] transition-colors hover:bg-gray-100 hover:text-[#1565C0] focus:bg-gray-100 focus:text-[#1565C0] focus:outline-none disabled:pointer-events-none disabled:opacity-50 font-['Poppins']"
             >
               <Search className="w-4 h-4" />
               Buscar

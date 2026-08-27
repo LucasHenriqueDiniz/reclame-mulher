@@ -39,7 +39,7 @@ export function ComplaintCompanyHeader({
             className="object-cover w-full h-full"
           />
         ) : (
-          <span className="text-[#1E88E5] text-3xl font-bold font-['Poppins']">
+          <span className="text-[#1565C0] text-3xl font-bold font-['Poppins']">
             {initial}
           </span>
         )}
@@ -57,7 +57,7 @@ export function ComplaintCompanyHeader({
             {name}
           </span>
           {verified && (
-            <Badge className="bg-gradient-to-r from-[#4299FF] to-[#1E88E5] text-white text-xs font-['Poppins'] font-bold px-2.5 py-1 rounded-md leading-tight hover:from-[#1E88E5] hover:to-[#1976D2] border-0 shadow-sm">
+            <Badge className="bg-gradient-to-r from-[#4299FF] to-[#1565C0] text-white text-xs font-['Poppins'] font-bold px-2.5 py-1 rounded-md leading-tight hover:from-[#1565C0] hover:to-[#0D47A1] border-0 shadow-sm">
               VERIFICADA
             </Badge>
           )}
@@ -67,15 +67,15 @@ export function ComplaintCompanyHeader({
         <div className="flex items-center gap-4 flex-wrap">
           {region && (
             <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-              <MapPin className="w-4 h-4 text-[#1E88E5]" />
-              <span className="font-['Poppins'] font-medium text-[#607D8B] text-xs leading-normal">
+              <MapPin className="w-4 h-4 text-[#1565C0]" />
+              <span className="font-['Poppins'] font-medium text-[#546E7A] text-xs leading-normal">
                 {region}
               </span>
             </div>
           )}
           <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-            <BarChart2 className="w-4 h-4 text-[#1E88E5]" />
-            <span className="font-['Poppins'] font-medium text-[#607D8B] text-xs leading-normal whitespace-nowrap">
+            <BarChart2 className="w-4 h-4 text-[#1565C0]" />
+            <span className="font-['Poppins'] font-medium text-[#546E7A] text-xs leading-normal whitespace-nowrap">
               {projectsCount} {projectsCount === 1 ? "projeto" : "projetos"} em andamento
             </span>
           </div>

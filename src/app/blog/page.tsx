@@ -131,7 +131,7 @@ export default function BlogPage() {
                 {featuredPost.tags?.map((tag) => (
                   <span
                     key={tag.id}
-                    className="inline-flex items-center bg-gradient-to-r from-[#1E88E5] to-[#1976D2] text-white text-sm font-medium py-2 px-4 rounded-full shadow-md"
+                    className="inline-flex items-center bg-gradient-to-r from-[#1565C0] to-[#0D47A1] text-white text-sm font-medium py-2 px-4 rounded-full shadow-md"
                   >
                     {tag.name}
                   </span>
@@ -168,7 +168,7 @@ export default function BlogPage() {
               )}
               <Link
                 href="/blog/all"
-                className="hidden sm:flex shrink-0 items-center gap-2 text-[#1E88E5] hover:text-[#1976D2] font-semibold transition-colors group"
+                className="hidden sm:flex shrink-0 items-center gap-2 text-[#1565C0] hover:text-[#0D47A1] font-semibold transition-colors group"
               >
                 <span>Ver Todos</span>
                 <svg
@@ -209,7 +209,7 @@ export default function BlogPage() {
           <div className="flex sm:hidden justify-center items-center mt-8">
             <Link
               href="/blog/all"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#1E88E5] to-[#1976D2] hover:from-[#1976D2] hover:to-[#1565C0] text-white font-semibold py-4 px-8 rounded-full transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#1565C0] to-[#0D47A1] hover:from-[#0D47A1] hover:to-[#1565C0] text-white font-semibold py-4 px-8 rounded-full transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               <span>Ver Todos os Posts</span>
               <svg

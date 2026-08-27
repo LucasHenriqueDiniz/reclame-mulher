@@ -16,7 +16,7 @@ interface FilterTabsProps {
   mutedColor?: string;
 }
 
-export function FilterTabs({ tabs, activeTab, onChange, mutedColor = "#607D8B" }: FilterTabsProps) {
+export function FilterTabs({ tabs, activeTab, onChange, mutedColor = "#546E7A" }: FilterTabsProps) {
   return (
     <nav className="flex h-14 items-center gap-4 bg-white border-b border-[#26a69a1a] px-4">
       {tabs.map((tab) => {
@@ -28,7 +28,7 @@ export function FilterTabs({ tabs, activeTab, onChange, mutedColor = "#607D8B" }
             onClick={() => onChange(tab.id)}
             className={`inline-flex items-center gap-1.5 px-2 py-4 self-stretch flex-[0_0_auto] border-b-2 cursor-pointer transition-colors -mb-px ${
               isActive
-                ? "border-[#1E88E5]"
+                ? "border-[#1565C0]"
                 : "border-transparent hover:border-gray-300"
             }`}
           >

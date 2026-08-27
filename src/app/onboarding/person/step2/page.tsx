@@ -98,7 +98,7 @@ export default function PersonStep2() {
         <div className="flex justify-center">
           <GlassCard className="w-full max-w-3xl p-6 sm:p-10">
             <div className="flex justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-[#3BA5FF]" />
+              <Loader2 className="h-8 w-8 animate-spin text-[#1976D2]" />
             </div>
           </GlassCard>
         </div>
@@ -114,7 +114,7 @@ export default function PersonStep2() {
 
           {/* Account context banner */}
           <div className="mt-4 flex items-center gap-3 p-3 bg-blue-50 border border-blue-100 rounded-xl">
-            <UserCircle2 className="h-8 w-8 text-[#3BA5FF] flex-shrink-0" />
+            <UserCircle2 className="h-8 w-8 text-[#1976D2] flex-shrink-0" />
             <div>
               {profile?.name && <p className="text-sm font-semibold text-[#2A1B55]">{profile.name}</p>}
               {user?.email && <p className="text-xs text-neutral-500">{user.email}</p>}
@@ -214,7 +214,7 @@ export default function PersonStep2() {
               <Button variant="outline" type="button" onClick={() => history.back()}>
                 ← Voltar
               </Button>
-              <Button type="submit" disabled={loading} className="bg-[#3BA5FF] hover:bg-[#2d8ddf] text-white">
+              <Button type="submit" disabled={loading} className="bg-[#1976D2] hover:bg-[#2d8ddf] text-white">
                 {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Salvando...</> : "Finalizar cadastro →"}
               </Button>
             </div>

@@ -51,11 +51,11 @@ export function UserMenu({
         {avatarUrl ? (
           <Avatar className="h-9 w-9">
             <AvatarImage src={avatarUrl} alt={name ?? undefined} />
-            <AvatarFallback className="bg-[#1E88E5] text-white text-xs">{initials}</AvatarFallback>
+            <AvatarFallback className="bg-[#1565C0] text-white text-xs">{initials}</AvatarFallback>
           </Avatar>
         ) : (
           <Avatar className="h-9 w-9">
-            <AvatarFallback className="bg-[#1E88E5] text-white text-xs">{initials}</AvatarFallback>
+            <AvatarFallback className="bg-[#1565C0] text-white text-xs">{initials}</AvatarFallback>
           </Avatar>
         )}
       </DropdownMenuTrigger>

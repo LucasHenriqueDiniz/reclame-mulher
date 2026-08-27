@@ -29,7 +29,7 @@ export default function RegisterPage() {
         <div className="w-full max-w-[1180px] text-center text-white">
           <div className="mx-auto mb-6 text-[24px] font-bold tracking-[-0.02em] sm:mb-8 sm:text-[26px]">
             <span className="text-white">Comunica</span>
-            <span className="text-[#3BA5FF]">Mulher</span>
+            <span className="text-[#1976D2]">Mulher</span>
           </div>
 
           <h1 className="font-heading text-[30px] font-bold tracking-[-0.03em] sm:text-[38px] lg:text-[44px]">
@@ -43,7 +43,7 @@ export default function RegisterPage() {
           <div className="mt-10 grid items-stretch gap-6 sm:mt-12 lg:grid-cols-2 lg:gap-8">
             <Link
               href="/onboarding/person/step1"
-              className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-[30px] border border-white/12 bg-white/[0.08] p-8 text-left text-white shadow-[0_30px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-[#3BA5FF]/30 hover:bg-white/[0.11] sm:min-h-[460px] sm:p-10 lg:min-h-[500px]"
+              className="group relative flex min-h-[400px] flex-col overflow-hidden rounded-[30px] border border-white/12 bg-white/[0.08] p-8 text-left text-white shadow-[0_30px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-[#1976D2]/30 hover:bg-white/[0.11] sm:min-h-[460px] sm:p-10 lg:min-h-[500px]"
             >
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,165,255,0.16),transparent_38%)] opacity-80" />
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
@@ -53,7 +53,7 @@ export default function RegisterPage() {
                   Perfil
                 </span>
 
-                <div className="mt-6 flex h-18 w-18 items-center justify-center rounded-[20px] border border-[#3BA5FF]/20 bg-[rgba(59,165,255,0.16)] text-[#3BA5FF] shadow-[0_14px_34px_rgba(59,165,255,0.18)] sm:h-20 sm:w-20">
+                <div className="mt-6 flex h-18 w-18 items-center justify-center rounded-[20px] border border-[#1976D2]/20 bg-[rgba(59,165,255,0.16)] text-[#1976D2] shadow-[0_14px_34px_rgba(59,165,255,0.18)] sm:h-20 sm:w-20">
                   <Users className="h-8 w-8 sm:h-9 sm:w-9" />
                 </div>
 
@@ -68,7 +68,7 @@ export default function RegisterPage() {
               </div>
 
               <div className="relative z-10 mt-auto pt-10">
-                <div className="inline-flex items-center gap-2 text-[14px] font-semibold text-[#3BA5FF] transition-all duration-300 group-hover:gap-3">
+                <div className="inline-flex items-center gap-2 text-[14px] font-semibold text-[#1976D2] transition-all duration-300 group-hover:gap-3">
                   Continuar como pessoa
                   <ArrowRight className="h-4 w-4" />
                 </div>
@@ -112,7 +112,7 @@ export default function RegisterPage() {
 
           <p className="mt-8 text-[14px] text-white/40 sm:mt-10">
             Já tem conta?{" "}
-            <Link href="/login" className="font-medium text-[#3BA5FF] hover:underline">
+            <Link href="/login" className="font-medium text-[#1976D2] hover:underline">
               Entrar
             </Link>
           </p>

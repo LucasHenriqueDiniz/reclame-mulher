@@ -83,11 +83,11 @@ export function ComplaintDropzone({
         onDragLeave={() => setIsDragging(false)}
         className={`
           relative w-full min-h-[180px] rounded-xl
-          border-2 border-dashed border-[#1E88E5]
+          border-2 border-dashed border-[#1565C0]
           bg-white
           flex flex-col items-center justify-center gap-3 p-6
           transition-colors
-          ${isDragging ? "bg-blue-50 border-[#1976D2]" : ""}
+          ${isDragging ? "bg-blue-50 border-[#0D47A1]" : ""}
           ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
         `}
       >
@@ -102,18 +102,18 @@ export function ComplaintDropzone({
 
         {/* Upload icon */}
         <div className="w-12 h-12 rounded-full bg-[#E3F2FD] flex items-center justify-center">
-          <Upload className="w-6 h-6 text-[#1E88E5]" />
+          <Upload className="w-6 h-6 text-[#1565C0]" />
         </div>
 
         {/* Text */}
         <div className="text-center space-y-1.5">
-          <p className="font-['Poppins'] font-semibold text-[#1E88E5] text-sm">
+          <p className="font-['Poppins'] font-semibold text-[#1565C0] text-sm">
             Arraste e solte os arquivos
           </p>
-          <p className="font-['Poppins'] text-[#607D8B] text-xs">ou</p>
+          <p className="font-['Poppins'] text-[#546E7A] text-xs">ou</p>
           <Button
             type="button"
-            className="bg-[#1E88E5] hover:bg-[#1976D2] text-white px-5 py-1.5 h-auto rounded-lg font-['Poppins'] font-medium text-sm"
+            className="bg-[#1565C0] hover:bg-[#0D47A1] text-white px-5 py-1.5 h-auto rounded-lg font-['Poppins'] font-medium text-sm"
             disabled={disabled || files.length >= maxFiles}
           >
             Selecione do computador
@@ -121,7 +121,7 @@ export function ComplaintDropzone({
         </div>
 
         {/* Format info */}
-        <p className="font-['Poppins'] text-[#607D8B] text-xs text-center">
+        <p className="font-['Poppins'] text-[#546E7A] text-xs text-center">
           {acceptedFormats.join(", ")} até {maxSizeMB}MB
         </p>
       </div>
@@ -135,12 +135,12 @@ export function ComplaintDropzone({
               className="flex items-center justify-between p-3 rounded-lg border border-[#E5E5ED] bg-white"
             >
               <div className="flex items-center gap-3">
-                <FileIcon className="w-5 h-5 text-[#607D8B]" />
+                <FileIcon className="w-5 h-5 text-[#546E7A]" />
                 <div>
                   <p className="font-['Poppins'] font-medium text-[#2A3F54] text-sm">
                     {fileItem.file.name}
                   </p>
-                  <p className="font-['Poppins'] text-[#607D8B] text-xs">
+                  <p className="font-['Poppins'] text-[#546E7A] text-xs">
                     {(fileItem.file.size / 1024 / 1024).toFixed(2)} MB
                   </p>
                 </div>
@@ -160,8 +160,8 @@ export function ComplaintDropzone({
       )}
 
       {/* Info alert */}
-      <div className="bg-[#E3F2FD] border border-[#1E88E5]/20 rounded-lg p-3">
-        <p className="font-['Poppins'] text-[#1E88E5] text-xs text-center leading-relaxed">
+      <div className="bg-[#E3F2FD] border border-[#1565C0]/20 rounded-lg p-3">
+        <p className="font-['Poppins'] text-[#1565C0] text-xs text-center leading-relaxed">
           Você pode enviar até {maxFiles} arquivos ({acceptedFormats.join(", ")}) com tamanho máximo de {maxSizeMB}MB cada.
         </p>
       </div>

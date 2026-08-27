@@ -57,8 +57,8 @@ const PROFILE_TABS: PageTabItem[] = [
 ];
 
 const FILTER_TABS: FilterTabItem[] = [
-  { id: "ultimas", label: "Últimas", icon: Clock, color: "#1E88E5" },
-  { id: "nao-respondidas", label: "Não Respondidas", icon: Meh, color: "#607D8B" },
+  { id: "ultimas", label: "Últimas", icon: Clock, color: "#1565C0" },
+  { id: "nao-respondidas", label: "Não Respondidas", icon: Meh, color: "#546E7A" },
   { id: "respondidas", label: "Respondidas", icon: Smile, color: "#26A69A" },
   { id: "concluidas", label: "Concluídas", icon: Laugh, color: "#26A69A" },
 ];
@@ -118,15 +118,15 @@ export function ComplaintsContent({
         {complaints.length === 0 ? (
           <Card className="shadow-md border-0">
             <CardContent className="p-12 text-center">
-              <MessageCircle size={48} className="text-[#607D8B] mx-auto mb-4" />
+              <MessageCircle size={48} className="text-[#546E7A] mx-auto mb-4" />
               <h2 className="text-lg font-semibold text-[#2A3F54] mb-2">
                 Nenhum relato ainda
               </h2>
-              <p className="text-sm text-[#607D8B] mb-6">
+              <p className="text-sm text-[#546E7A] mb-6">
                 Comece criando seu primeiro relato
               </p>
               <Link href="/app/complaints/new">
-                <Button className="h-auto px-6 py-3 rounded-xl bg-[#1E88E5] hover:bg-[#1976D2]">
+                <Button className="h-auto px-6 py-3 rounded-xl bg-[#1565C0] hover:bg-[#0D47A1]">
                   Criar relato
                 </Button>
               </Link>
@@ -143,7 +143,7 @@ export function ComplaintsContent({
             <div className="p-0">
               {filteredComplaints.length === 0 ? (
                 <div className="p-12 text-center">
-                  <p className="font-['Poppins'] text-[#607D8B] text-sm">
+                  <p className="font-['Poppins'] text-[#546E7A] text-sm">
                     Nenhum relato encontrado nesta categoria
                   </p>
                 </div>
@@ -184,31 +184,31 @@ export function ComplaintsContent({
 
                         {/* Row 2: Reference ID + Company + Date */}
                         <div className="flex items-center gap-3 mb-2">
-                          <div className="inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded-md bg-[#1E88E5]">
+                          <div className="inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded-md bg-[#1565C0]">
                             <span className="font-['Poppins'] font-medium text-white text-xs">
                               {protocolId(complaint.id)}
                             </span>
                           </div>
                           {complaint.company && (
-                            <span className="font-['Poppins'] text-sm text-[#607D8B]">
+                            <span className="font-['Poppins'] text-sm text-[#546E7A]">
                               {complaint.company.name}
                             </span>
                           )}
-                          <span className="font-['Poppins'] text-sm text-[#607D8B]">
+                          <span className="font-['Poppins'] text-sm text-[#546E7A]">
                             {date.toLocaleDateString("pt-BR")}
                           </span>
                         </div>
 
                         {/* Row 3: Project + Ver detalhes link */}
                         <div className="flex justify-between items-center">
-                          <span className="font-['Poppins'] text-sm text-[#607D8B]">
+                          <span className="font-['Poppins'] text-sm text-[#546E7A]">
                             {complaint.project?.name || "Sem projeto específico"}
                           </span>
                           <div className="flex items-center gap-1">
-                            <span className="font-['Poppins'] font-medium text-xs text-[#AD92FF]">
+                            <span className="font-['Poppins'] font-medium text-xs text-[#6B4EE6]">
                               Ver detalhes
                             </span>
-                            <ChevronRight size={12} className="text-[#AD92FF]" />
+                            <ChevronRight size={12} className="text-[#6B4EE6]" />
                           </div>
                         </div>
                       </div>

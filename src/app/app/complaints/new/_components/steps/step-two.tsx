@@ -28,7 +28,7 @@ export function StepTwo({ data, onChange }: StepTwoProps) {
         <h2 className="text-center font-['Poppins'] font-semibold text-[#2A3F54] text-2xl leading-tight">
           Conte o que aconteceu
         </h2>
-        <p className="text-center font-['Poppins'] text-[#607D8B] text-sm leading-normal">
+        <p className="text-center font-['Poppins'] text-[#546E7A] text-sm leading-normal">
           Escreva de forma simples. Não precisa usar palavras difíceis.
         </p>
       </div>
@@ -82,8 +82,8 @@ export function StepTwo({ data, onChange }: StepTwoProps) {
       </ComplaintField>
 
       {/* Aviso importante */}
-      <div className="bg-[#E3F2FD] border-l-4 border-[#1E88E5] rounded-r-xl p-4 flex items-start gap-3">
-        <Info className="w-5 h-5 text-[#1E88E5] flex-shrink-0 mt-0.5" />
+      <div className="bg-[#E3F2FD] border-l-4 border-[#1565C0] rounded-r-xl p-4 flex items-start gap-3">
+        <Info className="w-5 h-5 text-[#1565C0] flex-shrink-0 mt-0.5" />
         <p className="font-['Poppins'] text-[#1565C0] text-sm leading-relaxed">
           Não coloque seu CPF, RG ou dados bancários aqui. Esses dados não são necessários.
         </p>

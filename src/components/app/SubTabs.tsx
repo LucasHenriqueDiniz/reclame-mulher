@@ -25,16 +25,16 @@ export function SubTabs({ tabs, activeTab, onChange }: SubTabsProps) {
             key={tab.key}
             onClick={() => onChange(tab.key)}
             className={`flex items-center gap-1.5 px-2 py-4 bg-transparent border-none cursor-pointer -mb-px border-b-2 transition-colors ${
-              isActive ? "border-[#1E88E5]" : "border-transparent"
+              isActive ? "border-[#1565C0]" : "border-transparent"
             }`}
           >
             <Icon
               size={24}
-              className={isActive ? "text-[#1E88E5]" : "text-[#607D8B]"}
+              className={isActive ? "text-[#1565C0]" : "text-[#546E7A]"}
             />
             <span
               className={`text-sm font-medium ${
-                isActive ? "text-[#1E88E5]" : "text-[#607D8B]"
+                isActive ? "text-[#1565C0]" : "text-[#546E7A]"
               }`}
             >
               {tab.label}

@@ -15,11 +15,21 @@ import { entrarViaApi, type Papel as PapelDeConta } from "./fixtures/auth";
  *
  * São 39 páginas × 2 viewports, cada uma carregada e analisada — vários minutos.
  * Por isso ela vive em projetos próprios do Playwright (`a11y-desktop` e
- * `a11y-mobile`), e os projetos da suíte rápida a ignoram.
+ * `a11y-mobile`), e a suíte rápida é rodada com filtro de projeto:
  *
  * ```bash
- * npm run test:a11y      # varre e falha se alguma página piorar em relação ao baseline
+ * npm run test:e2e     # só a suíte rápida
+ * npm run test:a11y    # só esta varredura
  * ```
+ *
+ * `npx playwright test` sem `--project` roda os dois conjuntos.
+ *
+ * ## Ela reprova, não só mede
+ *
+ * Desde a task `13` o piso é **zero violação `critical` ou `serious`** em toda
+ * página varrida — foi o estado alcançado ali, e a partir daqui reintroduzir
+ * uma quebra a suíte. As violações de impacto menor são comparadas com o
+ * baseline gravado, que também está em zero.
  *
  * Para **regravar** o baseline depois de uma correção (task `13`):
  *
@@ -215,6 +225,15 @@ test.describe(() => {
 
       if (process.env.A11Y_BASELINE) return;
 
+      const graves = violacoes.filter(
+        (violacao) => violacao.impacto === "critical" || violacao.impacto === "serious"
+      );
+      expect(
+        graves.map((violacao) => `${violacao.id} (${violacao.ocorrencias}x): ${violacao.descricao}`),
+        `${rotulo} tem violação crítica ou séria — o piso desde a task 13 é zero`
+      ).toEqual([]);
+
+      // O resto (moderate, minor) não pode crescer em relação ao baseline.
       const piso = lerBaseline(viewportDe(info.project.name), rotulo);
       if (piso === null) return; // rota nova: entra no baseline na próxima gravação
 

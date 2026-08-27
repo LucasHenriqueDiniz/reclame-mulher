@@ -22,7 +22,7 @@ export function ComplaintSuccessCard({
   estimatedResponseText = "Demora normalmente 73 horas para responder, iremos notificar quando seu relato receber uma resposta!",
 }: ComplaintSuccessCardProps) {
   return (
-    <div className="w-full rounded-2xl px-8 py-12 text-white shadow-2xl bg-gradient-to-br from-[#1E88E5] via-[#1976D2] to-[#075599] relative overflow-hidden animate-in fade-in zoom-in-95 duration-500">
+    <div className="w-full rounded-2xl px-8 py-12 text-white shadow-2xl bg-gradient-to-br from-[#1565C0] via-[#0D47A1] to-[#075599] relative overflow-hidden animate-in fade-in zoom-in-95 duration-500">
       {/* Decorative elements */}
       <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -mr-20 -mt-20" />
       <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full -ml-16 -mb-16" />
@@ -33,7 +33,7 @@ export function ComplaintSuccessCard({
         {/* Success icon */}
         <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white mb-6 shadow-xl animate-in zoom-in duration-700 delay-100 relative">
           <div className="absolute inset-0 rounded-full bg-green-400/20 animate-ping" />
-          <Check className="h-14 w-14 text-[#1E88E5] relative z-10" strokeWidth={3} />
+          <Check className="h-14 w-14 text-[#1565C0] relative z-10" strokeWidth={3} />
         </div>
 
         {/* Success message */}
@@ -88,7 +88,7 @@ export function ComplaintSuccessCard({
 
         {/* Action button */}
         <Link href={`/app/complaints/${complaintId}`} className="animate-in slide-in-from-bottom-4 duration-500 delay-700">
-          <Button className="bg-white text-[#1E88E5] hover:bg-gray-50 hover:scale-105 font-['Poppins'] font-bold px-10 py-4 h-auto rounded-xl shadow-xl hover:shadow-2xl transition-all duration-200">
+          <Button className="bg-white text-[#1565C0] hover:bg-gray-50 hover:scale-105 font-['Poppins'] font-bold px-10 py-4 h-auto rounded-xl shadow-xl hover:shadow-2xl transition-all duration-200">
             Ver meu relato
           </Button>
         </Link>

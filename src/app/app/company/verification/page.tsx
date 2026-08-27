@@ -34,26 +34,26 @@ export default function CompanyVerificationPage() {
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 text-left">
           <h2 className="font-semibold text-[#2A1B55] mb-3 flex items-center gap-2">
-            <CheckCircle2 className="h-5 w-5 text-[#3BA5FF]" />
+            <CheckCircle2 className="h-5 w-5 text-[#1976D2]" />
             Próximos passos:
           </h2>
           <ul className="space-y-2 text-neutral-700 text-sm">
             <li className="flex items-start gap-2">
-              <span className="text-[#3BA5FF] font-bold">1.</span>
+              <span className="text-[#1565C0] font-bold">1.</span>
               <span>
                 Nossa equipe irá verificar os dados da sua empresa (pode levar até
                 48 horas úteis)
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#3BA5FF] font-bold">2.</span>
+              <span className="text-[#1565C0] font-bold">2.</span>
               <span>
                 Você receberá um email de confirmação assim que sua conta for
                 aprovada
               </span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#3BA5FF] font-bold">3.</span>
+              <span className="text-[#1565C0] font-bold">3.</span>
               <span>
                 Após a aprovação, você poderá acessar todas as funcionalidades da
                 plataforma
@@ -65,7 +65,7 @@ export default function CompanyVerificationPage() {
         <div className="space-y-3">
           <Button
             asChild
-            className="w-full bg-[#3BA5FF] hover:bg-[#2d8ddf] text-white"
+            className="w-full bg-[#1976D2] hover:bg-[#2d8ddf] text-white"
           >
             <Link href="/app">
               Ir para o painel
@@ -87,7 +87,7 @@ export default function CompanyVerificationPage() {
           Precisa de ajuda?{" "}
           <a
             href="mailto:suporte@reclame-mulher.com.br"
-            className="text-[#3BA5FF] hover:underline"
+            className="text-[#1976D2] underline"
           >
             Entre em contato
           </a>

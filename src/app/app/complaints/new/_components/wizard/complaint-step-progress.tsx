@@ -31,7 +31,7 @@ export function ComplaintStepProgress({
       </div>
       <div className="self-stretch w-full bg-gray-200 rounded-full h-3 overflow-hidden">
         <div
-          className="h-3 bg-[#1E88E5] rounded-full transition-all duration-500 ease-out"
+          className="h-3 bg-[#1565C0] rounded-full transition-all duration-500 ease-out"
           style={{ width: `${percentage}%` }}
         />
       </div>
@@ -41,12 +41,12 @@ export function ComplaintStepProgress({
             <div
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 i < currentStep
-                  ? "bg-[#1E88E5]"
+                  ? "bg-[#1565C0]"
                   : "bg-gray-300"
               }`}
             />
             <span className={`text-[10px] font-['Poppins'] text-center ${
-              i < currentStep ? "text-[#1E88E5] font-medium" : "text-gray-400"
+              i < currentStep ? "text-[#1565C0] font-medium" : "text-gray-500"
             }`}>
               {STEP_LABELS[i]}
             </span>

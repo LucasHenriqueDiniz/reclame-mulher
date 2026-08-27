@@ -30,7 +30,7 @@ import { CompanyPageShell } from "@/components/app/CompanyPageShell";
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; border: string; icon: React.ReactNode }> = {
   OPEN: {
     label: "Em aberto",
-    color: "#F97316",
+    color: "#9A4B00",
     bg: "#FFF7ED",
     border: "#FDBA74",
     icon: <AlertCircle className="w-4 h-4" />,
@@ -214,7 +214,7 @@ export function CompanyComplaintDetailContent({
   return (
     <CompanyPageShell>
       {/* Header azul */}
-      <div className="bg-gradient-to-br from-[#1E88E5] to-[#1565C0] -mx-6 -mt-8 px-6 py-8 mb-6">
+      <div className="bg-gradient-to-br from-[#1565C0] to-[#1565C0] -mx-6 -mt-8 px-6 py-8 mb-6">
         <div className="max-w-[960px] mx-auto">
           <Link
             href="/app/company/complaints"
@@ -261,22 +261,22 @@ export function CompanyComplaintDetailContent({
               {/* Info grid */}
               <div className="grid grid-cols-2 gap-4 p-5 border-b border-gray-100">
                 <div>
-                  <p className="text-xs text-gray-400 mb-1">Empresa</p>
+                  <p className="text-xs text-gray-500 mb-1">Empresa</p>
                   <p className="text-sm font-semibold text-[#2A3F54]">{complaint.company.name ?? "—"}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 mb-1">Localização</p>
+                  <p className="text-xs text-gray-500 mb-1">Localização</p>
                   <p className="text-sm font-semibold text-[#2A3F54]">{complaint.problemLocation ?? "—"}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 mb-1">Data de abertura</p>
+                  <p className="text-xs text-gray-500 mb-1">Data de abertura</p>
                   <p className="text-sm font-semibold text-[#2A3F54]">{formatDateTime(complaint.createdAt)}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 mb-1">Categorias</p>
+                  <p className="text-xs text-gray-500 mb-1">Categorias</p>
                   <div className="flex gap-1 flex-wrap">
                     {complaint.impactCategory && (
-                      <Badge className="bg-[#1E88E5] text-white hover:bg-[#1E88E5] text-xs">
+                      <Badge className="bg-[#1565C0] text-white hover:bg-[#1565C0] text-xs">
                         {CATEGORY_LABELS[complaint.impactCategory] ?? complaint.impactCategory}
                       </Badge>
                     )}
@@ -291,11 +291,11 @@ export function CompanyComplaintDetailContent({
 
               {/* Ações */}
               <div className="flex items-center gap-4 px-5 py-3 border-b border-gray-100">
-                <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#1E88E5] transition-colors">
+                <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#1565C0] transition-colors">
                   <ThumbsUp className="w-4 h-4" />
                   Apoiar
                 </button>
-                <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#1E88E5] transition-colors">
+                <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#1565C0] transition-colors">
                   <Share2 className="w-4 h-4" />
                   Compartilhar
                 </button>
@@ -318,7 +318,7 @@ export function CompanyComplaintDetailContent({
                         <div
                           className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
                             isCompany
-                              ? "bg-[#1E88E5]"
+                              ? "bg-[#1565C0]"
                               : isFirst
                               ? "bg-orange-100"
                               : "bg-gray-100"
@@ -338,13 +338,13 @@ export function CompanyComplaintDetailContent({
                       </div>
 
                       {/* Conteúdo */}
-                      <div className={`flex-1 pb-6 ${isCompany ? "border-l-4 border-[#1E88E5] pl-4 -ml-0.5" : ""}`}>
+                      <div className={`flex-1 pb-6 ${isCompany ? "border-l-4 border-[#1565C0] pl-4 -ml-0.5" : ""}`}>
                         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
                           <div className="flex items-center justify-between mb-2">
                             <span className="font-semibold text-sm text-[#2A3F54]">
                               {message.author?.name ?? (isCompany ? "Sua empresa" : "Reclamante")}
                             </span>
-                            <span className="text-xs text-gray-400">
+                            <span className="text-xs text-gray-500">
                               {formatDateTime(message.createdAt)}
                             </span>
                           </div>
@@ -375,7 +375,7 @@ export function CompanyComplaintDetailContent({
                                     href={a.filePath}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-xs text-[#1E88E5] font-medium"
+                                    className="text-xs text-[#1565C0] font-medium"
                                   >
                                     📎 {a.fileName}
                                   </a>
@@ -393,12 +393,12 @@ export function CompanyComplaintDetailContent({
                 {complaint.status === "RESOLVED" && (
                   <div className="flex gap-4">
                     <div className="flex flex-col items-center">
-                      <div className="w-10 h-10 rounded-full bg-[#1E88E5] flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-[#1565C0] flex items-center justify-center flex-shrink-0">
                         <CheckCircle2 className="w-5 h-5 text-white" />
                       </div>
                     </div>
-                    <div className="flex-1 border-l-4 border-[#1E88E5] pl-4 -ml-0.5">
-                      <div className="bg-gradient-to-r from-[#1E88E5] to-[#1565C0] rounded-xl p-6 text-center text-white">
+                    <div className="flex-1 border-l-4 border-[#1565C0] pl-4 -ml-0.5">
+                      <div className="bg-gradient-to-r from-[#1565C0] to-[#1565C0] rounded-xl p-6 text-center text-white">
                         <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-3">
                           <CheckCircle2 className="w-8 h-8 text-white" />
                         </div>
@@ -418,17 +418,17 @@ export function CompanyComplaintDetailContent({
                   disabled={pending}
                   value={response}
                   onChange={(e) => setResponse(e.target.value)}
-                  className="rounded-xl border-gray-200 focus:border-[#1E88E5] focus:ring-[#1E88E5]/20 resize-none mb-3"
+                  className="rounded-xl border-gray-200 focus:border-[#1565C0] focus:ring-[#1565C0]/20 resize-none mb-3"
                 />
                 <div className="flex items-center justify-between">
-                  <button className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#1E88E5] transition-colors">
+                  <button className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#1565C0] transition-colors">
                     <Paperclip className="w-4 h-4" />
                     Anexar arquivo
                   </button>
                   <Button
                     onClick={submitResponse}
                     disabled={pending || !response.trim()}
-                    className="bg-[#1E88E5] hover:bg-[#1976D2] gap-2"
+                    className="bg-[#1565C0] hover:bg-[#0D47A1] gap-2"
                   >
                     <Send className="w-4 h-4" />
                     {pending ? "Enviando..." : "Enviar resposta"}
@@ -445,14 +445,14 @@ export function CompanyComplaintDetailContent({
           <Card className="border-0 shadow-md">
             <CardContent className="p-6 text-center">
               {/* Avatar */}
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#1E88E5] to-[#1565C0] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#1565C0] to-[#1565C0] flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
                 {complaint.company.name?.charAt(0).toUpperCase() ?? "E"}
               </div>
               <h3 className="font-['Poppins'] font-semibold text-[#2A3F54] text-lg mb-1">
                 {complaint.company.name ?? "Empresa"}
               </h3>
               {companyProfile.verified && (
-                <Badge className="bg-[#1E88E5]/10 text-[#1E88E5] hover:bg-[#1E88E5]/10 mb-4">
+                <Badge className="bg-[#1565C0]/10 text-[#1565C0] hover:bg-[#1565C0]/10 mb-4">
                   <Shield className="w-3 h-3 mr-1" />
                   VERIFICADA
                 </Badge>
@@ -472,7 +472,7 @@ export function CompanyComplaintDetailContent({
 
                 <div className="grid grid-cols-2 gap-3 pt-2">
                   <div className="flex items-center gap-2">
-                    <MessageCircle className="w-4 h-4 text-[#1E88E5]" />
+                    <MessageCircle className="w-4 h-4 text-[#1565C0]" />
                     <span className="text-xs text-gray-600">
                       <strong className="text-[#2A3F54]">{companyStats.activeDialogsCount}</strong> diálogos ativos
                     </span>
@@ -484,11 +484,11 @@ export function CompanyComplaintDetailContent({
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <BarChart3 className="w-4 h-4 text-[#1E88E5]" />
+                    <BarChart3 className="w-4 h-4 text-[#1565C0]" />
                     <span className="text-xs text-gray-600">{companyStats.activeProjectsCount} projetos em andamento</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-[#1E88E5]" />
+                    <Clock className="w-4 h-4 text-[#1565C0]" />
                     <span className="text-xs text-gray-600">
                       {companyStats.avgResponseHours != null ? `Resposta em ${companyStats.avgResponseHours}h` : "Sem histórico de resposta"}
                     </span>
@@ -498,7 +498,7 @@ export function CompanyComplaintDetailContent({
 
               {companyProfile.slug && (
                 <Link href={`/company/${companyProfile.slug}`}>
-                  <Button variant="link" className="mt-4 text-[#1E88E5]">
+                  <Button variant="link" className="mt-4 text-[#1565C0]">
                     Ver página da empresa →
                   </Button>
                 </Link>
@@ -513,7 +513,7 @@ export function CompanyComplaintDetailContent({
                 Está querendo fazer um relato sobre <strong>{complaint.company.name ?? "esta empresa"}</strong>?
               </p>
               <Link href={`/app/complaints/new?company=${complaint.company.name}`}>
-                <Button className="w-full bg-[#1E88E5] hover:bg-[#1976D2] gap-2">
+                <Button className="w-full bg-[#1565C0] hover:bg-[#0D47A1] gap-2">
                   <MessageCircle className="w-4 h-4" />
                   Criar um relato
                 </Button>
@@ -524,15 +524,18 @@ export function CompanyComplaintDetailContent({
           {/* Ações da empresa */}
           <Card className="border-0 shadow-md">
             <CardContent className="p-6">
-              <h4 className="font-semibold text-sm text-gray-400 uppercase tracking-wider mb-4">
+              <h4 className="font-semibold text-sm text-gray-500 uppercase tracking-wider mb-4">
                 Ações da empresa
               </h4>
               <div className="space-y-3">
                 <div>
-                  <label className="text-sm text-gray-500 mb-1.5 block">Mudar status</label>
+                  <label htmlFor="mudar-status" className="text-sm text-gray-500 mb-1.5 block">
+                    Mudar status
+                  </label>
                   <div className="flex gap-2">
                     <select
-                      className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm bg-white focus:border-[#1E88E5] focus:ring-2 focus:ring-[#1E88E5]/20 outline-none"
+                      id="mudar-status"
+                      className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm bg-white focus:border-[#1565C0] focus:ring-2 focus:ring-[#1565C0]/20 outline-none"
                       value={status}
                       disabled={pending}
                       onChange={(e) => setStatus(e.target.value)}

@@ -36,7 +36,7 @@ export default async function CompaniesPage({
       <MainHeader />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#1E88E5] to-[#1976D2] pt-28 pb-16">
+      <section className="bg-gradient-to-br from-[#1565C0] to-[#0D47A1] pt-28 pb-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 mb-4">
             <Building2 className="w-6 h-6 text-white/90" />
@@ -65,7 +65,7 @@ export default async function CompaniesPage({
                     name="q"
                     defaultValue={query}
                     placeholder="Buscar empresa ou órgão..."
-                    className="h-12 rounded-lg border border-[#E5E5ED] bg-white px-4 text-sm font-['Poppins'] outline-none transition focus:border-[#1E88E5] focus:ring-2 focus:ring-[#1E88E5]/20"
+                    className="h-12 rounded-lg border border-[#E5E5ED] bg-white px-4 text-sm font-['Poppins'] outline-none transition focus:border-[#1565C0] focus:ring-2 focus:ring-[#1565C0]/20"
                     aria-label="Buscar empresa ou órgão"
                   />
 
@@ -75,7 +75,7 @@ export default async function CompaniesPage({
                       name="verified"
                       value="true"
                       defaultChecked={verifiedOnly}
-                      className="w-4 h-4 text-[#1E88E5] rounded focus:ring-[#1E88E5]"
+                      className="w-4 h-4 text-[#1565C0] rounded focus:ring-[#1565C0]"
                       aria-label="Filtrar apenas empresas verificadas"
                     />
                     Apenas verificadas
@@ -83,7 +83,7 @@ export default async function CompaniesPage({
                   
                   <button
                     type="submit"
-                    className="h-12 rounded-lg bg-[#1E88E5] px-8 text-sm font-semibold font-['Poppins'] text-white transition hover:bg-[#1976D2] shadow-md hover:shadow-lg"
+                    className="h-12 rounded-lg bg-[#1565C0] px-8 text-sm font-semibold font-['Poppins'] text-white transition hover:bg-[#0D47A1] shadow-md hover:shadow-lg"
                   >
                     Buscar
                   </button>
@@ -116,7 +116,7 @@ export default async function CompaniesPage({
           <h2 className="font-['Poppins'] text-2xl font-semibold text-[#2A3F54]">
             {query ? `Resultados para "${query}"` : "Todas as empresas"}
           </h2>
-          <p className="mt-2 text-sm font-['Poppins'] text-[#607D8B]">
+          <p className="mt-2 text-sm font-['Poppins'] text-[#546E7A]">
             {totalCount} {totalCount === 1 ? "empresa encontrada" : "empresas encontradas"}
             {verifiedCount > 0 && ` • ${verifiedCount} verificada${verifiedCount > 1 ? 's' : ''}`}
           </p>
@@ -125,11 +125,11 @@ export default async function CompaniesPage({
         {sortedCompanies.length === 0 ? (
           <Card className="border-2 border-dashed border-[#E5E5ED] shadow-none">
             <CardContent className="px-6 py-16 text-center">
-              <Building2 className="w-16 h-16 text-[#607D8B] mx-auto mb-4 opacity-50" />
+              <Building2 className="w-16 h-16 text-[#546E7A] mx-auto mb-4 opacity-50" />
               <h3 className="font-['Poppins'] text-xl font-semibold text-[#2A3F54] mb-2">
                 Nenhuma empresa encontrada
               </h3>
-              <p className="text-sm font-['Poppins'] text-[#607D8B]">
+              <p className="text-sm font-['Poppins'] text-[#546E7A]">
                 Tente outro termo de busca ou remova o filtro de verificação.
               </p>
             </CardContent>
@@ -151,18 +151,18 @@ export default async function CompaniesPage({
                       {/* Header */}
                       <div className="flex items-start justify-between gap-3 mb-4">
                         <div className="min-w-0 flex-1">
-                          <h3 className="font-['Poppins'] font-semibold text-lg text-[#2A3F54] truncate group-hover:text-[#1E88E5] transition-colors">
+                          <h3 className="font-['Poppins'] font-semibold text-lg text-[#2A3F54] truncate group-hover:text-[#1565C0] transition-colors">
                             {company.name}
                           </h3>
                           {company.corporateName && (
-                            <p className="mt-1 text-xs font-['Poppins'] text-[#607D8B] truncate">
+                            <p className="mt-1 text-xs font-['Poppins'] text-[#546E7A] truncate">
                               {company.corporateName}
                             </p>
                           )}
                         </div>
                         
                         {company.verifiedAt && (
-                          <Badge className="bg-[#E3F2FD] text-[#1E88E5] border-[#1E88E5]/20 hover:bg-[#E3F2FD] flex items-center gap-1 px-2 py-1">
+                          <Badge className="bg-[#E3F2FD] text-[#1565C0] border-[#1565C0]/20 hover:bg-[#E3F2FD] flex items-center gap-1 px-2 py-1">
                             <CheckCircle2 className="w-3 h-3" />
                             <span className="text-[10px] font-semibold uppercase">Verificada</span>
                           </Badge>
@@ -172,14 +172,14 @@ export default async function CompaniesPage({
                       {/* Info */}
                       <div className="space-y-2">
                         {company.sector && (
-                          <div className="flex items-center gap-2 text-sm font-['Poppins'] text-[#607D8B]">
+                          <div className="flex items-center gap-2 text-sm font-['Poppins'] text-[#546E7A]">
                             <TrendingUp className="w-4 h-4 flex-shrink-0" />
                             <span className="truncate">{company.sector}</span>
                           </div>
                         )}
                         
                         {location && (
-                          <div className="flex items-center gap-2 text-sm font-['Poppins'] text-[#607D8B]">
+                          <div className="flex items-center gap-2 text-sm font-['Poppins'] text-[#546E7A]">
                             <MapPin className="w-4 h-4 flex-shrink-0" />
                             <span className="truncate">{location}</span>
                           </div>
@@ -188,7 +188,7 @@ export default async function CompaniesPage({
 
                       {/* Footer */}
                       <div className="mt-4 pt-4 border-t border-[#E5E5ED]">
-                        <span className="inline-flex items-center gap-1.5 text-sm font-['Poppins'] font-medium text-[#1E88E5] group-hover:gap-2 transition-all">
+                        <span className="inline-flex items-center gap-1.5 text-sm font-['Poppins'] font-medium text-[#1565C0] group-hover:gap-2 transition-all">
                           Ver perfil
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

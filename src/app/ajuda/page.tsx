@@ -69,7 +69,7 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       onClick={() => navigator.clipboard.writeText(text)}
-      className="ml-2 inline-flex items-center gap-1 text-xs text-gray-500 hover:text-[#1E88E5] transition-colors"
+      className="ml-2 inline-flex items-center gap-1 text-xs text-gray-500 hover:text-[#1565C0] transition-colors"
       title="Copiar"
     >
       <Copy className="h-3.5 w-3.5" />
@@ -88,7 +88,7 @@ export default function AjudaPage() {
           <h1 className="font-['Poppins'] text-4xl font-bold text-[#2A3F54]">
             Página de Ajuda
           </h1>
-          <p className="mt-2 text-lg text-[#607D8B]">
+          <p className="mt-2 text-lg text-[#546E7A]">
             Logins de teste, links rápidos e informações úteis para desenvolvimento.
           </p>
         </div>
@@ -108,11 +108,11 @@ export default function AjudaPage() {
                     <Link
                       key={link.href}
                       href={link.href}
-                      className="flex items-center gap-3 rounded-lg border border-[#E5E5ED] bg-white p-3 text-sm font-medium text-[#2A3F54] transition hover:border-[#1E88E5] hover:shadow-sm"
+                      className="flex items-center gap-3 rounded-lg border border-[#E5E5ED] bg-white p-3 text-sm font-medium text-[#2A3F54] transition hover:border-[#1565C0] hover:shadow-sm"
                     >
-                      <link.icon className="h-4 w-4 text-[#1E88E5]" />
+                      <link.icon className="h-4 w-4 text-[#1565C0]" />
                       <span className="flex-1">{link.label}</span>
-                      <ExternalLink className="h-3.5 w-3.5 text-gray-400" />
+                      <ExternalLink className="h-3.5 w-3.5 text-gray-500" />
                     </Link>
                   ))}
                 </div>
@@ -125,16 +125,16 @@ export default function AjudaPage() {
                   Como usar os logins de teste
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3 text-sm text-[#607D8B]">
+              <CardContent className="space-y-3 text-sm text-[#546E7A]">
                 <p>
                   Todos os usuários de teste usam a mesma senha: <strong className="text-[#2A3F54]">senha123</strong>
                 </p>
                 <p>
-                  Acesse <Link href="/login" className="text-[#1E88E5] hover:underline">/login</Link> e entre com qualquer email da lista ao lado.
+                  Acesse <Link href="/login" className="text-[#1565C0] underline">/login</Link> e entre com qualquer email da lista ao lado.
                 </p>
                 <p>
                   O seed também cria uma empresa pública:{" "}
-                  <Link href="/company/construtora-x" className="text-[#1E88E5] hover:underline">
+                  <Link href="/company/construtora-x" className="text-[#1565C0] underline">
                     /company/construtora-x
                   </Link>
                 </p>
@@ -169,13 +169,13 @@ export default function AjudaPage() {
                       <span className="inline-block mt-1 rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-600">
                         {user.role}
                       </span>
-                      <p className="mt-1 text-xs text-[#607D8B]">{user.description}</p>
+                      <p className="mt-1 text-xs text-[#546E7A]">{user.description}</p>
                     </div>
                   </div>
                 ))}
 
                 <div className="rounded-lg bg-[#E3F2FD] p-4">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-[#1E88E5]">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-[#1565C0]">
                     <KeyRound className="h-4 w-4" />
                     Senha padrão
                   </div>
@@ -188,7 +188,7 @@ export default function AjudaPage() {
             </Card>
 
             <div className="text-center">
-              <Button asChild className="bg-[#1E88E5] hover:bg-[#1976D2]">
+              <Button asChild className="bg-[#1565C0] hover:bg-[#0D47A1]">
                 <Link href="/login">Ir para o Login</Link>
               </Button>
             </div>

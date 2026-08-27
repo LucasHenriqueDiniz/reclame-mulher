@@ -14,7 +14,7 @@ export default function AuthCallbackPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <Loader2 className="mx-auto h-12 w-12 animate-spin text-[#3BA5FF]" />
+      <Loader2 className="mx-auto h-12 w-12 animate-spin text-[#1976D2]" />
     </div>
   );
 }

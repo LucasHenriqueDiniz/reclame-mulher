@@ -182,7 +182,7 @@ export function ComplaintDetailContent({
           </div>
           <span
             style={{
-              background: isResolved ? S.green : "rgba(255,255,255,0.2)",
+              background: isResolved ? S.green : "rgba(0,0,0,0.2)",
               color: S.white,
               fontSize: 12,
               fontWeight: 700,

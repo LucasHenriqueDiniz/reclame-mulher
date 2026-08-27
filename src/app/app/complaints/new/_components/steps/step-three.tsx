@@ -29,7 +29,7 @@ export function StepThree({ data, onChange, onUpload }: StepThreeProps) {
         <h2 className="text-center font-['Poppins'] font-semibold text-[#2A3F54] text-2xl leading-tight">
           Quer enviar uma foto?
         </h2>
-        <p className="text-center font-['Poppins'] text-[#607D8B] text-sm leading-normal">
+        <p className="text-center font-['Poppins'] text-[#546E7A] text-sm leading-normal">
           Isso é opcional. Você pode enviar fotos, vídeos ou documentos que ajudem a explicar o problema.
         </p>
       </div>

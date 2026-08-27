@@ -29,7 +29,7 @@ export function CompaniesDropdown() {
         <h3 className="font-['Poppins'] text-lg font-bold text-[#2A3F54] mb-2">
           Empresas em Destaque
         </h3>
-        <p className="font-['Poppins'] text-sm text-[#607D8B]">
+        <p className="font-['Poppins'] text-sm text-[#546E7A]">
           Empresas verificadas com melhor taxa de resolução
         </p>
       </div>
@@ -42,7 +42,7 @@ export function CompaniesDropdown() {
             className="block p-4 rounded-lg hover:bg-gray-50 transition-colors border border-transparent hover:border-[#E5E5ED]"
           >
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#1E88E5] to-[#1976D2] flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#1565C0] to-[#0D47A1] flex items-center justify-center flex-shrink-0">
                 <Building2 className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1 min-w-0">
@@ -50,17 +50,17 @@ export function CompaniesDropdown() {
                   <h4 className="font-['Poppins'] font-semibold text-sm text-[#2A3F54] truncate">
                     {company.name}
                   </h4>
-                  <CheckCircle2 className="w-4 h-4 text-[#1E88E5] flex-shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#1565C0] flex-shrink-0" />
                 </div>
-                <p className="font-['Poppins'] text-xs text-[#607D8B] mb-2">
+                <p className="font-['Poppins'] text-xs text-[#546E7A] mb-2">
                   {company.sector} • {company.region}
                 </p>
                 <div className="flex items-center gap-3 text-xs">
                   <span className="font-['Poppins'] text-green-600 font-medium">
                     {company.stats.resolutionRate}% resolvidas
                   </span>
-                  <span className="text-[#607D8B]">•</span>
-                  <span className="font-['Poppins'] text-[#607D8B]">
+                  <span className="text-[#546E7A]">•</span>
+                  <span className="font-['Poppins'] text-[#546E7A]">
                     Responde em {company.stats.avgResponseTime}
                   </span>
                 </div>
@@ -72,7 +72,7 @@ export function CompaniesDropdown() {
 
       <Link
         href="/companies"
-        className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-[#1E88E5] hover:bg-[#1976D2] text-white rounded-lg font-['Poppins'] font-semibold text-sm transition-colors"
+        className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-[#1565C0] hover:bg-[#0D47A1] text-white rounded-lg font-['Poppins'] font-semibold text-sm transition-colors"
       >
         Ver todas as empresas
         <ArrowRight className="w-4 h-4" />

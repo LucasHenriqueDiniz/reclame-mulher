@@ -104,14 +104,14 @@ export function BlogPostCard({
           ))}
         </div>
 
-        <h3 className="mb-4 line-clamp-2 text-xl font-bold text-[#190E4F] transition-colors group-hover:text-[#3BA5FF] font-heading">
+        <h3 className="mb-4 line-clamp-2 text-xl font-bold text-[#190E4F] transition-colors group-hover:text-[#1976D2] font-heading">
           {post.title}
         </h3>
 
         <div className="mb-4 flex items-center gap-3">
           <Avatar className="h-10 w-10 border-2 border-blue-100">
             <AvatarImage src={author.avatar ?? undefined} alt={author.name} />
-            <AvatarFallback className="bg-[#1E88E5] text-white">
+            <AvatarFallback className="bg-[#1565C0] text-white">
               {getInitials(author.name)}
             </AvatarFallback>
           </Avatar>

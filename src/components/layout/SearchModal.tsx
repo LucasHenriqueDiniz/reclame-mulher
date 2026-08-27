@@ -120,7 +120,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
         className="font-['Poppins']"
       />
       <CommandList>
-        <CommandEmpty className="py-6 text-center text-sm font-['Poppins'] text-[#607D8B]">
+        <CommandEmpty className="py-6 text-center text-sm font-['Poppins'] text-[#546E7A]">
           {query.length < 2 ? (
             "Digite pelo menos 2 caracteres para buscar"
           ) : (
@@ -128,7 +128,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
               <p>Nenhum resultado encontrado</p>
               <button
                 onClick={handleSearchAll}
-                className="text-[#1E88E5] hover:underline font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:rounded px-2 py-1"
+                className="text-[#1565C0] hover:underline font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:rounded px-2 py-1"
                 aria-label={`Buscar "${query}" em todas as categorias`}
               >
                 Buscar &quot;{query}&quot; em tudo
@@ -148,7 +148,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                   className="font-['Poppins'] cursor-pointer"
                 >
                   <div className="flex items-center gap-3 w-full">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1E88E5] to-[#1976D2] flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1565C0] to-[#0D47A1] flex items-center justify-center flex-shrink-0">
                       <Building2 className="w-4 h-4 text-white" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -157,13 +157,13 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                           {company.name}
                         </span>
                         {company.verifiedAt && (
-                          <Badge className="bg-[#1E88E5] text-white hover:bg-[#1E88E5] px-1.5 py-0 text-[9px]">
+                          <Badge className="bg-[#1565C0] text-white hover:bg-[#1565C0] px-1.5 py-0 text-[9px]">
                             VERIFICADA
                           </Badge>
                         )}
                       </div>
                       {company.sector && (
-                        <span className="text-xs text-[#607D8B]">{company.sector}</span>
+                        <span className="text-xs text-[#546E7A]">{company.sector}</span>
                       )}
                     </div>
                   </div>
@@ -181,7 +181,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
               className="font-['Poppins'] cursor-pointer"
             >
               <div className="flex items-center gap-3">
-                <Search className="w-4 h-4 text-[#607D8B]" />
+                <Search className="w-4 h-4 text-[#546E7A]" />
                 <span>Buscar &quot;{query}&quot; em tudo</span>
               </div>
             </CommandItem>
@@ -198,7 +198,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                 className="font-['Poppins'] cursor-pointer"
               >
                 <div className="flex items-center gap-3">
-                  <Clock className="w-4 h-4 text-[#607D8B]" />
+                  <Clock className="w-4 h-4 text-[#546E7A]" />
                   <span>{search}</span>
                 </div>
               </CommandItem>
@@ -218,7 +218,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                 className="font-['Poppins'] cursor-pointer"
               >
                 <div className="flex items-center gap-3">
-                  <Building2 className="w-4 h-4 text-[#607D8B]" />
+                  <Building2 className="w-4 h-4 text-[#546E7A]" />
                   <span>Ver todas as empresas</span>
                 </div>
               </CommandItem>
@@ -230,7 +230,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
                 className="font-['Poppins'] cursor-pointer"
               >
                 <div className="flex items-center gap-3">
-                  <TrendingUp className="w-4 h-4 text-[#607D8B]" />
+                  <TrendingUp className="w-4 h-4 text-[#546E7A]" />
                   <span>Busca avançada</span>
                 </div>
               </CommandItem>

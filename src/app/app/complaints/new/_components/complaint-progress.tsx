@@ -17,7 +17,7 @@ export function ComplaintProgress({ step, total = 4 }: ComplaintProgressProps) {
       </div>
       <div className="self-stretch w-full bg-gray-200 rounded-md h-2.5 overflow-hidden">
         <div
-          className="h-2.5 bg-[#1E88E5] rounded-md transition-all duration-300"
+          className="h-2.5 bg-[#1565C0] rounded-md transition-all duration-300"
           style={{ width: `${value}%` }}
         />
       </div>

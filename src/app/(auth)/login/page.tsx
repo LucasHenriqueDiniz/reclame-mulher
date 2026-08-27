@@ -75,7 +75,7 @@ export default function LoginPage() {
         {/* ── Left: Hero ── */}
         <div className="flex flex-col justify-center px-0 py-10 text-white lg:py-0 lg:pr-4">
           {/* Brand */}
-          <p className="text-[#3BA5FF] font-semibold text-sm uppercase tracking-widest mb-6">
+          <p className="text-[#1976D2] font-semibold text-sm uppercase tracking-widest mb-6">
             ComunicaMulher
           </p>
 
@@ -83,7 +83,7 @@ export default function LoginPage() {
             Conectando vozes
             <br />
             que{" "}
-            <span className="text-[#3BA5FF]">transformam</span>
+            <span className="text-[#1976D2]">transformam</span>
             <br />
             comunidades
           </h1>
@@ -96,7 +96,7 @@ export default function LoginPage() {
           <ul className="flex flex-col gap-3">
             {TRUST_POINTS.map((point) => (
               <li key={point} className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-[#3BA5FF] flex-shrink-0 mt-0.5" />
+                <CheckCircle2 className="h-5 w-5 text-[#1976D2] flex-shrink-0 mt-0.5" />
                 <span className="text-white/75 text-sm">{point}</span>
               </li>
             ))}
@@ -113,7 +113,7 @@ export default function LoginPage() {
                 <h2 className="text-[26px] font-extrabold tracking-[-0.02em] text-[#2A1B55]">Bem-vinda de volta!</h2>
                 <p className="mt-1 text-sm text-neutral-500">
                   Não tem uma conta?{" "}
-                  <Link href="/register" className="text-[#3BA5FF] font-semibold hover:underline">
+                  <Link href="/register" className="text-[#1976D2] font-semibold hover:underline">
                     Cadastre-se grátis
                   </Link>
                 </p>
@@ -137,7 +137,7 @@ export default function LoginPage() {
                     type="email"
                     placeholder="email@exemplo.com"
                     {...register("email")}
-                    className="h-[46px] text-base border-gray-200 placeholder:text-gray-400 focus:border-[#3BA5FF]"
+                    className="h-[46px] text-base border-gray-200 placeholder:text-gray-500 focus:border-[#1976D2]"
                     autoComplete="email"
                   />
                   {errors.email && (
@@ -151,7 +151,7 @@ export default function LoginPage() {
                     <label className="text-sm font-medium text-gray-800">Senha</label>
                     <Link
                       href="/forgot-password"
-                      className="text-xs text-[#3BA5FF] hover:underline"
+                      className="text-xs text-[#1976D2] hover:underline"
                     >
                       Esqueceu a senha?
                     </Link>
@@ -159,7 +159,7 @@ export default function LoginPage() {
                   <PasswordField
                     placeholder="Sua senha"
                     {...register("password")}
-                    className="h-[46px] text-base border-gray-200 placeholder:text-gray-400 focus:border-[#3BA5FF]"
+                    className="h-[46px] text-base border-gray-200 placeholder:text-gray-500 focus:border-[#1976D2]"
                     autoComplete="current-password"
                   />
                   {errors.password && (
@@ -171,7 +171,7 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="mt-1 h-12 w-full rounded-full bg-[#3BA5FF] text-base font-semibold text-white shadow-md transition-all hover:bg-[#2d8ddf]"
+                  className="mt-1 h-12 w-full rounded-full bg-[#1976D2] text-base font-semibold text-white shadow-md transition-all hover:bg-[#2d8ddf]"
                 >
                   {loading ? (
                     <>
@@ -189,7 +189,7 @@ export default function LoginPage() {
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-100" />
                 </div>
-                <div className="relative flex justify-center text-xs text-gray-400 bg-white px-3 w-fit mx-auto">
+                <div className="relative flex justify-center text-xs text-gray-500 bg-white px-3 w-fit mx-auto">
                   ou
                 </div>
               </div>

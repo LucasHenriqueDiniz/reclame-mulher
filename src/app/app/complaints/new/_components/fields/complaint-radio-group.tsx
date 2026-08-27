@@ -42,7 +42,7 @@ export function ComplaintRadioGroup({
           <RadioGroupItem
             value={option.value}
             id={`${name}-${option.value}`}
-            className="w-5 h-5 border-2 border-[#607D8B] text-[#1E88E5] focus:ring-[#1E88E5] focus:ring-offset-0"
+            className="w-5 h-5 border-2 border-[#546E7A] text-[#1565C0] focus:ring-[#1565C0] focus:ring-offset-0"
           />
           <Label
             htmlFor={`${name}-${option.value}`}

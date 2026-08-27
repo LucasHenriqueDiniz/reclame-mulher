@@ -117,7 +117,7 @@ export function ShareModal({ url, title, trigger }: ShareModalProps) {
       <DialogContent className="sm:max-w-md gap-0 p-0 overflow-hidden">
         <DialogHeader className="px-6 pt-6 pb-4">
           <DialogTitle className="text-lg font-bold flex items-center gap-2">
-            <Share2 className="h-5 w-5 text-[#3BA5FF]" />
+            <Share2 className="h-5 w-5 text-[#1976D2]" />
             Compartilhar
           </DialogTitle>
         </DialogHeader>

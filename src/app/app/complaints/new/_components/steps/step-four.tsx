@@ -59,7 +59,7 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
         <h2 className="text-center font-['Poppins'] font-semibold text-[#2A3F54] text-2xl leading-tight">
           Quase pronto!
         </h2>
-        <p className="text-center font-['Poppins'] text-[#607D8B] text-sm leading-normal">
+        <p className="text-center font-['Poppins'] text-[#546E7A] text-sm leading-normal">
           Só mais algumas informações para organizar seu relato
         </p>
       </div>
@@ -71,6 +71,7 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
         required
       >
         <ComplaintSelect
+          id="impact-category"
           options={impactCategories}
           value={data.impactCategory}
           onValueChange={(value) =>
@@ -88,6 +89,7 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
           hint="Só escolha se souber"
         >
           <ComplaintSelect
+            id="company-project"
             options={projectOptions}
             value={data.companyProjectId}
             onValueChange={(value) =>
@@ -101,6 +103,7 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
       {/* Urgência */}
       <ComplaintField label="Quão urgente é?" htmlFor="urgency-level" required>
         <ComplaintSelect
+          id="urgency-level"
           options={urgencyLevels}
           value={data.urgencyLevel}
           onValueChange={(value) => onChange({ ...data, urgencyLevel: value })}
@@ -111,6 +114,7 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
       {/* Escopo */}
       <ComplaintField label="Quem mais está sendo afetado?" htmlFor="impact-scope" required>
         <ComplaintSelect
+          id="impact-scope"
           options={impactScopes}
           value={data.impactScope}
           onValueChange={(value) => onChange({ ...data, impactScope: value })}

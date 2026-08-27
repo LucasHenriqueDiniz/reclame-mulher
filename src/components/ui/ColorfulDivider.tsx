@@ -28,7 +28,7 @@ export function ColorfulDivider({
 export function BrandColorfulDivider({ className = "" }: { className?: string }) {
   return (
     <ColorfulDivider
-      colors={["#1E88E5", "#3BA5FF", "#2A1B55", "#4C2D8F", "#1976D2"]}
+      colors={["#1565C0", "#1976D2", "#2A1B55", "#4C2D8F", "#0D47A1"]}
       className={className}
     />
   );

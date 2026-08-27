@@ -24,13 +24,13 @@ export function StepOne({ data, onChange }: StepOneProps) {
     <div className="space-y-6 py-4">
       {/* Heading simples */}
       <div className="flex flex-col items-center justify-center gap-3 px-2">
-        <div className="w-16 h-16 rounded-2xl bg-[#1E88E5]/10 flex items-center justify-center">
-          <MessageSquare className="w-8 h-8 text-[#1E88E5]" />
+        <div className="w-16 h-16 rounded-2xl bg-[#1565C0]/10 flex items-center justify-center">
+          <MessageSquare className="w-8 h-8 text-[#1565C0]" />
         </div>
         <h2 className="text-center font-['Poppins'] font-semibold text-[#2A3F54] text-2xl leading-tight max-w-xl">
           Você já reclamou sobre isso em outro lugar?
         </h2>
-        <p className="text-center font-['Poppins'] text-[#607D8B] text-sm leading-relaxed max-w-lg">
+        <p className="text-center font-['Poppins'] text-[#546E7A] text-sm leading-relaxed max-w-lg">
           Isso ajuda a empresa a entender melhor seu caso
         </p>
       </div>
@@ -75,8 +75,8 @@ export function StepOne({ data, onChange }: StepOneProps) {
 
       {/* Dica tranquilizadora */}
       <div className="flex items-start gap-3 px-4 py-3 bg-blue-50 rounded-lg border border-blue-100">
-        <HelpCircle className="w-5 h-5 text-[#1E88E5] flex-shrink-0 mt-0.5" />
-        <p className="text-sm font-['Poppins'] text-[#607D8B] leading-relaxed">
+        <HelpCircle className="w-5 h-5 text-[#1565C0] flex-shrink-0 mt-0.5" />
+        <p className="text-sm font-['Poppins'] text-[#546E7A] leading-relaxed">
           Não se preocupe, você pode voltar e mudar essa informação depois.
         </p>
       </div>

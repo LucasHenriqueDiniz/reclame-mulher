@@ -59,7 +59,7 @@ function MetricCard({ label, value, icon, color, bgColor, active, onClick }: Met
       onClick={onClick}
       className={`w-full text-left rounded-xl p-5 transition-all border ${
         active
-          ? "border-[#1E88E5] shadow-md ring-1 ring-[#1E88E5]/20"
+          ? "border-[#1565C0] shadow-md ring-1 ring-[#1565C0]/20"
           : "border-transparent shadow-sm hover:shadow-md hover:scale-[1.02]"
       }`}
       style={{ backgroundColor: bgColor }}
@@ -123,7 +123,7 @@ export function CompanyComplaintsContent({
       label: "Total",
       value: stats.total,
       icon: <MessageSquare className="w-5 h-5" />,
-      color: "#1E88E5",
+      color: "#1565C0",
       bgColor: "#FFFFFF",
     },
     {
@@ -131,7 +131,7 @@ export function CompanyComplaintsContent({
       label: "Sem resposta",
       value: stats.open,
       icon: <Clock className="w-5 h-5" />,
-      color: "#F97316",
+      color: "#9A4B00",
       bgColor: "#FFF7ED",
     },
     {
@@ -197,7 +197,7 @@ export function CompanyComplaintsContent({
               <p className="font-['Poppins'] font-semibold text-[#2A3F54] text-sm">
                 {stats.open} {stats.open === 1 ? "relato aguardando resposta" : "relatos aguardando resposta"}
               </p>
-              <p className="font-['Poppins'] text-xs text-[#607D8B]">
+              <p className="font-['Poppins'] text-xs text-[#546E7A]">
                 Responda rapidamente para melhorar sua avaliação
               </p>
             </div>
@@ -215,12 +215,12 @@ export function CompanyComplaintsContent({
       {/* Search */}
       <div className="mb-6">
         <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#607D8B]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#546E7A]" />
           <Input
             placeholder="Buscar relato..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 h-12 rounded-xl border-[#E5E5ED] font-['Poppins'] focus:border-[#1E88E5] focus:ring-2 focus:ring-[#1E88E5]/20 bg-white"
+            className="pl-10 h-12 rounded-xl border-[#E5E5ED] font-['Poppins'] focus:border-[#1565C0] focus:ring-2 focus:ring-[#1565C0]/20 bg-white"
           />
         </div>
       </div>
@@ -229,11 +229,11 @@ export function CompanyComplaintsContent({
       {filteredComplaints.length === 0 ? (
         <Card className="border-2 border-dashed border-[#E5E5ED] shadow-none">
           <CardContent className="px-6 py-16 text-center">
-            <MessageSquare className="w-16 h-16 text-[#607D8B] mx-auto mb-4 opacity-50" />
+            <MessageSquare className="w-16 h-16 text-[#546E7A] mx-auto mb-4 opacity-50" />
             <h3 className="font-['Poppins'] text-xl font-semibold text-[#2A3F54] mb-2">
               Nenhum relato encontrado
             </h3>
-            <p className="text-sm font-['Poppins'] text-[#607D8B]">
+            <p className="text-sm font-['Poppins'] text-[#546E7A]">
               {searchQuery || statusFilter !== "ALL"
                 ? "Tente ajustar os filtros de busca."
                 : "Ainda não há relatos registrados."}
@@ -252,24 +252,24 @@ export function CompanyComplaintsContent({
                 href={`/app/company/complaints/${complaint.id}`}
                 className="block group"
               >
-                <Card className="border border-gray-100 shadow-sm transition-all hover:shadow-lg hover:border-[#1E88E5]/30">
+                <Card className="border border-gray-100 shadow-sm transition-all hover:shadow-lg hover:border-[#1565C0]/30">
                   <CardContent className="p-5">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-2">
-                          <h3 className="font-['Poppins'] font-semibold text-base text-[#2A3F54] group-hover:text-[#1E88E5] transition-colors truncate">
+                          <h3 className="font-['Poppins'] font-semibold text-base text-[#2A3F54] group-hover:text-[#1565C0] transition-colors truncate">
                             {complaint.title}
                           </h3>
                           {complaint.isPublic && (
-                            <Badge className="bg-[#1E88E5]/10 text-[#1E88E5] hover:bg-[#1E88E5]/10 text-[10px] px-2 py-0 flex-shrink-0">
+                            <Badge className="bg-[#1565C0]/10 text-[#1565C0] hover:bg-[#1565C0]/10 text-[10px] px-2 py-0 flex-shrink-0">
                               Pública
                             </Badge>
                           )}
                         </div>
-                        <p className="font-['Poppins'] text-sm text-[#607D8B] line-clamp-1 mb-3">
+                        <p className="font-['Poppins'] text-sm text-[#546E7A] line-clamp-1 mb-3">
                           {complaint.description}
                         </p>
-                        <div className="flex items-center gap-3 text-xs font-['Poppins'] text-[#607D8B] flex-wrap">
+                        <div className="flex items-center gap-3 text-xs font-['Poppins'] text-[#546E7A] flex-wrap">
                           {complaint.problemLocation && (
                             <span className="flex items-center gap-1">
                               📍 {complaint.problemLocation}
@@ -281,7 +281,7 @@ export function CompanyComplaintsContent({
                           {!complaint.isAnonymous && complaint.author?.name ? (
                             <span>Por: {complaint.author.name}</span>
                           ) : (
-                            <span className="text-gray-400">Anônima</span>
+                            <span className="text-gray-500">Anônima</span>
                           )}
                           <span>{date.toLocaleDateString("pt-BR")}</span>
                         </div>
@@ -298,7 +298,7 @@ export function CompanyComplaintsContent({
                         >
                           {statusConfig.label}
                         </Badge>
-                        <span className="text-xs text-[#AD92FF] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-xs text-[#6B4EE6] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                           Ver detalhes →
                         </span>
                       </div>

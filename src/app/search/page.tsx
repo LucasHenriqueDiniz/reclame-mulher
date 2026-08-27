@@ -103,7 +103,7 @@ function SearchContent() {
       <MainHeader />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#1E88E5] to-[#1976D2] pt-20 pb-16">
+      <section className="bg-gradient-to-br from-[#1565C0] to-[#0D47A1] pt-20 pb-16">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 mb-4">
             <Search className="w-6 h-6 text-white/90" />
@@ -126,19 +126,19 @@ function SearchContent() {
               <div className="flex flex-col gap-3">
                 <div className="flex gap-3">
                   <div className="flex-1 relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#607D8B]" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#546E7A]" />
                     <Input
                       placeholder="Digite sua busca..."
                       value={query}
                       onChange={(e) => setQuery(e.target.value)}
                       onKeyDown={handleKeyPress}
-                      className="h-12 pl-10 rounded-lg border-[#E5E5ED] font-['Poppins'] text-base focus:border-[#1E88E5] focus:ring-2 focus:ring-[#1E88E5]/20"
+                      className="h-12 pl-10 rounded-lg border-[#E5E5ED] font-['Poppins'] text-base focus:border-[#1565C0] focus:ring-2 focus:ring-[#1565C0]/20"
                     />
                   </div>
                   <Button 
                     onClick={handleSearch}
                     disabled={!query.trim() || loading}
-                    className="h-12 px-8 bg-[#1E88E5] hover:bg-[#1976D2] font-['Poppins'] font-semibold shadow-md"
+                    className="h-12 px-8 bg-[#1565C0] hover:bg-[#0D47A1] font-['Poppins'] font-semibold shadow-md"
                   >
                     {loading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -163,8 +163,8 @@ function SearchContent() {
                         onClick={() => setScope(tab.value as typeof scope)}
                         className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-['Poppins'] text-sm font-medium transition-all ${
                           isActive
-                            ? "bg-[#1E88E5] text-white shadow-md"
-                            : "bg-white text-[#607D8B] hover:bg-gray-50"
+                            ? "bg-[#1565C0] text-white shadow-md"
+                            : "bg-white text-[#546E7A] hover:bg-gray-50"
                         }`}
                       >
                         <Icon className="w-4 h-4" />
@@ -183,8 +183,8 @@ function SearchContent() {
       <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
         {loading && (
           <div className="flex flex-col items-center justify-center py-16">
-            <Loader2 className="w-12 h-12 text-[#1E88E5] animate-spin mb-4" />
-            <p className="font-['Poppins'] text-[#607D8B]">Buscando...</p>
+            <Loader2 className="w-12 h-12 text-[#1565C0] animate-spin mb-4" />
+            <p className="font-['Poppins'] text-[#546E7A]">Buscando...</p>
           </div>
         )}
 
@@ -195,7 +195,7 @@ function SearchContent() {
               <h2 className="font-['Poppins'] text-2xl font-semibold text-[#2A3F54]">
                 Resultados para &quot;{query}&quot;
               </h2>
-              <p className="mt-2 text-sm font-['Poppins'] text-[#607D8B]">
+              <p className="mt-2 text-sm font-['Poppins'] text-[#546E7A]">
                 {results.total} {results.total === 1 ? "resultado encontrado" : "resultados encontrados"}
                 {scope !== "all" && ` em ${scope === "companies" ? "empresas" : "reclamações"}`}
               </p>
@@ -204,11 +204,11 @@ function SearchContent() {
             {results.total === 0 ? (
               <Card className="border-2 border-dashed border-[#E5E5ED] shadow-none">
                 <CardContent className="px-6 py-16 text-center">
-                  <Search className="w-16 h-16 text-[#607D8B] mx-auto mb-4 opacity-50" />
+                  <Search className="w-16 h-16 text-[#546E7A] mx-auto mb-4 opacity-50" />
                   <h3 className="font-['Poppins'] text-xl font-semibold text-[#2A3F54] mb-2">
                     Nenhum resultado encontrado
                   </h3>
-                  <p className="text-sm font-['Poppins'] text-[#607D8B]">
+                  <p className="text-sm font-['Poppins'] text-[#546E7A]">
                     Tente usar outras palavras-chave ou verifique a ortografia.
                   </p>
                 </CardContent>
@@ -219,7 +219,7 @@ function SearchContent() {
                 {results.companies.length > 0 && (
                   <div>
                     <div className="flex items-center gap-2 mb-4">
-                      <Building2 className="w-5 h-5 text-[#1E88E5]" />
+                      <Building2 className="w-5 h-5 text-[#1565C0]" />
                       <h3 className="font-['Poppins'] text-lg font-semibold text-[#2A3F54]">
                         Empresas ({results.companies.length})
                       </h3>
@@ -236,22 +236,22 @@ function SearchContent() {
                             <CardContent className="p-0">
                               {/* Header */}
                               <div className="flex items-center gap-3 px-4 py-4 border-b border-[#E5E5ED]">
-                                <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-[#1E88E5] to-[#1976D2] flex items-center justify-center flex-shrink-0">
+                                <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-[#1565C0] to-[#0D47A1] flex items-center justify-center flex-shrink-0">
                                   <Building2 className="w-7 h-7 text-white" />
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2">
-                                    <h4 className="font-['Poppins'] font-semibold text-lg text-[#2A3F54] truncate group-hover:text-[#1E88E5] transition-colors">
+                                    <h4 className="font-['Poppins'] font-semibold text-lg text-[#2A3F54] truncate group-hover:text-[#1565C0] transition-colors">
                                       {company.name}
                                     </h4>
                                     {company.verifiedAt && (
-                                      <Badge className="bg-[#1E88E5] text-white hover:bg-[#1E88E5] px-2 py-0.5">
+                                      <Badge className="bg-[#1565C0] text-white hover:bg-[#1565C0] px-2 py-0.5">
                                         <span className="text-[10px] font-bold uppercase">Verificada</span>
                                       </Badge>
                                     )}
                                   </div>
                                   {company.corporateName && (
-                                    <p className="mt-0.5 text-xs font-['Poppins'] text-[#607D8B] truncate">
+                                    <p className="mt-0.5 text-xs font-['Poppins'] text-[#546E7A] truncate">
                                       {company.corporateName}
                                     </p>
                                   )}
@@ -262,24 +262,24 @@ function SearchContent() {
                               <div className="grid grid-cols-2 gap-px bg-[#E5E5ED]">
                                 {/* Projetos */}
                                 <div className="bg-white px-3 py-2.5 flex items-center gap-2">
-                                  <BarChart2 className="w-4 h-4 text-[#607D8B] flex-shrink-0" />
-                                  <span className="text-xs font-['Poppins'] text-[#607D8B] truncate">
+                                  <BarChart2 className="w-4 h-4 text-[#546E7A] flex-shrink-0" />
+                                  <span className="text-xs font-['Poppins'] text-[#546E7A] truncate">
                                     {company.stats.activeProjects} projeto{company.stats.activeProjects !== 1 ? 's' : ''} ativo{company.stats.activeProjects !== 1 ? 's' : ''}
                                   </span>
                                 </div>
 
                                 {/* Localização */}
                                 <div className="bg-white px-3 py-2.5 flex items-center gap-2">
-                                  <MapPin className="w-4 h-4 text-[#607D8B] flex-shrink-0" />
-                                  <span className="text-xs font-['Poppins'] text-[#607D8B] truncate">
+                                  <MapPin className="w-4 h-4 text-[#546E7A] flex-shrink-0" />
+                                  <span className="text-xs font-['Poppins'] text-[#546E7A] truncate">
                                     {company.region || 'Não informado'}
                                   </span>
                                 </div>
 
                                 {/* Taxa de Resolução */}
                                 <div className="bg-white px-3 py-2.5 flex items-center gap-2">
-                                  <CheckCircle2 className="w-4 h-4 text-[#607D8B] flex-shrink-0" />
-                                  <span className="text-xs font-['Poppins'] text-[#607D8B]">
+                                  <CheckCircle2 className="w-4 h-4 text-[#546E7A] flex-shrink-0" />
+                                  <span className="text-xs font-['Poppins'] text-[#546E7A]">
                                     {company.stats.resolutionRate}% de resolução
                                   </span>
                                   {company.stats.resolutionRate < 50 && (
@@ -289,8 +289,8 @@ function SearchContent() {
 
                                 {/* Setor */}
                                 <div className="bg-white px-3 py-2.5 flex items-center gap-2">
-                                  <TrendingUp className="w-4 h-4 text-[#607D8B] flex-shrink-0" />
-                                  <span className="text-xs font-['Poppins'] text-[#607D8B] truncate">
+                                  <TrendingUp className="w-4 h-4 text-[#546E7A] flex-shrink-0" />
+                                  <span className="text-xs font-['Poppins'] text-[#546E7A] truncate">
                                     {company.sector || 'Não informado'}
                                   </span>
                                 </div>
@@ -299,7 +299,7 @@ function SearchContent() {
                               {/* Progress Bar */}
                               <div className="px-4 py-3 bg-gray-50">
                                 <div className="flex items-center justify-between mb-1.5">
-                                  <span className="text-xs font-['Poppins'] text-[#607D8B]">
+                                  <span className="text-xs font-['Poppins'] text-[#546E7A]">
                                     Taxa de resolução
                                   </span>
                                   <span className="text-xs font-['Poppins'] font-semibold text-[#2A3F54]">
@@ -311,7 +311,7 @@ function SearchContent() {
                                     className="h-full rounded-full transition-all"
                                     style={{
                                       width: `${company.stats.resolutionRate}%`,
-                                      backgroundColor: company.stats.resolutionRate >= 70 ? '#1E88E5' : company.stats.resolutionRate >= 40 ? '#F97316' : '#EF4444',
+                                      backgroundColor: company.stats.resolutionRate >= 70 ? '#1565C0' : company.stats.resolutionRate >= 40 ? '#9A4B00' : '#DC2626',
                                     }}
                                   />
                                 </div>
@@ -320,14 +320,14 @@ function SearchContent() {
                               {/* Footer Stats */}
                               <div className="flex items-center justify-center gap-4 px-4 py-3 border-t border-[#E5E5ED]">
                                 <div className="flex items-center gap-1.5">
-                                  <MessageSquare className="w-4 h-4 text-[#607D8B]" />
-                                  <span className="text-xs font-['Poppins'] text-[#607D8B]">
+                                  <MessageSquare className="w-4 h-4 text-[#546E7A]" />
+                                  <span className="text-xs font-['Poppins'] text-[#546E7A]">
                                     {company.stats.totalComplaints} reclamações
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-1.5">
-                                  <CheckCircle2 className="w-4 h-4 text-[#607D8B]" />
-                                  <span className="text-xs font-['Poppins'] text-[#607D8B]">
+                                  <CheckCircle2 className="w-4 h-4 text-[#546E7A]" />
+                                  <span className="text-xs font-['Poppins'] text-[#546E7A]">
                                     {company.stats.resolvedComplaints} resolvidas
                                   </span>
                                 </div>
@@ -336,10 +336,10 @@ function SearchContent() {
                               {/* Action Button */}
                               <div className="border-t border-[#E5E5ED]">
                                 <button className="w-full px-4 py-3 flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors">
-                                  <span className="font-['Poppins'] font-semibold text-sm text-[#1E88E5]">
+                                  <span className="font-['Poppins'] font-semibold text-sm text-[#1565C0]">
                                     Ver detalhes
                                   </span>
-                                  <ChevronRight className="w-4 h-4 text-[#1E88E5]" />
+                                  <ChevronRight className="w-4 h-4 text-[#1565C0]" />
                                 </button>
                               </div>
                             </CardContent>
@@ -354,7 +354,7 @@ function SearchContent() {
                 {results.complaints.length > 0 && (
                   <div>
                     <div className="flex items-center gap-2 mb-4">
-                      <MessageSquare className="w-5 h-5 text-[#1E88E5]" />
+                      <MessageSquare className="w-5 h-5 text-[#1565C0]" />
                       <h3 className="font-['Poppins'] text-lg font-semibold text-[#2A3F54]">
                         Reclamações ({results.complaints.length})
                       </h3>
@@ -374,7 +374,7 @@ function SearchContent() {
                             <Card className="border-0 shadow-md transition-all hover:shadow-xl hover:-translate-y-0.5">
                               <CardContent className="p-5">
                                 <div className="flex items-start justify-between gap-3 mb-2">
-                                  <h4 className="font-['Poppins'] font-semibold text-base text-[#2A3F54] flex-1 group-hover:text-[#1E88E5] transition-colors">
+                                  <h4 className="font-['Poppins'] font-semibold text-base text-[#2A3F54] flex-1 group-hover:text-[#1565C0] transition-colors">
                                     {complaint.title}
                                   </h4>
                                   <Badge 
@@ -389,11 +389,11 @@ function SearchContent() {
                                   </Badge>
                                 </div>
 
-                                <p className="text-sm font-['Poppins'] text-[#607D8B] line-clamp-2 mb-3">
+                                <p className="text-sm font-['Poppins'] text-[#546E7A] line-clamp-2 mb-3">
                                   {complaint.description}
                                 </p>
 
-                                <div className="flex items-center gap-3 text-xs font-['Poppins'] text-[#607D8B]">
+                                <div className="flex items-center gap-3 text-xs font-['Poppins'] text-[#546E7A]">
                                   {complaint.companyName && (
                                     <span>{complaint.companyName}</span>
                                   )}
@@ -416,11 +416,11 @@ function SearchContent() {
         {!searched && !loading && (
           <Card className="border-2 border-dashed border-[#E5E5ED] shadow-none">
             <CardContent className="px-6 py-16 text-center">
-              <Search className="w-16 h-16 text-[#607D8B] mx-auto mb-4 opacity-50" />
+              <Search className="w-16 h-16 text-[#546E7A] mx-auto mb-4 opacity-50" />
               <h3 className="font-['Poppins'] text-xl font-semibold text-[#2A3F54] mb-2">
                 Digite algo para buscar
               </h3>
-              <p className="text-sm font-['Poppins'] text-[#607D8B]">
+              <p className="text-sm font-['Poppins'] text-[#546E7A]">
                 Busque por empresas, reclamações ou palavras-chave
               </p>
             </CardContent>
@@ -437,7 +437,7 @@ export default function SearchPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-[#F5F7FA] flex items-center justify-center">
-        <Loader2 className="w-12 h-12 text-[#1E88E5] animate-spin" />
+        <Loader2 className="w-12 h-12 text-[#1565C0] animate-spin" />
       </div>
     }>
       <SearchContent />

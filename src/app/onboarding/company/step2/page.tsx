@@ -98,7 +98,7 @@ export default function CompanyStep2() {
         <div className="flex justify-center">
           <GlassCard className="w-full max-w-3xl p-6 sm:p-10">
             <div className="flex justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-[#3BA5FF]" />
+              <Loader2 className="h-8 w-8 animate-spin text-[#1976D2]" />
             </div>
           </GlassCard>
         </div>
@@ -224,7 +224,7 @@ export default function CompanyStep2() {
               <Button variant="outline" type="button" onClick={() => history.back()}>
                 ← Voltar
               </Button>
-              <Button type="submit" disabled={loading} className="bg-[#3BA5FF] hover:bg-[#2d8ddf] text-white">
+              <Button type="submit" disabled={loading} className="bg-[#1976D2] hover:bg-[#2d8ddf] text-white">
                 {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Finalizando...</> : "Finalizar cadastro →"}
               </Button>
             </div>

@@ -18,7 +18,7 @@ function CheckEmailContent() {
         <GlassCard className="w-full max-w-md p-6 sm:p-10">
           <div className="text-center">
             <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
-              <Mail className="w-8 h-8 text-[#3BA5FF]" />
+              <Mail className="w-8 h-8 text-[#1976D2]" />
             </div>
 
             <h1 className="text-3xl font-extrabold text-[#2A1B55] mb-4">
@@ -26,7 +26,7 @@ function CheckEmailContent() {
             </h1>
 
             {email && (
-              <p className="font-medium text-[#3BA5FF] mb-6 break-all">{email}</p>
+              <p className="font-medium text-[#1976D2] mb-6 break-all">{email}</p>
             )}
 
             <Button onClick={() => router.push("/onboarding/person/step2")} className="w-full">

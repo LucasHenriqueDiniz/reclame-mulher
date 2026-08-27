@@ -183,7 +183,13 @@ export function ProcessCarousel() {
           >
             {/* Progress bar */}
             <div className="relative w-full h-2 bg-secondary">
-              <Progress value={progressValue} className="h-full [&>div]:bg-[var(--brand-blue-light)]" />
+              {/* A barra é decorativa — indica em que passo do carrossel a pessoa
+                  está, e o passo já é anunciado pelo próprio conteúdo do card. */}
+              <Progress
+                value={progressValue}
+                aria-label="Progresso do carrossel"
+                className="h-full [&>div]:bg-[var(--brand-blue-light)]"
+              />
             </div>
 
               <div className="absolute -right-16 -bottom-16 md:-right-24 md:-bottom-24 opacity-5 pointer-events-none z-0 w-64 h-64 md:w-80 md:h-80">
@@ -217,7 +223,7 @@ export function ProcessCarousel() {
 
                     <div className="flex flex-col gap-4 flex-1 min-w-0">
                       <div className="flex items-center gap-3">
-                        <span className="opacity-70 font-medium text-[var(--brand-blue-light)] text-sm uppercase tracking-wider">
+                        <span className="font-medium text-[var(--brand-blue-light)] text-sm uppercase tracking-wider">
                           {steps[currentStep].label}
                         </span>
                       </div>

@@ -34,11 +34,11 @@ export function PartnersSection() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="group relative aspect-[4/3] rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/60 transition-all duration-300 hover:border-[#1E88E5]/40 hover:bg-blue-50/40"
+            className="group relative aspect-[4/3] rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/60 transition-all duration-300 hover:border-[#1565C0]/40 hover:bg-blue-50/40"
           >
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center">
-              <Building2 className="h-6 w-6 text-gray-300 transition-colors group-hover:text-[#1E88E5]/60" />
-              <span className="text-sm font-medium text-gray-400 transition-colors group-hover:text-[#1E88E5]/70">
+              <Building2 className="h-6 w-6 text-gray-300 transition-colors group-hover:text-[#1565C0]/60" />
+              <span className="text-sm font-medium text-gray-500 transition-colors group-hover:text-[#1565C0]/70">
                 Sua empresa aqui
               </span>
             </div>
@@ -48,7 +48,7 @@ export function PartnersSection() {
 
       <Link
         href="/onboarding/company/step1"
-        className="text-sm font-semibold text-[#1E88E5] hover:underline"
+        className="text-sm font-semibold text-[#1565C0] hover:underline"
       >
         Quero cadastrar minha empresa →
       </Link>

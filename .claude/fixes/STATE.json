@@ -12,7 +12,7 @@
     "eslint_errors_note": "0 erros apos ignorar .claude/** no eslint.config.mjs (task 01)",
     "eslint_warnings": 0,
     "eslint_top_rules": {},
-    "automated_tests": 232,
+    "automated_tests": 300,
     "pages": 42,
     "api_routes": 32,
     "components": 95,
@@ -300,12 +300,24 @@
       "slug": "corrigir-acessibilidade",
       "phase": 4,
       "order": 13,
-      "status": "pending",
+      "status": "done",
       "risk": "medio",
       "depends_on": [
         "12"
       ],
-      "notes": "Fila medida na task 12, por retorno sobre esforco: 1) contraste da paleta (461 ocorrencias, medir os pares de cor antes de tocar em componente); 2) button-name (44 botoes de icone, aria-label); 3) achado 53; 4) achado 52; 5) o resto soma 16 ocorrencias. Regravar baseline com A11Y_BASELINE=1 npm run test:a11y."
+      "notes": "523 -> 0 ocorrencias WCAG A/AA; 78 de 78 combinacoes limpas. Contraste veio de 33 pares de cor: 440 substituicoes de hex em 63 arquivos resolveram a maior parte. A varredura virou trava: piso de zero critical/serious. e2e/keyboard.spec.ts cobre os 3 fluxos so com teclado, sem nenhum click(). Achados 52 e 53 fechados. Corrigidos dois erros meus: o relatorio da 12 dizia que o axe nao pegou o 53 (pegou, como button-name) e que npx playwright test era so a suite rapida (roda tudo; test:e2e agora filtra projetos).",
+      "finished_at": "2026-08-27T01:45:00",
+      "debug_iterations": 2,
+      "files_changed": [
+        "63 arquivos de src/ (paleta)",
+        "src/components/PasswordField.tsx",
+        "src/app/app/complaints/new/_components/new-complaint-content.tsx",
+        "src/app/app/complaints/new/_components/fields/complaint-select.tsx",
+        "e2e/a11y.spec.ts",
+        "e2e/keyboard.spec.ts",
+        "package.json",
+        "playwright.config.ts"
+      ]
     },
     {
       "id": "14",
@@ -442,12 +454,12 @@
       "slug": "etapas-fora-de-tela-focaveis",
       "phase": 4,
       "order": 52,
-      "status": "pending",
+      "status": "done",
       "risk": "medio",
       "depends_on": [],
-      "notes": "Achado na task 09. As 4 etapas do wizard coexistem no DOM: 11 controles fora da tela continuam focaveis, sem aria-hidden nem inert. Evidencia medida no relatorio 09.",
+      "notes": "Achado na task 09. As 4 etapas do wizard coexistem no DOM: 11 controles fora da tela continuam focaveis, sem aria-hidden nem inert. Evidencia medida no relatorio 09. | FECHADO pela task 13.",
       "started_at": null,
-      "finished_at": null,
+      "finished_at": "2026-08-27T01:45:00",
       "debug_iterations": 0,
       "files_changed": []
     },
@@ -456,12 +468,12 @@
       "slug": "selects-sem-rotulo-associado",
       "phase": 4,
       "order": 53,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [],
-      "notes": "Achado na task 09. ComplaintField gera <label for> mas o Radix SelectTrigger nao recebe o id: 3 rotulos orfaos e 3 combobox sem nome acessivel na etapa 4.",
+      "notes": "Achado na task 09. ComplaintField gera <label for> mas o Radix SelectTrigger nao recebe o id: 3 rotulos orfaos e 3 combobox sem nome acessivel na etapa 4. | FECHADO pela task 13.",
       "started_at": null,
-      "finished_at": null,
+      "finished_at": "2026-08-27T01:45:00",
       "debug_iterations": 0,
       "files_changed": []
     },
@@ -642,6 +654,17 @@
       "status": "done",
       "report": "reports/12-varredura-acessibilidade.md",
       "medicao": "523 ocorrencias WCAG em 39 paginas"
+    },
+    {
+      "task": "13",
+      "at": "2026-08-27",
+      "status": "done",
+      "report": "reports/13-corrigir-acessibilidade.md",
+      "medicao": "523 -> 0 ocorrencias WCAG",
+      "fechou": [
+        "52",
+        "53"
+      ]
     }
   ]
 }

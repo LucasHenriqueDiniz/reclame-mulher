@@ -14,9 +14,17 @@ export const PasswordField = forwardRef<
       <button
         type="button"
         onClick={() => setShow((s) => !s)}
-        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-neutral-500"
+        // O rótulo diz o que a ação faz, não o nome do ícone: quem usa leitor de
+        // tela precisa saber o efeito do clique, e ele muda conforme o estado.
+        aria-label={show ? "Ocultar senha" : "Mostrar senha"}
+        aria-pressed={show}
+        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-neutral-600"
       >
-        {show ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+        {show ? (
+          <EyeOff className="h-5 w-5" aria-hidden="true" />
+        ) : (
+          <Eye className="h-5 w-5" aria-hidden="true" />
+        )}
       </button>
     </div>
   );

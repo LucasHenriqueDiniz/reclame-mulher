@@ -95,7 +95,7 @@ export default function CompanyStep1() {
         <div className="flex justify-center">
           <GlassCard className="w-full max-w-3xl p-6 sm:p-10">
             <div className="flex justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-[#3BA5FF]" />
+              <Loader2 className="h-8 w-8 animate-spin text-[#1976D2]" />
             </div>
           </GlassCard>
         </div>
@@ -188,9 +188,9 @@ export default function CompanyStep1() {
                 />
                 <span className="text-sm text-neutral-700">
                   Aceito os{" "}
-                  <a className="underline text-[#3BA5FF]" href="/terms" target="_blank">Termos de uso</a>{" "}
+                  <a className="underline text-[#1976D2]" href="/terms" target="_blank">Termos de uso</a>{" "}
                   e{" "}
-                  <a className="underline text-[#3BA5FF]" href="/privacy" target="_blank">política de privacidade</a>.
+                  <a className="underline text-[#1976D2]" href="/privacy" target="_blank">política de privacidade</a>.
                 </span>
               </label>
               {errors.terms && <p className="text-sm text-red-600 mt-1">{errors.terms.message}</p>}
@@ -200,7 +200,7 @@ export default function CompanyStep1() {
               <a href="/login" className="text-sm font-medium text-blue-stepper hover:text-blue-stepper/80 hover:underline transition">
                 Já tem uma conta? Entrar
               </a>
-              <Button type="submit" disabled={loading} className="bg-[#3BA5FF] hover:bg-[#2d8ddf] text-white">
+              <Button type="submit" disabled={loading} className="bg-[#1976D2] hover:bg-[#2d8ddf] text-white">
                 {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Criando conta...</> : "Continuar →"}
               </Button>
             </div>

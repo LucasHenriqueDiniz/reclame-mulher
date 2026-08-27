@@ -90,7 +90,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
           <div className="text-center">
             <h1 className="text-4xl font-bold text-gray-800 mb-4">Post não encontrado</h1>
             <p className="text-gray-600 mb-6">{error || "O post que você procura não existe."}</p>
-            <Link href="/blog" className="text-[#1E88E5] hover:text-[#1976D2]">
+            <Link href="/blog" className="text-[#1565C0] hover:text-[#0D47A1]">
               Voltar ao Blog
             </Link>
           </div>
@@ -110,7 +110,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
           <div className="flex items-center justify-between mb-8">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 text-[#1E88E5] hover:text-[#1976D2] font-medium transition-colors group"
+              className="inline-flex items-center gap-2 text-[#1565C0] hover:text-[#0D47A1] font-medium transition-colors group"
             >
               <ArrowLeft className="h-5 w-5 transform group-hover:-translate-x-1 transition-transform" />
               <span>Voltar</span>
@@ -127,7 +127,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                 </Button>
                 <Link
                   href={`/blog/${post.slug}/edit`}
-                  className="inline-flex items-center gap-2 bg-[#1E88E5] hover:bg-[#1976D2] text-white font-medium py-2 px-4 rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 bg-[#1565C0] hover:bg-[#0D47A1] text-white font-medium py-2 px-4 rounded-lg transition-colors"
                 >
                   <Edit className="h-4 w-4" />
                   <span>Editar</span>
@@ -142,7 +142,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
               {post.tags?.map((tag) => (
                 <span
                   key={tag.id}
-                  className="inline-flex items-center bg-gradient-to-r from-[#1E88E5] to-[#1976D2] text-white text-sm font-medium py-2 px-4 rounded-full"
+                  className="inline-flex items-center bg-gradient-to-r from-[#1565C0] to-[#0D47A1] text-white text-sm font-medium py-2 px-4 rounded-full"
                 >
                   {tag.name}
                 </span>
@@ -182,7 +182,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                 h3: ({ children }) => <h3 className="text-2xl font-bold text-[#181A2A] mt-6 mb-3">{children}</h3>,
                 p: ({ children }) => <p className="text-xl text-[#3B3C4A] mb-6 leading-relaxed">{children}</p>,
                 blockquote: ({ children }) => (
-                  <blockquote className="bg-[#F6F6F7] border-l-4 border-[#1E88E5] p-6 my-8 rounded-r-lg">
+                  <blockquote className="bg-[#F6F6F7] border-l-4 border-[#1565C0] p-6 my-8 rounded-r-lg">
                     <div className="text-[#181A2A] text-xl italic">{children}</div>
                   </blockquote>
                 ),
@@ -201,7 +201,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                 td: ({ children }) => <td className="px-4 py-3 align-top text-[#3B3C4A]">{children}</td>,
                 strong: ({ children }) => <strong className="font-bold text-[#181A2A]">{children}</strong>,
                 a: ({ children, href }) => (
-                  <a href={href} className="text-[#1E88E5] hover:text-[#1976D2] underline">
+                  <a href={href} className="text-[#1565C0] hover:text-[#0D47A1] underline">
                     {children}
                   </a>
                 ),
@@ -223,7 +223,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
           <div className="mt-12 pt-8 border-t-2 border-gray-200">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 text-[#1E88E5] hover:text-[#1976D2] font-medium transition-colors group"
+              className="inline-flex items-center gap-2 text-[#1565C0] hover:text-[#0D47A1] font-medium transition-colors group"
             >
               <ArrowLeft className="h-5 w-5 transform group-hover:-translate-x-1 transition-transform" />
               <span>Voltar ao Blog</span>

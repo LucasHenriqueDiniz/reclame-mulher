@@ -34,7 +34,7 @@ export function ComplaintSwitchRow({
           {label}
         </Label>
         {description && (
-          <p className="font-['Poppins'] text-[#607D8B] text-xs leading-normal">
+          <p className="font-['Poppins'] text-[#546E7A] text-xs leading-normal">
             {description}
           </p>
         )}
@@ -44,7 +44,7 @@ export function ComplaintSwitchRow({
         checked={checked}
         onCheckedChange={onCheckedChange}
         disabled={disabled}
-        className="data-[state=checked]:bg-[#1E88E5]"
+        className="data-[state=checked]:bg-[#1565C0]"
       />
     </div>
   );

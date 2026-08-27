@@ -77,7 +77,7 @@ documentos discordam entre 87,5% e "validada".
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
 | ✅ | `12` | [Varredura automatizada (axe) nas 42 páginas](tasks/12-varredura-acessibilidade.md) | baixo | `07` |
-| ⬜ | `13` | [Corrigir as violações encontradas](tasks/13-corrigir-acessibilidade.md) | médio | `12` |
+| ✅ | `13` | [Corrigir as violações encontradas](tasks/13-corrigir-acessibilidade.md) | médio | `12` |
 
 ---
 
@@ -142,8 +142,8 @@ criar deve registrar aqui e em `STATE.json`.
 |---|---|---|---|---|---|
 | ✅ | `50` | [Middleware não protege `/app/*`](tasks/50-middleware-nao-protege.md) | **alto** | `00` | ~~200 sem sessão~~ **resolvido:** o arquivo estava na raiz, mas com `src/` o Next só lê `src/middleware.ts` — era código morto |
 | ✅ | `51` | [Rate limiter em memória com bucket compartilhado](tasks/51-rate-limit-em-memoria.md) | médio | `00` | `getClientIp` colapsa em `"unknown"`; conta login bem-sucedido |
-| ⬜ | `52` | [Etapas do wizard fora de tela continuam focáveis](tasks/52-etapas-fora-de-tela-focaveis.md) | médio | `09` | achado na `09`: 11 controles das etapas 2–4 focáveis estando na etapa 1, sem `aria-hidden` nem `inert` |
-| ⬜ | `53` | [Selects do wizard sem rótulo associado](tasks/53-selects-sem-rotulo-associado.md) | baixo | `09` | achado na `09`: `<label for>` aponta para id que o Radix nunca aplica — 3 combobox sem nome acessível |
+| ✅ | `52` | [Etapas do wizard fora de tela continuam focáveis](tasks/52-etapas-fora-de-tela-focaveis.md) | médio | `09` | achado na `09`: 11 controles das etapas 2–4 focáveis estando na etapa 1, sem `aria-hidden` nem `inert` |
+| ✅ | `53` | [Selects do wizard sem rótulo associado](tasks/53-selects-sem-rotulo-associado.md) | baixo | `09` | achado na `09`: `<label for>` aponta para id que o Radix nunca aplica — 3 combobox sem nome acessível |
 | ⬜ | `54` | [Rótulos de status divergentes](tasks/54-rotulos-de-status-divergentes.md) | baixo | `10` | achado na `10`: quatro mapas de rótulo que discordam — "Em réplica" na lista vs "Respondida" no detalhe, "Concluído" para a usuária vs "Resolvida" para a empresa |
 | ⬜ | `55` | [Resolvida não reabre](tasks/55-resolvido-nao-reabre.md) | **alto** | `10` | achado na `10`: depois de `RESOLVED` a resposta da autora é gravada mas o status não muda — ela não consegue contestar o encerramento |
 | ⬜ | `56` | [Conta de empresa do seed é MEMBER](tasks/56-conta-empresa-do-seed-e-member.md) | médio | `11` | achado na `11`: a conta da demonstração recebe 403 ao editar perfil, criar projeto ou convidar usuária — conserto de seed |

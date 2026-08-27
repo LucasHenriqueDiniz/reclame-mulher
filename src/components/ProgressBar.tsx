@@ -7,7 +7,7 @@ export function ProgressBar({ step, total }: { step: number; total: number }) {
       </div>
       <div className="mx-auto mt-2 h-2 w-full max-w-xl rounded-full bg-neutral-200">
         <div
-          className="h-2 rounded-full bg-[#3BA5FF] transition-all duration-300"
+          className="h-2 rounded-full bg-[#1976D2] transition-all duration-300"
           style={{ width: `${pct}%` }}
         />
       </div>

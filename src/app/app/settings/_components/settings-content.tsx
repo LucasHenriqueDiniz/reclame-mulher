@@ -70,9 +70,11 @@ function PasswordInput({
       <button
         type="button"
         onClick={() => setShow((s) => !s)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-[#607D8B] flex items-center justify-center"
+        aria-label={show ? "Ocultar senha" : "Mostrar senha"}
+        aria-pressed={show}
+        className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-[#546E7A] flex items-center justify-center"
       >
-        {show ? <EyeOff size={18} /> : <Eye size={18} />}
+        {show ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
       </button>
     </div>
   );
@@ -91,7 +93,7 @@ function DeleteModal({ onClose }: { onClose: () => void }) {
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 bg-transparent border-none cursor-pointer text-[#607D8B] flex items-center justify-center hover:text-[#455A64] transition-colors"
+          className="absolute top-4 right-4 bg-transparent border-none cursor-pointer text-[#546E7A] flex items-center justify-center hover:text-[#455A64] transition-colors"
         >
           <X size={20} />
         </button>
@@ -104,7 +106,7 @@ function DeleteModal({ onClose }: { onClose: () => void }) {
         <h3 className="text-[22px] font-bold text-[#2A3F54] mb-2.5">
           Você tem certeza?
         </h3>
-        <p className="text-sm text-[#607D8B] leading-relaxed mb-2.5">
+        <p className="text-sm text-[#546E7A] leading-relaxed mb-2.5">
           Ao deletar sua conta iremos remover todos os seus dados do nosso banco de dados.
         </p>
         <p className="text-sm font-semibold text-[#E8721D] mb-6">
@@ -245,7 +247,7 @@ export function SettingsContent({
                     disabled
                     className="h-[45px] rounded-[9px] border-[#e5e5ed] bg-gray-50"
                   />
-                  <p className="text-xs text-[#607D8B] mt-1">O e-mail não pode ser alterado.</p>
+                  <p className="text-xs text-[#546E7A] mt-1">O e-mail não pode ser alterado.</p>
                 </div>
 
                 <div className="mb-4 max-w-[400px]">
@@ -347,7 +349,7 @@ export function SettingsContent({
                       }
                     }}
                     disabled={savingProfile}
-                    className="h-auto px-6 py-3 rounded-lg bg-[#1E88E5] hover:bg-[#1976D2]"
+                    className="h-auto px-6 py-3 rounded-lg bg-[#1565C0] hover:bg-[#0D47A1]"
                   >
                     <span className="text-sm font-medium">
                       {savingProfile ? "Salvando..." : "Salvar"}
@@ -469,7 +471,7 @@ export function SettingsContent({
                       }
                     }}
                     disabled={savingPassword}
-                    className="h-auto px-6 py-3 rounded-lg bg-[#1E88E5] hover:bg-[#1976D2]"
+                    className="h-auto px-6 py-3 rounded-lg bg-[#1565C0] hover:bg-[#0D47A1]"
                   >
                     <span className="text-sm font-medium">
                       {savingPassword ? "Salvando..." : "Salvar"}

@@ -94,24 +94,35 @@ a lista, com 23 ocorrências, todas de contraste.
 
 ## O achado que a varredura NÃO pegou
 
-Isto merece destaque, porque eu previ o contrário na iteração anterior.
+> **Correção (task `13`).** A versão original desta seção afirmava que a
+> varredura não tinha pegado **nenhum** dos dois achados da task `09`. Estava
+> errado quanto ao `53`. Ao abrir o detalhe nó a nó para corrigir, as 3
+> ocorrências de `button-name` em `/app/complaints/new` — que eu tinha atribuído
+> a botões de ícone — são exatamente os três gatilhos do Radix:
+>
+> ```
+> button-name | /app/complaints/new | button[aria-controls="radix-…"] role="combobox"
+> ```
+>
+> Ou seja: o axe **achou** o `53`, só que sob outra regra. Eu havia deduzido o
+> contrário a partir do agregado por regra, sem olhar os nós. A conclusão certa
+> não é "o axe é fraco", é "contagem agregada não substitui ler o detalhe".
+> O texto abaixo fica, corrigido, porque a parte sobre o `52` continua valendo.
 
 Na task `09` registrei dois defeitos de acessibilidade no wizard, e escrevi que
-a varredura os reencontraria. **Ela pegou nenhum dos dois:**
+a varredura os reencontraria:
 
-| Achado | O axe viu? | Por quê |
+| Achado | O axe viu? | Como |
 |---|---|---|
 | `52` — 11 controles fora da tela continuam focáveis | **não** | os elementos existem, são visíveis e têm nome; nenhuma regra do axe pergunta "isso está na etapa certa do wizard" |
-| `53` — os 3 selects da etapa 4 sem rótulo associado | **não** | a regra `select-name` só olha `<select>` nativo. O Radix renderiza `<button role="combobox">` com o texto "Escolha uma opção" — para o axe, tem nome acessível; só que o nome é o placeholder, não o rótulo |
-
-`/app/complaints/new` aparece no relatório com 11 ocorrências: 3 de
-`button-name` e 8 de contraste. Os dois defeitos que eu conhecia, encontrados
-lendo o DOM na task `09`, **não estão ali**.
+| `53` — os 3 selects da etapa 4 sem rótulo associado | **sim** | como `button-name`, não como `select-name`: a regra `select-name` só olha `<select>` nativo, e o Radix renderiza `<button role="combobox">` |
 
 O `select-name` que a varredura acusou é outro: o `<select>` nativo de mudar
 status em `/app/company/complaints/:id`, que tem `<label>` sem `for`.
 
-Este é o argumento concreto contra tratar "axe limpo" como "acessível". A
+O `52` continua sendo o argumento concreto contra tratar "axe limpo" como
+"acessível" — nenhuma regra automática pergunta se o foco está indo para uma
+parte da tela que a pessoa não consegue ver. A
 varredura automática cobre entre **30% e 40%** dos critérios WCAG. Ela não julga
 ordem de foco, ordem de leitura, se o texto alternativo *descreve* a imagem, se
 a mensagem de erro é compreensível, nem contraste sobre gradiente. Numa
@@ -130,8 +141,15 @@ npm run test:a11y
 ```
 
 A escolha de projeto em vez de variável de ambiente é proposital: funciona igual
-no PowerShell e no bash, e `npx playwright test` continua sendo só a suíte
-rápida.
+no PowerShell e no bash.
+
+> **Correção (task `13`).** Esta seção afirmava que `npx playwright test`
+> continuaria sendo só a suíte rápida. Falso: sem `--project`, o Playwright roda
+> **todos** os projetos, a varredura inclusive. Descobri ao ver a suíte fechar em
+> 298 testes e 14,6 min quando eu esperava 222. O `testIgnore` dos projetos
+> rápidos impede que eles rodem a spec de a11y, mas não impede que os projetos de
+> a11y rodem. Corrigido na `13`: `npm run test:e2e` passou a filtrar os projetos
+> explicitamente, e é ele o caminho documentado.
 
 **Ela já é uma trava, não só um relatório.** Cada página é comparada com o
 baseline gravado: se alguma piorar, o teste falha dizendo qual e quanto. Página

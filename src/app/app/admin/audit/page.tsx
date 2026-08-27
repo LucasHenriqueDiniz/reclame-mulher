@@ -111,23 +111,39 @@ export default function AdminAuditPage() {
           value={entity}
           onChange={(event) => setEntity(event.target.value)}
         />
-        <Input
-          type="date"
-          value={dateFrom}
-          onChange={(event) => setDateFrom(event.target.value)}
-        />
-        <Input
-          type="date"
-          value={dateTo}
-          onChange={(event) => setDateTo(event.target.value)}
-        />
+        {/* Campo de data sem rótulo não diz qual das duas pontas do intervalo
+            ele é — nem para quem enxerga, nem para leitor de tela. */}
+        <div>
+          <label htmlFor="auditoria-data-inicial" className="mb-1 block text-xs text-gray-600">
+            De
+          </label>
+          <Input
+            id="auditoria-data-inicial"
+            type="date"
+            value={dateFrom}
+            onChange={(event) => setDateFrom(event.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="auditoria-data-final" className="mb-1 block text-xs text-gray-600">
+            Até
+          </label>
+          <Input
+            id="auditoria-data-final"
+            type="date"
+            value={dateTo}
+            onChange={(event) => setDateTo(event.target.value)}
+          />
+        </div>
         <Button onClick={applyFilters}>Filtrar</Button>
       </div>
 
       {error ? <p className="mb-4 text-sm text-red-600">{error}</p> : null}
       <p className="mb-3 text-sm text-gray-500">{loading ? "Carregando..." : `${total} registro(s)`}</p>
 
-      <div className="overflow-x-auto">
+      {/* A tabela rola na horizontal no celular; sem `tabIndex` quem navega só
+          por teclado não alcança a barra de rolagem e perde as colunas da direita. */}
+      <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Registros de auditoria">
         <table className="w-full border-collapse border">
           <thead>
             <tr className="bg-gray-50">

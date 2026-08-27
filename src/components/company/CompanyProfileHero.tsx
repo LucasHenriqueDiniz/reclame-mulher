@@ -57,7 +57,7 @@ export function CompanyProfileHero({
               width: 72,
               height: 72,
               borderRadius: "50%",
-              background: "rgba(255,255,255,0.2)",
+              background: "rgba(0,0,0,0.2)",
               border: "2px solid rgba(255,255,255,0.4)",
               display: "flex",
               alignItems: "center",
@@ -104,7 +104,7 @@ export function CompanyProfileHero({
               {isVerified && (
                 <span
                   style={{
-                    background: "rgba(255,255,255,0.25)",
+                    background: "rgba(0,0,0,0.2)",
                     color: S.white,
                     fontSize: 11,
                     fontWeight: 700,
@@ -118,7 +118,7 @@ export function CompanyProfileHero({
               {isMember && (
                 <span
                   style={{
-                    background: "rgba(255,255,255,0.25)",
+                    background: "rgba(0,0,0,0.2)",
                     color: S.white,
                     fontSize: 11,
                     fontWeight: 700,

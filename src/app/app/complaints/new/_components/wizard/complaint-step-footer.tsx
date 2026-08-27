@@ -35,10 +35,10 @@ export function ComplaintStepFooter({
       <div className="flex items-center gap-2">
         {showPrivateInfo && (
           <>
-            <div className="p-1.5 rounded-lg bg-[#1E88E5]/10">
-              <EyeOff className="w-4 h-4 text-[#1E88E5]" />
+            <div className="p-1.5 rounded-lg bg-[#1565C0]/10">
+              <EyeOff className="w-4 h-4 text-[#1565C0]" />
             </div>
-            <span className="font-['Poppins'] font-medium text-[#1E88E5] text-xs tracking-[-0.20px] leading-normal">
+            <span className="font-['Poppins'] font-medium text-[#1565C0] text-xs tracking-[-0.20px] leading-normal">
               Informações privadas
             </span>
           </>
@@ -65,7 +65,7 @@ export function ComplaintStepFooter({
           type="button"
           onClick={onNext}
           disabled={disableNext || loading}
-          className="gap-2.5 bg-gradient-to-r from-[#1E88E5] to-[#1976D2] hover:from-[#1976D2] hover:to-[#1565C0] text-white px-7 py-3 h-auto rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 disabled:hover:scale-100"
+          className="gap-2.5 bg-gradient-to-r from-[#1565C0] to-[#0D47A1] hover:from-[#0D47A1] hover:to-[#1565C0] text-white px-7 py-3 h-auto rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 disabled:hover:scale-100"
         >
           {loading && (
             <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

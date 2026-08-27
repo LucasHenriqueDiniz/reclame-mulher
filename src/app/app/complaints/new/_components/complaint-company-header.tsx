@@ -32,7 +32,7 @@ export function ComplaintCompanyHeader({
             className="object-cover"
           />
         ) : (
-          <span className="text-gray-400 text-2xl font-bold">
+          <span className="text-gray-500 text-2xl font-bold">
             {name.slice(0, 1).toUpperCase()}
           </span>
         )}
@@ -41,7 +41,7 @@ export function ComplaintCompanyHeader({
       <div className="inline-flex flex-col items-start justify-center">
         {/* Company name and badge */}
         <div className="gap-2 inline-flex items-center">
-          <span className="font-semibold text-[#1E88E5] text-xl text-center">
+          <span className="font-semibold text-[#1565C0] text-xl text-center">
             {name}
           </span>
           {verified && (

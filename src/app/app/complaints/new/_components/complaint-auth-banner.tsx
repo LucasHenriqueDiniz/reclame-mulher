@@ -12,7 +12,7 @@ export function ComplaintAuthBanner() {
         </h3>
         <Link href="/login">
           <Button className="inline-flex items-center justify-center gap-3 px-6 py-3 bg-white rounded-xl hover:bg-gray-100">
-            <span className="font-bold text-[#1E88E5] text-sm">
+            <span className="font-bold text-[#1565C0] text-sm">
               Faça login ou cadastre-se
             </span>
           </Button>

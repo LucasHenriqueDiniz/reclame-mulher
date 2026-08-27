@@ -46,10 +46,10 @@ export function ProfileHero({
   return (
     <Card className="relative overflow-hidden shadow-md border-0">
       {/* Blue Banner */}
-      <div className="h-[126px] bg-[#1E88E5] rounded-t-xl" />
+      <div className="h-[126px] bg-[#1565C0] rounded-t-xl" />
 
       {/* Avatar - overlapping banner */}
-      <div className="absolute top-[58px] left-[43px] w-[137px] h-[137px] rounded-full border-4 border-white overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm bg-[#1E88E5]">
+      <div className="absolute top-[58px] left-[43px] w-[137px] h-[137px] rounded-full border-4 border-white overflow-hidden flex items-center justify-center flex-shrink-0 shadow-sm bg-[#1565C0]">
         {avatarUrl ? (
           <Image
             src={avatarUrl}
@@ -76,16 +76,16 @@ export function ProfileHero({
           <div className="flex items-center gap-4 flex-wrap">
             {location && (
               <div className="flex items-center gap-1.5">
-                <MapPin size={18} className="text-[#607D8B]" />
-                <span className="text-[13px] text-[#607D8B]">{location}</span>
+                <MapPin size={18} className="text-[#546E7A]" />
+                <span className="text-[13px] text-[#546E7A]">{location}</span>
               </div>
             )}
             {stats.map((stat, i) => {
               const Icon = stat.icon;
               return (
                 <div key={i} className="flex items-center gap-1.5">
-                  <Icon size={18} className="text-[#607D8B]" />
-                  <span className="text-[13px] text-[#607D8B]">
+                  <Icon size={18} className="text-[#546E7A]" />
+                  <span className="text-[13px] text-[#546E7A]">
                     {stat.value !== undefined ? `${stat.value} ` : ""}
                     {stat.label}
                   </span>
@@ -96,7 +96,7 @@ export function ProfileHero({
 
           {actionButton && (
             <Link href={actionButton.href}>
-              <Button className="h-auto px-6 py-3 rounded-xl gap-3 bg-[#1E88E5] hover:bg-[#1976D2]">
+              <Button className="h-auto px-6 py-3 rounded-xl gap-3 bg-[#1565C0] hover:bg-[#0D47A1]">
                 <span className="text-sm font-medium">{actionButton.label}</span>
                 <PlusSquare size={18} />
               </Button>

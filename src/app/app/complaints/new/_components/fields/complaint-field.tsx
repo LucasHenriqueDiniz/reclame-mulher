@@ -39,7 +39,7 @@ export function ComplaintField({
       )}
       {children}
       {hint && !error && (
-        <p className="font-['Poppins'] text-[#607D8B] text-xs leading-normal">
+        <p className="font-['Poppins'] text-[#546E7A] text-xs leading-normal">
           {hint}
         </p>
       )}

@@ -200,13 +200,13 @@ export default function AdminBlogHelpPage() {
                   <div className="space-y-3">
                     <div>
                       <p className="mb-1 text-xs font-medium uppercase tracking-wide text-slate-500">Sintaxe</p>
-                      <pre className="overflow-x-auto rounded-xl bg-slate-950 px-4 py-3 text-sm text-slate-100">
+                      <pre tabIndex={0} className="overflow-x-auto rounded-xl bg-slate-950 px-4 py-3 text-sm text-slate-100">
                         <code>{item.syntax}</code>
                       </pre>
                     </div>
                     <div>
                       <p className="mb-1 text-xs font-medium uppercase tracking-wide text-slate-500">Exemplo</p>
-                      <pre className="overflow-x-auto rounded-xl bg-white px-4 py-3 text-sm text-slate-800 ring-1 ring-slate-200">
+                      <pre tabIndex={0} className="overflow-x-auto rounded-xl bg-white px-4 py-3 text-sm text-slate-800 ring-1 ring-slate-200">
                         <code>{item.example}</code>
                       </pre>
                     </div>
@@ -227,7 +227,7 @@ export default function AdminBlogHelpPage() {
             </div>
             <h2 className="text-xl font-semibold text-slate-900">Exemplo completo</h2>
           </div>
-          <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-5 text-sm leading-7 text-slate-100">
+          <pre tabIndex={0} className="overflow-x-auto rounded-2xl bg-slate-950 p-5 text-sm leading-7 text-slate-100">
             <code>{`# Titulo do artigo
 
 Breve introducao com **destaques** e um [link util](https://exemplo.com).

@@ -161,11 +161,11 @@ export function MainHeader() {
                             {profile?.avatar_url ? (
                               <Avatar className="h-12 w-12">
                                 <AvatarImage src={profile.avatar_url} alt={profile?.name || "Usuário"} />
-                                <AvatarFallback className="bg-[#1E88E5] text-white text-sm">{getUserInitials()}</AvatarFallback>
+                                <AvatarFallback className="bg-[#1565C0] text-white text-sm">{getUserInitials()}</AvatarFallback>
                               </Avatar>
                             ) : (
                               <Avatar className="h-12 w-12">
-                                <AvatarFallback className="bg-[#1E88E5] text-white text-sm">
+                                <AvatarFallback className="bg-[#1565C0] text-white text-sm">
                                   {getUserInitials()}
                                 </AvatarFallback>
                               </Avatar>
@@ -246,7 +246,7 @@ export function MainHeader() {
                           <SheetClose asChild>
                             <Button
                               onClick={() => router.push("/login")}
-                              className="w-full bg-[#1E88E5] hover:bg-[#1976D2] text-white rounded-full font-heading font-medium h-12 shadow-md hover:shadow-lg transition-all font-['Poppins']"
+                              className="w-full bg-[#1565C0] hover:bg-[#0D47A1] text-white rounded-full font-heading font-medium h-12 shadow-md hover:shadow-lg transition-all font-['Poppins']"
                             >
                               Entrar
                             </Button>
@@ -267,7 +267,7 @@ export function MainHeader() {
             {isAdmin ? (
               <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
-                  <Button className="bg-[#1E88E5] hover:bg-[#1976D2] text-white rounded-full px-4 font-['Poppins'] inline-flex items-center gap-2">
+                  <Button className="bg-[#1565C0] hover:bg-[#0D47A1] text-white rounded-full px-4 font-['Poppins'] inline-flex items-center gap-2">
                     <Wrench className="h-4 w-4" />
                     Ferramentas
                     <ChevronDown className="h-4 w-4" />
@@ -276,36 +276,36 @@ export function MainHeader() {
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuItem asChild>
                     <Link href="/app/admin" className="cursor-pointer flex items-center font-['Poppins']">
-                      <Shield className="mr-2 h-4 w-4 text-[#607D8B]" />
+                      <Shield className="mr-2 h-4 w-4 text-[#546E7A]" />
                       <span>Painel admin</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/app/admin/blog" className="cursor-pointer flex items-center font-['Poppins']">
-                      <FileText className="mr-2 h-4 w-4 text-[#607D8B]" />
+                      <FileText className="mr-2 h-4 w-4 text-[#546E7A]" />
                       <span>Posts do blog</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/app/admin/companies" className="cursor-pointer flex items-center font-['Poppins']">
-                      <Building2 className="mr-2 h-4 w-4 text-[#607D8B]" />
+                      <Building2 className="mr-2 h-4 w-4 text-[#546E7A]" />
                       <span>Empresas</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/app/admin/audit" className="cursor-pointer flex items-center font-['Poppins']">
-                      <Wrench className="mr-2 h-4 w-4 text-[#607D8B]" />
+                      <Wrench className="mr-2 h-4 w-4 text-[#546E7A]" />
                       <span>Auditoria</span>
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : isCompany ? (
-              <Button asChild className="bg-[#1E88E5] hover:bg-[#1976D2] text-white rounded-full px-4 font-['Poppins']">
+              <Button asChild className="bg-[#1565C0] hover:bg-[#0D47A1] text-white rounded-full px-4 font-['Poppins']">
                 <Link href="/app/company/complaints">Ver relatos</Link>
               </Button>
             ) : (
-              <Button asChild className="bg-[#1E88E5] hover:bg-[#1976D2] text-white rounded-full px-4 font-['Poppins']">
+              <Button asChild className="bg-[#1565C0] hover:bg-[#0D47A1] text-white rounded-full px-4 font-['Poppins']">
                 <Link href="/app/complaints/new">Fale aqui</Link>
               </Button>
             )}
@@ -315,7 +315,7 @@ export function MainHeader() {
                 <Button variant="ghost" size="icon" className="relative hover:bg-gray-100 text-[#2A3F54]" aria-label="Notificações">
                   <Bell className="h-5 w-5" />
                   {notificationCount > 0 && (
-                    <Badge variant="default" className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-[#1E88E5] text-white text-[10px] font-semibold rounded-full border-2 border-white">
+                    <Badge variant="default" className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-[#1565C0] text-white text-[10px] font-semibold rounded-full border-2 border-white">
                       {notificationCount}
                     </Badge>
                   )}
@@ -325,7 +325,7 @@ export function MainHeader() {
                 <div className="px-4 py-3 border-b">
                   <h3 className="font-semibold text-[#2A3F54] font-['Poppins']">Notificações</h3>
                 </div>
-                <div className="p-4 text-center text-sm text-[#607D8B] font-['Poppins']">
+                <div className="p-4 text-center text-sm text-[#546E7A] font-['Poppins']">
                   Nenhuma notificação nova
                 </div>
               </DropdownMenuContent>
@@ -337,11 +337,11 @@ export function MainHeader() {
                   {profile?.avatar_url ? (
                     <Avatar className="h-10 w-10">
                       <AvatarImage src={profile.avatar_url} alt={profile?.name || "Usuário"} />
-                      <AvatarFallback className="bg-[#1E88E5] text-white text-sm">{getUserInitials()}</AvatarFallback>
+                      <AvatarFallback className="bg-[#1565C0] text-white text-sm">{getUserInitials()}</AvatarFallback>
                     </Avatar>
                   ) : (
                     <Avatar className="h-10 w-10">
-                      <AvatarFallback className="bg-[#1E88E5] text-white text-sm">
+                      <AvatarFallback className="bg-[#1565C0] text-white text-sm">
                         {getUserInitials()}
                       </AvatarFallback>
                     </Avatar>
@@ -356,11 +356,11 @@ export function MainHeader() {
                     {profile?.avatar_url ? (
                       <Avatar className="h-12 w-12">
                         <AvatarImage src={profile.avatar_url} alt={profile?.name || "Usuário"} />
-                        <AvatarFallback className="bg-[#1E88E5] text-white text-sm">{getUserInitials()}</AvatarFallback>
+                        <AvatarFallback className="bg-[#1565C0] text-white text-sm">{getUserInitials()}</AvatarFallback>
                       </Avatar>
                     ) : (
                       <Avatar className="h-12 w-12 flex-shrink-0">
-                        <AvatarFallback className="bg-[#1E88E5] text-white text-sm">
+                        <AvatarFallback className="bg-[#1565C0] text-white text-sm">
                           {getUserInitials()}
                         </AvatarFallback>
                       </Avatar>
@@ -369,7 +369,7 @@ export function MainHeader() {
                       <p className="font-['Poppins'] font-semibold text-sm text-[#2A3F54] truncate">
                         {profile?.name || "Usuário"}
                       </p>
-                      <p className="font-['Poppins'] text-xs text-[#607D8B] truncate">
+                      <p className="font-['Poppins'] text-xs text-[#546E7A] truncate">
                         {user?.email}
                       </p>
                     </div>
@@ -382,25 +382,25 @@ export function MainHeader() {
                     <>
                       <DropdownMenuItem asChild>
                         <Link href="/app/admin" className="cursor-pointer flex items-center font-['Poppins'] px-3 py-2">
-                          <Shield className="mr-3 h-4 w-4 text-[#607D8B]" />
+                          <Shield className="mr-3 h-4 w-4 text-[#546E7A]" />
                           <span>Painel admin</span>
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
                         <Link href="/app/admin/blog" className="cursor-pointer flex items-center font-['Poppins'] px-3 py-2">
-                          <FileText className="mr-3 h-4 w-4 text-[#607D8B]" />
+                          <FileText className="mr-3 h-4 w-4 text-[#546E7A]" />
                           <span>Gerenciar blog</span>
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
                         <Link href="/app/admin/companies" className="cursor-pointer flex items-center font-['Poppins'] px-3 py-2">
-                          <Building2 className="mr-3 h-4 w-4 text-[#607D8B]" />
+                          <Building2 className="mr-3 h-4 w-4 text-[#546E7A]" />
                           <span>Empresas</span>
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
                         <Link href="/app/admin/audit" className="cursor-pointer flex items-center font-['Poppins'] px-3 py-2">
-                          <Wrench className="mr-3 h-4 w-4 text-[#607D8B]" />
+                          <Wrench className="mr-3 h-4 w-4 text-[#546E7A]" />
                           <span>Auditoria</span>
                         </Link>
                       </DropdownMenuItem>
@@ -408,7 +408,7 @@ export function MainHeader() {
                   ) : (
                     <DropdownMenuItem asChild>
                       <Link href="/app/settings" className="cursor-pointer flex items-center font-['Poppins'] px-3 py-2">
-                        <Settings className="mr-3 h-4 w-4 text-[#607D8B]" />
+                        <Settings className="mr-3 h-4 w-4 text-[#546E7A]" />
                         <span>Configurações</span>
                       </Link>
                     </DropdownMenuItem>
@@ -416,14 +416,14 @@ export function MainHeader() {
                   {isCompany ? (
                     <DropdownMenuItem asChild>
                       <Link href="/app/company/complaints" className="cursor-pointer flex items-center font-['Poppins'] px-3 py-2">
-                        <MessageSquare className="mr-3 h-4 w-4 text-[#607D8B]" />
+                        <MessageSquare className="mr-3 h-4 w-4 text-[#546E7A]" />
                         <span>Ver relatos</span>
                       </Link>
                     </DropdownMenuItem>
                   ) : !isAdmin ? (
                     <DropdownMenuItem asChild>
                       <Link href="/app/complaints" className="cursor-pointer flex items-center font-['Poppins'] px-3 py-2">
-                        <MessageSquare className="mr-3 h-4 w-4 text-[#607D8B]" />
+                        <MessageSquare className="mr-3 h-4 w-4 text-[#546E7A]" />
                         <span>Meus relatos</span>
                       </Link>
                     </DropdownMenuItem>
@@ -449,13 +449,13 @@ export function MainHeader() {
           <div className="hidden md:flex items-center space-x-3">
             <Link
               href="/onboarding/role"
-              className="font-heading font-medium text-sm hover:text-[#1E88E5] transition whitespace-nowrap text-[#2A3F54] font-['Poppins']"
+              className="font-heading font-medium text-sm hover:text-[#1565C0] transition whitespace-nowrap text-[#2A3F54] font-['Poppins']"
             >
               Cadastrar
             </Link>
             <Button
               onClick={() => router.push("/login")}
-              className="bg-[#1E88E5] hover:bg-[#1976D2] text-white rounded-full font-heading font-medium shadow-md hover:shadow-lg transition-all px-6 font-['Poppins']"
+              className="bg-[#1565C0] hover:bg-[#0D47A1] text-white rounded-full font-heading font-medium shadow-md hover:shadow-lg transition-all px-6 font-['Poppins']"
             >
               Entrar
             </Button>

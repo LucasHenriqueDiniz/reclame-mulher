@@ -258,7 +258,7 @@ export function NewComplaintContent({
       {/* Botão para voltar */}
       <Link 
         href="/app/complaints"
-        className="inline-flex items-center gap-2 mb-4 text-[#607D8B] hover:text-[#1E88E5] transition-colors"
+        className="inline-flex items-center gap-2 mb-4 text-[#546E7A] hover:text-[#1565C0] transition-colors"
       >
         <svg 
           className="w-5 h-5" 
@@ -286,11 +286,11 @@ export function NewComplaintContent({
               projectsCount={projectsInProgressCount}
             />
           ) : (
-            <div className="rounded-xl border-2 border-dashed border-[#1E88E5]/30 bg-gradient-to-br from-blue-50/50 to-indigo-50/30 px-5 py-6 text-center transition-all duration-300 hover:border-[#1E88E5]/50 hover:shadow-md">
+            <div className="rounded-xl border-2 border-dashed border-[#1565C0]/30 bg-gradient-to-br from-blue-50/50 to-indigo-50/30 px-5 py-6 text-center transition-all duration-300 hover:border-[#1565C0]/50 hover:shadow-md">
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3 flex-1 text-left">
-                  <div className="w-12 h-12 rounded-lg bg-[#1E88E5]/10 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-6 h-6 text-[#1E88E5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-12 h-12 rounded-lg bg-[#1565C0]/10 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-6 h-6 text-[#1565C0]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                   </div>
@@ -298,14 +298,14 @@ export function NewComplaintContent({
                     <p className="font-['Poppins'] font-semibold text-[#2A3F54] text-base mb-0.5">
                       Selecione uma empresa
                     </p>
-                    <p className="font-['Poppins'] text-[#607D8B] text-xs">
+                    <p className="font-['Poppins'] text-[#546E7A] text-xs">
                       Busque a empresa para iniciar seu relato
                     </p>
                   </div>
                 </div>
                 <Button
                   type="button"
-                  className="bg-[#1E88E5] hover:bg-[#1976D2] text-white px-6 py-2.5 h-auto rounded-lg font-['Poppins'] font-medium text-sm shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 flex-shrink-0"
+                  className="bg-[#1565C0] hover:bg-[#0D47A1] text-white px-6 py-2.5 h-auto rounded-lg font-['Poppins'] font-medium text-sm shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 flex-shrink-0"
                   onClick={() => setSearchCompanyModalOpen(true)}
                 >
                   Buscar
@@ -324,34 +324,46 @@ export function NewComplaintContent({
                 transform: `translateX(-${(step - 1) * 100}%)`,
               }}
             >
-              <div className="w-full flex-shrink-0 px-1" style={{ width: "100%" }}>
-                <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-                  <StepOne data={stepOne} onChange={setStepOne} />
-                </div>
-              </div>
-              <div className="w-full flex-shrink-0 px-1" style={{ width: "100%" }}>
-                <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-                  <StepTwo data={stepTwo} onChange={setStepTwo} />
-                </div>
-              </div>
-              <div className="w-full flex-shrink-0 px-1" style={{ width: "100%" }}>
-                <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-                  <StepThree
-                    data={stepThree}
-                    onChange={setStepThree}
-                    onUpload={handleUpload}
-                  />
-                </div>
-              </div>
-              <div className="w-full flex-shrink-0 px-1" style={{ width: "100%" }}>
-                <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-                  <StepFour
-                    data={stepFour}
-                    onChange={setStepFour}
-                    projects={effectiveProjects}
-                  />
-                </div>
-              </div>
+              {/*
+                As quatro etapas ficam no DOM ao mesmo tempo — é um carrossel, e
+                o que esconde as outras é só o `overflow-hidden` do pai. Sem
+                `inert`, os campos das etapas fora da tela continuam recebendo
+                Tab e sendo lidos por leitor de tela: a pessoa digitaria às
+                cegas num formulário que não está vendo.
+              */}
+              {[
+                <StepOne key="1" data={stepOne} onChange={setStepOne} />,
+                <StepTwo key="2" data={stepTwo} onChange={setStepTwo} />,
+                <StepThree
+                  key="3"
+                  data={stepThree}
+                  onChange={setStepThree}
+                  onUpload={handleUpload}
+                />,
+                <StepFour
+                  key="4"
+                  data={stepFour}
+                  onChange={setStepFour}
+                  projects={effectiveProjects}
+                />,
+              ].map((conteudo, indice) => {
+                const foraDaVez = step !== indice + 1;
+                return (
+                  <div
+                    key={indice}
+                    className="w-full flex-shrink-0 px-1"
+                    style={{ width: "100%" }}
+                    role="group"
+                    aria-label={`Etapa ${indice + 1} de ${TOTAL_STEPS}`}
+                    inert={foraDaVez}
+                    aria-hidden={foraDaVez}
+                  >
+                    <div className="animate-in fade-in slide-in-from-right-4 duration-500">
+                      {conteudo}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -370,7 +382,7 @@ export function NewComplaintContent({
             </p>
           )}
           {!canSubmit && step === TOTAL_STEPS && (
-            <p className="text-sm text-[#607D8B] text-center font-['Poppins']">
+            <p className="text-sm text-[#546E7A] text-center font-['Poppins']">
               {!session ? "Faça login para enviar." : "Selecione uma empresa para enviar."}
             </p>
           )}

@@ -146,7 +146,7 @@ export default function CompanyProjectsPage() {
   const createButton = (
     <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#1E88E5] hover:bg-[#1976D2]">
+        <Button className="bg-[#1565C0] hover:bg-[#0D47A1]">
           <Plus className="w-4 h-4 mr-2" />
           Criar Projeto
         </Button>
@@ -181,7 +181,7 @@ export default function CompanyProjectsPage() {
           </div>
           <Button
             onClick={() => void handleCreateProject()}
-            className="w-full bg-[#1E88E5] hover:bg-[#1976D2]"
+            className="w-full bg-[#1565C0] hover:bg-[#0D47A1]"
             disabled={submitting || !projectName.trim()}
           >
             {submitting ? "Criando..." : "Criar"}

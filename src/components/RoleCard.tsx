@@ -32,11 +32,11 @@ export function RoleCard({
 }) {
   const Icon = type === "person" ? UserRound : Building2;
   const features = type === "person" ? PERSON_FEATURES : COMPANY_FEATURES;
-  const accent = type === "person" ? "#3BA5FF" : "#2A1B55";
+  const accent = type === "person" ? "#1976D2" : "#2A1B55";
   const accentBg = type === "person" ? "bg-blue-500/10" : "bg-purple-900/10";
-  const accentText = type === "person" ? "text-[#3BA5FF]" : "text-[#2A1B55]";
+  const accentText = type === "person" ? "text-[#1976D2]" : "text-[#2A1B55]";
   const btnClass = type === "person"
-    ? "bg-[#3BA5FF] hover:bg-[#2d8ddf]"
+    ? "bg-[#1976D2] hover:bg-[#2d8ddf]"
     : "bg-[#2A1B55] hover:bg-[#1e1340]";
 
   return (
@@ -45,7 +45,7 @@ export function RoleCard({
       className={cn(
         "group relative h-full w-full rounded-3xl text-left transition-all duration-300",
         "bg-white/95 backdrop-blur-sm shadow-lg hover:shadow-2xl hover:-translate-y-1",
-        active ? "ring-2 ring-[#3BA5FF]" : ""
+        active ? "ring-2 ring-[#1976D2]" : ""
       )}
     >
       <div className="flex flex-col h-full p-8">

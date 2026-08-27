@@ -15,6 +15,12 @@ export interface ComplaintSelectOption {
 }
 
 export interface ComplaintSelectProps {
+  /**
+   * Id do gatilho. Precisa casar com o `htmlFor` do `ComplaintField` — sem ele,
+   * o `<label>` aponta para um elemento que não existe e o combobox fica sem
+   * nome acessível.
+   */
+  id?: string;
   options: ComplaintSelectOption[];
   value?: string;
   onValueChange?: (value: string) => void;
@@ -29,6 +35,7 @@ export interface ComplaintSelectProps {
  * Segue design do Figma com altura, bordas e espaçamento consistentes
  */
 export function ComplaintSelect({
+  id,
   options,
   value,
   onValueChange,
@@ -40,11 +47,12 @@ export function ComplaintSelect({
   return (
     <Select value={value} onValueChange={onValueChange} disabled={disabled}>
       <SelectTrigger
+        id={id}
         className={cn(
           "w-full h-[45px] rounded-[9px] border border-[#E5E5ED]",
           "px-[18px]",
           "font-['Poppins'] font-medium text-[#2A3F54] text-sm",
-          "focus:border-[#1E88E5] focus:ring-1 focus:ring-[#1E88E5]",
+          "focus:border-[#1565C0] focus:ring-1 focus:ring-[#1565C0]",
           "disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed",
           error && "border-red-500 focus:border-red-500 focus:ring-red-500",
           className

@@ -27,11 +27,11 @@ export function PageTabs({ tabs, activeTab, variant = "underline", className = "
               key={tab.key}
               href={tab.href}
               className={`flex items-center gap-1.5 py-4 px-2 no-underline border-b-2 -mb-px transition-colors ${
-                isActive ? "border-[#1E88E5]" : "border-transparent"
+                isActive ? "border-[#1565C0]" : "border-transparent"
               }`}
             >
-              {Icon && <Icon className={isActive ? "text-[#1E88E5]" : "text-[#607D8B]"} />}
-              <span className={`text-sm font-medium ${isActive ? "text-[#1E88E5]" : "text-[#607D8B]"}`}>
+              {Icon && <Icon className={isActive ? "text-[#1565C0]" : "text-[#546E7A]"} />}
+              <span className={`text-sm font-medium ${isActive ? "text-[#1565C0]" : "text-[#546E7A]"}`}>
                 {tab.label}
               </span>
             </Link>
@@ -52,8 +52,8 @@ export function PageTabs({ tabs, activeTab, variant = "underline", className = "
             href={tab.href}
             className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
               isActive
-                ? "border-[#1E88E5] text-[#1E88E5]"
-                : "border-transparent text-[#607D8B] hover:text-[#2A3F54]"
+                ? "border-[#1565C0] text-[#1565C0]"
+                : "border-transparent text-[#546E7A] hover:text-[#2A3F54]"
             }`}
           >
             {Icon && <Icon className="w-4 h-4" />}

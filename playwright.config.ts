@@ -53,9 +53,12 @@ export default defineConfig({
     },
     // A varredura de acessibilidade carrega 39 páginas em dois viewports e leva
     // minutos. Fica em projetos próprios em vez de variável de ambiente: assim
-    // roda igual no PowerShell e no bash, e `npx playwright test` continua
-    // sendo a suíte rápida.
-    //   npm run test:a11y
+    // roda igual no PowerShell e no bash.
+    //
+    // ATENÇÃO: `npx playwright test` sem `--project` roda **todos** os projetos,
+    // a varredura inclusive (~20 min). Use os scripts, que já filtram:
+    //   npm run test:e2e    -> suíte rápida (chromium-desktop + chromium-mobile)
+    //   npm run test:a11y   -> só a varredura
     {
       name: "a11y-desktop",
       testMatch: /a11y\.spec\.ts/,

@@ -137,7 +137,7 @@ export default function AllBlogPostsPage() {
           {/* Back Button */}
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-[#1E88E5] hover:text-[#1976D2] font-medium mb-6 transition-colors group"
+            className="inline-flex items-center gap-2 text-[#1565C0] hover:text-[#0D47A1] font-medium mb-6 transition-colors group"
           >
             <ArrowLeft className="h-5 w-5 transform group-hover:-translate-x-1 transition-transform" />
             <span>Voltar ao Blog</span>
@@ -157,13 +157,13 @@ export default function AllBlogPostsPage() {
           <div className="mb-10 space-y-4">
             {/* Search Bar */}
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
               <Input
                 type="text"
                 placeholder="Buscar por título..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 pr-4 py-6 text-base border-2 border-gray-200 focus:border-[#1E88E5] rounded-xl shadow-sm hover:shadow-md transition-shadow bg-white"
+                className="pl-12 pr-4 py-6 text-base border-2 border-gray-200 focus:border-[#1565C0] rounded-xl shadow-sm hover:shadow-md transition-shadow bg-white"
               />
             </div>
 
@@ -171,12 +171,12 @@ export default function AllBlogPostsPage() {
             <div className="flex items-center justify-between">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center gap-2 text-[#1E88E5] hover:text-[#1976D2] font-semibold transition-colors"
+                className="flex items-center gap-2 text-[#1565C0] hover:text-[#0D47A1] font-semibold transition-colors"
               >
                 <SlidersHorizontal className="h-5 w-5" />
                 <span>{showFilters ? "Ocultar Filtros" : "Mostrar Filtros"}</span>
                 {selectedTags.length > 0 && (
-                  <Badge className="bg-[#1E88E5] text-white">
+                  <Badge className="bg-[#1565C0] text-white">
                     {selectedTags.length}
                   </Badge>
                 )}
@@ -198,7 +198,7 @@ export default function AllBlogPostsPage() {
                   {selectedTags.length > 0 && (
                     <button
                       onClick={() => setSelectedTags([])}
-                      className="text-sm text-[#1E88E5] hover:text-[#1976D2] font-medium transition-colors"
+                      className="text-sm text-[#1565C0] hover:text-[#0D47A1] font-medium transition-colors"
                     >
                       Limpar filtros
                     </button>
@@ -211,8 +211,8 @@ export default function AllBlogPostsPage() {
                       onClick={() => toggleTag(tag.slug)}
                       className={`cursor-pointer transition-all text-sm py-2 px-4 ${
                         selectedTags.includes(tag.slug)
-                          ? "bg-gradient-to-r from-[#1E88E5] to-[#1976D2] text-white hover:from-[#1976D2] hover:to-[#1565C0] shadow-md"
-                          : "bg-white text-[#1E88E5] border-2 border-[#1E88E5] hover:bg-blue-50"
+                          ? "bg-gradient-to-r from-[#1565C0] to-[#0D47A1] text-white hover:from-[#0D47A1] hover:to-[#1565C0] shadow-md"
+                          : "bg-white text-[#1565C0] border-2 border-[#1565C0] hover:bg-blue-50"
                       }`}
                     >
                       {tag.name}
@@ -246,7 +246,7 @@ export default function AllBlogPostsPage() {
                   setSearchQuery("");
                   setSelectedTags([]);
                 }}
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#1E88E5] to-[#1976D2] hover:from-[#1976D2] hover:to-[#1565C0] text-white font-semibold py-3 px-6 rounded-full transition-all shadow-md hover:shadow-lg"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#1565C0] to-[#0D47A1] hover:from-[#0D47A1] hover:to-[#1565C0] text-white font-semibold py-3 px-6 rounded-full transition-all shadow-md hover:shadow-lg"
               >
                 Limpar todos os filtros
               </button>

@@ -328,7 +328,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ slug: s
                 onClick={() => setActiveTab("edit")}
                 className={`flex items-center gap-2 py-3 px-4 border-b-2 transition-colors ${
                   activeTab === "edit"
-                    ? "border-[#1E88E5] text-[#1E88E5]"
+                    ? "border-[#1565C0] text-[#1565C0]"
                     : "border-transparent text-gray-500 hover:text-gray-700"
                 }`}
               >
@@ -339,7 +339,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ slug: s
                 onClick={() => setActiveTab("preview")}
                 className={`flex items-center gap-2 py-3 px-4 border-b-2 transition-colors ${
                   activeTab === "preview"
-                    ? "border-[#1E88E5] text-[#1E88E5]"
+                    ? "border-[#1565C0] text-[#1565C0]"
                     : "border-transparent text-gray-500 hover:text-gray-700"
                 }`}
               >
@@ -348,7 +348,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ slug: s
               </button>
               <Link
                 href="/app/admin/blog/help"
-                className="ml-auto text-sm text-[#1E88E5] hover:text-[#1976D2]"
+                className="ml-auto text-sm text-[#1565C0] hover:text-[#0D47A1]"
               >
                 Ajuda de Markdown
               </Link>
@@ -486,22 +486,22 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ slug: s
                       onChange={(e) => setContent(e.target.value)}
                       placeholder="Escreva seu conteúdo em Markdown..."
                       className={`min-h-[500px] font-mono text-sm rounded-t-none border-gray-200 ${
-                        dragActive ? "border-[#1E88E5] border-2 bg-blue-50/50" : ""
+                        dragActive ? "border-[#1565C0] border-2 bg-blue-50/50" : ""
                       }`}
                     />
                     {dragActive && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-blue-50/80 border-2 border-dashed border-[#1E88E5] rounded-b-xl pointer-events-none">
+                      <div className="absolute inset-0 flex items-center justify-center bg-blue-50/80 border-2 border-dashed border-[#1565C0] rounded-b-xl pointer-events-none">
                         <div className="text-center">
-                          <ImageIcon className="h-12 w-12 text-[#1E88E5] mx-auto mb-2" />
-                          <p className="text-[#1E88E5] font-medium">Solte a imagem aqui</p>
+                          <ImageIcon className="h-12 w-12 text-[#1565C0] mx-auto mb-2" />
+                          <p className="text-[#1565C0] font-medium">Solte a imagem aqui</p>
                         </div>
                       </div>
                     )}
                     {uploading && (
                       <div className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-b-xl">
                         <div className="text-center">
-                          <Upload className="h-12 w-12 text-[#1E88E5] mx-auto mb-2 animate-pulse" />
-                          <p className="text-[#1E88E5] font-medium">Fazendo upload...</p>
+                          <Upload className="h-12 w-12 text-[#1565C0] mx-auto mb-2 animate-pulse" />
+                          <p className="text-[#1565C0] font-medium">Fazendo upload...</p>
                         </div>
                       </div>
                     )}
@@ -517,14 +517,16 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ slug: s
                     {tags.map((tag) => (
                       <Badge
                         key={tag}
-                        className="bg-[#1E88E5] text-white flex items-center gap-2"
+                        className="bg-[#1565C0] text-white flex items-center gap-2"
                       >
                         {tag}
                         <button
+                          type="button"
                           onClick={() => removeTag(tag)}
+                          aria-label={`Remover a tag ${tag}`}
                           className="hover:bg-white/20 rounded-full p-0.5"
                         >
-                          <X className="h-3 w-3" />
+                          <X className="h-3 w-3" aria-hidden="true" />
                         </button>
                       </Badge>
                     ))}
@@ -558,7 +560,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ slug: s
                   </label>
                   <div className="space-y-3">
                     {featuredImage && (
-                      <div className="border-2 border-[#1E88E5] rounded-xl p-2">
+                      <div className="border-2 border-[#1565C0] rounded-xl p-2">
                         {/* featuredImage vem de um Input livre: a autora cola
                             qualquer URL. next/image lancaria erro em runtime
                             para host fora de remotePatterns, quebrando o
@@ -613,7 +615,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ slug: s
                     h3: ({ children }) => <h3 className="text-2xl font-bold text-[#181A2A] mt-6 mb-3">{children}</h3>,
                     p: ({ children }) => <p className="text-xl text-[#3B3C4A] mb-6 leading-relaxed">{children}</p>,
                     blockquote: ({ children }) => (
-                      <blockquote className="bg-[#F6F6F7] border-l-4 border-[#1E88E5] p-6 my-8 rounded-r-lg">
+                      <blockquote className="bg-[#F6F6F7] border-l-4 border-[#1565C0] p-6 my-8 rounded-r-lg">
                         <div className="text-[#181A2A] text-xl italic">{children}</div>
                       </blockquote>
                     ),
@@ -650,7 +652,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ slug: s
             </Button>
             <Button
               onClick={handleSave}
-              className="bg-[#1E88E5] hover:bg-[#1976D2] text-white px-6"
+              className="bg-[#1565C0] hover:bg-[#0D47A1] text-white px-6"
               disabled={saving || !title.trim() || !content.trim()}
             >
               {saving ? "Salvando..." : "Salvar"}

@@ -67,7 +67,7 @@ export function Hero() {
             <Button
               type="submit"
               size="lg"
-              className="h-12 sm:h-14 px-6 sm:px-10 bg-[#3BA5FF] hover:bg-[#2d94f5] rounded-full font-semibold text-white text-base sm:text-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-lg focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+              className="h-12 sm:h-14 px-6 sm:px-10 bg-[#1976D2] hover:bg-[#2d94f5] rounded-full font-semibold text-white text-base sm:text-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-lg focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
               aria-label="Pesquisar empresa ou órgão"
             >
               <Search className="h-5 w-5" aria-hidden="true" />
