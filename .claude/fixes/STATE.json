@@ -28,7 +28,7 @@
     "corrected_by_task": "01",
     "corrected_at": "2026-08-26"
   },
-  "current_task": "65",
+  "current_task": "66",
   "tasks": [
     {
       "id": "00",
@@ -874,13 +874,18 @@
       "phase": 2,
       "order": 65,
       "risk": "medio",
-      "notes": "Achado na task 23: com 5 empresas no banco, /companies mede 399px numa tela de 375. Todos os cartoes estouram, inclusive os do seed base. Item de grade nasce com min-width auto e o conteudo mais largo empurra todas as faixas.",
-      "status": "pending",
+      "notes": "Reproduzido com o cenario de demonstracao carregado: 399 px de conteudo em 375 px. O detalhe da mensagem de erro da spec era o diagnostico inteiro: TODOS os cartoes estouravam os mesmos 24 px, inclusive Construtora X, que e do seed base e e curta. Nao era um cartao largo demais - era a faixa da grade inteira, porque item de grade nasce com min-width: auto e fica com max(largura disponivel, min-content do item mais largo). O que faz o min-content ser enorme e o proprio truncate, que traz white-space: nowrap: sem min-width 0 ele nunca chega a cortar, ele estica. CORRECAO em tres lugares: min-w-0 no Link (item da grade) e nos dois span.truncate (setor e localidade), que sao itens de flex pelo mesmo motivo. Nenhum texto encurtado. O TESTE QUE FALTAVA: a task 14 corrigiu esta pagina e travou com teste, e o teste estava certo - o DADO e que nao era. Com as duas empresas de nome curto do seed base, ele passava com a pagina quebrada. Em vez de amarrar a suite ao cenario de demonstracao, o teste CRIA a empresa larga: criarEmpresaDeNomeLongo() e limparEmpresasDeTeste() novas em e2e/fixtures/db.ts, e o teste confere que a empresa apareceu na listagem antes de medir - senao passaria por nao ter medido nada. MUTACAO no seed base: sem o min-w-0 da 654 px em 375 px, mais severo que os 399 px do cenario que originou a task. ACHADO NO CAMINHO -> TASK 69: a primeira versao da empresa de teste nao tinha CNPJ e o banco recusou com NOT NULL. Mas src/db/schema.ts declara cnpj sem .notNull(). Conferido no information_schema: obrigatorias de companies sao id, name, cnpj, created_at. Nao e so documentacao: a task 56 fez o PATCH /api/company/profile aceitar limpeza explicita, entao {'cnpj': null} vira UPDATE SET cnpj = NULL e a rota devolve 500. Verificado lendo o caminho do codigo; nenhum teste manda cnpj: null hoje. O projeto usa db:push, que sincroniza sem gerar migracao. Suite 467 -> 469.",
+      "status": "done",
       "depends_on": [],
-      "started_at": null,
-      "finished_at": null,
-      "debug_iterations": 0,
-      "files_changed": []
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 1,
+      "files_changed": [
+        "src/app/companies/page.tsx",
+        "e2e/fixtures/db.ts",
+        "e2e/responsive.spec.ts",
+        "TODO.md"
+      ]
     },
     {
       "id": "66",
@@ -919,6 +924,20 @@
       "risk": "baixo",
       "depends_on": [],
       "notes": "Achado na task 60: api-erros.spec.ts:152 ('id inexistente devolve NOT_FOUND') falhou uma vez em chromium-mobile e nao se reproduz. O detalhe da falha se perdeu porque a execucao usava --reporter=line, que reescreve a mesma linha. Segundo caso de suite nao deterministica depois da 66.",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "69",
+      "slug": "schema-e-banco-discordam-do-cnpj",
+      "phase": 2,
+      "order": 69,
+      "status": "pending",
+      "risk": "medio",
+      "depends_on": [],
+      "notes": "Achado na task 65: companies.cnpj e NOT NULL no banco e opcional em src/db/schema.ts. PATCH /api/company/profile com {'cnpj': null} - caminho que a task 56 abriu de proposito - vira UPDATE SET cnpj = NULL e devolve 500. O projeto usa db:push, que nao gera migracao.",
       "started_at": null,
       "finished_at": null,
       "debug_iterations": 0,

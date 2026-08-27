@@ -78,3 +78,67 @@ export async function limparRelatosDeTeste(): Promise<number> {
   `;
   return apagados.length;
 }
+
+/**
+ * Cria uma empresa com nome, razão social e setor **longos**, para o teste de
+ * responsividade da task `65`.
+ *
+ * Existe porque o defeito era invisível para a suíte: a `/companies` estourava
+ * 375 px por causa do conteúdo mais largo da grade, e o seed base só tem duas
+ * empresas de nome curto. Enquanto o teste dependesse do que estava no banco,
+ * ele passava com a página quebrada — e foi o que aconteceu entre a task `14` e
+ * a `23`. Com a empresa criada aqui, o teste protege com qualquer seed.
+ *
+ * Devolve o `id`, e a marca `[e2e]` no nome é o que a limpeza procura.
+ */
+export async function criarEmpresaDeNomeLongo(): Promise<string> {
+  if (!url) {
+    throw new Error(
+      "DATABASE_URL não definida — a empresa de teste não pode ser criada. " +
+        "Confira o .env antes de rodar a suíte."
+    );
+  }
+
+  const sql = neon(url);
+  const carimbo = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+  // `cnpj` vai preenchido porque a coluna é `NOT NULL` no banco — ainda que o
+  // `src/db/schema.ts` a declare opcional. A divergência virou a task `69`.
+  const cnpj = String(Date.now()).slice(-14).padStart(14, "9");
+  const [criada] = await sql`
+    INSERT INTO companies (name, cnpj, corporate_name, sector, region, city, state, slug)
+    VALUES (
+      ${`${MARCA_E2E} Engenharia e Infraestrutura Metropolitana ${carimbo}`},
+      ${cnpj},
+      'Concessionária de Saneamento e Infraestrutura Metropolitana Sociedade Anônima',
+      'Concessão rodoviária e saneamento básico',
+      'Centro-Oeste', 'Goiânia', 'GO',
+      ${`e2e-nome-longo-${carimbo}`}
+    )
+    RETURNING id
+  `;
+  return (criada as { id: string }).id;
+}
+
+/**
+ * Apaga as empresas criadas por teste.
+ *
+ * Só alcança as que não têm relato nenhum apontando para elas — que é o caso
+ * das criadas por `criarEmpresaDeNomeLongo`. Se um dia um teste criar relato
+ * contra uma empresa de teste, a limpeza de relatos precisa rodar antes desta.
+ */
+export async function limparEmpresasDeTeste(): Promise<number> {
+  if (!url) {
+    throw new Error(
+      "DATABASE_URL não definida — a limpeza das empresas de teste não pode rodar. " +
+        "Confira o .env antes de rodar a suíte."
+    );
+  }
+
+  const sql = neon(url);
+  const apagadas = await sql`
+    DELETE FROM companies
+    WHERE name LIKE ${`${MARCA_E2E}%`}
+    RETURNING id
+  `;
+  return apagadas.length;
+}

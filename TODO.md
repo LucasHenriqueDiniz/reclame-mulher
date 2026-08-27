@@ -60,15 +60,16 @@ fazer.
 
 Encontrados durante a fila de correções, cada um com investigação escrita.
 
-- [ ] [`65`](.claude/fixes/tasks/65-companies-estoura-com-mais-empresas.md) —
-      `/companies` volta a rolar para o lado em 375 px quando há mais de duas
-      empresas no banco. A correção da task `14` não cobria nome longo.
 - [ ] [`66`](.claude/fixes/tasks/66-teste-de-teclado-instavel.md) — o teste
       de teclado do assistente falha de vez em quando no celular. É corrida do
       teste com a lista do Radix, não defeito do produto.
 - [ ] [`68`](.claude/fixes/tasks/68-teste-de-erro-instavel.md) — um teste de
       formato de erro falhou uma vez e não se reproduz. O detalhe da falha se
       perdeu: a execução usava um reporter que não guarda o motivo.
+- [ ] [`69`](.claude/fixes/tasks/69-schema-e-banco-discordam-do-cnpj.md) — o
+      banco exige CNPJ (`NOT NULL`) e o `src/db/schema.ts` diz que é opcional.
+      `PATCH /api/company/profile` com `{"cnpj": null}` bate nessa divergência
+      e devolve 500.
 - [ ] [`67`](.claude/fixes/tasks/67-endereco-de-suporte-nao-verificado.md) — a
       tela de verificação manda a empresa escrever para
       `suporte@reclame-mulher.com.br`. Ninguém sabe se essa caixa existe.
@@ -146,7 +147,7 @@ alguém": é feito segundo um número que dá para reproduzir.
       permanente varre todo destino do código contra as rotas de `src/app`. Ver
       [`59`](.claude/fixes/reports/59-esqueceu-a-senha-nao-existe.md).
 - [x] **ESLint zerado** — de 4 erros e 277 avisos para 0 e 0.
-- [x] **Suíte de testes existe** — 499 testes: 29 de unidade, 398 de ponta a
+- [x] **Suíte de testes existe** — 503 testes: 31 de unidade, 400 de ponta a
       ponta, 72 de acessibilidade. Antes: nenhum.
 - [x] **Acessibilidade WCAG 2.1 AA** — de 523 ocorrências para 0, em 39 páginas
       × 2 viewports. Ver [`docs/acessibilidade.md`](docs/acessibilidade.md).

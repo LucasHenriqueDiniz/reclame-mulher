@@ -2,7 +2,11 @@ import { expect, test, type Page } from "@playwright/test";
 
 import { entrarViaApi, type Papel } from "./fixtures/auth";
 import { criarRelato, empresaDaConta } from "./fixtures/complaints";
-import { limparRelatosDeTeste } from "./fixtures/db";
+import {
+  criarEmpresaDeNomeLongo,
+  limparEmpresasDeTeste,
+  limparRelatosDeTeste,
+} from "./fixtures/db";
 
 /**
  * Nenhuma página pode rolar para o lado.
@@ -150,6 +154,39 @@ test.describe("páginas públicas cabem na tela", () => {
       await conferir(page, rota);
     });
   }
+});
+
+test.describe("/companies com conteúdo longo", () => {
+  // O defeito da task 65 era invisível para a suíte: em 375 px a grade tem uma
+  // coluna só, e item de grade nasce com `min-width: auto` — então o cartão mais
+  // largo esticava a faixa e empurrava TODOS os outros para fora da tela. Como o
+  // seed base só tem duas empresas de nome curto, o teste passava com a página
+  // quebrada. Aqui a empresa larga é criada pelo próprio teste, então ele
+  // protege com qualquer seed carregado.
+  test.beforeAll(async () => {
+    await limparEmpresasDeTeste();
+  });
+
+  test.afterAll(async () => {
+    await limparEmpresasDeTeste();
+  });
+
+  test("/companies não rola para o lado com nome e razão social longos", async ({ page }) => {
+    await criarEmpresaDeNomeLongo();
+
+    const resposta = await page.goto("/companies");
+    expect(resposta?.status(), "/companies não carregou").toBeLessThan(400);
+    await page.waitForLoadState("networkidle").catch(() => {});
+
+    // A empresa longa precisa estar na tela — senão o teste passaria por não
+    // ter medido nada.
+    await expect(
+      page.getByText(/Engenharia e Infraestrutura Metropolitana/).first(),
+      "a empresa de nome longo não apareceu na listagem"
+    ).toBeVisible();
+
+    await conferir(page, "/companies (nome longo)");
+  });
 });
 
 test.describe("páginas autenticadas cabem na tela", () => {

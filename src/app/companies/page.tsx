@@ -144,7 +144,11 @@ export default async function CompaniesPage({
                 <Link
                   key={company.id}
                   href={href}
-                  className="group block"
+                  // `min-w-0`: item de grade nasce com `min-width: auto`, então a
+                  // faixa fica do tamanho do conteúdo mais largo — e como em 375 px
+                  // há uma coluna só, um nome comprido empurrava TODOS os cartões
+                  // para fora da tela, não só o dele. Ver task `65`.
+                  className="group block min-w-0"
                 >
                   <Card className="h-full border-0 shadow-md transition-all hover:shadow-xl hover:-translate-y-1">
                     <CardContent className="p-6">
@@ -174,14 +178,14 @@ export default async function CompaniesPage({
                         {company.sector && (
                           <div className="flex items-center gap-2 text-sm font-['Poppins'] text-[#546E7A]">
                             <TrendingUp className="w-4 h-4 flex-shrink-0" />
-                            <span className="truncate">{company.sector}</span>
+                            <span className="truncate min-w-0">{company.sector}</span>
                           </div>
                         )}
                         
                         {location && (
                           <div className="flex items-center gap-2 text-sm font-['Poppins'] text-[#546E7A]">
                             <MapPin className="w-4 h-4 flex-shrink-0" />
-                            <span className="truncate">{location}</span>
+                            <span className="truncate min-w-0">{location}</span>
                           </div>
                         )}
                       </div>
