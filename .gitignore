@@ -59,3 +59,9 @@ dev-server*.log
 /blob-report
 /.playwright
 /coverage
+
+# Este projeto usa pnpm (ver "packageManager" no package.json).
+# Um package-lock.json solto reintroduz o problema que a task 20 resolveu:
+# dois lockfiles divergentes, e um `npm ci` instalando outra arvore.
+package-lock.json
+yarn.lock

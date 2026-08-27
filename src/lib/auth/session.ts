@@ -3,13 +3,14 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
+import { env } from "@/lib/env.server";
+
 const COOKIE_NAME = "__session";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 
 function getSecret(): Uint8Array {
-  const secret = process.env.SESSION_SECRET;
-  if (!secret) throw new Error("SESSION_SECRET must be set");
-  return new TextEncoder().encode(secret);
+  // `env.server` já validou tamanho e presença na subida — aqui é só usar.
+  return new TextEncoder().encode(env.sessionSecret);
 }
 
 export interface SessionPayload {

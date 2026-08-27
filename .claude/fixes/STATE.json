@@ -464,12 +464,25 @@
       "slug": "ambiente-e-deploy",
       "phase": 7,
       "order": 20,
-      "status": "pending",
+      "status": "done",
       "risk": "medio",
       "depends_on": [
         "18"
       ],
-      "notes": "decidir sobre images.unoptimized=true - depende do alvo de deploy ter otimizador em runtime | LOCKFILES DUPLICADOS: package-lock.json (abr) + pnpm-lock.yaml (jul) e sem campo packageManager. node_modules e do pnpm; npm install falha com EACCES nos symlinks. Decidir e declarar."
+      "notes": "A hipotese da task estava certa: o .env NAO tem DATABASE_URL, e todo o codigo usa 'DATABASE_URL ?? DIRECT_URL' - a aplicacao roda na conexao DIRETA do Neon, sem pooler, que sob carga esgota conexoes. Nao editei o .env (regra do LOOP.md); a aplicacao agora avisa no log. env.server.ts existia com dois if e NINGUEM o importava; db/client.ts caia numa string falsa ('postgresql://build:build@localhost/build') quando faltava a variavel, entao um deploy mal configurado subia saudavel e falhava por requisicao. Agora valida com Zod e e importado por quem usa. Ressalva honesta: o Next avalia modulo sob demanda, entao a falha aparece na primeira requisicao, nao no next start - a mensagem do log e clara, mas o processo nao morre na subida. Lockfiles: package-lock.json estava 4 meses atrasado e NAO conhecia @axe-core/playwright; removido, packageManager pnpm@10.33.0 fixado, e os dois lockfiles no gitignore. ACHADO: nao existe envio de e-mail em lugar nenhum - 4 templates, um script que so LISTA arquivos, e /auth/verify que e um redirect vazio -> task 61. PRECISA DO USUARIO: por DATABASE_URL no .env; decidir onde hospedar (regiao do banco, sharp, images.unoptimized); decidir sobre e-mail.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 1,
+      "files_changed": [
+        "README.md",
+        ".env.example",
+        ".gitignore",
+        "package.json",
+        "package-lock.json (removido)",
+        "src/lib/env.server.ts",
+        "src/db/client.ts",
+        "src/lib/auth/session.ts"
+      ]
     },
     {
       "id": "21",
@@ -643,6 +656,20 @@
         "19"
       ],
       "notes": "Achado na task 19: /blog tem CLS 0,163 (desktop) e 0,198 (mobile) porque page.tsx tem dois return completos e remonta header e footer na troca de loading.",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "61",
+      "slug": "email-nao-existe",
+      "phase": 2,
+      "order": 61,
+      "status": "pending",
+      "risk": "medio",
+      "depends_on": [],
+      "notes": "Achado na task 20: nao ha envio de e-mail no projeto. 4 templates HTML, um script que so valida arquivos, e tres telas que dependem de e-mail que nunca chega.",
       "started_at": null,
       "finished_at": null,
       "debug_iterations": 0,
@@ -831,6 +858,12 @@
       "task": "19",
       "event": "done",
       "detail": "LCP da home 7220 -> 848 ms. Imagens de public/: 1291 -> 192 kB. LCP 12/12 no alvo. Achado 60 (CLS do /blog)."
+    },
+    {
+      "at": "2026-08-27",
+      "task": "20",
+      "event": "done",
+      "detail": "DATABASE_URL ausente do .env (roda sem pooler). Validacao Zod religada. package-lock.json de abril removido, pnpm fixado. Achado 61 (nao ha envio de e-mail)."
     }
   ]
 }
