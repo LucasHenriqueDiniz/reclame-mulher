@@ -16,7 +16,12 @@ interface SubTabsProps {
 
 export function SubTabs({ tabs, activeTab, onChange }: SubTabsProps) {
   return (
-    <div className="flex h-14 items-center gap-4 px-4 border-b border-[#26a69a1a] bg-white">
+    // Ver a nota do `FilterTabs`: rola dentro de si em vez de empurrar a página.
+    <nav
+      tabIndex={0}
+      aria-label="Seções das configurações"
+      className="flex h-14 items-center gap-4 overflow-x-auto px-4 border-b border-[#26a69a1a] bg-white"
+    >
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.key;
@@ -24,7 +29,7 @@ export function SubTabs({ tabs, activeTab, onChange }: SubTabsProps) {
           <button
             key={tab.key}
             onClick={() => onChange(tab.key)}
-            className={`flex items-center gap-1.5 px-2 py-4 bg-transparent border-none cursor-pointer -mb-px border-b-2 transition-colors ${
+            className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap px-2 py-4 bg-transparent border-none cursor-pointer -mb-px border-b-2 transition-colors ${
               isActive ? "border-[#1565C0]" : "border-transparent"
             }`}
           >
@@ -42,6 +47,6 @@ export function SubTabs({ tabs, activeTab, onChange }: SubTabsProps) {
           </button>
         );
       })}
-    </div>
+    </nav>
   );
 }

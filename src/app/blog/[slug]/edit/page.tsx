@@ -623,7 +623,12 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ slug: s
                     ol: ({ children }) => <ol className="list-decimal list-inside text-xl text-[#3B3C4A] mb-6 space-y-2">{children}</ol>,
                     hr: () => <hr className="my-8 border-t-2 border-gray-200" />,
                     table: ({ children }) => (
-                      <div className="my-8 overflow-x-auto rounded-2xl border border-gray-200">
+                      <div
+                        className="my-8 overflow-x-auto rounded-2xl border border-gray-200"
+                        tabIndex={0}
+                        role="region"
+                        aria-label="Tabela do artigo"
+                      >
                         <table className="min-w-full border-collapse bg-white text-left text-base">{children}</table>
                       </div>
                     ),

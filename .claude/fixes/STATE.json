@@ -347,12 +347,24 @@
       "slug": "responsividade-autenticadas",
       "phase": 5,
       "order": 15,
-      "status": "pending",
+      "status": "done",
       "risk": "medio",
       "depends_on": [
         "14"
       ],
-      "notes": "A metade overflow ja foi fechada pela task 14: e2e/responsive.spec.ts cobre 15 rotas autenticadas e todas passam. Resta o resto do escopo: alvos de toque, menu lateral em celular, formularios longos, e o item do menu hamburguer que ficou aberto no aceite da 14."
+      "notes": "Fechada. responsive.spec.ts foi de 66 para 94 testes: alvos de toque com as excecoes do WCAG 2.5.8 (espacamento, inline, sr-only), menu de celular abre/navega/fecha, e a conversa do relato com medicao do campo de resposta. Corrigidos: pontinhos do carrossel da home (8x8 -> area de toque 24x24 sem mudar o desenho), FilterTabs e SubTabs sem overflow-x-auto, rodape do wizard espremido em 375px, tabelas do blog sem tabIndex. Riscos previstos que nao existem: 31 usos de vh sao todos min-height (nenhuma altura fixa) e nao ha composer fixed/sticky. Nao coberto: teclado virtual em aparelho real. Achado novo -> task 57.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 1,
+      "files_changed": [
+        "e2e/responsive.spec.ts",
+        "src/components/landing/ProcessCarousel.tsx",
+        "src/components/app/FilterTabs.tsx",
+        "src/components/app/SubTabs.tsx",
+        "src/app/blog/[slug]/page.tsx",
+        "src/app/blog/[slug]/edit/page.tsx",
+        "src/app/app/complaints/new/_components/wizard/complaint-step-footer.tsx"
+      ]
     },
     {
       "id": "16",
@@ -530,6 +542,20 @@
       "finished_at": null,
       "debug_iterations": 0,
       "files_changed": []
+    },
+    {
+      "id": "57",
+      "slug": "cta-de-relato-na-tela-da-empresa",
+      "phase": 5,
+      "order": 57,
+      "status": "pending",
+      "risk": "baixo",
+      "depends_on": [],
+      "notes": "Achado na task 15. company-complaint-detail-content.tsx:515 monta /app/complaints/new?company= com o NOME da empresa; os outros cinco call sites passam id. Alem disso o card aparece para a propria empresa, convidando-a a reclamar de si mesma; a regra !isMember ja existe em company-profile-content.tsx:568.",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
     }
   ],
   "task_fields": {
@@ -684,6 +710,12 @@
       "status": "done",
       "report": "reports/14-responsividade-publicas.md",
       "medicao": "8 paginas com overflow -> 0"
+    },
+    {
+      "at": "2026-08-27",
+      "task": "15",
+      "event": "done",
+      "detail": "Suite rapida 288 -> 316. 0 alvos de toque abaixo de 24x24 sem espacamento. Achado 57 registrado."
     }
   ]
 }

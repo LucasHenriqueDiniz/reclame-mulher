@@ -243,16 +243,26 @@ export function ProcessCarousel() {
               {/* Dots indicadores */}
               <div className="flex items-center justify-center gap-2 mt-8 pt-6 border-t border-border">
                 {steps.map((_, index) => (
+                  // O ponto continua com 8px de altura, mas quem recebe o toque
+                  // é um botão de 24x24 — o mínimo do WCAG 2.5.8. Sem isso, em
+                  // celular a pessoa erra o alvo e pula a etapa errada.
                   <button
                     key={index}
                     onClick={() => goToStep(index)}
-                    className={`h-2 rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
-                      index === currentStep
-                        ? "bg-[var(--brand-blue-light)] w-8"
-                        : "bg-muted-foreground/30 w-2 hover:bg-muted-foreground/50"
+                    className={`group flex h-6 items-center justify-center rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                      index === currentStep ? "w-10" : "w-6"
                     }`}
                     aria-label={`Ir para etapa ${index + 1}`}
-                  />
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={`block h-2 rounded-full transition-all duration-200 ${
+                        index === currentStep
+                          ? "w-8 bg-[var(--brand-blue-light)]"
+                          : "w-2 bg-muted-foreground/30 group-hover:bg-muted-foreground/50"
+                      }`}
+                    />
+                  </button>
                 ))}
               </div>
             </CardContent>

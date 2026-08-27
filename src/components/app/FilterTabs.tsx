@@ -18,7 +18,14 @@ interface FilterTabsProps {
 
 export function FilterTabs({ tabs, activeTab, onChange, mutedColor = "#546E7A" }: FilterTabsProps) {
   return (
-    <nav className="flex h-14 items-center gap-4 bg-white border-b border-[#26a69a1a] px-4">
+    // Mesmo tratamento do `PageTabs`: em 375px cinco filtros não cabem lado a
+    // lado. A barra rola dentro de si mesma em vez de empurrar a página, e
+    // `tabIndex` porque região rolável precisa ser alcançável por teclado.
+    <nav
+      tabIndex={0}
+      aria-label="Filtros da lista"
+      className="flex h-14 items-center gap-4 overflow-x-auto bg-white border-b border-[#26a69a1a] px-4"
+    >
       {tabs.map((tab) => {
         const IconComponent = tab.icon;
         const isActive = activeTab === tab.id;
@@ -26,7 +33,7 @@ export function FilterTabs({ tabs, activeTab, onChange, mutedColor = "#546E7A" }
           <button
             key={tab.id}
             onClick={() => onChange(tab.id)}
-            className={`inline-flex items-center gap-1.5 px-2 py-4 self-stretch flex-[0_0_auto] border-b-2 cursor-pointer transition-colors -mb-px ${
+            className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap px-2 py-4 self-stretch flex-[0_0_auto] border-b-2 cursor-pointer transition-colors -mb-px ${
               isActive
                 ? "border-[#1565C0]"
                 : "border-transparent hover:border-gray-300"

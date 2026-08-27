@@ -30,9 +30,12 @@ export function ComplaintStepFooter({
   loading = false,
 }: ComplaintStepFooterProps) {
   return (
-    <div className="flex items-center justify-between pt-6 w-full border-t border-gray-100">
+    // Em 375px os três blocos lado a lado espremiam "Informações privadas" em
+    // duas linhas por cima do ícone e encolhiam os botões. No celular eles
+    // empilham; de `sm:` para cima o desenho original continua igual.
+    <div className="flex flex-col gap-4 pt-6 w-full border-t border-gray-100 sm:flex-row sm:items-center sm:justify-between">
       {/* Private info indicator */}
-      <div className="flex items-center gap-2">
+      <div className="flex shrink-0 items-center gap-2">
         {showPrivateInfo && (
           <>
             <div className="p-1.5 rounded-lg bg-[#1565C0]/10">
@@ -46,7 +49,7 @@ export function ComplaintStepFooter({
       </div>
 
       {/* Action buttons */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-end gap-2">
         {showBackButton && (
           <Button
             type="button"

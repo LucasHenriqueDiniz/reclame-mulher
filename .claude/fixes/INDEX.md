@@ -89,7 +89,7 @@ mobile.
 | | ID | Task | Risco | Depende de |
 |---|---|---|---|---|
 | ✅ | `14` | [Páginas públicas em 375px](tasks/14-responsividade-publicas.md) | médio | `12` |
-| ⬜ | `15` | [Áreas autenticadas em 375px](tasks/15-responsividade-autenticadas.md) | médio | `14` |
+| ✅ | `15` | [Áreas autenticadas em 375px](tasks/15-responsividade-autenticadas.md) | médio | `14` |
 
 ---
 
@@ -147,6 +147,7 @@ criar deve registrar aqui e em `STATE.json`.
 | ⬜ | `54` | [Rótulos de status divergentes](tasks/54-rotulos-de-status-divergentes.md) | baixo | `10` | achado na `10`: quatro mapas de rótulo que discordam — "Em réplica" na lista vs "Respondida" no detalhe, "Concluído" para a usuária vs "Resolvida" para a empresa |
 | ⬜ | `55` | [Resolvida não reabre](tasks/55-resolvido-nao-reabre.md) | **alto** | `10` | achado na `10`: depois de `RESOLVED` a resposta da autora é gravada mas o status não muda — ela não consegue contestar o encerramento |
 | ⬜ | `56` | [Conta de empresa do seed é MEMBER](tasks/56-conta-empresa-do-seed-e-member.md) | médio | `11` | achado na `11`: a conta da demonstração recebe 403 ao editar perfil, criar projeto ou convidar usuária — conserto de seed |
+| ⬜ | `57` | [CTA de relato na tela da empresa](tasks/57-cta-de-relato-na-tela-da-empresa.md) | baixo | `15` | achado na `15`: o link passa o *nome* da empresa onde o wizard espera o *id*, e o card convida a empresa a reclamar de si mesma |
 
 **Ordem revisada pela task `00`:** `01` → `02` → `03` → **`50`** → `07` → …
 A `50` sobe na fila por ser defeito confirmado, e cabe antes dos testes para que
