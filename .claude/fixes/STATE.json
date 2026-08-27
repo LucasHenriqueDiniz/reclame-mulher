@@ -12,7 +12,7 @@
     "eslint_errors_note": "0 erros apos ignorar .claude/** no eslint.config.mjs (task 01)",
     "eslint_warnings": 0,
     "eslint_top_rules": {},
-    "automated_tests": 114,
+    "automated_tests": 130,
     "pages": 42,
     "api_routes": 32,
     "components": 95,
@@ -225,12 +225,18 @@
       "slug": "e2e-nova-reclamacao",
       "phase": 3,
       "order": 9,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [
         "08"
       ],
-      "notes": "limite REAL de upload: 3 arquivos x 5MB (upload-dropzone.tsx), nao 10MB/50MB como diz o manual"
+      "notes": "16 testes novos (8 por projeto). Limites reais: 3 arquivos, 5MB cada, PNG/JPG/JPEG/PDF - o manual diz 10MB/50MB e esta errado (task 21). Limpeza do banco por prefixo [e2e] em e2e/fixtures/db.ts, porque nao existe rota de exclusao de relato. Upload real atras de E2E_UPLOAD=1. Achados 52 e 53 abertos.",
+      "finished_at": "2026-08-26T23:35:00",
+      "debug_iterations": 0,
+      "files_changed": [
+        "e2e/complaint-create.spec.ts",
+        "e2e/fixtures/db.ts"
+      ]
     },
     {
       "id": "10",
@@ -264,7 +270,8 @@
       "risk": "baixo",
       "depends_on": [
         "07"
-      ]
+      ],
+      "notes": "A varredura deve reencontrar os achados 52 e 53; se nao reencontrar, a varredura e que esta incompleta."
     },
     {
       "id": "13",
@@ -370,7 +377,7 @@
       "depends_on": [
         "19"
       ],
-      "notes": "MANUAL_PLATAFORMA.md diz 10MB/50MB de anexo; o codigo usa 3 arquivos x 5MB"
+      "notes": "MANUAL_PLATAFORMA.md diz 10MB/50MB de anexo; o codigo usa 3 arquivos x 5MB | MANUAL_PLATAFORMA.md diz 10MB por arquivo e 50MB no total; o codigo faz 3 arquivos de 5MB, PNG/JPG/JPEG/PDF. Medido na task 09."
     },
     {
       "id": "22",
@@ -394,7 +401,7 @@
       "depends_on": [
         "22"
       ],
-      "notes": "seed precisa de logoUrl nas empresas: hoje as 2 tem NULL e os componentes de logo caem no fallback da letra"
+      "notes": "seed precisa de logoUrl nas empresas: hoje as 2 tem NULL e os componentes de logo caem no fallback da letra | Medido na task 09: o seed tem apenas 3 relatos no total."
     },
     {
       "id": "99",
@@ -406,6 +413,34 @@
       "depends_on": [
         "23"
       ]
+    },
+    {
+      "id": "52",
+      "slug": "etapas-fora-de-tela-focaveis",
+      "phase": 4,
+      "order": 52,
+      "status": "pending",
+      "risk": "medio",
+      "depends_on": [],
+      "notes": "Achado na task 09. As 4 etapas do wizard coexistem no DOM: 11 controles fora da tela continuam focaveis, sem aria-hidden nem inert. Evidencia medida no relatorio 09.",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "53",
+      "slug": "selects-sem-rotulo-associado",
+      "phase": 4,
+      "order": 53,
+      "status": "pending",
+      "risk": "baixo",
+      "depends_on": [],
+      "notes": "Achado na task 09. ComplaintField gera <label for> mas o Radix SelectTrigger nao recebe o id: 3 rotulos orfaos e 3 combobox sem nome acessivel na etapa 4.",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
     }
   ],
   "task_fields": {
@@ -505,6 +540,16 @@
       "status": "done",
       "report": "reports/08-e2e-autenticacao.md",
       "regressao_corrigida": "50"
+    },
+    {
+      "task": "09",
+      "at": "2026-08-26",
+      "status": "done",
+      "report": "reports/09-e2e-nova-reclamacao.md",
+      "achados_abertos": [
+        "52",
+        "53"
+      ]
     }
   ]
 }
