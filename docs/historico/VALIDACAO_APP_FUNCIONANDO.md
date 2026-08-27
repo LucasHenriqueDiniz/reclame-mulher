@@ -1,5 +1,9 @@
 # ✅ VALIDAÇÃO FINAL - APP FUNCIONANDO
 
+> **Documento histórico, de 07/07/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 **Data:** 2026-07-07  
 **Status:** 🚀 **PRONTO PARA PRODUÇÃO**  
 **Teste:** Real em http://localhost:5000

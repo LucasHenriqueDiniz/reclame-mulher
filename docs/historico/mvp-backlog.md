@@ -1,5 +1,9 @@
 # Backlog Tecnico Prioritario
 
+> **Documento histórico, de 19/03/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 ## P0
 
 - Persistir `onboardingCompletedAt` no final dos fluxos de onboarding de pessoa e empresa.

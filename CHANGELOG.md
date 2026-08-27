@@ -2,9 +2,73 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
+> **Leia a entrada 0.1.0 com cuidado.** Ela foi escrita em 07/07/2026 e afirma
+> coisas que a fila de correções de agosto mediu e desmentiu: "20/20 testes
+> passando" quando não havia nenhum arquivo de teste, "zero violações de
+> acessibilidade" quando a varredura automatizada encontrou 523, e um limite de
+> anexo de 50 MB que não corresponde a nenhum valor do código.
+>
+> A entrada fica como está. É registro do que se acreditava na época, e reescrevê-la
+> apagaria justamente a informação útil. Para o estado verificado, veja
+> [`TODO.md`](TODO.md) e [`docs/`](docs/arquitetura.md).
+
+---
+
+## [Não versionado] - agosto de 2026 - Fila de correções
+
+Trabalho catalogado em [`.claude/fixes/`](.claude/fixes/INDEX.md), uma task por
+assunto, cada uma com relatório e medição reproduzível. Resumo:
+
+### Corrigido
+
+- **Middleware não protegia `/app/*`** — estava na raiz do repositório, onde o
+  Next não o executa quando existe diretório `src/`.
+- **Anonimato vazava** — o painel da empresa mostrava o nome da autora de um
+  relato anônimo.
+- **Autorização** — as 32 rotas de API passaram a ter prova de autorização por
+  papel, com teste. Antes: 40 rotas sem prova.
+- **Erros de API** — de 34 formatos diferentes para um só, documentado e travado
+  por teste.
+- **Acessibilidade** — de 523 ocorrências WCAG 2.1 A/AA para 0, em 39 páginas ×
+  2 viewports. A maior parte vinha de 33 pares de cor da paleta.
+- **Responsividade** — de 8 páginas com scroll horizontal em 375px para 0.
+- **Mensagens de erro em inglês** na interface — cerca de 64 ocorrências.
+- **ESLint** — de 4 erros e 277 avisos para 0 e 0.
+- **Configuração de ambiente** — faltando uma variável obrigatória, a aplicação
+  caía numa string de conexão falsa e subia saudável. Agora falha com o nome da
+  variável.
+- **Dois lockfiles** — `package-lock.json` estava quatro meses atrasado ao lado
+  do `pnpm-lock.yaml`. Removido; `pnpm` fixado em `packageManager`.
+
+### Acrescentado
+
+- **458 testes automatizados**: 18 de unidade, 362 de ponta a ponta, 78 de
+  acessibilidade. Antes: nenhum.
+- `docs/autorizacao.md`, `docs/api-erros.md`, `docs/arquitetura.md`,
+  `docs/testes.md`, `docs/acessibilidade.md`.
+
+### Desempenho
+
+- **LCP da home** de 7 220 ms para 848 ms, medido em 4G lenta com CPU 4× mais
+  lenta.
+- **Imagens de `public/`** de 1 291 kB para 192 kB.
+
+### Documentação
+
+- 21 arquivos `.md` na raiz reduzidos a 5. O que era registro datado foi para
+  [`docs/historico/`](docs/historico/README.md), sem edição de conteúdo; o que
+  era duplicata foi apagado.
+- `TODO.md` reconciliado: tinha 63 itens com caixa desmarcada e corpo dizendo
+  "Concluído".
+
 ---
 
 ## [0.1.0] - 2026-07-07 - MVP Finalizado
+
+> ⚠️ **Entrada histórica, não verificada.** Os números desta seção — testes,
+> acessibilidade, limites de upload, contraste — foram escritos sem medição e
+> não descrevem o projeto. Ficam como registro. Estado atual:
+> [`TODO.md`](TODO.md).
 
 ### Versão: 0.1.0 MVP (Production Ready)
 
@@ -490,9 +554,8 @@ Este projeto é propriedade de Comunica Mulher / ReclameMulher.
 
 ---
 
-**Última atualização:** 07/07/2026  
-**Próxima revisão:** 14/07/2026  
-**Mantido por:** Equipe ReclameMulher
+**Última atualização:** 27/08/2026  
+**Mantido por:** Lucas Henrique Diniz Ostroski
 
 ---
 
@@ -505,4 +568,5 @@ Este projeto é propriedade de Comunica Mulher / ReclameMulher.
 
 ---
 
-**ReclameMulher MVP v0.1.0 - Pronto para Produção** ✅
+**ComunicaMulher — v0.1.0 mais a fila de correções de agosto de 2026.**
+O que ainda falta está em [`TODO.md`](TODO.md).

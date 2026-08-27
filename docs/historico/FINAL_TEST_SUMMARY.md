@@ -1,5 +1,9 @@
 # 📋 Sumário Final de Testes - ReclameMulher MVP v0.1.0
 
+> **Documento histórico, de 07/07/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 **Data de Conclusão:** 07/07/2026  
 **Status Final:** ✅ **PRONTO PARA PRODUÇÃO**  
 **Testes Totais:** 20/20 Passando (100%)  

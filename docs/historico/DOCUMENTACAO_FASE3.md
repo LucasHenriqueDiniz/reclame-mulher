@@ -1,5 +1,9 @@
 # 📚 Documentação da Fase 3 - Testes e Finalização
 
+> **Documento histórico, de 07/07/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 **Período:** 07/07/2026  
 **Versão do MVP:** 0.1.0  
 **Status:** ✅ Concluído com Sucesso

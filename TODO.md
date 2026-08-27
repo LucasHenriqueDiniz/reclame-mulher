@@ -1,440 +1,159 @@
-# ReclameMulher TODO
-
-Backlog operacional do projeto ReclameMulher / Comunica Mulher.
-
-Status base: 91 tarefas pendentes → 80 tarefas pendentes (11 P1 concluídas na Sprint 3)
-
-## Resumo
-
-- P1: 11 tarefas - MVP critico ✅ **TODAS CONCLUÍDAS**
-- P2: 23 tarefas - core features
-- P3: 35 tarefas - views e refinamentos
-- P4: 5 tarefas - post-MVP
-- Complementar: 17 tarefas - fechamento da contagem e saneamento
-
-## P1 - MVP Critico ✅ CONCLUÍDO
-
-### Testes Finalizados (Sprint 3)
-
-- [x] Mensagens: consolidar modelo de thread entre usuaria e empresa.
-  - Implementado em Fase 2, validado em Fase 3 com E2E
-  - Componentes: `complaint-detail-content.tsx`, message handlers
-  - Endpoints: POST/GET `/api/complaints/[id]/messages`
-  - Status: ✅ PASSOU EM TESTES
-
-- [x] Mensagens: garantir permissao de leitura apenas para autora, empresa envolvida e admin.
-  - RLS policies implementadas
-  - Authorization layer validado
-  - Audit logging confirmado
-  - Status: ✅ PASSOU EM TESTES
-
-- [x] Mensagens: permitir resposta da empresa com atualizacao correta do status.
-  - Company response flow validado
-  - Status transitions: OPEN → IN_PROGRESS → RESOLVED
-  - Endpoint: PATCH `/api/company/complaints/[id]/status`
-  - Status: ✅ PASSOU EM TESTES
-
-- [x] Mensagens: permitir resposta da usuaria com reabertura quando aplicavel.
-  - User reply auto-reopens complaint
-  - Status logic implementado
-  - E2E flow testado com sucesso
-  - Status: ✅ PASSOU EM TESTES
-
-- [x] Mensagens: tratar anexos na thread com regra de acesso.
-  - File upload com UploadThing integrado
-  - Validação de tipo e tamanho (10MB por arquivo, 50MB total)
-  - Access control por permissão
-  - Status: ✅ PASSOU EM TESTES
-
-- [x] Blog publico: validar API de listagem com busca, tag e paginacao.
-  - API implementada em Fase 2
-  - Endpoints: GET `/api/blog/posts`, `/api/blog/tags`
-  - Paginação e busca funcional
-  - Status: ✅ PASSOU EM TESTES
-
-- [x] Blog publico: alinhar pagina de lista, detalhe e posts em destaque.
-  - Páginas públicas criadas: `/blog`, `/blog/[slug]`, `/blog/all`
-  - Posts em destaque carregados
-  - SEO metadata completo
-  - Status: ✅ PASSOU EM TESTES
-
-- [x] Projetos: fechar CRUD da empresa com validacao e ownership.
-  - CRUD completo em Fase 2
-  - Ownership verification implementado
-  - Validações Zod para schema
-  - Status: ✅ PASSOU EM TESTES
-
-- [x] Admin: revisar guards/middleware para rotas administrativas.
-  - Middleware de autenticação em place
-  - Role-based access control
-  - Route guards para admin
-  - Audit logging ativo
-  - Status: ✅ PASSOU EM TESTES
-
-- [x] Reclamacao: completar pagina de detalhe com estados e permissoes.
-  - Página completa em `/app/complaints/[id]`
-  - Estados de reclamação implementados
-  - Permissões granulares validadas
-  - Status: ✅ PASSOU EM TESTES
-
-- [x] Cadastro obra/mapa: criar fluxo minimo de area afetada e dados territoriais mock.
-  - Fluxo mínimo criado
-  - Dados territoriais mock para prototype
-  - Localização integration em complaint form
-  - Status: ✅ PASSOU EM TESTES
-
-## P2 - Core Features
-
-### Em Progresso
-
-- [ ] Repos: revisar contratos dos repos principais.
-  - Status: Investigação necessária
-  - Prioridade: Média para Fase 4
-
-- [ ] Repos: padronizar retorno de erro em operacoes server-side.
-  - Status: Parcialmente feito
-  - Prioridade: Média para Fase 4
-
-- [ ] Validacoes: revisar DTOs de reclamacao.
-  - Status: Validações Zod implementadas
-  - Prioridade: Baixa, validar em Fase 4
-
-- [ ] Validacoes: revisar DTOs de empresa.
-  - Status: DTOs criados
-  - Prioridade: Baixa
-
-- [ ] Validacoes: revisar DTOs de projetos.
-  - Status: Validações em place
-  - Prioridade: Baixa
-
-- [ ] Validacoes: revisar DTOs de mensagens.
-  - Status: Schema validado
-  - Prioridade: Baixa
-
-- [ ] UI mensagens: criar composer reutilizavel.
-  - Status: Composer criado
-  - Prioridade: Concluído informalmente
-
-- [ ] UI mensagens: adicionar estados de envio, erro e sucesso.
-  - Status: Estados básicos implementados
-  - Prioridade: Refinamento Fase 4
-
-- [ ] UI reclamacoes: padronizar badges de status.
-  - Status: Badges criadas
-  - Prioridade: Concluído informalmente
-
-- [ ] UI reclamacoes: padronizar empty states.
-  - Status: Empty states implementados
-  - Prioridade: Refinamento Fase 4
-
-- [ ] RLS/policies: decidir se o projeto manterá auth propria sem RLS ou camada equivalente.
-  - Status: Decisão tomada - Auth própria sem RLS
-  - Prioridade: Documentação necessária
-
-- [ ] RLS/policies: documentar modelo de autorizacao real.
-  - Status: Parcialmente documentado
-  - Prioridade: Alta para Fase 4
-
-- [ ] RLS/policies: cobrir regras de empresa, reclamacao e admin.
-  - Status: Regras implementadas no backend
-  - Prioridade: Validação Fase 4
-
-- [ ] Company dashboard: consolidar cards principais.
-  - Status: Dashboard criado em Fase 2
-  - Prioridade: Refinamento
-
-- [ ] Company dashboard: ligar inbox a dados reais.
-  - Status: Inbox linkado a dados
-  - Prioridade: Concluído
-
-- [ ] Company dashboard: ligar projetos a dados reais.
-  - Status: Projetos integrados
-  - Prioridade: Concluído
-
-- [ ] Company dashboard: ligar perfil a dados reais.
-  - Status: Perfil integrado
-  - Prioridade: Concluído
-
-- [ ] Settings: implementar troca de senha completa.
-  - Status: Endpoint POST `/api/auth/change-password`
-  - Prioridade: Concluído informalmente
-
-- [ ] Settings: implementar edicao de conta/perfil.
-  - Status: Edição básica implementada
-  - Prioridade: Concluído informalmente
-
-- [ ] Notificacoes: definir eventos minimos.
-  - Status: Estrutura preparada
-  - Prioridade: Fase 4
-
-- [ ] Notificacoes: criar estrutura de envio ou fila futura.
-  - Status: Placeholder em place
-  - Prioridade: Fase 4
-
-- [ ] Territorial data: definir contrato de dados de localidade.
-  - Status: Mock data em place
-  - Prioridade: Refinamento Fase 4
-
-- [ ] Territorial data: criar mock consistente para obra/mapa.
-  - Status: Mock criado
-  - Prioridade: Concluído para MVP
-
-## P3 - Views e Refinements
-
-### Visibilidade Pública
-
-- [ ] Perfil empresa: revisar layout publico.
-  - Status: Layout criado
-  - Prioridade: Refinamento
-
-- [ ] Perfil empresa: exibir projetos ativos.
-  - Status: Implementado
-  - Prioridade: Concluído
-
-- [ ] Perfil empresa: exibir reclamacoes publicas.
-  - Status: Implementado
-  - Prioridade: Concluído
-
-- [ ] Perfil empresa: exibir metricas principais.
-  - Status: Métricas básicas
-  - Prioridade: Refinamento
-
-- [ ] Perfil empresa: adicionar estados sem dados.
-  - Status: Empty states implementados
-  - Prioridade: Concluído
-
-- [ ] Perfil pessoa: criar view de dados pessoais.
-  - Status: View criada
-  - Prioridade: Concluído
-
-- [ ] Perfil pessoa: criar historico de reclamacoes.
-  - Status: Histórico implementado
-  - Prioridade: Concluído
-
-- [ ] Perfil pessoa: criar preferencias de contato.
-  - Status: Campos preparados
-  - Prioridade: Fase 4
-
-- [ ] Reclamacao usuaria: revisar listagem.
-  - Status: Listagem funcional
-  - Prioridade: Refinamento
-
-- [ ] Reclamacao usuaria: revisar filtros.
-  - Status: Filtros básicos
-  - Prioridade: Refinamento
-
-- [ ] Reclamacao usuaria: revisar detalhe.
-  - Status: Detalhe completo
-  - Prioridade: Concluído
-
-- [ ] Reclamacao empresa: revisar inbox.
-  - Status: Inbox funcional
-  - Prioridade: Concluído
-
-- [ ] Reclamacao empresa: revisar detalhe.
-  - Status: Detalhe implementado
-  - Prioridade: Concluído
-
-- [ ] Reclamacao empresa: revisar mudanca de status.
-  - Status: Mudança funcional
-  - Prioridade: Concluído
-
-- [ ] Reclamacao reclamador: ajustar linguagem e acessibilidade.
-  - Status: Validado em Fase 3
-  - Prioridade: ✅ WCAG AA COMPLIANT
-
-### Acessibilidade ✅ VALIDADA
-
-- [x] Acessibilidade: revisar contraste basico.
-  - ✅ Validado em Fase 3 - WCAG AAA
-  
-- [x] Acessibilidade: revisar foco visivel.
-  - ✅ Validado em Fase 3 - Focus visible em todos os elementos
-  
-- [x] Acessibilidade: revisar textos de erro.
-  - ✅ Validado em Fase 3 - Mensagens claras
-
-- [x] Acessibilidade: revisar labels de formulario.
-  - ✅ Validado em Fase 3 - Labels associados corretamente
-
-- [ ] Acessibilidade: criar modo alto contraste.
-  - Status: Não requerido para MVP
-  - Prioridade: Fase 4
-
-- [ ] Acessibilidade: avaliar TTS ou leitura assistida.
-  - Status: Screen reader compatibility ✅ testado
-  - Prioridade: Monitoramento contínuo
-
-- [x] Acessibilidade: revisar navegacao por teclado.
-  - ✅ Validado em Fase 3 - Tab order correto
-
-### OAuth e Autenticação Social
-
-- [ ] OAuth: definir provedores desejados.
-  - Status: Google, Facebook definidos
-  - Prioridade: Fase 4
-
-- [ ] OAuth: criar estrategia de callback.
-  - Status: Arquitetura definida
-  - Prioridade: Fase 4
-
-- [ ] OAuth: reconciliar contas existentes por email.
-  - Status: Lógica preparada
-  - Prioridade: Fase 4
-
-### Blog CMS
-
-- [ ] Blog CMS: revisar editor markdown.
-  - Status: Editor básico em place
-  - Prioridade: Refinamento Fase 4
-
-- [ ] Blog CMS: revisar upload de imagem.
-  - Status: Upload via UploadThing
-  - Prioridade: Funcional
-
-- [ ] Blog CMS: revisar tags.
-  - Status: Sistema de tags implementado
-  - Prioridade: Funcional
-
-- [ ] Blog CMS: revisar rascunho/publicacao.
-  - Status: Draft status em place
-  - Prioridade: Funcional
-
-### UX Padrões
-
-- [ ] UX filtros: padronizar filtros por status.
-  - Status: Padrão criado
-  - Prioridade: Refinamento
-
-- [ ] UX filtros: padronizar busca textual.
-  - Status: Busca implementada
-  - Prioridade: Refinamento
-
-- [ ] UX filtros: preservar filtros na URL quando fizer sentido.
-  - Status: Query params em place
-  - Prioridade: Refinamento
-
-- [ ] UX empty states: revisar textos e CTAs.
-  - Status: Empty states criados
-  - Prioridade: Refinamento
-
-- [ ] UX loading states: revisar skeletons.
-  - Status: Skeletons implementados
-  - Prioridade: Refinamento
-
-- [ ] UX mobile: revisar telas criticas em viewport pequeno.
-  - Status: ✅ VALIDADO EM FASE 3
-  - Prioridade: Concluído
-
-## P4 - Post-MVP
-
-- [ ] Reports/feedback: fechar modelo de feedback do usuario.
-  - Status: Modelo preparado
-  - Prioridade: Fase 4
-
-- [ ] Reports/feedback: criar triagem administrativa.
-  - Status: Sistema preparado
-  - Prioridade: Fase 4
-
-- [ ] Auditoria avancada: adicionar filtros por acao e entidade.
-  - Status: Base implementada
-  - Prioridade: Fase 4
-
-- [ ] Auditoria avancada: exportar logs administrativos.
-  - Status: Estrutura preparada
-  - Prioridade: Fase 4
-
-- [ ] Filtros avancados: adicionar filtros compostos em reclamacoes e empresas.
-  - Status: Estrutura preparada
-  - Prioridade: Fase 4
-
-## Complementar - Saneamento e Fechamento ✅ CONCLUÍDO
-
-### Documentação Atualizada
-
-- [x] Atualizar `docs/mvp-backlog.md` para refletir o que ja foi implementado.
-  - Status: ✅ FEITO NA FASE 3
-  - Documento: CHANGELOG.md criado
-
-- [x] Corrigir referencias antigas a cookie `auth-token` na documentacao.
-  - Status: ✅ FEITO - JWT utilizado
-
-- [x] Remover mencoes obsoletas a Supabase se nao houver runtime relacionado.
-  - Status: ✅ FEITO - Drizzle + Neon
-
-- [ ] Limpar warnings de imports nao usados.
-  - Status: ESLint em place
-  - Prioridade: Manutenção contínua
-
-- [ ] Revisar ocorrencias de `<img>` e migrar para `next/image` quando fizer sentido.
-  - Status: Next/image utilizado onde possível
-  - Prioridade: Otimização contínua
-
-- [ ] Revisar encoding mojibake em textos renderizados.
-  - Status: UTF-8 encoding correto
-  - Prioridade: Monitoramento
-
-- [ ] Padronizar package manager recomendado.
-  - Status: pnpm recomendado
-  - Prioridade: ✅ Documentado
-
-- [ ] Decidir se `package-lock.json` deve permanecer junto com `pnpm-lock.yaml`.
-  - Status: Ambos mantidos por compatibilidade
-  - Prioridade: ✅ Documentado
-
-- [x] Documentar fluxo de migrations Drizzle.
-  - Status: ✅ DOCUMENTADO
-
-- [x] Documentar fluxo de seed e contas de teste.
-  - Status: ✅ DOCUMENTADO
-
-- [x] Criar checklist de smoke test manual.
-  - Status: ✅ CRIADO (E2E test report)
-
-- [x] Criar testes automatizados para auth.
-  - Status: ✅ E2E VALIDADO
-
-- [x] Criar testes automatizados para reclamacoes.
-  - Status: ✅ E2E VALIDADO
-
-- [x] Criar testes automatizados para empresas/projetos.
-  - Status: ✅ E2E VALIDADO
-
-- [x] Criar testes automatizados para blog.
-  - Status: ✅ VALIDADO
-
-- [x] Criar testes automatizados para admin/auditoria.
-  - Status: ✅ VALIDADO
-
-- [x] Revisar variaveis de ambiente obrigatorias em `.env.example`.
-  - Status: ✅ REVISADO
-
-## Resumo Sprint 3 (Testes e Finalização)
-
-### Concluído
-- ✅ E2E tests para 3 fluxos principais
-- ✅ Validação de 3 viewports (mobile, tablet, desktop)
-- ✅ Axe DevTools audit (0 violações críticas)
-- ✅ Screen reader testing (NVDA)
-- ✅ Contraste WebAIM (WCAG AA 100%)
-- ✅ Homepage render validation
-- ✅ CHANGELOG.md criado
-- ✅ TODO.md atualizado
-- ✅ E2E test report gerado
-
-### Taxa de Sucesso MVP
-- Testes: 20/20 passando (100%)
-- Violações críticas: 0
-- Conformidade: WCAG AA (100%)
-- Performance: ✅ Passou
-
-### Próximas Fases
-- Fase 4: Otimizações e feature refinement
-- Fase 5: Escalabilidade e performance
-- Fase 6: Produção e monitoring
+# Backlog
+
+Único backlog vivo do projeto. Reconciliado com a realidade medida na task `21`
+(agosto de 2026).
+
+> **O que aconteceu com a versão anterior.** O `TODO.md` de julho tinha 91
+> itens, 63 deles com caixa `[ ]` desmarcada e corpo dizendo "Concluído". Não
+> era descuido de digitação: os itens marcados como feitos incluíam "testes
+> automatizados para auth", "para reclamações", "para blog" e "para
+> admin/auditoria" — e o repositório não tinha **um único arquivo de teste**.
+> Também descrevia a transição de status `OPEN → IN_PROGRESS → RESOLVED`, que
+> nunca existiu, e "RLS policies implementadas" num projeto sem RLS.
+>
+> A versão antiga está em
+> [`docs/historico/`](docs/historico/README.md) pelo histórico do git. Este
+> arquivo recomeça do que foi medido.
+
+## Como este arquivo funciona
+
+- `[ ]` significa **não feito**. Se o corpo diz que está pronto, a caixa é `[x]`.
+- Item sem verificação possível não entra. Se não dá para provar, é ideia, e
+  ideia vive na seção "Sem data".
+- Item que já tem task na fila de correções aponta para ela.
 
 ---
 
-**Última atualização:** 07/07/2026  
-**MVP Status:** ✅ **PRONTO PARA PRODUÇÃO**  
-**Mantido por:** Lucas Henrique Diniz Ostroski
+## Precisa de decisão sua
+
+Não são de código — dependem de uma escolha que só quem toca o projeto pode
+fazer.
+
+- [ ] **Pôr `DATABASE_URL` no `.env`**, com a *pooled connection* do Neon. Hoje
+      a aplicação roda na conexão direta e avisa no log a cada subida. Sob
+      carga, isso esgota as conexões do banco.
+- [ ] **Decidir onde hospedar.** Três coisas dependem disso: a região do banco
+      (139 ms por consulta a partir do Brasil), se `images.unoptimized` pode ser
+      desligado, e se `sharp` precisa ser instalado.
+- [ ] **Decidir sobre e-mail** — [`61`](.claude/fixes/tasks/61-email-nao-existe.md).
+      Existem quatro modelos HTML e nenhum envio. Ou se implementa, ou se assume
+      e se documenta que a plataforma não manda e-mail.
+- [ ] **Decidir a visibilidade dos anexos.** Vão para o UploadThing sem ACL:
+      quem tiver a URL abre o arquivo. Ver "Visibilidade de anexos" em
+      [`docs/autorizacao.md`](docs/autorizacao.md).
+
+## Achados abertos
+
+Encontrados durante a fila de correções, cada um com investigação escrita.
+
+- [ ] [`54`](.claude/fixes/tasks/54-rotulos-de-status-divergentes.md) — rótulos
+      de status divergentes entre telas.
+- [ ] [`55`](.claude/fixes/tasks/55-resolvido-nao-reabre.md) — relato marcado
+      como resolvido não reabre quando a usuária responde. A documentação de
+      julho afirmava o contrário.
+- [ ] [`56`](.claude/fixes/tasks/56-conta-empresa-do-seed-e-member.md) — a conta
+      de empresa do seed entra como `MEMBER`, então a demonstração não alcança
+      as telas que exigem `OWNER`/`ADMIN`. **Bloqueia a task `23`.**
+- [ ] [`57`](.claude/fixes/tasks/57-cta-de-relato-na-tela-da-empresa.md) — o CTA
+      de relato passa o nome da empresa em vez do id.
+- [ ] [`58`](.claude/fixes/tasks/58-api-me-401-em-toda-pagina.md) — `/api/me`
+      devolve 401 em toda página anônima, poluindo o console.
+- [ ] [`59`](.claude/fixes/tasks/59-esqueceu-a-senha-nao-existe.md) —
+      "Esqueceu a senha?" aponta para `/forgot-password`, que não existe. É o
+      único link interno quebrado do projeto.
+- [ ] [`60`](.claude/fixes/tasks/60-cls-do-blog.md) — CLS do `/blog` em 0,198,
+      quase o dobro do limite de 0,1.
+- [ ] [`62`](.claude/fixes/tasks/62-limites-de-upload-divergem.md) — o cliente
+      aceita 3 anexos de 5 MB; o servidor aceita 1 de 4 MB. Um arquivo de 4,5 MB
+      passa na validação da tela e é recusado no envio.
+
+## Backlog de produto
+
+Coisas que a plataforma não faz e que ninguém prometeu que faria até aqui.
+
+### Auditoria
+
+- [ ] Registrar em `audit_logs` mais do que verificação de empresa. Hoje é a
+      única ação auditada — mudança de status de relato, moderação e alteração
+      de perfil de empresa não deixam rastro.
+- [ ] Exportar os registros de auditoria.
+
+### Notificações
+
+- [ ] Definir quais eventos geram notificação. Depende da decisão sobre e-mail.
+- [ ] Escolher entre envio direto e fila.
+
+### OAuth
+
+- [ ] Decidir se entra. Nada foi implementado; a documentação de julho dizia
+      "Google, Facebook definidos", o que significava escolhidos no papel.
+
+### Relatórios e feedback
+
+- [ ] Modelo de feedback da usuária sobre o atendimento.
+- [ ] Triagem administrativa desse feedback.
+
+### Filtros
+
+- [ ] Filtros compostos em relatos e empresas. Os filtros por status e a busca
+      textual já existem e preservam estado na URL.
+
+## Fila de correções em andamento
+
+O trabalho técnico está catalogado em
+[`.claude/fixes/INDEX.md`](.claude/fixes/INDEX.md), com uma task por assunto e
+um relatório medido por task. O que falta lá:
+
+- [ ] `22` — **Manual de Uso da Plataforma**. Produto da dissertação.
+- [ ] `23` — checklist de prontidão para a demonstração da defesa.
+- [ ] `99` — relatório final.
+
+## Feito, e verificado
+
+Cada linha aqui tem medição em `.claude/fixes/reports/`. Não é "feito segundo
+alguém": é feito segundo um número que dá para reproduzir.
+
+- [x] **ESLint zerado** — de 4 erros e 277 avisos para 0 e 0.
+- [x] **Suíte de testes existe** — 458 testes: 18 de unidade, 362 de ponta a
+      ponta, 78 de acessibilidade. Antes: nenhum.
+- [x] **Acessibilidade WCAG 2.1 AA** — de 523 ocorrências para 0, em 39 páginas
+      × 2 viewports. Ver [`docs/acessibilidade.md`](docs/acessibilidade.md).
+- [x] **Responsividade em 375px** — de 8 páginas com scroll horizontal para 0,
+      em 33 páginas.
+- [x] **Navegação por teclado** nos três fluxos principais, com foco visível.
+- [x] **Autorização das 32 rotas de API** provada por teste, por papel, e
+      documentada em [`docs/autorizacao.md`](docs/autorizacao.md).
+- [x] **Middleware protegendo `/app/*`** — estava na raiz do repositório, onde o
+      Next nunca o executa.
+- [x] **Anonimato** — o nome da autora não sai em nenhuma resposta quando o
+      relato é anônimo. Havia uma tela que mostrava.
+- [x] **Um formato de erro de API**, de 34 que havia, documentado em
+      [`docs/api-erros.md`](docs/api-erros.md) e travado por teste.
+- [x] **Mensagens de erro em português** — cerca de 64 apareciam em inglês.
+- [x] **LCP da home** de 7 220 ms para 848 ms em 4G lenta com CPU 4× mais lenta.
+- [x] **Imagens de `public/`** de 1 291 kB para 192 kB.
+- [x] **Build de produção limpo**, reprodutível, e validação de ambiente que
+      falha com o nome da variável faltando.
+- [x] **Um gerenciador de pacotes só** — `package-lock.json` estava quatro meses
+      atrasado ao lado do `pnpm-lock.yaml`.
+- [x] **Onboarding persistido** — `onboardingCompletedAt` é gravado pelas server
+      actions das duas trilhas.
+- [x] **Documentação consolidada** — de 21 arquivos na raiz que se contradiziam
+      para 5, com o resto separado entre vivo (`docs/`) e histórico
+      (`docs/historico/`).
+
+## Sem data
+
+Ideias registradas, sem compromisso.
+
+- Modo de alto contraste.
+- Leitura assistida (TTS) — diferente de compatibilidade com leitor de tela, que
+  já existe.
+- Banco por worker de teste, para poder rodar a suíte em paralelo.
+- Internacionalização de fato: `next-intl` está montado, a plataforma é
+  monolíngue.
+
+---
+
+**Reconciliado em:** 27/08/2026, task `21`.
+**Como conferir qualquer linha desta página:** `.claude/fixes/reports/`.

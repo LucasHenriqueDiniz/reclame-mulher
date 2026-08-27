@@ -1,5 +1,9 @@
 # 🚀 PLANO DE IMPLEMENTAÇÃO - Sprint Integrado
 
+> **Documento histórico, de 07/07/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 **Status:** Em Andamento  
 **Data Início:** 2026-07-07  
 **Estimativa Total:** 11-15 horas  

@@ -1,5 +1,9 @@
 # 🎉 RELATÓRIO FINAL - SPRINT COMPLETO RECLAME MULHER
 
+> **Documento histórico, de 07/07/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 **Status:** ✅ **PROJETO CONCLUÍDO COM SUCESSO**  
 **Data:** 2026-07-07  
 **Duração:** 1 dia (paralelo)  

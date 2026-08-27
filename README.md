@@ -145,12 +145,20 @@ Itens que dependem de decisão e não de código:
 
 | Arquivo | Conteúdo |
 |---|---|
+| [`docs/arquitetura.md`](docs/arquitetura.md) | stack, estrutura de pastas, banco, domínios |
 | [`docs/autorizacao.md`](docs/autorizacao.md) | quem pode o quê, regra de posse, anonimato |
 | [`docs/api-erros.md`](docs/api-erros.md) | contrato de erro da API |
-| [`docs/project-status.md`](docs/project-status.md) | estado técnico |
-| [`docs/mvp-backlog.md`](docs/mvp-backlog.md) | backlog priorizado |
+| [`docs/testes.md`](docs/testes.md) | as três suítes, o que cada uma trava, como rodar |
+| [`docs/acessibilidade.md`](docs/acessibilidade.md) | conformidade WCAG: o que foi medido e o que se mantém |
 | [`docs/acessibilidade-inclusiva.md`](docs/acessibilidade-inclusiva.md) | diretrizes para baixa alfabetização e baixa familiaridade digital |
+| [`TODO.md`](TODO.md) | o único backlog vivo |
+| [`docs/historico/`](docs/historico/README.md) | documentos datados, congelados. Não são o estado atual |
 | [`.claude/fixes/`](.claude/fixes/INDEX.md) | plano de correção, relatórios e medições |
+
+> Um assunto, um documento. Até agosto de 2026 havia 21 arquivos `.md` na raiz
+> que se contradiziam — três respostas diferentes para "quanto está pronto",
+> testes E2E descritos sem existir um arquivo de teste. A task `21` desfez isso;
+> o que era registro datado está em `docs/historico/`, sem edição.
 
 ## Contas de teste
 

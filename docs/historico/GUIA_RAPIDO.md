@@ -1,5 +1,9 @@
 # Guia Rápido ReclameMulher
 
+> **Documento histórico, de 07/07/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 **Referência rápida para usuários e equipe**
 
 ---

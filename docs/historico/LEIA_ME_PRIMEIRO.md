@@ -1,5 +1,9 @@
 # 📖 Manual da Plataforma ReclameMulher
 
+> **Documento histórico, de 07/07/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 ## Bem-vinda ao Guia Completo!
 
 Você está recebendo um **manual visual e completo** da plataforma ReclameMulher com fluxos, guias e documentação estruturada.

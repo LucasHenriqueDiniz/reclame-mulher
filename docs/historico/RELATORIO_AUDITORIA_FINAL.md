@@ -1,5 +1,9 @@
 # 📋 RELATÓRIO FINAL DE AUDITORIA - ReclameMulher MVP
 
+> **Documento histórico, de 07/07/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 **Data:** 2026-07-07  
 **Status:** ✅ AUDITORIA COMPLETA  
 **Versão:** v0.1.0  

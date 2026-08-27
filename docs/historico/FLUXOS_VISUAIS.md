@@ -1,5 +1,9 @@
 # Diagramas de Fluxo - ReclameMulher
 
+> **Documento histórico, de 07/07/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 Representação visual dos principais processos da plataforma.
 
 ---

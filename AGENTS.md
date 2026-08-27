@@ -141,9 +141,14 @@ Exceção: mudanças triviais (typos, pequenos bugfixes) podem pular o pitch.
 
 ## Documentação interna existente
 
-- `docs/project-status.md` — estado técnico atual
-- `docs/mvp-backlog.md` — backlog técnico priorizado
+- `docs/arquitetura.md` — stack, estrutura, banco, domínios
+- `docs/autorizacao.md` — quem pode o quê, regra de posse, anonimato
+- `docs/api-erros.md` — contrato de erro da API
+- `docs/testes.md` — as três suítes e o que cada uma trava
+- `docs/acessibilidade.md` — conformidade WCAG medida
 - `docs/acessibilidade-inclusiva.md` — diretrizes para baixa alfabetização e baixa familiaridade digital
+- `TODO.md` — backlog vivo
+- `docs/historico/` — documentos datados, congelados. Não descrevem o estado atual
 
 ## Logins de teste
 

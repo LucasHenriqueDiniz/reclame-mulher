@@ -1,5 +1,9 @@
 # 🗺️ MAPEAMENTO COMPLETO DE TELAS - ReclameMulher MVP
 
+> **Documento histórico, de 07/07/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 **Data:** 2026-07-07  
 **Total de Páginas:** 43  
 **Status:** Em validação (testando cada tela)

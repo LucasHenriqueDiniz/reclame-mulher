@@ -1,5 +1,9 @@
 # 🚀 STATUS FINAL - ReclameMulher MVP v0.1.0
 
+> **Documento histórico, de 07/07/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 **Data:** 2026-07-07  
 **Última Auditoria:** Completa  
 **Status Geral:** ✅ **80% PRONTO PARA PRODUÇÃO**

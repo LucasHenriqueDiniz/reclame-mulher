@@ -489,12 +489,26 @@
       "slug": "consolidar-documentacao",
       "phase": 8,
       "order": 21,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [
         "19"
       ],
-      "notes": "MANUAL_PLATAFORMA.md diz 10MB/50MB de anexo; o codigo usa 3 arquivos x 5MB | MANUAL_PLATAFORMA.md diz 10MB por arquivo e 50MB no total; o codigo faz 3 arquivos de 5MB, PNG/JPG/JPEG/PDF. Medido na task 09. | TODO.md descreve IN_PROGRESS (status inexistente) e GET /api/complaints/[id]/messages (handler inexistente). Medido na task 10. | Acessibilidade medida na task 12: 523 ocorrencias. RELATORIO_CORRECOES_ACESSIBILIDADE.md, STATUS_FINAL_PRODUCAO.md (87,5%) e TODO.md (VALIDADA, WCAG AAA) estao todos errados. | Responsividade medida na task 14: 8 de 33 paginas quebravam em 375px. TODO.md afirma VALIDADO EM FASE 3, o que e falso; STATUS_FINAL_PRODUCAO.md (5%) estava mais perto."
+      "notes": "21 .md na raiz -> 5. O TODO.md tinha 63 itens com caixa [ ] e corpo dizendo 'Concluido', e entre os MARCADOS como feitos estavam os quatro 'criar testes automatizados' - num repositorio sem um unico arquivo de teste. Tambem afirmava 'OPEN -> IN_PROGRESS -> RESOLVED' (o enum de relato nao tem IN_PROGRESS; isso e status de PROJETO), 'RLS policies implementadas' (nao ha RLS) e '10MB/50MB' de anexo (o codigo diz 5MB no cliente e 4MB no servidor). Reescrito por quem consegue agir, nao por P1-P4. 18 arquivos para docs/historico/ SEM editar conteudo, cada um com aviso de uma linha, mais um README indexando. 3 apagados apos conferencia secao a secao. LEIA_ME_PRIMEIRO.md estava na lista de apagar e NAO apaguei: tem glossario que a task 22 vai querer - a secao de riscos da propria task manda mover na duvida. docs/arquitetura.md nasceu de project-status.md (marco) e corrigi dois pontos envelhecidos conferidos no codigo: onboardingCompletedAt HOJE e persistido, e admin/auditoria EXISTEM - o que falta e abrangencia (audit_logs so registra verificacao de empresa). EXCECAO DE ESCOPO: toquei 3 linhas do AGENTS.md, que a task manda nao tocar, porque ele linkava dois arquivos movidos e o criterio 3 exige link interno funcionando. ACHADO: cliente aceita 3 anexos de 5MB, servidor aceita 1 de 4MB -> task 62. Verificacao: 154 links internos conferidos por script, 0 quebrados; check + build ok. E2E nao rodada de proposito - nenhum arquivo de codigo mudou.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 0,
+      "files_changed": [
+        "README.md",
+        "TODO.md",
+        "CHANGELOG.md",
+        "AGENTS.md",
+        "docs/arquitetura.md (novo)",
+        "docs/testes.md (novo)",
+        "docs/acessibilidade.md (novo)",
+        "docs/historico/ (18 arquivos movidos + README)",
+        "GITHUB_PUSH_SUMMARY.md / INDICE_DOCUMENTACAO.md / README_DOCUMENTACAO.txt (apagados)"
+      ]
     },
     {
       "id": "22",
@@ -670,6 +684,20 @@
       "risk": "medio",
       "depends_on": [],
       "notes": "Achado na task 20: nao ha envio de e-mail no projeto. 4 templates HTML, um script que so valida arquivos, e tres telas que dependem de e-mail que nunca chega.",
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "62",
+      "slug": "limites-de-upload-divergem",
+      "phase": 2,
+      "order": 62,
+      "status": "pending",
+      "risk": "baixo",
+      "depends_on": [],
+      "notes": "Achado na task 21: upload-dropzone aceita 3 arquivos de 5MB, a rota complaintAttachment do UploadThing aceita 1 de 4MB. Um arquivo de 4,5MB passa na tela e e recusado no envio.",
       "started_at": null,
       "finished_at": null,
       "debug_iterations": 0,
@@ -864,6 +892,12 @@
       "task": "20",
       "event": "done",
       "detail": "DATABASE_URL ausente do .env (roda sem pooler). Validacao Zod religada. package-lock.json de abril removido, pnpm fixado. Achado 61 (nao ha envio de e-mail)."
+    },
+    {
+      "at": "2026-08-27",
+      "task": "21",
+      "event": "done",
+      "detail": "21 .md na raiz -> 5. TODO.md reescrito (63 itens mentiam). 18 arquivos para docs/historico/ sem editar. 3 novos documentos vivos. 154 links conferidos, 0 quebrados. Achado 62 (limites de upload divergem)."
     }
   ]
 }

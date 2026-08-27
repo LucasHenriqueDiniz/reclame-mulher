@@ -1,5 +1,9 @@
 # Relatório de Testes E2E - ReclameMulher MVP
 
+> **Documento histórico, de 07/07/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 **Data de Execução:** 07/07/2026  
 **Versão do Projeto:** 0.1.0 MVP  
 **Status Geral:** ✅ PASSOU COM SUCESSO

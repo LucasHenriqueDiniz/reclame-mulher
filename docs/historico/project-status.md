@@ -1,5 +1,9 @@
 # Estado Atual do Projeto
 
+> **Documento histórico, de 19/03/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 ## Resumo
 
 O projeto atual nao roda em Supabase no runtime. A arquitetura real hoje e:

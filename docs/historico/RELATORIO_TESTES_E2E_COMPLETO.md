@@ -1,5 +1,9 @@
 # 🧪 RELATÓRIO E2E - TESTES COMPLETOS
 
+> **Documento histórico, de 07/07/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 **Data:** 2026-07-07  
 **Status:** ✅ **TODOS OS TESTES PASSARAM**  
 **Resultado:** E2E Workflow funcional

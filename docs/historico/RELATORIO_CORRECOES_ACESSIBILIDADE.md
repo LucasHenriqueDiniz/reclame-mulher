@@ -1,5 +1,9 @@
 # 📋 RELATÓRIO DE CORREÇÕES DE ACESSIBILIDADE
 
+> **Documento histórico, de 07/07/2026 — não é atualizado.** Para o estado atual do
+> projeto, veja [`docs/`](../../README.md#documentação).
+
+
 **Data:** 2026-07-07  
 **Commit:** dfa9baa  
 **Status:** ✅ CONCLUÍDO  
