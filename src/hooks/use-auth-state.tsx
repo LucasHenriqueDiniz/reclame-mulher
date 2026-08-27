@@ -59,8 +59,12 @@ export function AuthStateProvider({ children }: { children: ReactNode }) {
     try {
       setLoading(true);
 
+      // `/api/me` responde 200 com tudo nulo para quem não tem sessão — desde
+      // a task `58`, quando ela deixou de devolver 401 e de pintar de vermelho
+      // o console de toda visita anônima. O `catch` abaixo continua cobrindo o
+      // que sobrou: rede fora do ar e 500.
       const response = await fetch("/api/me", { cache: "no-store" });
-      const data: MeResponse | null = response.ok ? await response.json() : null;
+      const data: MeResponse = await response.json();
 
       setUser(data?.user ?? null);
       setProfile(data?.profile ?? null);

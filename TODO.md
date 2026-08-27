@@ -54,8 +54,6 @@ fazer.
 
 Encontrados durante a fila de correções, cada um com investigação escrita.
 
-- [ ] [`58`](.claude/fixes/tasks/58-api-me-401-em-toda-pagina.md) — `/api/me`
-      devolve 401 em toda página anônima, poluindo o console.
 - [ ] [`59`](.claude/fixes/tasks/59-esqueceu-a-senha-nao-existe.md) —
       "Esqueceu a senha?" aponta para `/forgot-password`, que não existe. É o
       único link interno quebrado do projeto.
@@ -70,6 +68,9 @@ Encontrados durante a fila de correções, cada um com investigação escrita.
 - [ ] [`62`](.claude/fixes/tasks/62-limites-de-upload-divergem.md) — o cliente
       aceita 3 anexos de 5 MB; o servidor aceita 1 de 4 MB. Um arquivo de 4,5 MB
       passa na validação da tela e é recusado no envio.
+- [ ] [`66`](.claude/fixes/tasks/66-teste-de-teclado-instavel.md) — o teste
+      de teclado do assistente falha de vez em quando no celular. É corrida do
+      teste com a lista do Radix, não defeito do produto.
 
 ## Backlog de produto
 
@@ -132,6 +133,12 @@ alguém": é feito segundo um número que dá para reproduzir.
       Construtora X?", com um botão cujo link ainda estava quebrado. Aquela
       página só abre para a própria empresa. Ver
       [`57`](.claude/fixes/reports/57-cta-de-relato-na-tela-da-empresa.md).
+- [x] **O console de uma visita anônima está limpo** — `/api/me` devolvia 401
+      em todo carregamento sem sessão, e o canário da suíte tinha uma lista de
+      "ruído esperado" para conviver com isso. A rota passou a responder 200 com
+      tudo nulo, a lista foi apagada, e no build de produção a home deslogada não
+      imprime **mensagem nenhuma**. Ver
+      [`58`](.claude/fixes/reports/58-api-me-401-em-toda-pagina.md).
 - [x] **ESLint zerado** — de 4 erros e 277 avisos para 0 e 0.
 - [x] **Suíte de testes existe** — 458 testes: 18 de unidade, 362 de ponta a
       ponta, 78 de acessibilidade. Antes: nenhum.

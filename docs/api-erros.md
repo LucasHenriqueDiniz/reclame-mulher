@@ -45,7 +45,7 @@ outro lado da tela, não para quem programa.
 | `code` | HTTP | Quando | Mensagem padrão |
 |---|---|---|---|
 | `VALIDATION_ERROR` | 400 | o corpo ou os parâmetros não passaram no Zod, ou a regra de negócio recusou | "Alguns dados não foram aceitos. Confira os campos e tente de novo." |
-| `UNAUTHENTICATED` | 401 | **não há sessão** | "Você precisa entrar na sua conta para continuar." |
+| `UNAUTHENTICATED` | 401 | **não há sessão**, e a operação exige uma | "Você precisa entrar na sua conta para continuar." |
 | `FORBIDDEN` | 403 | há sessão, e ela não dá esse direito | "Você não tem permissão para fazer isso." |
 | `NOT_FOUND` | 404 | o recurso não existe, ou o id não é um UUID | "Não encontramos o que você procura." |
 | `CONFLICT` | 409 | o dado já existe (e-mail, CNPJ, CPF, vínculo) | "Esses dados já estão em uso." |
@@ -170,6 +170,7 @@ Para marcar campos num formulário, `camposComErro(data)` devolve o mapa
 | `GET\|POST /api/uploadthing` | quem responde é o SDK do UploadThing, não código nosso. A autorização acontece no `.middleware()` de `core.ts`, e o formato do erro é o do serviço |
 | `429` de limite de tentativas | segue o envelope, **e** acrescenta `retryAfterSeconds` fora dele, ao lado do cabeçalho `Retry-After`. Não é explicação do erro; é dado para o cliente agendar a próxima tentativa |
 | Páginas (não-API) | sem sessão, o middleware **redireciona** para `/login`. Envelope é só para `/api/**`; devolver JSON para uma navegação não ajudaria ninguém |
+| `GET /api/me` | **não usa `UNAUTHENTICATED`.** Sem sessão responde `200 { user: null, profile: null, companyMembership: null }`. "Existe alguém logado?" é pergunta, não operação protegida, e a mensagem padrão do 401 — *"você precisa entrar na sua conta para continuar"* — é falsa numa home que funciona deslogada. Até a task `58` ela devolvia 401 e pintava de vermelho o console de toda visita anônima, porque o `AuthStateProvider` pergunta em todo carregamento |
 
 ## Ao escrever uma rota nova
 

@@ -98,11 +98,13 @@ const ENDPOINTS: Endpoint[] = [
 
   // -------------------------------------------------- exige sessão, sem papel
   {
+    // Sem sessão esta rota responde 200 com tudo nulo, e não 401: "existe
+    // alguém logado?" é pergunta, não operação protegida. Ver task `58`. O
+    // corpo devolvido a quem não entrou é conferido em `ownership.spec.ts`.
     rotulo: "GET /api/me",
     metodo: "GET",
     caminho: () => "/api/me",
-    permite: LOGADOS,
-    nega: ["anonimo"],
+    permite: TODOS,
   },
   {
     rotulo: "GET /api/complaints?mine=1",

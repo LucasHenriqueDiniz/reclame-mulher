@@ -98,7 +98,7 @@ Legenda: `—` = não chamado de propósito (motivo na última coluna).
 
 | Rota | anônimo | pessoa | outra pessoa | empresa | admin | Observação |
 |---|---|---|---|---|---|---|
-| `GET /api/me` | 401 | 200 | 200 | 200 | 200 | |
+| `GET /api/me` | **200** | 200 | 200 | 200 | 200 | sem sessão o corpo vem todo nulo — ver a nota abaixo da tabela |
 | `GET /api/complaints?mine=1` | 401 | 200 | 200 | 200 | 200 | devolve só os relatos de quem chama |
 | `POST /api/complaints` | 401 | — | — | — | — | criação coberta em `complaint-create.spec.ts` |
 | `POST /api/complaints/[id]/messages` | 401 | — | **403** | — | — | só autora e empresa envolvida escrevem na conversa |
@@ -106,6 +106,22 @@ Legenda: `—` = não chamado de propósito (motivo na última coluna).
 | `PATCH /api/user/profile` | 401 | — | — | — | — | destrutivo |
 | `DELETE /api/user/account` | 401 | — | — | — | — | destrutivo |
 | `POST /api/auth/change-password` | 401 | — | — | — | — | destrutivo: trocaria a senha do seed |
+
+> **`/api/me` é a exceção da tabela, e é de propósito.** Ela está aqui porque
+> devolve dado de sessão, mas não *exige* sessão: sem cookie responde
+> `200 { user: null, profile: null, companyMembership: null }`.
+>
+> Até a task `58` ela devolvia 401, e como o `AuthStateProvider` pergunta em
+> todo carregamento — o cookie é `httpOnly`, não há outro jeito de saber —, o
+> console de **toda visita anônima** ganhava um erro vermelho permanente. Erro
+> vermelho que é normal ensina quem depura a ignorar erro vermelho.
+>
+> "Existe alguém logado?" é pergunta, não operação protegida, e `docs/api-erros.md`
+> define `UNAUTHENTICATED` como *"você precisa entrar para continuar"* — o que
+> não se aplica a uma home que funciona deslogada.
+>
+> O que trava a mudança não é o 200 sozinho, que isolado seria uma piora: é o
+> **corpo**, conferido campo a campo em `e2e/ownership.spec.ts`.
 
 ### Área da empresa — exigem vínculo com a empresa
 
@@ -396,7 +412,7 @@ Toda rota de API foi conferida. Nenhuma depende de a interface esconder o botão
 | `/api/blog/posts*` | 2 | `getSession()` mais consulta a `profiles.role === "ADMIN"` inline |
 | Públicas por design | 10 | ver a tabela mais acima |
 | `/api/uploadthing` | 1 | `.middleware()` do próprio UploadThing, com sessão e papel |
-| `/api/me` | 1 | `getSession()`; devolve 401 sem sessão |
+| `/api/me` | 1 | `getSession()`; **200 com tudo nulo** sem sessão, e o cookie morto é apagado quando a sessão aponta para conta inexistente |
 | `/api/search`, `/api/companies/top`, `/api/companies/[id]/projects` | 3 | públicas; só dado já público |
 
 As quatro Server Actions do repositório (`"use server"`) também foram

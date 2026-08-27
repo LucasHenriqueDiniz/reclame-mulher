@@ -698,16 +698,26 @@
       "slug": "api-me-401-em-toda-pagina",
       "phase": 6,
       "order": 58,
-      "status": "pending",
+      "status": "done",
       "risk": "baixo",
       "depends_on": [
         "17"
       ],
-      "notes": "Achado na task 18 (build de producao).",
-      "started_at": null,
-      "finished_at": null,
-      "debug_iterations": 0,
-      "files_changed": []
+      "notes": "200 { user: null, profile: null, companyMembership: null } sem sessao. Havia um SEGUNDO naoAutenticada() que a task nao citava - sessao valida cuja conta sumiu do banco; virou o mesmo 200 e continua apagando o cookie morto. O hook SIMPLIFICOU, como a task previa: 'response.ok ? json : null' virou 'await response.json()'. O smoke.spec.ts tinha uma lista RUIDO_ESPERADO com exatamente um item, e o item era este 401: apaguei a lista em vez de manter, e o teste virou 'o console da home nao tem erro nenhum' - lista de ruido esperado com um item e o comeco de uma com dez. O 200 sozinho seria uma piora (rota que negava passou a responder), entao o teste novo nao confere status: confere o CORPO com toEqual, chave a mais reprova. Medido no BUILD DE PRODUCAO, que e o que o criterio 2 pede: curl 200, console da home anonima com NENHUMA mensagem de nenhum tipo, GET /api/me 200 na aba de rede. A suite achou o que eu nao achei lendo: a assercao de 401 para /api/me existia em TRES arquivos, e eu so tinha corrigido dois. Tambem apareceu um teste instavel (keyboard.spec.ts fluxo 2, so no celular) que NAO e regressao - no assistente a usuaria esta logada e /api/me ja respondia 200 antes; registrado como task 66 e nao reapareceu na reexecucao. Suite: 473 -> 475.",
+      "started_at": "2026-08-27",
+      "finished_at": "2026-08-27",
+      "debug_iterations": 1,
+      "files_changed": [
+        "src/app/api/me/route.ts",
+        "src/hooks/use-auth-state.tsx",
+        "e2e/smoke.spec.ts",
+        "e2e/ownership.spec.ts",
+        "e2e/api-authorization.spec.ts",
+        "e2e/auth.spec.ts",
+        "docs/autorizacao.md",
+        "docs/api-erros.md",
+        "TODO.md"
+      ]
     },
     {
       "id": "59",
@@ -811,6 +821,20 @@
       "notes": "Achado na task 23: com 5 empresas no banco, /companies mede 399px numa tela de 375. Todos os cartoes estouram, inclusive os do seed base. Item de grade nasce com min-width auto e o conteudo mais largo empurra todas as faixas.",
       "status": "pending",
       "depends_on": [],
+      "started_at": null,
+      "finished_at": null,
+      "debug_iterations": 0,
+      "files_changed": []
+    },
+    {
+      "id": "66",
+      "slug": "teste-de-teclado-instavel",
+      "phase": 3,
+      "order": 66,
+      "status": "pending",
+      "risk": "baixo",
+      "depends_on": [],
+      "notes": "Achado na task 58: e2e/keyboard.spec.ts 'fluxo 2' falhou so no chromium-mobile, no terceiro dos tres selects da etapa 4, e passou duas vezes em isolamento. Corrida do Radix: o teste manda ArrowDown/Enter sem esperar a lista montar no portal. NAO e regressao da 58 - no assistente a usuaria esta logada, e para logada /api/me ja respondia 200.",
       "started_at": null,
       "finished_at": null,
       "debug_iterations": 0,
@@ -1057,6 +1081,16 @@
       "event": "done",
       "report": "reports/57-cta-de-relato-na-tela-da-empresa.md",
       "detail": "Cartao que convidava a empresa a reclamar de si mesma removido; a pagina so abre para ela. Suite 469 -> 473. Manual refeito."
+    },
+    {
+      "at": "2026-08-27",
+      "task": "58",
+      "event": "done",
+      "report": "reports/58-api-me-401-em-toda-pagina.md",
+      "detail": "Console da home anonima em producao: de 1 erro por carregamento para nenhuma mensagem. Lista de ruido esperado do smoke apagada. Suite 473 -> 475. Achado 66 aberto (teste instavel).",
+      "created": [
+        "66"
+      ]
     }
   ]
 }

@@ -381,12 +381,15 @@ test.describe("anonimato é do dado, não da tela", () => {
 });
 
 test.describe("o portão sem sessão", () => {
+  // `/api/me` **não** entra nesta lista: desde a task `58` ela responde 200 com
+  // tudo nulo para quem não tem sessão, porque "existe alguém logado?" é
+  // pergunta e não operação protegida. O corpo dela é conferido logo abaixo, e
+  // com mais rigor do que um código de status daria.
   const SEM_SESSAO = [
     "/api/complaints?mine=1",
     "/api/company/complaints",
     "/api/company/profile",
     "/api/user/profile",
-    "/api/me",
     "/api/admin/audit",
   ];
 
@@ -404,5 +407,22 @@ test.describe("o portão sem sessão", () => {
     expect(medido, "alguma rota de dado pessoal deixou de exigir sessão").toEqual(
       Object.fromEntries(SEM_SESSAO.map((caminho) => [caminho, 401]))
     );
+  });
+
+  test("/api/me responde 200 sem sessão, e sem contar nada de ninguém", async ({ browser }) => {
+    // O 200 é o ponto da task `58`, mas sozinho ele seria uma piora: rota que
+    // antes negava passou a responder. O que trava a mudança é o **corpo** —
+    // nulo em tudo, e sem nenhuma chave a mais que pudesse carregar dado.
+    const semSessao = await browser.newContext();
+    const resposta = await semSessao.request.get("/api/me");
+    const corpo = await resposta.json();
+    await semSessao.close();
+
+    expect(resposta.status(), "/api/me deixou de responder a quem não tem sessão").toBe(200);
+    expect(corpo, "/api/me devolveu algo além de 'não há ninguém' para visitante").toEqual({
+      user: null,
+      profile: null,
+      companyMembership: null,
+    });
   });
 });

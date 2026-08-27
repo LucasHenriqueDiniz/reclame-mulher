@@ -137,7 +137,9 @@ test.describe("acesso cruzado entre papéis", () => {
 test.describe("APIs negam quem não tem permissão", () => {
   test("anônimo recebe 401 ou 403, nunca 200 nem 500", async ({ request }) => {
     const rotas = [
-      "/api/me",
+      // `/api/me` não entra aqui: desde a task `58` ela responde 200 com tudo
+      // nulo para quem não tem sessão — "existe alguém logado?" é pergunta, não
+      // operação protegida. O corpo dela é conferido em `ownership.spec.ts`.
       "/api/company/complaints",
       "/api/company/profile",
       "/api/company/users",

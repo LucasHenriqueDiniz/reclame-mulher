@@ -4,14 +4,33 @@ import { db } from "@/db/client";
 import { profiles, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { CompanyUsersRepo } from "@/server/repos/company-users";
-import { erroInterno, naoAutenticada } from "@/server/http/respond";
+import { erroInterno } from "@/server/http/respond";
+
+/**
+ * "Existe alguém logado?" é pergunta, não operação protegida.
+ *
+ * Esta rota respondia `401` para visitante sem sessão, e isso pintava de
+ * vermelho o console de **toda** página anônima — o `AuthStateProvider`
+ * pergunta em todo carregamento, porque o cookie é `httpOnly` e o cliente não
+ * tem outro jeito de saber. Erro vermelho que é normal ensina quem depura a
+ * ignorar erro vermelho.
+ *
+ * Além do ruído, o `401` contradizia o contrato: `docs/api-erros.md` define
+ * `UNAUTHENTICATED` como "você precisa entrar na sua conta para continuar", e
+ * aqui não precisa — a home funciona deslogada.
+ *
+ * A resposta certa para "não há ninguém" é 200 com tudo nulo. Ver task `58`.
+ */
+function semSessao() {
+  return NextResponse.json({ user: null, profile: null, companyMembership: null });
+}
 
 export async function GET() {
   try {
     const session = await getSession();
 
     if (!session) {
-      return naoAutenticada();
+      return semSessao();
     }
 
     const [profile] = await db
@@ -34,7 +53,10 @@ export async function GET() {
     } catch {}
 
     if (!user || !profile) {
-      const response = naoAutenticada("Sua sessão expirou. Entre de novo.");
+      // Sessão apontando para conta que não existe mais. A resposta é a mesma
+      // de quem nunca entrou — e o cookie morto sai junto, senão a próxima
+      // visita repete a consulta ao banco para chegar aqui de novo.
+      const response = semSessao();
       await clearSessionCookie(response);
       return response;
     }
