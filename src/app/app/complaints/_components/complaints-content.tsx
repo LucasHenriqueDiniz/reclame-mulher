@@ -2,17 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import {
-  MessageCircle,
-  Settings as SettingsIcon,
-  PlusSquare,
-  ChevronRight,
-  Clock,
-  Meh,
-  Smile,
-  Laugh,
-  BarChart2,
-} from "lucide-react";
+import { MessageCircle, Settings as SettingsIcon, ChevronRight, Clock, Meh, Smile, Laugh, BarChart2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

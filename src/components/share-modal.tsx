@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Share2, Link2, Check, X } from "lucide-react";
+import { Share2, Link2, Check } from "lucide-react";
 import {
   Dialog,
   DialogContent,

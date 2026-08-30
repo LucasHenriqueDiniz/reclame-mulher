@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { LogIn, UserPlus } from "lucide-react";
+import { LogIn } from "lucide-react";
 
 /**
  * Banner de login/cadastro exibido quando usuário não está autenticado

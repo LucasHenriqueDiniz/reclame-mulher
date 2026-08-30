@@ -1,22 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
-import {
-  MapPin,
-  Eye,
-  EyeOff,
-  Trash2,
-  X,
-  BarChart2,
-  MessageCircle,
-  Settings as SettingsIcon,
-  Info,
-  ShieldCheck,
-  PlusSquare,
-} from "lucide-react";
+import { Eye, EyeOff, Trash2, X, BarChart2, MessageCircle, Settings as SettingsIcon, Info, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
