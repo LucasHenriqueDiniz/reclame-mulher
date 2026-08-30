@@ -466,7 +466,6 @@ export function CompanyDashboard({
         tabs={tabs}
         activeTab={tab}
         onTabChange={setTab}
-        showMetrics={true}
         publicProfileLink={publicProfileLink}
       />
 
