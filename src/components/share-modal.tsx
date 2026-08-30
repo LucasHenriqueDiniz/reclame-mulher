@@ -47,11 +47,10 @@ function LinkedInIcon({ className }: { className?: string }) {
 interface ShareModalProps {
   url: string;
   title?: string;
-  description?: string;
   trigger?: React.ReactNode;
 }
 
-export function ShareModal({ url, title, description, trigger }: ShareModalProps) {
+export function ShareModal({ url, title, trigger }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -77,7 +76,6 @@ export function ShareModal({ url, title, description, trigger }: ShareModalProps
 
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title ?? "");
-  const encodedDesc = encodeURIComponent(description ?? "");
 
   const shareLinks = [
     {
