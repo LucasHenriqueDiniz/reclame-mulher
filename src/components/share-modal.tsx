@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Share2, Link2, Check, X } from "lucide-react";
+import { Share2, Link2, Check } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -47,11 +47,10 @@ function LinkedInIcon({ className }: { className?: string }) {
 interface ShareModalProps {
   url: string;
   title?: string;
-  description?: string;
   trigger?: React.ReactNode;
 }
 
-export function ShareModal({ url, title, description, trigger }: ShareModalProps) {
+export function ShareModal({ url, title, trigger }: ShareModalProps) {
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -77,7 +76,6 @@ export function ShareModal({ url, title, description, trigger }: ShareModalProps
 
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title ?? "");
-  const encodedDesc = encodeURIComponent(description ?? "");
 
   const shareLinks = [
     {

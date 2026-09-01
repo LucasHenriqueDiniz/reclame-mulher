@@ -1,33 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import {
-  Home,
-  MessageCircle,
-  Info,
-  BarChart3,
-  Clock,
-  Check,
-  MapPin,
-  FileText,
-  Shield,
-} from "lucide-react";
-import {
-  companyTheme as S,
-  CompanyAboutCard,
-  CompanyContactsCard,
-  CompanyAreasCard,
-  CompanyComplaintCtaCard,
-  CompanyReportCtaCard,
-  CompanyRecentComplaintsCard,
-  CompanyPerformanceCard,
-  CompanyComplaintList,
-  CompanyProjectList,
-  CompanyReportModal,
-  SearchInput,
-  formatDate,
-  type CompanyStats,
-} from "@/components/company";
+import { MessageCircle, BarChart3, Clock, Check, MapPin, FileText, Shield } from "lucide-react";
+import { CompanyAboutCard, CompanyContactsCard, CompanyAreasCard, CompanyComplaintCtaCard, CompanyReportCtaCard, CompanyRecentComplaintsCard, CompanyPerformanceCard, CompanyComplaintList, CompanyProjectList, CompanyReportModal, SearchInput, formatDate, type CompanyStats } from "@/components/company";
 import { MainHeader } from "@/components/layout/MainHeader";
 import { Footer } from "@/components/landing/Footer";
 import { Card, CardContent } from "@/components/ui/card";

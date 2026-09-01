@@ -9,7 +9,6 @@
 import "dotenv/config";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
-import { eq } from "drizzle-orm";
 import * as schema from "../src/db/schema";
 import crypto from "crypto";
 import { promisify } from "util";
@@ -191,7 +190,7 @@ async function main() {
   console.log("✓ Company user: empresa@construtorax.com → Construtora X");
 
   // ─── Projects ───────────────────────────────────────────────────────────
-  const [proj1, proj2, proj3] = await db
+  const [proj1] = await db
     .insert(schema.projects)
     .values([
       {
@@ -225,7 +224,7 @@ async function main() {
   console.log("✓ Projetos criados");
 
   // ─── Complaints ──────────────────────────────────────────────────────────
-  const [c1, c2, c3] = await db
+  const [, c2] = await db
     .insert(schema.complaints)
     .values([
       {

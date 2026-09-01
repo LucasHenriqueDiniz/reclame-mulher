@@ -2,14 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import { Upload, X, FileText } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-const ACCEPT = {
-  "image/png": [".png"],
-  "image/jpeg": [".jpg", ".jpeg"],
-  "application/pdf": [".pdf"],
-} as const;
 
 const ACCEPT_STR = ".png,.jpg,.jpeg,.pdf";
 const MAX_FILES = 3;

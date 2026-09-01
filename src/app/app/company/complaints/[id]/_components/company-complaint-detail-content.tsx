@@ -3,26 +3,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  ArrowLeft,
-  MessageCircle,
-  Clock,
-  CheckCircle2,
-  AlertCircle,
-  XCircle,
-  MapPin,
-  Tag,
-  Zap,
-  Users,
-  Send,
-  Shield,
-  Building2,
-  ThumbsUp,
-  Share2,
-  Flag,
-  Paperclip,
-  BarChart3,
-} from "lucide-react";
+import { ArrowLeft, MessageCircle, Clock, CheckCircle2, AlertCircle, XCircle, Send, Shield, Building2, ThumbsUp, Share2, Flag, Paperclip, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

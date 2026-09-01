@@ -8,7 +8,7 @@
  */
 
 import { readFileSync, readdirSync, statSync, writeFileSync } from "fs";
-import { basename, extname, join, relative } from "path";
+import { extname, join, relative } from "path";
 import {
   Document,
   HeadingLevel,
