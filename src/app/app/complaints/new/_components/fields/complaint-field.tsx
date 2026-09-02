@@ -14,8 +14,8 @@ export interface ComplaintFieldProps {
 }
 
 /**
- * Wrapper de campo de formulário
- * Padroniza label, hint, erro e espaçamento
+ * The wrapper around a single form field.
+ * Standardises the label, the hint, the error and the spacing.
  */
 export function ComplaintField({
   label,

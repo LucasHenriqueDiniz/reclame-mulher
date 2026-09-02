@@ -1,5 +1,6 @@
 /**
  * Predefined options for "Como ficou sabendo da plataforma"
+ * (how did you hear about the platform) — the label is what the form shows.
  * (how the user heard about the platform).
  * Values of the how_heard_type enum in the database.
  */

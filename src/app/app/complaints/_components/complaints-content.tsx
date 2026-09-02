@@ -190,7 +190,7 @@ export function ComplaintsContent({
                           </span>
                         </div>
 
-                        {/* Row 3: Project + Ver detalhes link */}
+                        {/* Row 3: project + the "Ver detalhes" (see details) link */}
                         <div className="flex justify-between items-center">
                           <span className="font-['Poppins'] text-sm text-[#607D8B]">
                             {complaint.project?.name || "Sem projeto específico"}

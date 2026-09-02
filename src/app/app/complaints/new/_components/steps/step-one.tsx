@@ -16,13 +16,13 @@ export interface StepOneProps {
 }
 
 /**
- * Passo 1: Você já reclamou em outro lugar?
- * Apenas uma pergunta simples para entender o histórico
+ * Step 1: has the person already complained somewhere else?
+ * One plain question, to place the report in context.
  */
 export function StepOne({ data, onChange }: StepOneProps) {
   return (
     <div className="space-y-6 py-4">
-      {/* Heading simples */}
+      {/* Plain heading */}
       <div className="flex flex-col items-center justify-center gap-3 px-2">
         <div className="w-16 h-16 rounded-2xl bg-[#1E88E5]/10 flex items-center justify-center">
           <MessageSquare className="w-8 h-8 text-[#1E88E5]" />
@@ -35,7 +35,7 @@ export function StepOne({ data, onChange }: StepOneProps) {
         </p>
       </div>
 
-      {/* Pergunta em destaque */}
+      {/* Highlighted question */}
       <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
         <ComplaintField
           label="Você já fez um relato sobre esse problema em outro lugar?"
@@ -57,7 +57,7 @@ export function StepOne({ data, onChange }: StepOneProps) {
           />
         </ComplaintField>
 
-        {/* Pergunta adicional só se respondeu sim */}
+        {/* Follow-up question, only when the answer was yes */}
         {data.hasPreviousComplaintElsewhere && (
           <div className="mt-5 animate-in slide-in-from-top-2 fade-in duration-300">
             <ComplaintField label="Onde você reclamou?">
@@ -73,7 +73,7 @@ export function StepOne({ data, onChange }: StepOneProps) {
         )}
       </div>
 
-      {/* Dica tranquilizadora */}
+      {/* Reassuring hint */}
       <div className="flex items-start gap-3 px-4 py-3 bg-blue-50 rounded-lg border border-blue-100">
         <HelpCircle className="w-5 h-5 text-[#1E88E5] flex-shrink-0 mt-0.5" />
         <p className="text-sm font-['Poppins'] text-[#607D8B] leading-relaxed">

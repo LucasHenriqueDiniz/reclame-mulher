@@ -149,7 +149,7 @@ export function ProcessCarousel() {
         </motion.div>
 
         <div className="relative w-full max-w-[600px]">
-          {/* Botão lateral esquerdo */}
+          {/* Left side button */}
           <button
             onClick={prevStep}
             disabled={currentStep === 0}
@@ -168,7 +168,7 @@ export function ProcessCarousel() {
             <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" aria-hidden="true" />
           </button>
 
-          {/* Card principal com animação */}
+          {/* Main card, animated */}
           <Card
             className="overflow-hidden shadow-xl rounded-2xl border-0 relative
                      cursor-grab active:cursor-grabbing select-none
@@ -191,7 +191,7 @@ export function ProcessCarousel() {
             </div>
             
             <CardContent className="p-8 md:p-10 relative overflow-hidden h-full flex flex-col min-h-[320px] md:min-h-[380px]">
-              {/* Ícone de fundo grande - renderizado uma vez para evitar shift */}
+              {/* Large background icon - rendered once, to avoid a layout shift */}
 
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
@@ -207,7 +207,7 @@ export function ProcessCarousel() {
                   className="flex-1 flex flex-col relative z-10"
                 >
                   <div className="relative flex items-start gap-6 flex-1">
-                    {/* Ícone principal */}
+                    {/* Main icon */}
                     <div className="flex items-center justify-center flex-shrink-0
                                   w-14 h-14 md:w-16 md:h-16 rounded-xl
                                   bg-[var(--brand-blue-light)]/10
@@ -234,7 +234,7 @@ export function ProcessCarousel() {
                 </motion.div>
               </AnimatePresence>
 
-              {/* Dots indicadores */}
+              {/* Dot indicators */}
               <div className="flex items-center justify-center gap-2 mt-8 pt-6 border-t border-border">
                 {steps.map((_, index) => (
                   <button
@@ -252,7 +252,7 @@ export function ProcessCarousel() {
             </CardContent>
           </Card>
 
-          {/* Botão lateral direito */}
+          {/* Right side button */}
           <button
             onClick={nextStep}
             disabled={currentStep === steps.length - 1}

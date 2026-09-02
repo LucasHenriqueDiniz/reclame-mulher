@@ -19,7 +19,7 @@ config({ path: path.resolve(process.cwd(), ".env") });
 const DATABASE_URL = process.env.DATABASE_URL || process.env.DIRECT_URL;
 
 if (!DATABASE_URL) {
-  console.error("❌ Erro: DATABASE_URL ou DIRECT_URL deve estar definido no .env");
+  console.error("❌ Error: DATABASE_URL or DIRECT_URL must be set in .env");
   process.exit(1);
 }
 
@@ -31,19 +31,19 @@ const sql = postgres(DATABASE_URL, {
 
 async function resetDatabase() {
   try {
-    console.log("⚠️  Limpando schemas drizzle e public...");
+    console.log("⚠️  Dropping the drizzle and public schemas...");
     await sql.begin(async (tx) => {
       await tx`drop schema if exists drizzle cascade`;
       await tx`drop schema if exists public cascade`;
       await tx`create schema public`;
     });
 
-    console.log("✅ Banco limpo com sucesso.");
-    console.log("Agora rode:");
+    console.log("✅ Database wiped.");
+    console.log("Now run:");
     console.log("  pnpm db:migrate");
     console.log("  pnpm db:seed");
   } catch (error) {
-    console.error("❌ Erro ao resetar banco:", error);
+    console.error("❌ Resetting the database failed:", error);
     process.exit(1);
   } finally {
     await sql.end();

@@ -201,7 +201,7 @@ export default function BlogPage() {
             </div>
           )}
 
-          {/* Ver Todos Button Mobile */}
+          {/* "Ver Todos" (see all) button, mobile */}
           <div className="flex sm:hidden justify-center items-center mt-8">
             <Link
               href="/blog/all"

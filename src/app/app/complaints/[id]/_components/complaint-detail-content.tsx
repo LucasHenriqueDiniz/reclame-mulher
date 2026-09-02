@@ -149,7 +149,7 @@ export function ComplaintDetailContent({
           </Link>
         </div>
 
-        {/* Banner azul: título + protocolo + status */}
+        {/* Blue banner: title + protocol + status */}
         <div
           style={{
             background: S.primary,
@@ -195,9 +195,9 @@ export function ComplaintDetailContent({
         </div>
 
         <div className="complaint-detail-grid" style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 24, alignItems: "start" }}>
-          {/* Coluna principal */}
+          {/* Main column */}
           <div>
-            {/* Painel detalhes */}
+            {/* Details panel */}
             <div
               style={{
                 background: S.white,
@@ -273,9 +273,9 @@ export function ComplaintDetailContent({
               </div>
             </div>
 
-            {/* Thread: relato inicial + mensagens */}
+            {/* Thread: the opening report + the messages */}
             <div style={{ marginBottom: 20 }}>
-              {/* Bloco inicial: autor do relato + descrição */}
+              {/* Opening block: report author + description */}
               <div
                 style={{
                   background: S.white,
@@ -353,7 +353,7 @@ export function ComplaintDetailContent({
               )}
             </div>
 
-            {/* Enviar resposta */}
+            {/* Reply form */}
             {isAuthor && (
               <div
                 style={{
@@ -411,7 +411,7 @@ export function ComplaintDetailContent({
             )}
           </div>
 
-          {/* Sidebar: empresa + CTA */}
+          {/* Sidebar: company + CTA */}
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {complaint.companyId && (
               <>

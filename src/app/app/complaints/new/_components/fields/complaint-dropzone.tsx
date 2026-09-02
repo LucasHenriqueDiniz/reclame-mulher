@@ -19,8 +19,8 @@ export interface ComplaintDropzoneProps {
 }
 
 /**
- * Dropzone padronizado para upload de arquivos
- * Segue design do Figma com borda tracejada, ícone e textos centralizados
+ * The standard file-upload dropzone.
+ * Follows the Figma design: dashed border, icon and centred text.
  */
 export function ComplaintDropzone({
   files,

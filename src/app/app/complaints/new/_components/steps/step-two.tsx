@@ -23,7 +23,7 @@ export interface StepTwoProps {
 export function StepTwo({ data, onChange }: StepTwoProps) {
   return (
     <div className="space-y-6">
-      {/* Heading simples */}
+      {/* Plain heading */}
       <div className="flex flex-col items-center justify-center gap-2 px-2 py-0">
         <h2 className="text-center font-['Poppins'] font-semibold text-[#2A3F54] text-2xl leading-tight">
           Conte o que aconteceu
@@ -33,7 +33,7 @@ export function StepTwo({ data, onChange }: StepTwoProps) {
         </p>
       </div>
 
-      {/* Título */}
+      {/* Title */}
       <ComplaintField
         label="Qual é o problema?"
         htmlFor="complaint-title"
@@ -48,7 +48,7 @@ export function StepTwo({ data, onChange }: StepTwoProps) {
         />
       </ComplaintField>
 
-      {/* Descrição */}
+      {/* Description */}
       <ComplaintField
         label="Conte com mais detalhes"
         htmlFor="complaint-description"
@@ -65,7 +65,7 @@ export function StepTwo({ data, onChange }: StepTwoProps) {
         />
       </ComplaintField>
 
-      {/* Local */}
+      {/* Location */}
       <ComplaintField
         label="Onde aconteceu?"
         htmlFor="complaint-location"
@@ -81,7 +81,7 @@ export function StepTwo({ data, onChange }: StepTwoProps) {
         />
       </ComplaintField>
 
-      {/* Aviso importante */}
+      {/* Important notice */}
       <div className="bg-[#E3F2FD] border-l-4 border-[#1E88E5] rounded-r-xl p-4 flex items-start gap-3">
         <Info className="w-5 h-5 text-[#1E88E5] flex-shrink-0 mt-0.5" />
         <p className="font-['Poppins'] text-[#1565C0] text-sm leading-relaxed">

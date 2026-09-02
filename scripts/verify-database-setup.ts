@@ -13,7 +13,7 @@ config({ path: path.resolve(process.cwd(), ".env") });
 const DATABASE_URL = process.env.DATABASE_URL || process.env.DIRECT_URL;
 
 if (!DATABASE_URL) {
-  console.error("❌ Erro: DATABASE_URL ou DIRECT_URL deve estar definido no .env");
+  console.error("❌ Error: DATABASE_URL or DIRECT_URL must be set in .env");
   process.exit(1);
 }
 
@@ -52,7 +52,7 @@ type IndexRow = {
 };
 
 async function verifySetup() {
-  console.log("🔍 Verificando configuração do banco...\n");
+  console.log("🔍 Checking the database setup...\n");
 
   try {
     // Functions
@@ -107,8 +107,8 @@ async function verifySetup() {
         console.log(`  ✅ ${t.trigger_name} on ${t.event_object_table} (${t.event_manipulation})`);
       });
     } else {
-      console.log("  ⚠️  Nenhum trigger encontrado em auth.users");
-      console.log("  ℹ️  Isso pode ser normal se você ainda não tem acesso ao schema auth");
+      console.log("  ⚠️  No trigger found on auth.users");
+      console.log("  ℹ️  That can be normal when you do not have access to the auth schema yet");
     }
 
     // RLS policies
@@ -151,7 +151,7 @@ async function verifySetup() {
     });
 
     // Indexes
-    console.log("\n📋 Índices principais:");
+    console.log("\n📋 Main indexes:");
     const indexes = await client<IndexRow[]>`
       SELECT 
         tablename,
@@ -166,9 +166,9 @@ async function verifySetup() {
       console.log(`  ✅ ${idx.indexname} on ${idx.tablename}`);
     });
 
-    console.log("\n✨ Verificação concluída!");
+    console.log("\n✨ Check finished.");
   } catch (error) {
-    console.error("❌ Erro ao verificar:", error);
+    console.error("❌ Check failed:", error);
     process.exit(1);
   } finally {
     await client.end();

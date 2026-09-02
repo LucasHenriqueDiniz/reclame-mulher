@@ -208,7 +208,7 @@ export function SettingsContent({
           />
 
           <div className="p-3 px-4">
-            {/* ── Informações ── */}
+            {/* ── Profile details ── */}
             {activeTab === "informacoes" && (
               <div className="pt-3">
                 <div className="mb-4 max-w-[400px]">
@@ -346,7 +346,7 @@ export function SettingsContent({
               </div>
             )}
 
-            {/* ── Senha ── */}
+            {/* ── Password ── */}
             {activeTab === "senha" && (
               <div className="pt-3">
                 <div className="mb-4 max-w-[400px]">
@@ -468,7 +468,7 @@ export function SettingsContent({
               </div>
             )}
 
-            {/* ── Deletar ── */}
+            {/* ── Delete account ── */}
             {activeTab === "deletar" && (
               <div className="pt-3 max-w-[560px]">
                 <div className="border border-[#FED7AA] rounded-xl p-5 bg-[#FFF7ED] mb-6">

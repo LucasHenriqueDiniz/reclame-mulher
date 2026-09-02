@@ -54,7 +54,7 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
 
   return (
     <div className="space-y-6">
-      {/* Heading simples */}
+      {/* Plain heading */}
       <div className="flex flex-col items-center justify-center gap-2 px-2 py-0">
         <h2 className="text-center font-['Poppins'] font-semibold text-[#2A3F54] text-2xl leading-tight">
           Quase pronto!
@@ -64,7 +64,7 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
         </p>
       </div>
 
-      {/* Categoria */}
+      {/* Category */}
       <ComplaintField
         label="Qual tipo de problema?"
         htmlFor="impact-category"
@@ -80,7 +80,7 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
         />
       </ComplaintField>
 
-      {/* Projeto (se houver) */}
+      {/* Project, when the company has any */}
       {projectOptions.length > 0 && (
         <ComplaintField
           label="Qual projeto da empresa? (opcional)"
@@ -98,7 +98,7 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
         </ComplaintField>
       )}
 
-      {/* Urgência */}
+      {/* Urgency */}
       <ComplaintField label="Quão urgente é?" htmlFor="urgency-level" required>
         <ComplaintSelect
           options={urgencyLevels}
@@ -108,7 +108,7 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
         />
       </ComplaintField>
 
-      {/* Escopo */}
+      {/* Impact scope */}
       <ComplaintField label="Quem mais está sendo afetado?" htmlFor="impact-scope" required>
         <ComplaintSelect
           options={impactScopes}
@@ -118,7 +118,7 @@ export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
         />
       </ComplaintField>
 
-      {/* Privacidade */}
+      {/* Privacy */}
       <div className="space-y-0 border border-[#E5E5ED] rounded-lg overflow-hidden">
         <ComplaintSwitchRow
           id="anonymous"

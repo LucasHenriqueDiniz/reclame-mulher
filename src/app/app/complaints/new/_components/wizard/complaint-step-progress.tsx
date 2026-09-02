@@ -13,8 +13,8 @@ const STEP_LABELS = [
 ];
 
 /**
- * Barra de progresso do wizard
- * Mostra o passo atual de forma clara e acessível
+ * The wizard progress bar.
+ * Announces the current step clearly and accessibly.
  */
 export function ComplaintStepProgress({ 
   currentStep, 

@@ -1,8 +1,9 @@
 # Reclame Mulher
 
-Plataforma para conectar mulheres impactadas por obras de infraestrutura com empresas responsaveis, permitindo registro, reclamacoes, respostas, perfil publico de empresas, blog e administracao.
+A platform that connects women affected by infrastructure works with the companies responsible for
+them: sign-up, complaints, replies, a public company profile, a blog and an admin area.
 
-## Stack real atual
+## Current stack
 
 - Next.js App Router
 - TypeScript
@@ -10,11 +11,11 @@ Plataforma para conectar mulheres impactadas por obras de infraestrutura com emp
 - shadcn/ui
 - Drizzle ORM
 - Postgres/Neon
-- autenticacao propria com cookie HTTP-only
+- own authentication, on an HTTP-only cookie
 - React Hook Form + Zod
 - next-intl
 
-## Comandos
+## Commands
 
 ```bash
 npm install
@@ -23,29 +24,29 @@ npm run build
 npm run lint
 ```
 
-O projeto roda na porta `5000` em desenvolvimento.
+In development the project serves on port `5000`.
 
-## Banco
+## Database
 
-A fonte de verdade atual do banco esta em:
+The current source of truth for the database is:
 
 - `src/db/schema.ts`
 - `src/db/migrations`
 - `drizzle.config.ts`
 
-O legado antigo baseado em Supabase foi removido para evitar ambiguidade arquitetural.
+The old Supabase-based layer was removed to keep the architecture unambiguous.
 
-## Documentacao interna
+## Internal documentation
 
-- `docs/project-status.md`: estado tecnico atual do projeto
-- `docs/mvp-backlog.md`: backlog tecnico priorizado a partir do estado atual
-- `docs/acessibilidade-inclusiva.md`: diretrizes para baixa alfabetizacao e baixa familiaridade digital
+- `docs/project-status.md`: current technical state of the project
+- `docs/mvp-backlog.md`: technical backlog, prioritised from that state
+- `docs/acessibilidade-inclusiva.md`: guidelines for low literacy and low digital familiarity
 
-## Logins de teste
+## Test logins
 
-Senha para todos: `senha123`
+Password for all of them: `senha123`
 
-- `maria@exemplo.com` (pessoa)
-- `empresa@construtorax.com` (empresa)
-- `ana@exemplo.com` (pessoa)
+- `maria@exemplo.com` (person)
+- `empresa@construtorax.com` (company)
+- `ana@exemplo.com` (person)
 - `admin@comunicamulher.com.br` (admin)

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { BlogRepo } from "@/server/repos/blog";
 
-// GET /api/blog/tags - Listar todas as tags
+// GET /api/blog/tags - list every tag
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
