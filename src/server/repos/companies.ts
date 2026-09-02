@@ -242,7 +242,7 @@ export class CompaniesRepo {
       });
     }
 
-    // Garantir que todas as empresas tenham entrada (mesmo que zerada)
+    // Every company gets an entry, even a zeroed one
     for (const id of companyIds) {
       if (!result.has(id)) {
         result.set(id, {

@@ -1,6 +1,7 @@
 /**
- * Opções pré-definidas de "Como ficou sabendo da plataforma"
- * Valores do enum how_heard_type no banco
+ * Predefined options for "Como ficou sabendo da plataforma"
+ * (how the user heard about the platform).
+ * Values of the how_heard_type enum in the database.
  */
 
 export const HOW_HEARD_OPTIONS = [
@@ -26,7 +27,7 @@ export type HowHeardType =
   | "EVENTO"
   | "OUTRO";
 
-// Array de valores para uso no Zod (como tupla)
+// The values as a tuple, for Zod
 export const HOW_HEARD_VALUES: [string, ...string[]] = [
   "LINKEDIN",
   "INSTAGRAM",

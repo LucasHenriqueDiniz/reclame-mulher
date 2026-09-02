@@ -1,8 +1,8 @@
 #!/usr/bin/env tsx
 /**
- * Script para aplicar migrations SQL manuais
+ * Applies hand-written SQL migrations.
  * 
- * Uso:
+ * Usage:
  *   pnpm tsx scripts/apply-sql-migration.ts src/db/migrations/0000_xxx.sql
  */
 
@@ -13,7 +13,7 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
-// Carrega variáveis do .env
+// Load variables from .env
 config({ path: path.resolve(process.cwd(), ".env.local") });
 config({ path: path.resolve(process.cwd(), ".env") });
 

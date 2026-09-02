@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 
 /**
- * Hook para prevenir layout shift quando dropdowns abrem
- * O Radix UI esconde a scrollbar ao abrir dropdowns, causando shift
- * Este hook adiciona padding para compensar
+ * Hook that prevents the layout shift a dropdown causes when it opens.
+ * Radix UI hides the scrollbar on open, which shifts the page.
+ * This hook adds padding to compensate.
  */
 export function usePreventScrollShift(isOpen: boolean) {
   useEffect(() => {
@@ -13,18 +13,18 @@ export function usePreventScrollShift(isOpen: boolean) {
     }
 
     if (isOpen) {
-      // Salva o estado atual da scrollbar
+      // Remember the current scrollbar state
       const hasScrollbar = window.innerWidth > document.documentElement.clientWidth;
       
       if (hasScrollbar) {
-        // Calcula a largura da scrollbar
+        // Measure the scrollbar width
         const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
         
-        // Adiciona padding ao body para compensar quando o Radix esconder a scrollbar
+        // Pad the body to compensate for the scrollbar Radix is about to hide
         document.body.style.paddingRight = `${scrollbarWidth}px`;
       }
     } else {
-      // Remove o padding quando fecha
+      // Drop the padding on close
       document.body.style.paddingRight = "";
     }
 

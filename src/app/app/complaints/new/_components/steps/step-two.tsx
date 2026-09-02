@@ -17,8 +17,8 @@ export interface StepTwoProps {
 }
 
 /**
- * Passo 2: Conte o que aconteceu
- * Apenas 3 campos: título, descrição e local
+ * Step 2: tell us what happened.
+ * Three fields only: title, description and location.
  */
 export function StepTwo({ data, onChange }: StepTwoProps) {
   return (

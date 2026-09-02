@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * Script para verificar se todas as functions, triggers e policies foram criadas
+ * Checks that every function, trigger and policy was created.
  */
 
 import { config } from "dotenv";
@@ -55,7 +55,7 @@ async function verifySetup() {
   console.log("🔍 Verificando configuração do banco...\n");
 
   try {
-    // Verificar Functions
+    // Functions
     console.log("📋 Functions:");
     const functions = await client<RoutineRow[]>`
       SELECT 
@@ -76,7 +76,7 @@ async function verifySetup() {
       console.log(`  ✅ ${f.routine_name} (${f.routine_type}, ${f.security_type})`);
     });
 
-    // Verificar Triggers em public
+    // Triggers in public
     console.log("\n📋 Triggers (public schema):");
     const triggers = await client<TriggerRow[]>`
       SELECT 
@@ -91,7 +91,7 @@ async function verifySetup() {
       console.log(`  ✅ ${t.trigger_name} on ${t.event_object_table} (${t.event_manipulation})`);
     });
 
-    // Verificar Trigger em auth.users
+    // Trigger on auth.users
     console.log("\n📋 Triggers (auth schema):");
     const authTriggers = await client<TriggerRow[]>`
       SELECT 
@@ -111,7 +111,7 @@ async function verifySetup() {
       console.log("  ℹ️  Isso pode ser normal se você ainda não tem acesso ao schema auth");
     }
 
-    // Verificar RLS Policies
+    // RLS policies
     console.log("\n📋 RLS Policies:");
     const policies = await client<PolicyRow[]>`
       SELECT 
@@ -134,7 +134,7 @@ async function verifySetup() {
       });
     });
 
-    // Verificar Enums
+    // Enums
     console.log("\n📋 Enums:");
     const enums = await client<EnumRow[]>`
       SELECT 
@@ -150,7 +150,7 @@ async function verifySetup() {
       console.log(`  ✅ ${e.enum_name}: [${e.enum_values.join(", ")}]`);
     });
 
-    // Verificar Índices
+    // Indexes
     console.log("\n📋 Índices principais:");
     const indexes = await client<IndexRow[]>`
       SELECT 

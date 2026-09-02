@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       })
       .where(eq(users.id, session.userId));
 
-    // Rotacionar sessão para invalidar token antigo
+    // Rotate the session so the old token stops working
     const response = NextResponse.json({ success: true });
     await setSessionCookie(response, { userId: session.userId, email: session.email });
     return response;

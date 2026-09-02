@@ -7,7 +7,7 @@ import { BlogRepo } from "@/server/repos/blog";
 import { CreatePostDto } from "@/server/dto/blog";
 import { z } from "zod";
 
-// GET /api/blog/posts - Listar posts públicos
+// GET /api/blog/posts - list public posts
 export async function GET(request: NextRequest) {
   try {
     const session = await getSession();
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
       result = await BlogRepo.findPublic(search, page, limit);
     }
 
-    // Buscar tags em batch para todos os posts da página
+    // Fetch tags in one batch for every post on the page
     const postIds = result.posts.map((p) => p.id);
     const tagsMap = await BlogRepo.getPostTagsBatch(postIds);
 
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/blog/posts - Criar post (ADMIN only)
+// POST /api/blog/posts - create a post (ADMIN only)
 export async function POST(request: NextRequest) {
   try {
     const session = await getSession();
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Verificar se é ADMIN
+    // Check the caller is ADMIN
     const [profile] = await db
       .select()
       .from(profiles)

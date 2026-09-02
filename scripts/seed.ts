@@ -1,9 +1,9 @@
 #!/usr/bin/env tsx
 /**
- * Seed do banco com dados para testes (pessoas, empresas, projetos, reclamações).
+ * Seeds the database with test data: people, companies, projects, complaints.
  *
- * Uso: pnpm db:seed
- * Requer: DATABASE_URL no .env
+ * Usage: pnpm db:seed
+ * Requires: DATABASE_URL in .env
  */
 
 import "dotenv/config";
@@ -13,7 +13,7 @@ import * as schema from "../src/db/schema";
 import crypto from "crypto";
 import { promisify } from "util";
 
-// Usa DATABASE_URL (pooled) ou DIRECT_URL (conexão direta) — qualquer um serve para o seed
+// Uses DATABASE_URL (pooled) or DIRECT_URL (direct) — either one works for seeding
 const connectionString =
   process.env.DATABASE_URL ||
   process.env.DIRECT_URL;
@@ -34,7 +34,7 @@ async function hashPassword(password: string): Promise<string> {
 async function main() {
   console.log("🌱 Iniciando seed...\n");
 
-  // Limpar dados existentes (ambiente dev)
+  // Wipe existing data (dev only)
   console.log("🗑️  Limpando dados existentes...");
   await db.delete(schema.complaintMessages);
   await db.delete(schema.complaints);
@@ -272,7 +272,7 @@ async function main() {
   ]);
   console.log("✓ Mensagens de reclamação criadas");
 
-  // ─── Report (denúncia) ──────────────────────────────────────────────────
+  // ─── Report ─────────────────────────────────────────────────────────────
   await db.insert(schema.reports).values({
     reporterId: user3.id,
     type: "ABUSE",
@@ -400,7 +400,7 @@ A participação feminina em projetos de infraestrutura não apenas melhora as o
         excerpt: "Descubra como a participação ativa de mulheres tem transformado projetos de infraestrutura em todo o Brasil.",
         coverUrl: "/blog-image-2.webp",
         status: "PUBLISHED",
-        publishedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), // 2 dias atrás
+        publishedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
       },
       {
         title: "5 Direitos que Toda Mulher Deve Conhecer ao Fazer uma Reclamação",
@@ -469,7 +469,7 @@ Fazer uma reclamação legítima não pode resultar em retaliação ou discrimin
         excerpt: "Conheça os direitos fundamentais que protegem você ao registrar uma reclamação.",
         coverUrl: "/blog-image-3.webp",
         status: "PUBLISHED",
-        publishedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000), // 5 dias atrás
+        publishedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
       },
       {
         title: "Construindo Comunidades Mais Fortes Através da Participação Cidadã",
@@ -568,7 +568,7 @@ Esse futuro começa com sua participação hoje.
         excerpt: "Descubra como a participação cidadã ativa pode transformar sua comunidade.",
         coverUrl: "/hero.webp",
         status: "PUBLISHED",
-        publishedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000), // 7 dias atrás
+        publishedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
       },
     ])
     .returning({ id: schema.blogPosts.id, slug: schema.blogPosts.slug });
@@ -579,20 +579,20 @@ Esse futuro começa com sua participação hoje.
   const postMap = new Map(postsInserted.map(p => [p.slug, p.id]));
 
   await db.insert(schema.blogPostTags).values([
-    // Como reclamar com segurança
+    // post: "Como reclamar com segurança"
     { postId: postMap.get("como-reclamar-com-seguranca")!, tagId: tagMap.get("direitos")! },
     { postId: postMap.get("como-reclamar-com-seguranca")!, tagId: tagMap.get("empoderamento")! },
     
-    // Participação Social Feminina
+    // post: "Participação Social Feminina"
     { postId: postMap.get("participacao-social-feminina-infraestrutura")!, tagId: tagMap.get("participacao-social")! },
     { postId: postMap.get("participacao-social-feminina-infraestrutura")!, tagId: tagMap.get("casos-de-sucesso")! },
     { postId: postMap.get("participacao-social-feminina-infraestrutura")!, tagId: tagMap.get("infraestrutura")! },
     
-    // 5 Direitos
+    // post: "5 Direitos"
     { postId: postMap.get("5-direitos-mulher-reclamacao")!, tagId: tagMap.get("direitos")! },
     { postId: postMap.get("5-direitos-mulher-reclamacao")!, tagId: tagMap.get("empoderamento")! },
     
-    // Construindo Comunidades
+    // post: "Construindo Comunidades"
     { postId: postMap.get("construindo-comunidades-participacao-cidada")!, tagId: tagMap.get("participacao-social")! },
     { postId: postMap.get("construindo-comunidades-participacao-cidada")!, tagId: tagMap.get("comunidade")! },
     { postId: postMap.get("construindo-comunidades-participacao-cidada")!, tagId: tagMap.get("casos-de-sucesso")! },

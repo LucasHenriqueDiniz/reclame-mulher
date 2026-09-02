@@ -20,8 +20,8 @@ export interface StepFourProps {
 }
 
 /**
- * Passo 4: Últimas informações
- * Classificação simples e configurações de privacidade
+ * Step 4: the last few details.
+ * A simple classification, plus the privacy settings.
  */
 export function StepFour({ data, onChange, projects = [] }: StepFourProps) {
   const impactCategories = [

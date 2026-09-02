@@ -240,7 +240,7 @@ export function NewComplaintContent({
 
   const canSubmit = Boolean(effectiveCompany && session);
   
-  // Determinar label do botão baseado no step e estado
+  // Pick the button label from the current step and state
   const getNextLabel = () => {
     if (step === 3) {
       return stepThree.attachments.length > 0 ? "Continuar" : "Continuar sem foto";

@@ -18,8 +18,8 @@ export interface StepThreeProps {
 }
 
 /**
- * Passo 3: Quer enviar uma foto ou documento?
- * Totalmente opcional - o usuário pode pular
+ * Step 3: attach a photo or a document.
+ * Entirely optional — the user can skip it.
  */
 export function StepThree({ data, onChange, onUpload }: StepThreeProps) {
   return (

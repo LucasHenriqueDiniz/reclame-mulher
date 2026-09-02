@@ -47,7 +47,7 @@ export function ProcessCarousel() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartX = useRef(0);
-  const dragThreshold = 50; // pixels mínimos para considerar um drag
+  const dragThreshold = 50; // minimum pixels before it counts as a drag
 
   const nextStep = () => {
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
@@ -111,7 +111,7 @@ export function ProcessCarousel() {
   const progressValue = ((currentStep + 1) / steps.length) * 100;
   const CurrentIcon = steps[currentStep].icon;
 
-  // Variantes de animação
+  // Animation variants
   const cardVariants = {
     enter: {
       opacity: 0,

@@ -1,6 +1,6 @@
 /**
- * Script de demonstração visual de testes
- * Simula a execução de validações manuais realizadas durante o desenvolvimento
+ * Visual demonstration of the test checklist.
+ * Replays the manual validations that were run during development.
  */
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -71,7 +71,7 @@ async function runDemo() {
     process.stdout.write(`  ${colors.dim}○${colors.reset} ${test.name}`);
     await sleep(test.duration);
     
-    // Limpa a linha e reescreve com checkmark
+    // Clear the line and rewrite it with a checkmark
     process.stdout.write('\r');
     console.log(`  ${colors.green}✓${colors.reset} ${test.name} ${colors.dim}(${test.duration}ms)${colors.reset}`);
     passedCount++;

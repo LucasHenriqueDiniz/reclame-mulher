@@ -16,7 +16,7 @@ export function BlogCards() {
         const data = (await res.json()) as { posts: Array<Parameters<typeof toBlogCardPost>[0]> };
         setPosts(data.posts.map(toBlogCardPost));
       } catch {
-        // silencioso: landing não deve quebrar se blog falhar
+        // silent: the landing page must not break when the blog fails
       } finally {
         setLoading(false);
       }

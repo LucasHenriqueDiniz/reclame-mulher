@@ -10,7 +10,7 @@ export type ComplaintItem = {
   title: string;
   status: string;
   createdAt: string;
-  /** Localização do problema (ex.: endereço ou cidade) */
+  /** Where the problem is (an address or a city) */
   location?: string | null;
 };
 

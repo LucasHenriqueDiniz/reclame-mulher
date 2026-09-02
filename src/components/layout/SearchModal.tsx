@@ -39,10 +39,10 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
     recentSearches: [],
   });
 
-  // Prevenir layout shift quando o modal abre
+  // Prevent the layout shift when the modal opens
   usePreventScrollShift(open);
 
-  // Carregar buscas recentes do localStorage
+  // Load recent searches from localStorage
   useEffect(() => {
     if (open) {
       const recent = localStorage.getItem("recentSearches");
@@ -52,7 +52,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
     }
   }, [open]);
 
-  // Buscar empresas quando o usuário digita
+  // Query companies as the user types
   useEffect(() => {
     if (query.length < 2) {
       setResults((prev) => ({ ...prev, companies: [] }));
@@ -75,7 +75,7 @@ export function SearchModal({ open, onOpenChange }: SearchModalProps) {
     const recent = localStorage.getItem("recentSearches");
     let searches: string[] = recent ? JSON.parse(recent) : [];
     
-    // Adicionar no início e remover duplicatas
+    // Prepend, and drop duplicates
     searches = [searchQuery, ...searches.filter((s) => s !== searchQuery)].slice(0, 5);
     
     localStorage.setItem("recentSearches", JSON.stringify(searches));

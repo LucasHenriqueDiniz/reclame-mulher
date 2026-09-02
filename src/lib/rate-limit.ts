@@ -7,7 +7,7 @@ interface RateLimitEntry {
 
 const store = new Map<string, RateLimitEntry>();
 
-const WINDOW_MS = 15 * 60 * 1000; // 15 minutos
+const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 const MAX_REQUESTS = 5;
 
 function getClientIp(request: NextRequest): string {
@@ -44,7 +44,7 @@ export function rateLimit(request: NextRequest): NextResponse | null {
   return null;
 }
 
-// Limpa entradas expiradas a cada 10 minutos para evitar vazamento de memória
+// Sweep expired entries every 10 minutes so the map does not leak
 setInterval(() => {
   const now = Date.now();
   for (const [key, entry] of store.entries()) {

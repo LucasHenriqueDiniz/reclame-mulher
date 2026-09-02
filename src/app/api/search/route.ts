@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
       total: 0,
     };
 
-    // Buscar empresas com estatísticas
+    // Companies, with their stats
     if (scope === "all" || scope === "companies") {
       const companiesResults = await CompaniesRepo.findPublic(query, false);
       const selected = companiesResults.slice(0, limit);
@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Buscar reclamações públicas
+    // Public complaints
     if (scope === "all" || scope === "complaints") {
       const complaintsResults = await db
         .select({

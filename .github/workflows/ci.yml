@@ -6,13 +6,13 @@ on:
   pull_request:
     branches: [master]
 
-# A action de pnpm não recebe 'version' — ela lê o campo packageManager do
-# package.json, que é o que mantém o CI e as máquinas locais na mesma versão.
-# A branch aqui é `master`, não `main`: este repo é servido pela Vercel, e
-# mudar o nome exigiria reapontar o projeto lá.
+# The pnpm action takes no 'version' input — it reads the packageManager field
+# from package.json, which is what keeps CI and local machines on one version.
+# The branch here is `master`, not `main`: this repo is served by Vercel, and
+# renaming it would mean repointing the project there.
 
-# Sem passo de build: a Vercel constrói e publica a cada push, e reporta como
-# check no commit. Este workflow cobre o que ela não olha — lint e testes.
+# No build step: Vercel builds and publishes on every push and reports back as a
+# commit check. This workflow covers what Vercel does not look at — lint and tests.
 
 jobs:
   check:

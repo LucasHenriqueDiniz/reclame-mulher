@@ -1,12 +1,12 @@
 #!/usr/bin/env tsx
 /**
- * Reset completo do banco atual.
+ * Full reset of the current database.
  *
- * Uso:
+ * Usage:
  *   pnpm db:reset
  *
- * Atenção: apaga os schemas `drizzle` e `public` do banco apontado por
- * DATABASE_URL ou DIRECT_URL e recria `public` vazio.
+ * Warning: drops the `drizzle` and `public` schemas of the database pointed at
+ * by DATABASE_URL or DIRECT_URL, then recreates `public` empty.
  */
 
 import { config } from "dotenv";

@@ -1,13 +1,13 @@
 #!/usr/bin/env tsx
 /**
- * Valida e lista templates de e-mail em email-templates/
+ * Validates and lists the email templates in email-templates/
  *
- * Uso:
+ * Usage:
  *   pnpm email:sync
  *   ou: pnpm tsx scripts/sync-email-templates.ts
  *
- * Os templates ficam apenas no repositório (email-templates/*.html).
- * Para envio de e-mail, leia os arquivos deste diretório no servidor.
+ * The templates live only in the repository (email-templates/*.html).
+ * To send mail, read the files from this directory on the server.
  */
 
 import * as fs from "fs";
