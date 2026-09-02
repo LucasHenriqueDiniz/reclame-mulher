@@ -11,9 +11,12 @@ on:
 # A branch aqui é `master`, não `main`: este repo é servido pela Vercel, e
 # mudar o nome exigiria reapontar o projeto lá.
 
+# Sem passo de build: a Vercel constrói e publica a cada push, e reporta como
+# check no commit. Este workflow cobre o que ela não olha — lint e testes.
+
 jobs:
   check:
-    name: Lint, Tests & Build
+    name: Lint & Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,5 +33,3 @@ jobs:
       - name: Tests
         run: pnpm run test:demo
 
-      - name: Build
-        run: pnpm run build
