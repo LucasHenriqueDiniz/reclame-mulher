@@ -160,3 +160,16 @@ Senha para todos: `senha123`
 - **DB:** nunca rodar `db:reset` ou `db:push` em produção sem confirmação.
 - **Env:** variáveis sensíveis estão em `.env`. Nunca exponha secrets no chat.
 - **shadcn:** se o usuário pedir um componente novo, verifique se já existe em `src/components/ui/` antes de criar do zero.
+
+## Commit hook
+
+`.githooks/commit-msg` strips AI attribution trailers from commit messages. Git does not version
+`.git/hooks`, so what makes the hook run is one line of local config — and a fresh clone does not
+have it. The root `prepare` script sets it on `pnpm install`, and only when nothing else claims it:
+
+```
+git config --get core.hooksPath >/dev/null 2>&1 || git config core.hooksPath .githooks
+```
+
+If you already point `core.hooksPath` somewhere else, the script leaves your value alone and this
+repo's hook stays inert — wire it by hand, or move the file into whatever directory you do use.
