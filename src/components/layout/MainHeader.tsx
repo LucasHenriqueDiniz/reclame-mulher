@@ -42,7 +42,7 @@ export function MainHeader() {
   const [searchOpen, setSearchOpen] = useState(false);
   const { user, profile, isLoggedIn, isCompany, isAdmin, clear } = useAuthState();
 
-  // Atalho de teclado Ctrl+K / Cmd+K
+  // Ctrl+K / Cmd+K keyboard shortcut
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {

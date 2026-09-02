@@ -7,7 +7,7 @@ import { BlogRepo } from "@/server/repos/blog";
 import { UpdatePostDto } from "@/server/dto/blog";
 import { z } from "zod";
 
-// GET /api/blog/posts/[id] - Ver post específico
+// GET /api/blog/posts/[id] - read one post
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -33,7 +33,7 @@ export async function GET(
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
-    // Buscar tags do post
+    // Fetch the post's tags
     const tags = await BlogRepo.getPostTags(post.id);
 
     return NextResponse.json({ ...post, tags });
@@ -46,7 +46,7 @@ export async function GET(
   }
 }
 
-// PUT /api/blog/posts/[id] - Atualizar post (ADMIN only)
+// PUT /api/blog/posts/[id] - update a post (ADMIN only)
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -57,7 +57,7 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Verificar se é ADMIN
+    // Check the caller is ADMIN
     const [profile] = await db
       .select()
       .from(profiles)
@@ -96,7 +96,7 @@ export async function PUT(
   }
 }
 
-// DELETE /api/blog/posts/[id] - Deletar post (ADMIN only)
+// DELETE /api/blog/posts/[id] - delete a post (ADMIN only)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -107,7 +107,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Verificar se é ADMIN
+    // Check the caller is ADMIN
     const [profile] = await db
       .select()
       .from(profiles)

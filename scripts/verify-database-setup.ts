@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * Script para verificar se todas as functions, triggers e policies foram criadas
+ * Checks that every function, trigger and policy was created.
  */
 
 import { config } from "dotenv";
@@ -13,7 +13,7 @@ config({ path: path.resolve(process.cwd(), ".env") });
 const DATABASE_URL = process.env.DATABASE_URL || process.env.DIRECT_URL;
 
 if (!DATABASE_URL) {
-  console.error("❌ Erro: DATABASE_URL ou DIRECT_URL deve estar definido no .env");
+  console.error("❌ Error: DATABASE_URL or DIRECT_URL must be set in .env");
   process.exit(1);
 }
 
@@ -52,10 +52,10 @@ type IndexRow = {
 };
 
 async function verifySetup() {
-  console.log("🔍 Verificando configuração do banco...\n");
+  console.log("🔍 Checking the database setup...\n");
 
   try {
-    // Verificar Functions
+    // Functions
     console.log("📋 Functions:");
     const functions = await client<RoutineRow[]>`
       SELECT 
@@ -76,7 +76,7 @@ async function verifySetup() {
       console.log(`  ✅ ${f.routine_name} (${f.routine_type}, ${f.security_type})`);
     });
 
-    // Verificar Triggers em public
+    // Triggers in public
     console.log("\n📋 Triggers (public schema):");
     const triggers = await client<TriggerRow[]>`
       SELECT 
@@ -91,7 +91,7 @@ async function verifySetup() {
       console.log(`  ✅ ${t.trigger_name} on ${t.event_object_table} (${t.event_manipulation})`);
     });
 
-    // Verificar Trigger em auth.users
+    // Trigger on auth.users
     console.log("\n📋 Triggers (auth schema):");
     const authTriggers = await client<TriggerRow[]>`
       SELECT 
@@ -107,11 +107,11 @@ async function verifySetup() {
         console.log(`  ✅ ${t.trigger_name} on ${t.event_object_table} (${t.event_manipulation})`);
       });
     } else {
-      console.log("  ⚠️  Nenhum trigger encontrado em auth.users");
-      console.log("  ℹ️  Isso pode ser normal se você ainda não tem acesso ao schema auth");
+      console.log("  ⚠️  No trigger found on auth.users");
+      console.log("  ℹ️  That can be normal when you do not have access to the auth schema yet");
     }
 
-    // Verificar RLS Policies
+    // RLS policies
     console.log("\n📋 RLS Policies:");
     const policies = await client<PolicyRow[]>`
       SELECT 
@@ -134,7 +134,7 @@ async function verifySetup() {
       });
     });
 
-    // Verificar Enums
+    // Enums
     console.log("\n📋 Enums:");
     const enums = await client<EnumRow[]>`
       SELECT 
@@ -150,8 +150,8 @@ async function verifySetup() {
       console.log(`  ✅ ${e.enum_name}: [${e.enum_values.join(", ")}]`);
     });
 
-    // Verificar Índices
-    console.log("\n📋 Índices principais:");
+    // Indexes
+    console.log("\n📋 Main indexes:");
     const indexes = await client<IndexRow[]>`
       SELECT 
         tablename,
@@ -166,9 +166,9 @@ async function verifySetup() {
       console.log(`  ✅ ${idx.indexname} on ${idx.tablename}`);
     });
 
-    console.log("\n✨ Verificação concluída!");
+    console.log("\n✨ Check finished.");
   } catch (error) {
-    console.error("❌ Erro ao verificar:", error);
+    console.error("❌ Check failed:", error);
     process.exit(1);
   } finally {
     await client.end();

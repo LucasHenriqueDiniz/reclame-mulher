@@ -7,8 +7,8 @@ interface ComplaintWizardShellProps {
 }
 
 /**
- * Shell principal do wizard de relato
- * Define o layout, background e container centralizado
+ * The outer shell of the complaint wizard.
+ * Owns the layout, the background and the centred container.
  */
 export function ComplaintWizardShell({ children }: ComplaintWizardShellProps) {
   return (

@@ -47,7 +47,7 @@ type Complaint = {
   project?: { name: string } | null;
 };
 
-// ─── Reclamações Tab ─────────────────────────────────────────────────────────
+// ─── Complaints tab ─────────────────────────────────────────────────────────
 function ReclamacoesTab({
   complaints,
   detailBasePath,
@@ -126,7 +126,7 @@ function ReclamacoesTab({
   );
 }
 
-// ─── Projetos Tab ───────────────────────────────────────────────────────────
+// ─── Projects tab ───────────────────────────────────────────────────────────
 function ProjetosTab({ initial }: { initial: Project[] }) {
   const [projects, setProjects] = useState(initial);
   const [showFormModal, setShowFormModal] = useState(false);
@@ -261,7 +261,7 @@ function ProjetosTab({ initial }: { initial: Project[] }) {
   );
 }
 
-// ─── Configurações Tab ──────────────────────────────────────────────────────
+// ─── Settings tab ───────────────────────────────────────────────────────────
 function ConfiguracoesTab({ company }: { company: Company }) {
   const [subTab, setSubTab] = useState("dados");
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);

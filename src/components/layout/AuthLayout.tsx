@@ -12,10 +12,10 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         fill
         className="object-cover"
       />
-      {/* Overlay roxo com vinheta */}
+      {/* Purple overlay with a vignette */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#3F237E]/80 to-[#280F5E]/80" />
       <div className="absolute inset-0 pointer-events-none ring-1 ring-white/10" />
-      {/* Conteúdo */}
+      {/* Content */}
       <div className="relative z-10 mx-auto max-w-6xl px-4 py-10 sm:py-16">
         {children}
       </div>

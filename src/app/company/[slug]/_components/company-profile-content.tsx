@@ -177,7 +177,7 @@ function CompanyHero({
   );
 }
 
-// ─── MÉTRICAS MODERNAS ──────────────────────────────────────────────────────
+// ─── METRICS BAR ────────────────────────────────────────────────────────────
 function MetricsBar({ stats }: { stats: CompanyStats }) {
   const metrics = [
     {
@@ -236,7 +236,7 @@ function MetricsBar({ stats }: { stats: CompanyStats }) {
   );
 }
 
-// ─── PERFIL PÚBLICO - ABA INÍCIO ────────────────────────────────────────────
+// ─── PUBLIC PROFILE - OVERVIEW TAB ──────────────────────────────────────────
 function OverviewTab({
   company,
   stats,
@@ -294,7 +294,7 @@ function OverviewTab({
   );
 }
 
-// ─── PERFIL PÚBLICO - ABA INFORMAÇÕES ───────────────────────────────────────
+// ─── PUBLIC PROFILE - COMPANY INFO TAB ──────────────────────────────────────
 function InformacoesTab({ company }: { company: Company }) {
   const addr = [
     company.address,
@@ -330,7 +330,7 @@ function InformacoesTab({ company }: { company: Company }) {
   );
 }
 
-// ─── PERFIL PÚBLICO - ABA PROJETOS ─────────────────────────────────────────
+// ─── PUBLIC PROFILE - PROJECTS TAB ─────────────────────────────────────────
 function ProjetosTab({
   projects,
   companyId,
@@ -403,7 +403,7 @@ function ProjetosTab({
   );
 }
 
-// ─── PERFIL PÚBLICO - ABA RECLAMAÇÕES ───────────────────────────────────────
+// ─── PUBLIC PROFILE - COMPLAINTS TAB ────────────────────────────────────────
 function ReclamacoesTab({
   complaints,
   stats,

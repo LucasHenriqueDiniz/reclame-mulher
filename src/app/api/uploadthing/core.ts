@@ -6,9 +6,9 @@ import { eq } from "drizzle-orm";
 
 const f = createUploadthing();
 
-// FileRouter para a aplicação
+// FileRouter for the app
 export const ourFileRouter = {
-  // Rota para upload de imagens do blog (apenas ADMIN)
+  // Blog image uploads (ADMIN only)
   blogImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
     .middleware(async () => {
       const session = await getSession();
@@ -17,7 +17,7 @@ export const ourFileRouter = {
         throw new Error("Unauthorized");
       }
 
-      // Verificar se é ADMIN
+      // Check the caller is ADMIN
       const [profile] = await db
         .select()
         .from(profiles)
@@ -35,7 +35,7 @@ export const ourFileRouter = {
       return { url: fileUrl };
     }),
 
-  // Rota para upload de anexos de reclamações (usuários logados)
+  // Complaint attachment uploads (signed-in users)
   complaintAttachment: f({
     image: { maxFileSize: "4MB", maxFileCount: 1 },
     pdf: { maxFileSize: "4MB", maxFileCount: 1 },

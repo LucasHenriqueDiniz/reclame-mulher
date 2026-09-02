@@ -1,13 +1,13 @@
 #!/usr/bin/env tsx
 /**
- * Valida e lista templates de e-mail em email-templates/
+ * Validates and lists the email templates in email-templates/
  *
- * Uso:
+ * Usage:
  *   pnpm email:sync
- *   ou: pnpm tsx scripts/sync-email-templates.ts
+ *   or: pnpm tsx scripts/sync-email-templates.ts
  *
- * Os templates ficam apenas no repositório (email-templates/*.html).
- * Para envio de e-mail, leia os arquivos deste diretório no servidor.
+ * The templates live only in the repository (email-templates/*.html).
+ * To send mail, read the files from this directory on the server.
  */
 
 import * as fs from "fs";
@@ -24,7 +24,7 @@ function main() {
   const templatesDir = path.join(__dirname, "..", BUCKET_NAME);
 
   if (!fs.existsSync(templatesDir)) {
-    console.error(`❌ Diretório ${templatesDir} não encontrado`);
+    console.error(`❌ Directory ${templatesDir} not found`);
     process.exit(1);
   }
 
@@ -33,18 +33,18 @@ function main() {
   );
 
   if (files.length === 0) {
-    console.log("⚠️  Nenhum template .html ou .txt encontrado em email-templates/");
+    console.log("⚠️  No .html or .txt template found in email-templates/");
     return;
   }
 
-  console.log(`📄 Templates em email-templates/ (${files.length}):\n`);
+  console.log(`📄 Templates in email-templates/ (${files.length}):\n`);
   for (const file of files) {
     const filePath = path.join(templatesDir, file);
     const stat = fs.statSync(filePath);
     const size = (stat.size / 1024).toFixed(2);
     console.log(`   ${file} (${size} KB)`);
   }
-  console.log("\n✨ Templates locais OK. Use este diretório para envio de e-mail no servidor.");
+  console.log("\n✨ Local templates OK. Read this directory on the server to send mail.");
 }
 
 main();

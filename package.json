@@ -17,7 +17,8 @@
     "email:sync": "node --import tsx scripts/sync-email-templates.ts",
     "evidencias:check": "node --import tsx scripts/evidencias-demo-check.ts",
     "evidencias:docx": "node --import tsx scripts/generate-evidencias-docx.ts",
-    "test:demo": "node --import tsx scripts/demo-tests.ts"
+    "test:demo": "node --import tsx scripts/demo-tests.ts",
+    "prepare": "git config --get core.hooksPath >/dev/null 2>&1 || git config core.hooksPath .githooks 2>/dev/null || true"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

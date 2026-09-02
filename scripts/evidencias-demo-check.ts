@@ -1,10 +1,10 @@
 #!/usr/bin/env tsx
 /**
- * Saída formatada para prints de "evidências técnicas" (TCC / orientação).
- * Não substitui testes automatizados — é um checklist visível no terminal.
+ * Formatted output for "evidências técnicas" screenshots (thesis / advisor).
+ * It does not replace automated tests — it is a checklist visible in the terminal.
  *
- * Uso: npm run evidencias:check
- * Requer: DATABASE_URL ou DIRECT_URL no .env para o teste de banco passar.
+ * Usage: pnpm run evidencias:check
+ * Requires: DATABASE_URL or DIRECT_URL in .env for the database check to pass.
  */
 
 import "dotenv/config";
@@ -29,7 +29,7 @@ async function main() {
 
   const marks: { ok: boolean; label: string; detail?: string }[] = [];
 
-  // Repositório / arquivos
+  // Repository / files
   const schemaPath = join(root, "src", "db", "schema.ts");
   const hasSchema = existsSync(schemaPath);
   marks.push({
@@ -56,7 +56,7 @@ async function main() {
         : "copie .env.example para .env e configure o Neon",
   });
 
-  // Banco (consulta mínima)
+  // Database (one minimal query)
   const connectionString =
     process.env.DATABASE_URL || process.env.DIRECT_URL || "";
   if (connectionString && !connectionString.includes("build")) {
@@ -84,7 +84,7 @@ async function main() {
     });
   }
 
-  // Stack (informativo — sempre OK se package.json existe)
+  // Stack (informational — always OK when package.json exists)
   marks.push({
     ok: existsSync(join(root, "package.json")),
     label: "Projeto Next.js (package.json)",

@@ -3,7 +3,7 @@
 import { companyTheme as S } from "./theme";
 import { TagChip } from "./TagChip";
 
-/** region = região macro; tags = array de áreas como #Rodovia, #Hidrovia (ou sector como fallback) */
+/** region = the macro region; tags = areas such as #Rodovia, #Hidrovia (falls back to sector) */
 export function CompanyAreasCard({
   region,
   tags,

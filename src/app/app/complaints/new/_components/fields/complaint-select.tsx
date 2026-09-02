@@ -25,8 +25,8 @@ export interface ComplaintSelectProps {
 }
 
 /**
- * Select padronizado para o wizard de relato
- * Segue design do Figma com altura, bordas e espaçamento consistentes
+ * The standard select for the complaint wizard.
+ * Follows the Figma design: consistent height, borders and spacing.
  */
 export function ComplaintSelect({
   options,

@@ -15,9 +15,9 @@ export interface ComplaintStepFooterProps {
 }
 
 /**
- * Rodapé padronizado para cada etapa do wizard
- * Exibe "Informações privadas", botão Voltar e botão de ação principal
- * Segue design do Figma com alinhamento e espaçamento consistentes
+ * The standard footer for every step of the wizard.
+ * Shows the "Informações privadas" note, the back button and the primary action.
+ * Follows the Figma design: consistent alignment and spacing.
  */
 export function ComplaintStepFooter({
   onBack,

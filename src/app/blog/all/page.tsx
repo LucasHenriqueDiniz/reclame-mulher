@@ -75,11 +75,11 @@ export default function AllBlogPostsPage() {
 
   const filteredPosts = useMemo(() => {
     return posts.filter(post => {
-      // Filtro de busca
+      // Search filter
       const matchesSearch = searchQuery === "" ||
         post.title.toLowerCase().includes(searchQuery.toLowerCase());
 
-      // Filtro de tags
+      // Tag filter
       const matchesTags = selectedTags.length === 0 ||
         post.tags?.some(tag => selectedTags.includes(tag.slug));
 

@@ -48,7 +48,7 @@ export function HeaderDataProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Fazer apenas uma chamada para cada endpoint
+    // One call per endpoint, no more
     Promise.all([
       fetch("/api/companies/top").then((r) => r.json()),
       fetch("/api/blog/featured").then((r) => r.json()),

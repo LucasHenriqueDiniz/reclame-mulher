@@ -10,18 +10,18 @@ export default async function CompanyComplaintsPage() {
     redirect("/login");
   }
 
-  // Buscar empresas do usuário
+  // The user's companies
   const memberships = await CompanyUsersRepo.findByUser(session.userId);
   
   if (memberships.length === 0) {
     redirect("/app");
   }
 
-  // Pegar a primeira empresa (ou você pode implementar seleção de empresa)
+  // Take the first company; company selection is not implemented yet
   const companyId = memberships[0].company.id;
   const companyName = memberships[0].company.name;
 
-  // Buscar todas as reclamações da empresa
+  // Every complaint for that company
   const complaints = await ComplaintsRepo.findByCompany(companyId);
 
   const serialized = {

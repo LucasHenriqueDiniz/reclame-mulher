@@ -18,13 +18,13 @@ export interface StepThreeProps {
 }
 
 /**
- * Passo 3: Quer enviar uma foto ou documento?
- * Totalmente opcional - o usuário pode pular
+ * Step 3: attach a photo or a document.
+ * Entirely optional — the user can skip it.
  */
 export function StepThree({ data, onChange, onUpload }: StepThreeProps) {
   return (
     <div className="space-y-6">
-      {/* Heading simples */}
+      {/* Plain heading */}
       <div className="flex flex-col items-center justify-center gap-2 px-2 py-0">
         <h2 className="text-center font-['Poppins'] font-semibold text-[#2A3F54] text-2xl leading-tight">
           Quer enviar uma foto?

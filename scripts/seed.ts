@@ -1,9 +1,9 @@
 #!/usr/bin/env tsx
 /**
- * Seed do banco com dados para testes (pessoas, empresas, projetos, reclamações).
+ * Seeds the database with test data: people, companies, projects, complaints.
  *
- * Uso: pnpm db:seed
- * Requer: DATABASE_URL no .env
+ * Usage: pnpm db:seed
+ * Requires: DATABASE_URL in .env
  */
 
 import "dotenv/config";
@@ -13,12 +13,12 @@ import * as schema from "../src/db/schema";
 import crypto from "crypto";
 import { promisify } from "util";
 
-// Usa DATABASE_URL (pooled) ou DIRECT_URL (conexão direta) — qualquer um serve para o seed
+// Uses DATABASE_URL (pooled) or DIRECT_URL (direct) — either one works for seeding
 const connectionString =
   process.env.DATABASE_URL ||
   process.env.DIRECT_URL;
 if (!connectionString || connectionString.includes("build")) {
-  console.error("❌ Defina DATABASE_URL ou DIRECT_URL no .env (URL real do Neon/Postgres).");
+  console.error("❌ Set DATABASE_URL or DIRECT_URL in .env (a real Neon/Postgres URL).");
   process.exit(1);
 }
 
@@ -32,10 +32,10 @@ async function hashPassword(password: string): Promise<string> {
 }
 
 async function main() {
-  console.log("🌱 Iniciando seed...\n");
+  console.log("🌱 Seeding...\n");
 
-  // Limpar dados existentes (ambiente dev)
-  console.log("🗑️  Limpando dados existentes...");
+  // Wipe existing data (dev only)
+  console.log("🗑️  Clearing existing rows...");
   await db.delete(schema.complaintMessages);
   await db.delete(schema.complaints);
   await db.delete(schema.reports);
@@ -47,7 +47,7 @@ async function main() {
   await db.delete(schema.companies);
   await db.delete(schema.profiles);
   await db.delete(schema.users);
-  console.log("✓ Dados limpos\n");
+  console.log("✓ Rows cleared\n");
 
   const now = new Date();
   const defaultPassword = "senha123";
@@ -81,7 +81,7 @@ async function main() {
     throw new Error("Falha ao criar users");
   }
 
-  console.log("✓ Users criados (maria, empresa@construtorax, ana, admin)");
+  console.log("✓ Users created (maria, empresa@construtorax, ana, admin)");
 
   // ─── Profiles ───────────────────────────────────────────────────────────
   await db.insert(schema.profiles).values([
@@ -135,7 +135,7 @@ async function main() {
       acceptedTermsAt: now,
     },
   ]);
-  console.log("✓ Profiles criados");
+  console.log("✓ Profiles created");
   console.log(`✓ Admin seed: admin@comunicamulher.com.br / ${defaultPassword}`);
 
   // ─── Companies ──────────────────────────────────────────────────────────
@@ -181,7 +181,7 @@ async function main() {
     ])
     .returning({ id: schema.companies.id });
 
-  console.log("✓ Empresas criadas (Construtora X, Transportes Sul)");
+  console.log("✓ Companies created (Construtora X, Transportes Sul)");
 
   // ─── Company users (João = Construtora X) ────────────────────────────────
   await db.insert(schema.companyUsers).values([
@@ -221,7 +221,7 @@ async function main() {
     ])
     .returning({ id: schema.projects.id });
 
-  console.log("✓ Projetos criados");
+  console.log("✓ Projects created");
 
   // ─── Complaints ──────────────────────────────────────────────────────────
   const [, c2] = await db
@@ -259,7 +259,7 @@ async function main() {
     ])
     .returning({ id: schema.complaints.id });
 
-  console.log("✓ Reclamações criadas");
+  console.log("✓ Complaints created");
 
   // ─── Complaint messages ─────────────────────────────────────────────────
   await db.insert(schema.complaintMessages).values([
@@ -270,9 +270,9 @@ async function main() {
       content: "Prezada, estamos verificando a autorização e entraremos em contato em até 48h.",
     },
   ]);
-  console.log("✓ Mensagens de reclamação criadas");
+  console.log("✓ Complaint messages created");
 
-  // ─── Report (denúncia) ──────────────────────────────────────────────────
+  // ─── Report ─────────────────────────────────────────────────────────────
   await db.insert(schema.reports).values({
     reporterId: user3.id,
     type: "ABUSE",
@@ -281,7 +281,7 @@ async function main() {
     description: "CNPJ da empresa não confere no site da Receita.",
     relatedCompanyId: company2.id,
   });
-  console.log("✓ Report (denúncia) criado");
+  console.log("✓ Report created");
 
   // ─── Blog Tags ──────────────────────────────────────────────────────────
   const tagsInserted = await db
@@ -297,7 +297,7 @@ async function main() {
     .returning({ id: schema.blogTags.id, slug: schema.blogTags.slug });
 
   const tagMap = new Map(tagsInserted.map(t => [t.slug, t.id]));
-  console.log("✓ Tags de blog criadas");
+  console.log("✓ Blog tags created");
 
   // ─── Blog Posts ─────────────────────────────────────────────────────────
   const postsInserted = await db
@@ -400,7 +400,7 @@ A participação feminina em projetos de infraestrutura não apenas melhora as o
         excerpt: "Descubra como a participação ativa de mulheres tem transformado projetos de infraestrutura em todo o Brasil.",
         coverUrl: "/blog-image-2.webp",
         status: "PUBLISHED",
-        publishedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), // 2 dias atrás
+        publishedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
       },
       {
         title: "5 Direitos que Toda Mulher Deve Conhecer ao Fazer uma Reclamação",
@@ -469,7 +469,7 @@ Fazer uma reclamação legítima não pode resultar em retaliação ou discrimin
         excerpt: "Conheça os direitos fundamentais que protegem você ao registrar uma reclamação.",
         coverUrl: "/blog-image-3.webp",
         status: "PUBLISHED",
-        publishedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000), // 5 dias atrás
+        publishedAt: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
       },
       {
         title: "Construindo Comunidades Mais Fortes Através da Participação Cidadã",
@@ -568,48 +568,48 @@ Esse futuro começa com sua participação hoje.
         excerpt: "Descubra como a participação cidadã ativa pode transformar sua comunidade.",
         coverUrl: "/hero.webp",
         status: "PUBLISHED",
-        publishedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000), // 7 dias atrás
+        publishedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
       },
     ])
     .returning({ id: schema.blogPosts.id, slug: schema.blogPosts.slug });
 
-  console.log("✓ Posts de blog criados");
+  console.log("✓ Blog posts created");
 
   // ─── Blog Post Tags ─────────────────────────────────────────────────────
   const postMap = new Map(postsInserted.map(p => [p.slug, p.id]));
 
   await db.insert(schema.blogPostTags).values([
-    // Como reclamar com segurança
+    // post: "Como reclamar com segurança"
     { postId: postMap.get("como-reclamar-com-seguranca")!, tagId: tagMap.get("direitos")! },
     { postId: postMap.get("como-reclamar-com-seguranca")!, tagId: tagMap.get("empoderamento")! },
     
-    // Participação Social Feminina
+    // post: "Participação Social Feminina"
     { postId: postMap.get("participacao-social-feminina-infraestrutura")!, tagId: tagMap.get("participacao-social")! },
     { postId: postMap.get("participacao-social-feminina-infraestrutura")!, tagId: tagMap.get("casos-de-sucesso")! },
     { postId: postMap.get("participacao-social-feminina-infraestrutura")!, tagId: tagMap.get("infraestrutura")! },
     
-    // 5 Direitos
+    // post: "5 Direitos"
     { postId: postMap.get("5-direitos-mulher-reclamacao")!, tagId: tagMap.get("direitos")! },
     { postId: postMap.get("5-direitos-mulher-reclamacao")!, tagId: tagMap.get("empoderamento")! },
     
-    // Construindo Comunidades
+    // post: "Construindo Comunidades"
     { postId: postMap.get("construindo-comunidades-participacao-cidada")!, tagId: tagMap.get("participacao-social")! },
     { postId: postMap.get("construindo-comunidades-participacao-cidada")!, tagId: tagMap.get("comunidade")! },
     { postId: postMap.get("construindo-comunidades-participacao-cidada")!, tagId: tagMap.get("casos-de-sucesso")! },
   ]);
 
-  console.log("✓ Tags associadas aos posts");
+  console.log("✓ Tags attached to the posts");
 
-  console.log("\n✅ Seed concluído.\n");
-  console.log("Logins para teste (senha para todos: senha123):");
-  console.log("  - maria@exemplo.com (pessoa)");
-  console.log("  - empresa@construtorax.com (empresa – Construtora X)");
-  console.log("  - ana@exemplo.com (pessoa)");
+  console.log("\n✅ Seed finished.\n");
+  console.log("Test logins (password for all of them: senha123):");
+  console.log("  - maria@exemplo.com (person)");
+  console.log("  - empresa@construtorax.com (company – Construtora X)");
+  console.log("  - ana@exemplo.com (person)");
   console.log("  - admin@comunicamulher.com.br (admin)");
-  console.log("\nPerfil público da empresa: /company/construtora-x");
+  console.log("\nPublic company profile: /company/construtora-x");
 }
 
 main().catch((err) => {
-  console.error("Erro no seed:", err);
+  console.error("Seed failed:", err);
   process.exit(1);
 });

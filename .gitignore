@@ -46,3 +46,11 @@ next-env.d.ts
 
 # IDE
 .vscode/
+
+# Claude Code's local permission file. NEVER commit it: allow-rules accumulate by
+# clicking, and a rule that allowlists a command with a token in it puts that token
+# in the repo.
+**/.claude/settings.local.json
+
+# derived kanban board — regenerate with /hexagram:board, never track it
+.kanban.json

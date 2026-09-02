@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { LogIn } from "lucide-react";
 
 /**
- * Banner de login/cadastro exibido quando usuário não está autenticado
- * Segue design do Figma com gradiente azul e CTA branco
+ * The sign-in/sign-up banner, shown while the visitor is not authenticated.
+ * Follows the Figma design: blue gradient with a white CTA.
  */
 export function ComplaintLoginBanner() {
   return (

@@ -21,7 +21,7 @@ export default async function CompaniesPage({
   const verifiedOnly = verified === "true";
   const companies = await CompaniesRepo.findPublic(query || undefined, verifiedOnly);
 
-  // Ordenar por verificadas primeiro, depois por nome
+  // Verified first, then by name
   const sortedCompanies = [...companies].sort((a, b) => {
     if (a.verifiedAt && !b.verifiedAt) return -1;
     if (!a.verifiedAt && b.verifiedAt) return 1;

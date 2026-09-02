@@ -186,7 +186,7 @@ export function CompanyComplaintsContent({
         ))}
       </div>
 
-      {/* Alerta de reclamações pendentes */}
+      {/* Pending complaints alert */}
       {stats.open > 0 && (
         <Card className="border-0 shadow-md mb-6 bg-gradient-to-r from-orange-50 to-amber-50">
           <CardContent className="p-4 flex items-center gap-4">

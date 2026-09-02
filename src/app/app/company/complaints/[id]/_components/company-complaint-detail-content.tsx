@@ -180,7 +180,7 @@ export function CompanyComplaintDetailContent({
 
   return (
     <CompanyPageShell>
-      {/* Header azul */}
+      {/* Blue header */}
       <div className="bg-gradient-to-br from-[#1E88E5] to-[#1565C0] -mx-6 -mt-8 px-6 py-8 mb-6">
         <div className="max-w-[960px] mx-auto">
           <Link
@@ -218,11 +218,11 @@ export function CompanyComplaintDetailContent({
         </div>
       )}
 
-      {/* Layout 2 colunas */}
+      {/* Two-column layout */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
-        {/* Coluna principal */}
+        {/* Main column */}
         <div className="space-y-4">
-          {/* Card de detalhes */}
+          {/* Details card */}
           <Card className="border-0 shadow-md overflow-hidden">
             <CardContent className="p-0">
               {/* Info grid */}
@@ -256,7 +256,7 @@ export function CompanyComplaintDetailContent({
                 </div>
               </div>
 
-              {/* Ações */}
+              {/* Actions */}
               <div className="flex items-center gap-4 px-5 py-3 border-b border-gray-100">
                 <button className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#1E88E5] transition-colors">
                   <ThumbsUp className="w-4 h-4" />
@@ -280,7 +280,7 @@ export function CompanyComplaintDetailContent({
 
                   return (
                     <div key={message.id} className="flex gap-4">
-                      {/* Linha do tempo */}
+                      {/* Timeline rail */}
                       <div className="flex flex-col items-center">
                         <div
                           className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
@@ -304,7 +304,7 @@ export function CompanyComplaintDetailContent({
                         )}
                       </div>
 
-                      {/* Conteúdo */}
+                      {/* Entry content */}
                       <div className={`flex-1 pb-6 ${isCompany ? "border-l-4 border-[#1E88E5] pl-4 -ml-0.5" : ""}`}>
                         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
                           <div className="flex items-center justify-between mb-2">
@@ -327,7 +327,7 @@ export function CompanyComplaintDetailContent({
                   );
                 })}
 
-                {/* Card de conclusão (se resolvida) */}
+                {/* Closing card, only once the complaint is resolved */}
                 {complaint.status === "RESOLVED" && (
                   <div className="flex gap-4">
                     <div className="flex flex-col items-center">
@@ -347,7 +347,7 @@ export function CompanyComplaintDetailContent({
                 )}
               </div>
 
-              {/* Área de resposta */}
+              {/* Reply area */}
               <div className="p-5 border-t border-gray-100">
                 <h3 className="font-['Poppins'] font-semibold text-[#2A3F54] mb-3">Enviar resposta</h3>
                 <Textarea
@@ -379,7 +379,7 @@ export function CompanyComplaintDetailContent({
 
         {/* Sidebar */}
         <div className="space-y-4">
-          {/* Card da empresa */}
+          {/* Company card */}
           <Card className="border-0 shadow-md">
             <CardContent className="p-6 text-center">
               {/* Avatar */}
@@ -438,7 +438,7 @@ export function CompanyComplaintDetailContent({
             </CardContent>
           </Card>
 
-          {/* Card Criar relato */}
+          {/* "Criar um relato" (start a report) card */}
           <Card className="border-0 shadow-md">
             <CardContent className="p-6">
               <p className="text-sm text-[#2A3F54] mb-4">
@@ -453,7 +453,7 @@ export function CompanyComplaintDetailContent({
             </CardContent>
           </Card>
 
-          {/* Ações da empresa */}
+          {/* Company actions */}
           <Card className="border-0 shadow-md">
             <CardContent className="p-6">
               <h4 className="font-semibold text-sm text-gray-400 uppercase tracking-wider mb-4">

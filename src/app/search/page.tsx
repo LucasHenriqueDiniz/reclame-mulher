@@ -260,7 +260,7 @@ function SearchContent() {
 
                               {/* Stats Grid */}
                               <div className="grid grid-cols-2 gap-px bg-[#E5E5ED]">
-                                {/* Projetos */}
+                                {/* Projects */}
                                 <div className="bg-white px-3 py-2.5 flex items-center gap-2">
                                   <BarChart2 className="w-4 h-4 text-[#607D8B] flex-shrink-0" />
                                   <span className="text-xs font-['Poppins'] text-[#607D8B] truncate">
@@ -268,7 +268,7 @@ function SearchContent() {
                                   </span>
                                 </div>
 
-                                {/* Localização */}
+                                {/* Location */}
                                 <div className="bg-white px-3 py-2.5 flex items-center gap-2">
                                   <MapPin className="w-4 h-4 text-[#607D8B] flex-shrink-0" />
                                   <span className="text-xs font-['Poppins'] text-[#607D8B] truncate">
@@ -276,7 +276,7 @@ function SearchContent() {
                                   </span>
                                 </div>
 
-                                {/* Taxa de Resolução */}
+                                {/* Resolution rate */}
                                 <div className="bg-white px-3 py-2.5 flex items-center gap-2">
                                   <CheckCircle2 className="w-4 h-4 text-[#607D8B] flex-shrink-0" />
                                   <span className="text-xs font-['Poppins'] text-[#607D8B]">
@@ -287,7 +287,7 @@ function SearchContent() {
                                   )}
                                 </div>
 
-                                {/* Setor */}
+                                {/* Sector */}
                                 <div className="bg-white px-3 py-2.5 flex items-center gap-2">
                                   <TrendingUp className="w-4 h-4 text-[#607D8B] flex-shrink-0" />
                                   <span className="text-xs font-['Poppins'] text-[#607D8B] truncate">

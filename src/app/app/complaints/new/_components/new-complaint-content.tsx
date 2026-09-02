@@ -240,7 +240,7 @@ export function NewComplaintContent({
 
   const canSubmit = Boolean(effectiveCompany && session);
   
-  // Determinar label do botão baseado no step e estado
+  // Pick the button label from the current step and state
   const getNextLabel = () => {
     if (step === 3) {
       return stepThree.attachments.length > 0 ? "Continuar" : "Continuar sem foto";
@@ -255,7 +255,7 @@ export function NewComplaintContent({
 
   return (
     <ComplaintWizardShell>
-      {/* Botão para voltar */}
+      {/* Back button */}
       <Link 
         href="/app/complaints"
         className="inline-flex items-center gap-2 mb-4 text-[#607D8B] hover:text-[#1E88E5] transition-colors"
@@ -316,7 +316,7 @@ export function NewComplaintContent({
 
           <ComplaintStepProgress currentStep={step} totalSteps={TOTAL_STEPS} />
 
-          {/* Steps com animação de transição */}
+          {/* Steps, with the transition animation */}
           <div className="relative overflow-hidden w-full">
             <div
               className="flex transition-all duration-500 ease-out"

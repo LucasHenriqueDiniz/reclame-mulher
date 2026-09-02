@@ -24,7 +24,7 @@ export function ColorfulDivider({
   );
 }
 
-// Variantes pré-definidas
+// Predefined variants
 export function BrandColorfulDivider({ className = "" }: { className?: string }) {
   return (
     <ColorfulDivider

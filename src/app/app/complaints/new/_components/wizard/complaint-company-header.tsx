@@ -13,9 +13,9 @@ export interface ComplaintCompanyHeaderProps {
 }
 
 /**
- * Header da empresa no wizard
- * Exibe avatar, nome, selo de verificação, localização e projetos
- * Segue design do Figma com densidade visual adequada
+ * The company header inside the wizard.
+ * Shows the avatar, name, verification badge, location and projects.
+ * Follows the Figma design and its visual density.
  */
 export function ComplaintCompanyHeader({
   name,

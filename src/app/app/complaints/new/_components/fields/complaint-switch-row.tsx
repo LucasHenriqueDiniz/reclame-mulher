@@ -13,8 +13,8 @@ export interface ComplaintSwitchRowProps {
 }
 
 /**
- * Linha com switch padronizada para o wizard de relato
- * Segue design do Figma com alinhamento e espaçamento consistentes
+ * The standard switch row for the complaint wizard.
+ * Follows the Figma design: consistent alignment and spacing.
  */
 export function ComplaintSwitchRow({
   id,

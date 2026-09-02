@@ -1,9 +1,9 @@
 #!/usr/bin/env tsx
 /**
- * Gera assets/evidencias-desenvolvimento-tcc.docx
- * — texto simples, sem tabelas; embute imagens encontradas em assets/ (exceto o próprio .docx).
+ * Generates assets/evidencias-desenvolvimento-tcc.docx
+ * — plain text, no tables; embeds the images found under assets/ (except the .docx itself).
  *
- * Coloque PNG/JPG em assets/figma, assets/dev, assets/testes ou assets/wireframes e rode:
+ * Drop PNG/JPG files in assets/figma, assets/dev, assets/testes or assets/wireframes, then run:
  *   npm run evidencias:docx
  */
 
@@ -60,7 +60,7 @@ function sortPaths(paths: string[]) {
   });
 }
 
-/** Lê largura/altura do PNG para redimensionar sem distorcer (IHDR). */
+/** Reads the PNG width/height (IHDR) so it can be resized without distortion. */
 function pngDimensions(buf: Buffer): { w: number; h: number } | null {
   if (buf.length < 24 || buf[0] !== 0x89) return null;
   if (buf.toString("ascii", 1, 4) !== "PNG") return null;

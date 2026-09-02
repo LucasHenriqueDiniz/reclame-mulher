@@ -27,7 +27,7 @@ export function CompanyProfileHero({
   isMember?: boolean;
   dashboardLink?: string;
   publicProfileLink?: string;
-  /** Link para "Iniciar um relato" (perfil público) */
+  /** Target of the "Iniciar um relato" (start a report) link on the public profile */
   complaintCtaHref?: string;
 }) {
   const isVerified = !!company.verifiedAt;
