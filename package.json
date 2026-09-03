@@ -18,6 +18,10 @@
     "evidencias:check": "node --import tsx scripts/evidencias-demo-check.ts",
     "evidencias:docx": "node --import tsx scripts/generate-evidencias-docx.ts",
     "test:demo": "node --import tsx scripts/demo-tests.ts",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report e2e/.report",
+    "test:e2e:db:down": "docker compose -f docker-compose.e2e.yml down -v",
     "prepare": "git config --get core.hooksPath >/dev/null 2>&1 || git config core.hooksPath .githooks 2>/dev/null || true"
   },
   "dependencies": {
@@ -71,6 +75,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@next/eslint-plugin-next": "15.5.9",
+    "@playwright/test": "^1.62.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

@@ -59,3 +59,11 @@ next-env.d.ts
 # .gitmodules, which made `git submodule status` abort for everyone. They are
 # per-machine scratch checkouts, so they belong outside the index.
 .claude/worktrees/
+
+# Playwright. .auth holds real session cookies minted against the local E2E
+# database — throwaway, but still session tokens, so they stay out of the index.
+/e2e/.auth/
+/e2e/.results/
+/e2e/.report/
+/test-results/
+/playwright-report/

@@ -7,8 +7,7 @@
  */
 
 import "dotenv/config";
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
+import { createDatabase } from "../src/db/driver";
 import * as schema from "../src/db/schema";
 import crypto from "crypto";
 import { promisify } from "util";
@@ -22,8 +21,9 @@ if (!connectionString || connectionString.includes("build")) {
   process.exit(1);
 }
 
-const sql = neon(connectionString);
-const db = drizzle(sql, { schema });
+// Same driver choice the app makes: Neon over HTTP, or wire-protocol Postgres
+// when E2E_LOCAL_DB=1 points the seed at the throwaway E2E container.
+const db = createDatabase(connectionString);
 
 async function hashPassword(password: string): Promise<string> {
   const salt = crypto.randomBytes(16).toString("hex");

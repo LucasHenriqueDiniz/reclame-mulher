@@ -1,0 +1,33 @@
+# Throwaway Postgres for the E2E suite.
+#
+# The deployed app talks to Neon; there is no Neon instance a contributor can
+# point tests at without owning one, and pointing tests at a shared database
+# would be worse: `pnpm db:seed` deletes every row before it inserts.
+#
+# So the suite brings its own database up, seeds it, and throws it away.
+#
+# POSTGRES_HOST_AUTH_METHOD=trust is deliberate: with trust there is no
+# password to invent, so no credential ends up committed here or read out of a
+# file. It is safe only because this container listens on 127.0.0.1 and holds
+# nothing but seed data.
+#
+# Port 55432, not 5432, so it cannot collide with a Postgres a contributor
+# already runs for something else.
+services:
+  e2e-db:
+    image: postgres:15
+    container_name: reclame-mulher-e2e-db
+    environment:
+      POSTGRES_USER: rm_e2e
+      POSTGRES_DB: reclame_mulher_e2e
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "127.0.0.1:55432:5432"
+    # Data lives in RAM and dies with the container. Every run starts clean.
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rm_e2e -d reclame_mulher_e2e"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
