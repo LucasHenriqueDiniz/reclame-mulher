@@ -50,16 +50,34 @@ Plus one that keeps the handler honest:
 ## Done when
 
 ```bash
-grep -q '"test":' package.json || echo "FAIL: no test script — honest-ci slice 02 is not done"
-pnpm test -- --run src/server/use-cases/create-complaint.test.ts >/dev/null 2>&1 \
-  && echo "tests: ok" || echo "tests: FAILED"
+if ! grep -q '"test":' package.json; then
+  echo "tests: FAILED — no test script; honest-ci slice 02 is not done"
+elif pnpm test --run src/server/use-cases/create-complaint.test.ts >/dev/null 2>&1; then
+  echo "tests: ok"
+else
+  echo "tests: FAILED"
+fi
 ```
 
-prints `tests: ok` — five tests, and the run is judged by its exit code. Drop the `>/dev/null` to read
-the summary; Vitest writes `Tests  5 passed (5)` in a four-line final block, so use `tail -5` if you
-pipe it. The existence check comes first because `pnpm test --run` exits **0** and prints nothing when
-`package.json` has no `test` script, which would make a missing runner look like a passing suite
-(`"test:demo"` does not satisfy the grep).
+prints `tests: ok`. Today it prints the `no test script` line instead, because the runner arrives with
+honest-ci slice 02. Drop the `>/dev/null` to read the summary; Vitest writes `Tests  5 passed (5)` in a
+four-line final block, so use `tail -5` if you pipe it. The gate judges by exit code and does not count
+the tests, so the five listed under *Tests* stay your responsibility.
+
+Two things about that block, because the obvious phrasings are both wrong here:
+
+- **No `--` before `--run`.** `pnpm test -- --run <file>` puts *both* `--run` and the path into the `--`
+  bucket, and Vitest ignores the pair. Run against Vitest 4.1.11 with the test file deleted, that form
+  still ran the whole suite and printed `tests: ok` — a false green wide enough to pass this slice with
+  no use-case test written at all. `pnpm test --run <file>` filters for real: `No test files found,
+  exiting with code 1` when the file is missing, `Tests  5 passed (5)` and exit 0 when it is there. The
+  `--` also costs the flag its whole purpose, since Vitest 4 defaults to
+  `watch: !isCI && process.stdin.isTTY && !isAgent` — in a normal terminal the `--` form opens watch
+  mode and never returns a verdict.
+- **The existence check gates the run rather than warning beside it.** `pnpm test --run` exits **0** and
+  prints nothing while `package.json` has no `test` script, so reaching the run before honest-ci slice
+  02 lands would make a missing runner read as a passing suite (`"test:demo"` does not satisfy the
+  grep).
 
 Then, for the handler:
 

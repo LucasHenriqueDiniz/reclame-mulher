@@ -48,20 +48,29 @@ Two things are extractable without touching the component's state:
 
 ```bash
 wc -l 'src/app/app/complaints/[id]/_components/complaint-detail-content.tsx'
-grep -q '"test":' package.json || echo "FAIL: no test script — honest-ci slice 02 is not done"
-pnpm test -- --run >/dev/null 2>&1 && echo "tests: ok" || echo "tests: FAILED"
-pnpm run build  >/dev/null 2>&1 && echo "build: ok" || echo "build: FAILED"
+if ! grep -q '"test":' package.json; then
+  echo "tests: FAILED — no test script; honest-ci slice 02 is not done"
+elif pnpm test --run >/dev/null 2>&1; then
+  echo "tests: ok"
+else
+  echo "tests: FAILED"
+fi
+pnpm run build >/dev/null 2>&1 && echo "build: ok" || echo "build: FAILED"
 ```
 
 prints a line count below 500, then `tests: ok`, then `build: ok`. Today it prints `538`, the
-`FAIL: no test script` line, `tests: FAILED` and `build: ok`.
+`tests: FAILED — no test script; honest-ci slice 02 is not done` line, and `build: ok`.
 
 Both runs are asserted by exit code rather than by a string in their output, for the reasons slice 01
 records in full: `next build` prints `✓ Compiled successfully` before it type-checks, so that string
 survives a broken build; `pnpm test --run` exits **0** and prints nothing when no `test` script exists,
-so a missing runner reads as a pass unless existence is asserted first; and no runner in play prints
-`0 failed` on success — Vitest prints `Tests  5 passed (5)` and omits the failed count entirely, while
-`node --test` prints `# fail 0`.
+so the existence check has to gate the run instead of merely warning next to it; and no runner in play
+prints `0 failed` on success — Vitest prints `Tests  5 passed (5)` and omits the failed count entirely,
+while `node --test` prints `# fail 0`.
+
+The flag is `--run`, not `-- --run`: after a `--` Vitest never reads it, and Vitest 4 defaults to
+`watch: !isCI && process.stdin.isTTY && !isAgent`, so on a real terminal the `-- --run` form drops into
+watch mode and the gate hangs instead of reporting.
 
 ## If stuck
 

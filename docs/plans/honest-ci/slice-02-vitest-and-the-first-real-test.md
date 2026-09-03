@@ -40,12 +40,31 @@ The list is the definition of done. All against `CreateComplaintDto`:
 ## Done when
 
 ```bash
-pnpm test -- --run 2>&1 | tail -5
+set -o pipefail
+if ! grep -q '"test":' package.json; then
+  echo "tests: FAILED — no test script yet, so this slice has not landed"
+else
+  pnpm test --run 2>&1 | tail -5
+  echo "vitest exit=$?"
+fi
 ```
 
-prints a summary line reading `Tests  5 passed (5)` and the process exits 0 — and after temporarily
-making `company_id` optional in `src/server/dto/complaints.ts`, the same command prints
-`Tests  1 failed | 4 passed (5)` and exits non-zero. Revert the mutation before committing.
+prints a summary line reading `Tests  5 passed (5)` followed by `vitest exit=0` — and after temporarily
+making `company_id` optional in `src/server/dto/complaints.ts`, the same block prints
+`Tests  1 failed | 4 passed (5)` and `vitest exit=1`. Revert the mutation before committing. Today it
+prints only the `no test script yet` line, which is what this slice turns over.
+
+Three details, because a pipe and a `--` each quietly break this gate:
+
+- **`set -o pipefail`, or the exit code the criterion asks for is unreadable.** Without it `$?` after
+  `| tail -5` is *tail's* status, which is 0 even when Vitest exits 1 — measured on a deliberately red
+  suite, the bare pipe reported `0`. With `pipefail` the pipeline carries Vitest's own code, in both
+  `zsh` and `bash`.
+- **`--run`, not `-- --run`.** A `--` sends the flag to a bucket Vitest ignores, and Vitest 4 defaults
+  to `watch: !isCI && process.stdin.isTTY && !isAgent`, so on a normal terminal `pnpm test -- --run`
+  opens watch mode and waits for file changes rather than exiting.
+- **`tail -5` is the right depth.** Vitest's green final block is Test Files / Tests / Start at /
+  Duration plus a blank line, so `tail -3` would cut off the `Tests` line the criterion reads.
 
 ## If stuck
 
