@@ -1,5 +1,5 @@
 ---
-status: todo
+status: done
 tags:
   - area/ci
   - area/testing
@@ -7,6 +7,17 @@ kanban: 88103fd4-29ad-40e4-8aa6-a57256e48b2d
 ---
 
 # Slice 02 — Vitest, and the first test that can fail
+
+> **Done 2026-09-03.** Vitest 4.1.11 with `vite-tsconfig-paths`, five tests against
+> `CreateComplaintDto`. The gate prints `Tests  5 passed (5)` / `vitest exit=0`, and with
+> `company_id` relaxed to `.optional()` it prints `Tests  1 failed | 4 passed (5)` /
+> `vitest exit=1` — the mutant dies, so the test asserts something. The DTO was reverted
+> before committing; `git diff` against `master` on that file is empty.
+>
+> Slice 03 asked for the CI wiring separately. It is done here instead, because leaving a
+> real runner out of CI for one more slice is the same false green this epic exists to
+> remove — and the same commit had to add `manuais:check` to CI anyway: the manuals had
+> already drifted from their served copies within hours of delivery, and nothing noticed.
 
 ## Delivers
 

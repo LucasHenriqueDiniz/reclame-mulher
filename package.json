@@ -24,7 +24,8 @@
     "prepare": "git config --get core.hooksPath >/dev/null 2>&1 || git config core.hooksPath .githooks 2>/dev/null || true",
     "demo:checklist": "node --import tsx scripts/demo-tests.ts",
     "manuais:sync": "node --import tsx scripts/sync-manuais.ts",
-    "manuais:check": "node --import tsx scripts/sync-manuais.ts --check"
+    "manuais:check": "node --import tsx scripts/sync-manuais.ts --check",
+    "test": "vitest"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -91,7 +92,9 @@
     "postcss": "8",
     "tailwindcss": "^3.4.13",
     "tsx": "^4.20.6",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.11"
   },
   "packageManager": "pnpm@11.24.0"
 }

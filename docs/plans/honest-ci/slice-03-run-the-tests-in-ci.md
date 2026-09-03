@@ -1,11 +1,17 @@
 ---
-status: todo
+status: done
 tags:
   - area/ci
 kanban: 1d1f6e63-beda-4ae2-a51e-bd36be82a28f
 ---
 
 # Slice 03 — Run the tests in CI, and prove the job can go red
+
+> **Done 2026-09-03, in the same commit as slice 02.** The `check` job now runs `Lint`,
+> `Unit tests` (`pnpm test --run`) and `Manuals in sync`, and the separate `e2e` job runs
+> the 20-test Playwright suite. Splitting the runner from its CI wiring across two slices
+> would have left a green CI that runs no unit tests for as long as slice 03 sat in the
+> backlog, which is exactly the gap this epic is about.
 
 ## Delivers
 
