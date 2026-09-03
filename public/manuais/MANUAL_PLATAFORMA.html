@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual da Plataforma ReclameMulher</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #2A3F54;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #C91F5E 0%, #A01648 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .toc {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            padding: 40px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .toc-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #C91F5E;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #2A3F54;
+            font-weight: 500;
+        }
+
+        .toc-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(201, 31, 94, 0.15);
+            background: #fef5f8;
+        }
+
+        .content {
+            padding: 60px 40px;
+        }
+
+        section {
+            margin-bottom: 80px;
+            scroll-margin-top: 100px;
+        }
+
+        .section-title {
+            font-size: 2.2em;
+            color: #C91F5E;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #C91F5E;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            font-size: 1.3em;
+            color: #2A3F54;
+            margin: 30px 0 20px 0;
+            font-weight: 600;
+        }
+
+        .flow-diagram {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8eaed 100%);
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+            overflow-x: auto;
+        }
+
+        .flow-steps {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            min-width: 100%;
+        }
+
+        .step {
+            background: white;
+            border: 2px solid #C91F5E;
+            border-radius: 8px;
+            padding: 20px;
+            min-width: 200px;
+            text-align: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #C91F5E;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .step h4 {
+            color: #2A3F54;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+
+        .step p {
+            font-size: 0.9em;
+            color: #666;
+            margin: 0;
+        }
+
+        .arrow {
+            font-size: 2em;
+            color: #C91F5E;
+            flex-shrink: 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(201, 31, 94, 0.12);
+            border-color: #C91F5E;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #C91F5E 0%, #A01648 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: #2A3F54;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #fef5f8 0%, #fff0f4 100%);
+            border-left: 4px solid #C91F5E;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .info-box strong {
+            color: #C91F5E;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #2A3F54;
+            margin: 0;
+        }
+
+        .screen-mockup {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .screen-mockup h4 {
+            color: #C91F5E;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .dashboard-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .preview-item {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .preview-item strong {
+            display: block;
+            color: #C91F5E;
+            margin-bottom: 5px;
+        }
+
+        .preview-item p {
+            color: #666;
+            font-size: 0.9em;
+            margin: 0;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, transparent 0%, rgba(201, 31, 94, 0.1) 50%, transparent 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #2A3F54;
+        }
+
+        a {
+            color: #C91F5E;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #C91F5E;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .badge.success {
+            background: #27AE60;
+        }
+
+        .badge.warning {
+            background: #F39C12;
+        }
+
+        .badge.info {
+            background: #3498DB;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+
+        th {
+            background: linear-gradient(135deg, #C91F5E 0%, #A01648 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        footer {
+            background: #2A3F54;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .flow-steps {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .arrow {
+                transform: rotate(90deg);
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            th, td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📋 Manual da Plataforma ReclameMulher</h1>
+            <p>Guia Completo de Fluxos e Funcionalidades</p>
+        </header>
+
+        <div class="toc">
+            <a href="#homepage" class="toc-item">🏠 Homepage & Navegação</a>
+            <a href="#criar-reclamacao" class="toc-item">📝 Criar Reclamação</a>
+            <a href="#resposta-empresa" class="toc-item">💼 Resposta da Empresa</a>
+            <a href="#dashboards" class="toc-item">📊 Dashboards</a>
+            <a href="#perfis" class="toc-item">👤 Perfis & Configurações</a>
+        </div>
+
+        <div class="content">
+            <!-- SEÇÃO 1: HOMEPAGE E NAVEGAÇÃO -->
+            <section id="homepage">
+                <h2 class="section-title">🏠 Homepage e Navegação</h2>
+                <p>A homepage é o ponto de entrada da plataforma, acessível por usuários não autenticados e como hub central após login.</p>
+
+                <h3 class="section-subtitle">Elementos Principais</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Header Principal</h3>
+                        <p>Logo ReclameMulher, menu de navegação e botões de Login/Registro</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">✨</div>
+                        <h3>Hero Section</h3>
+                        <p>Mensagem impactante sobre empoderamento de mulheres e infraestrutura</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📈</div>
+                        <h3>Estatísticas de Impacto</h3>
+                        <p>Números de reclamações, empresas verificadas e resoluções</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔄</div>
+                        <h3>Carrossel de Processo</h3>
+                        <p>Visual dos 4 passos principais: Criar → Responder → Acompanhar → Resolver</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🏢</div>
+                        <h3>Categorias de Impacto</h3>
+                        <p>Saúde, Mobilidade, Patrimônio, Direitos Humanos e Ambiental</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🤝</div>
+                        <h3>Seção de Parcerias</h3>
+                        <p>Logos e informações de empresas e organizações parceiras</p>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Navegação Pós-Login</h3>
+                <p>Após autenticação, a plataforma oferece diferentes caminhos conforme o perfil do usuário:</p>
+
+                <div class="info-box">
+                    <strong>👩 Usuária Pessoa</strong>
+                    <p>Redirecionada para lista de reclamações pessoais com opções de criar nova reclamação</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>💼 Usuária Empresa</strong>
+                    <p>Redirecionada para Dashboard da Empresa com estatísticas e gerenciamento</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>🔐 Admin</strong>
+                    <p>Acesso a painel administrativo com controles globais da plataforma</p>
+                </div>
+
+                <h3 class="section-subtitle">Fluxo de Autenticação</h3>
+                <div class="flow-diagram">
+                    <div class="flow-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <h4>Login/Registro</h4>
+                            <p>Insira email e senha</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <h4>Verificação</h4>
+                            <p>Confirme email se novo</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <h4>Escolher Papel</h4>
+                            <p>Pessoa ou Empresa</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <h4>Onboarding</h4>
+                            <p>Preencher dados pessoais</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 2: FLUXO DE CRIAÇÃO DE RECLAMAÇÃO -->
+            <section id="criar-reclamacao">
+                <h2 class="section-title">📝 Fluxo de Criação de Reclamação</h2>
+                <p>O processo para registrar uma reclamação é estruturado em 4 etapas intuitivas, permitindo que usuárias documentem completamente seu caso.</p>
+
+                <h3 class="section-subtitle">Visão Geral do Wizard</h3>
+                <div class="flow-diagram">
+                    <div class="flow-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <h4>Histórico</h4>
+                            <p>Reclamações anteriores</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <h4>Descrição</h4>
+                            <p>Título e detalhes do problema</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <h4>Anexos</h4>
+                            <p>Fotos e documentos</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <h4>Classificação</h4>
+                            <p>Categorizar e enviar</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Etapa 1: Histórico de Reclamações</h3>
+                <div class="screen-mockup">
+                    <h4>Você já fez reclamações sobre isso?</h4>
+                    <p>A plataforma busca identificar se há histórico anterior do mesmo problema, facilitando o rastreamento de casos relacionados.</p>
+                    <div class="dashboard-preview">
+                        <div class="preview-item">
+                            <strong>Pergunta Principal</strong>
+                            <p>"Você já reclamou sobre esse problema em outro local?"</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Opções</strong>
+                            <p>Sim / Não</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Se Sim</strong>
+                            <p>Selecione onde (chat, polícia, etc.)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Etapa 2: Descrição da Reclamação</h3>
+                <div class="screen-mockup">
+                    <h4>Conte-nos sobre o problema</h4>
+                    <div class="dashboard-preview">
+                        <div class="preview-item">
+                            <strong>Título</strong>
+                            <p>Máx. 100 caracteres - resumo do problema</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Descrição</strong>
+                            <p>Detalhes completos do que aconteceu</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Localização</strong>
+                            <p>Onde o problema ocorreu</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Etapa 3: Anexos (Fotos e Documentos)</h3>
+                <div class="screen-mockup">
+                    <h4>Adicione evidências</h4>
+                    <p>Arquivos ajudam empresas a entender melhor o problema. Permitido: imagens e documentos até 10MB cada.</p>
+                    <div class="dashboard-preview">
+                        <div class="preview-item">
+                            <strong>Drag & Drop</strong>
+                            <p>Arraste arquivos ou clique para selecionar</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Formatos</strong>
+                            <p>JPG, PNG, PDF, DOC</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Limite</strong>
+                            <p>Máx. 5 arquivos por reclamação</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Etapa 4: Classificação e Envio</h3>
+                <div class="screen-mockup">
+                    <h4>Finalize sua reclamação</h4>
+                    <div class="dashboard-preview">
+                        <div class="preview-item">
+                            <strong>Empresa Alvo</strong>
+                            <p>Pesquise e selecione a empresa responsável</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Projeto</strong>
+                            <p>Se a empresa tem múltiplos projetos ativos</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Urgência</strong>
+                            <p>Baixa / Média / Alta / Crítica</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Categoria de Impacto</strong>
+                            <p>Saúde, Mobilidade, Patrimônio, etc.</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Alcance do Impacto</strong>
+                            <p>Pessoal / Familiar / Comunidade / Regional</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Privacidade</strong>
+                            <p>Anônima? Pública?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Após Envio</h3>
+                <div class="info-box">
+                    <strong>✅ Sucesso</strong>
+                    <p>Exibição de card de confirmação com ID da reclamação, permitindo compartilhamento</p>
+                </div>
+
+                <h3 class="section-subtitle">Opções Iniciais (Antes da Autenticação)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Experiência</th>
+                            <th>Ação Recomendada</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Não Autenticado</td>
+                            <td>Banner oferecendo login/registro</td>
+                            <td>Prosseguir com email anônimo ou fazer login</td>
+                        </tr>
+                        <tr>
+                            <td>Autenticado</td>
+                            <td>Dados pré-preenchidos do perfil</td>
+                            <td>Confirmação ou alteração de dados</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- SEÇÃO 3: FLUXO DE RESPOSTA DA EMPRESA -->
+            <section id="resposta-empresa">
+                <h2 class="section-title">💼 Fluxo de Resposta da Empresa</h2>
+                <p>As empresas recebem notificações de reclamações e podem responder através de um fluxo estruturado no painel administrativo.</p>
+
+                <h3 class="section-subtitle">Recebimento de Reclamação</h3>
+                <div class="info-box">
+                    <strong>📧 Notificação</strong>
+                    <p>Email com alerta da reclamação é enviado para contatos cadastrados da empresa</p>
+                </div>
+
+                <h3 class="section-subtitle">Fluxo de Resposta</h3>
+                <div class="flow-diagram">
+                    <div class="flow-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <h4>Acesso</h4>
+                            <p>Empresa faz login no painel</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <h4>Inbox</h4>
+                            <p>Lista de reclamações não respondidas</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <h4>Detalhe</h4>
+                            <p>Leitura completa da reclamação</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <h4>Resposta</h4>
+                            <p>Escrever e enviar resposta</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <h4>Fechamento</h4>
+                            <p>Marcar como resolvido (opcional)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Tela de Inbox da Empresa</h3>
+                <div class="screen-mockup">
+                    <h4>Gerenciamento de Reclamações</h4>
+                    <p>Visualização de todas as reclamações destinadas à empresa com filtros e busca.</p>
+                    <div class="dashboard-preview">
+                        <div class="preview-item">
+                            <strong>Filtros Disponíveis</strong>
+                            <p>Todas / Abertas / Respondidas / Resolvidas</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Barra de Busca</strong>
+                            <p>Localize por título ou ID</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Informações Listadas</strong>
+                            <p>Título, data, autor, status, urgência</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Tela de Detalhe de Reclamação</h3>
+                <div class="screen-mockup">
+                    <h4>Visualizar Reclamação Completa</h4>
+                    <div class="dashboard-preview">
+                        <div class="preview-item">
+                            <strong>Informações do Autor</strong>
+                            <p>Nome (se não anônimo), localização, projeto relacionado</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Conteúdo Completo</strong>
+                            <p>Título, descrição, localização, categorias</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Anexos</strong>
+                            <p>Fotos e documentos enviados</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Histórico</strong>
+                            <p>Timeline de interações anteriores</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Urgência/Impacto</strong>
+                            <p>Badges indicando classificação</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Resposta Estruturada</h3>
+                <div class="info-box">
+                    <strong>💬 Campo de Resposta</strong>
+                    <p>Área de texto richformat para resposta detalhada. Empresa deve explicar ações tomadas ou plano de resolução.</p>
+                </div>
+
+                <h3 class="section-subtitle">Privacidade da Resposta</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cenário</th>
+                            <th>Resposta Visível Para</th>
+                            <th>Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Reclamação Pública</td>
+                            <td>Autor + Público no perfil da empresa</td>
+                            <td>Aumenta transparência</td>
+                        </tr>
+                        <tr>
+                            <td>Reclamação Anônima</td>
+                            <td>Apenas o autor</td>
+                            <td>Via token único no email</td>
+                        </tr>
+                        <tr>
+                            <td>Reclamação Privada</td>
+                            <td>Apenas autor e empresa</td>
+                            <td>Não aparece no histórico público</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 class="section-subtitle">Status de Reclamação</h3>
+                <div class="dashboard-preview">
+                    <div class="preview-item">
+                        <span class="badge">ABERTA</span>
+                        <p>Sem resposta da empresa</p>
+                    </div>
+                    <div class="preview-item">
+                        <span class="badge">RESPONDIDA</span>
+                        <p>Empresa respondeu, aguardando feedback</p>
+                    </div>
+                    <div class="preview-item">
+                        <span class="badge success">RESOLVIDA</span>
+                        <p>Problema foi solucionado</p>
+                    </div>
+                    <div class="preview-item">
+                        <span class="badge warning">CANCELADA</span>
+                        <p>Duplicada ou fora de escopo</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 4: DASHBOARDS -->
+            <section id="dashboards">
+                <h2 class="section-title">📊 Dashboards</h2>
+                <p>Cada tipo de usuário tem um dashboard personalizado com informações e ações relevantes.</p>
+
+                <h3 class="section-subtitle">Dashboard da Usuária Pessoa</h3>
+                <div class="screen-mockup">
+                    <h4>Minhas Reclamações</h4>
+                    <p>Visualização centralizada de todas as reclamações criadas pela usuária com status em tempo real.</p>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">👤</div>
+                        <h3>Card de Perfil</h3>
+                        <p>Nome, cidade, estado e avatar da usuária no topo</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📋</div>
+                        <h3>Lista de Reclamações</h3>
+                        <p>Todas as reclamações com título, data, status e empresa</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <h3>Filtros</h3>
+                        <p>Por status (Abertas/Respondidas/Resolvidas) e busca por título</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">➕</div>
+                        <h3>Botão Flutuante</h3>
+                        <p>Criar nova reclamação acessível de qualquer lugar</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Atalhos Rápidos</h3>
+                        <p>Links para áreas como Empresas, Ajuda, Blog</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔐</div>
+                        <h3>Privacidade</h3>
+                        <p>Indicadores se reclamação é anônima ou pública</p>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Dashboard da Empresa</h3>
+                <div class="screen-mockup">
+                    <h4>Painel Administrativo da Empresa</h4>
+                    <p>Visão holística de reclamações, projetos, equipe e estatísticas de resposta.</p>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Cartões de Métricas</h3>
+                        <p>Total de reclamações, resolvidas, aguardando resposta, taxa de resolução</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⏱️</div>
+                        <h3>Tempo Médio de Resposta</h3>
+                        <p>Indicador de desempenho da empresa em horas</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h3>Diálogos Ativos</h3>
+                        <p>Reclamações em conversa contínua com usuárias</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🗂️</div>
+                        <h3>Projetos</h3>
+                        <p>Lista de projetos de infraestrutura gerenciados</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👥</div>
+                        <h3>Equipe</h3>
+                        <p>Membros da empresa com permissões de acesso</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">✅</div>
+                        <h3>Verificação</h3>
+                        <p>Status de verificação e selo de confiabilidade</p>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Abas do Dashboard da Empresa</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aba</th>
+                            <th>Funcionalidade</th>
+                            <th>Ações Principais</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge">Painel</span></td>
+                            <td>Visão geral com métricas e gráficos</td>
+                            <td>Visualizar estatísticas</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge">Reclamações</span></td>
+                            <td>Inbox completo de reclamações</td>
+                            <td>Filtrar, pesquisar, responder</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge">Projetos</span></td>
+                            <td>Gerenciar projetos de infraestrutura</td>
+                            <td>Criar, editar, ativar/desativar</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge">Perfil</span></td>
+                            <td>Informações públicas da empresa</td>
+                            <td>Editar dados, logo, descrição</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 class="section-subtitle">Estatísticas Exibidas</h3>
+                <div class="dashboard-preview">
+                    <div class="preview-item">
+                        <strong>Total de Reclamações</strong>
+                        <p>Todas recebidas desde cadastro</p>
+                    </div>
+                    <div class="preview-item">
+                        <strong>Casos Resolvidos</strong>
+                        <p>Marcados como RESOLVIDOS</p>
+                    </div>
+                    <div class="preview-item">
+                        <strong>Taxa de Resolução</strong>
+                        <p>% de resolvidas vs. total</p>
+                    </div>
+                    <div class="preview-item">
+                        <strong>Aguardando Resposta</strong>
+                        <p>Reclamações ainda não respondidas</p>
+                    </div>
+                    <div class="preview-item">
+                        <strong>Tempo Médio de Resposta</strong>
+                        <p>Em horas, calculado automático</p>
+                    </div>
+                    <div class="preview-item">
+                        <strong>Projetos Ativos</strong>
+                        <p>Quantos projetos em andamento</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 5: PERFIS E CONFIGURAÇÕES -->
+            <section id="perfis">
+                <h2 class="section-title">👤 Perfis e Configurações</h2>
+                <p>Cada usuária pode gerenciar seu perfil e preferências de segurança e privacidade.</p>
+
+                <h3 class="section-subtitle">Onboarding Inicial</h3>
+                <div class="flow-diagram">
+                    <div class="flow-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <h4>Escolher Papel</h4>
+                            <p>Pessoa ou Empresa</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <h4>Dados Pessoais</h4>
+                            <p>Nome, email, telefone</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <h4>Endereço</h4>
+                            <p>Cidade e estado</p>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <h4>Confirmação</h4>
+                            <p>Pronto para usar!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Perfil da Pessoa</h3>
+                <div class="screen-mockup">
+                    <h4>Gerenciar Dados Pessoais</h4>
+                    <div class="dashboard-preview">
+                        <div class="preview-item">
+                            <strong>Avatar</strong>
+                            <p>Foto de perfil personalizável</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Nome Completo</strong>
+                            <p>Pode ser atualizado sempre</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Telefone</strong>
+                            <p>Para contato de empresa</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Localização</strong>
+                            <p>Cidade e estado</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Email</strong>
+                            <p>Exibido ou oculto por preferência</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Endereço</strong>
+                            <p>Opcional, para contato direto</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Perfil da Empresa</h3>
+                <div class="screen-mockup">
+                    <h4>Gerenciar Perfil Público da Empresa</h4>
+                    <div class="dashboard-preview">
+                        <div class="preview-item">
+                            <strong>Nome da Empresa</strong>
+                            <p>Nome legal ou comercial</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Logo</strong>
+                            <p>Imagem de marca</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Setor</strong>
+                            <p>Ex: Construção, Engenharia</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Website</strong>
+                            <p>Link para site oficial</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Descrição</strong>
+                            <p>Texto sobre a empresa</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Localização</strong>
+                            <p>Sede da empresa (cidade/estado)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <strong>🔐 Verificação de Empresa</strong>
+                    <p>Empresas podem solicitar selo de verificação para aumentar confiabilidade. Processo envolve validação de documentos.</p>
+                </div>
+
+                <h3 class="section-subtitle">Configurações de Segurança</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔐</div>
+                        <h3>Alterar Senha</h3>
+                        <p>Senha forte com requisitos de complexidade</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚠️</div>
+                        <h3>Forçar Troca de Senha</h3>
+                        <p>Ao primeiro acesso ou por requisição admin</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🚪</div>
+                        <h3>Sessões Ativas</h3>
+                        <p>Visualizar e encerrar sessões abertas</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔔</div>
+                        <h3>Notificações</h3>
+                        <p>Controlar preferências de alertas por email</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🗑️</div>
+                        <h3>Deletar Conta</h3>
+                        <p>Opção irreversível de remover perfil</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📱</div>
+                        <h3>Autenticação 2FA</h3>
+                        <p>Camada adicional de segurança (futuro)</p>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Configurações de Privacidade (Pessoa)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Configuração</th>
+                            <th>Opções</th>
+                            <th>Impacto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Perfil Público</td>
+                            <td>Sim / Não</td>
+                            <td>Se outras podem ver seu histórico</td>
+                        </tr>
+                        <tr>
+                            <td>Email Visível</td>
+                            <td>Sim / Não</td>
+                            <td>Se empresas veem seu email</td>
+                        </tr>
+                        <tr>
+                            <td>Receber Notificações</td>
+                            <td>Sim / Não</td>
+                            <td>Alertas sobre respostas e atualizações</td>
+                        </tr>
+                        <tr>
+                            <td>Compartilhar Dados</td>
+                            <td>Sim / Não</td>
+                            <td>Com parceiros e organizações parceiras</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 class="section-subtitle">Gerenciamento de Equipe (Empresa)</h3>
+                <div class="screen-mockup">
+                    <h4>Adicione Membros da Equipe</h4>
+                    <p>Empresas podem convidar colaboradores para gerenciar reclamações e projetos.</p>
+                    <div class="dashboard-preview">
+                        <div class="preview-item">
+                            <strong>Adicionar Membro</strong>
+                            <p>Enviar convite por email</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Roles</strong>
+                            <p>Admin, Gestor, Leitor</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Permissões</strong>
+                            <p>Responder, editar, deletar conforme role</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Remover</strong>
+                            <p>Revogar acesso de membro</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Projetos (Empresa)</h3>
+                <div class="screen-mockup">
+                    <h4>Gerenciar Projetos de Infraestrutura</h4>
+                    <div class="dashboard-preview">
+                        <div class="preview-item">
+                            <strong>Criar Projeto</strong>
+                            <p>Nome, descrição, localização, datas</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Associar Reclamação</strong>
+                            <p>Vincular problemas a projetos específicos</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Status</strong>
+                            <p>Planejamento / Em Andamento / Finalizado</p>
+                        </div>
+                        <div class="preview-item">
+                            <strong>Editar/Deletar</strong>
+                            <p>Atualizar informações do projeto</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO BONUS: NAVIGAÇÃO E RECURSOS ADICIONAIS -->
+            <section>
+                <h2 class="section-title">🎯 Recursos Adicionais</h2>
+
+                <h3 class="section-subtitle">Páginas Públicas</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🏢</div>
+                        <h3>Página de Empresa</h3>
+                        <p>Perfil público com histórico de reclamações, taxa de resolução, projetos</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📰</div>
+                        <h3>Blog</h3>
+                        <p>Artigos sobre infraestrutura, direitos e histórias de sucesso</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🏪</div>
+                        <h3>Catálogo de Empresas</h3>
+                        <p>Busca e filtro de todas as empresas cadastradas</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <h3>Busca Global</h3>
+                        <p>Pesquisa de empresas, reclamações e artigos</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📋</div>
+                        <h3>Termo de Privacidade</h3>
+                        <p>Política completa de tratamento de dados</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚖️</div>
+                        <h3>Termo de Uso</h3>
+                        <p>Direitos e responsabilidades das usuárias</p>
+                    </div>
+                </div>
+
+                <h3 class="section-subtitle">Funcionalidades de Compartilhamento</h3>
+                <div class="info-box">
+                    <strong>📤 Compartilhar Reclamação</strong>
+                    <p>Após criar reclamação, pode-se compartilhar link (com ID único) via WhatsApp, email, rede social. Modal com ícones sociais facilita compartilhamento.</p>
+                </div>
+
+                <h3 class="section-subtitle">Suporte e Ajuda</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Canal</th>
+                            <th>Acesso</th>
+                            <th>Tipo de Suporte</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Página /ajuda</td>
+                            <td>Pública (não precisa login)</td>
+                            <td>FAQ, guias, tutoriais</td>
+                        </tr>
+                        <tr>
+                            <td>Email Suporte</td>
+                            <td>Formulário no site</td>
+                            <td>Dúvidas específicas e problemas técnicos</td>
+                        </tr>
+                        <tr>
+                            <td>Chat/Redes Sociais</td>
+                            <td>Links no footer</td>
+                            <td>Contato direto com equipe</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 class="section-subtitle">Internacionalização</h3>
+                <div class="info-box">
+                    <strong>🌍 Suporte Multilíngue</strong>
+                    <p>Plataforma utiliza next-intl para suporte a múltiplos idiomas. Seletor de idioma disponível no header/footer permitindo troca entre português, inglês e espanhol.</p>
+                </div>
+            </section>
+
+            <!-- RESUMO VISUAL FINAL -->
+            <section>
+                <h2 class="section-title">📍 Mapa de Navegação Geral</h2>
+                <p>Estrutura completa de rotas e acessibilidade da plataforma:</p>
+
+                <div class="flow-diagram" style="overflow-x: auto; margin: 30px 0;">
+                    <pre style="font-family: monospace; font-size: 0.9em; color: #2A3F54; text-align: left;">
+HOMEPAGE (/)
+├── Não Autenticado
+│   ├── Login (/auth/login)
+│   ├── Registro (/(auth)/register)
+│   ├── Empresas Públicas (/companies)
+│   ├── Blog (/blog)
+│   └── Ajuda (/ajuda)
+│
+├── Autenticado - PESSOA
+│   ├── Painel (/app)
+│   │   └── Minhas Reclamações (/app/complaints)
+│   │       ├── Nova Reclamação (/app/complaints/new)
+│   │       └── Detalhe (/app/complaints/:id)
+│   ├── Configurações (/app/settings)
+│   │   ├── Conta (/app/settings/account)
+│   │   └── Segurança (/app/settings/security)
+│   └── Empresas (/companies)
+│
+├── Autenticado - EMPRESA
+│   ├── Dashboard (/app/company/dashboard)
+│   ├── Inbox (/app/company/inbox)
+│   ├── Reclamações (/app/company/complaints)
+│   │   └── Detalhe (/app/company/complaints/:id)
+│   ├── Projetos (/app/company/projects)
+│   ├── Perfil (/app/company/profile)
+│   ├── Verificação (/app/company/verification)
+│   └── Configurações (/app/settings)
+│
+└── Autenticado - ADMIN
+    └── Painel Admin (/app/admin)
+        ├── Dashboard
+        ├── Empresas
+        ├── Blog
+        └── Auditoria
+
+PÁGINAS PÚBLICAS
+├── Perfil Empresa (/company/:slug)
+├── Busca (/search)
+├── Blog Listagem (/blog/all)
+└── Artigos (/blog/:slug)
+                    </pre>
+                </div>
+            </section>
+
+        </div>
+
+        <footer>
+            <p>&copy; 2024-2025 ReclameMulher | Manual de Plataforma</p>
+            <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">
+                Documento visual para fins de documentação e onboarding de usuárias e equipe
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

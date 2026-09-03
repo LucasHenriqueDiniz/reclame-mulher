@@ -1,11 +1,30 @@
 ---
-status: todo
+status: done
 tags:
   - area/docs
 kanban: 54f4684f-69b3-4647-aa9a-73a01f69b65e
 ---
 
 # Slice 04 — Deliver the end-user manuals this weekend
+
+> **Delivered 2026-09-03, two days before the deadline.** All three gates pass: the six files are
+> under `public/manuais/`, all six filenames appear in `src/app`, and the marker counts still read
+> `55 79 41 38 63 61` with `/usr/bin/grep` — no manual content was touched.
+>
+> `INDICE_DOCUMENTACAO.md` moved 38 → 39, the one file the gate allows to move, and it is +1 for one
+> reason: the `Traduza GUIA_RAPIDO.md para EN e ES` line now says translating the manuals is product
+> i18n living next to `src/messages/`, not a debt this epic owes.
+>
+> Mechanism: `/manuais` indexes the family; `/manuais/<slug>` renders the five Markdown manuals as
+> pages with the `ReactMarkdown` the blog already uses, so they are read rather than downloaded;
+> `MANUAL_PLATAFORMA.html` is linked at its static URL because it already renders on its own. One
+> line was added to `QUICK_LINKS` in `/ajuda` — the diff on that file is 2 insertions, 0 deletions,
+> and the seed-password block is untouched.
+>
+> The index checked out: the audience table at :168-175 references only files that exist. The two
+> names an automated sweep flags as missing — `GUIA_RAPIDO_EN.md` and `MANUAL.md` — are inside the
+> "Suporte Multilíngue" section, one in a shell example and one in a table of *planned* translation
+> priorities. Aspirational text, not broken links, and deliberately left alone.
 
 **Answered by the owner on 2026-09-03: the six manual-family files are product content, and they
 have to be delivered this weekend — Saturday 2026-09-05 / Sunday 2026-09-06. They are the focus of

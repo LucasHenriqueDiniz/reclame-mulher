@@ -131,6 +131,7 @@ dependency tree four months stale against a `pnpm-lock.yaml` that was current.
 | ports | every driven dependency gets a port from its first use | no ports; repos import Drizzle directly | see D3. Recording the absence rather than abstracting seven dependencies in one pass |
 | composition root | one place constructs adapters and injects them | no root; repos are static-method classes imported where needed | a serverless function per route has no long-lived root to build in. A `createRepos(db)` factory is the cheapest step toward one if this is ever revisited |
 | product language | everything that lands in the repo is English | `src/messages/pt-BR/`, `email-templates/*.html`, user-visible JSX strings and the Zod error messages in `src/server/dto/*` are Portuguese | that text is read by a Brazilian user. The `language` skill classifies it as a literal — product content, not prose. Code, comments, docs, tests, commits and branch names are English |
+| end-user manuals | same rule | the six-file manual family at the repo root — `MANUAL_PLATAFORMA.{html,md}`, `FLUXOS_VISUAIS.md`, `INDICE_DOCUMENTACAO.md`, `GUIA_RAPIDO.md`, `LEIA_ME_PRIMEIRO.md`, 4,362 lines — stays Portuguese | decided by the owner on 2026-09-03. They are read by the people using the platform, so they are the same kind of literal as the row above. Delivered at `/manuais` and linked from `/ajuda`; served copies under `public/manuais/` are kept byte-identical by `pnpm run manuais:check` |
 | default branch | `main` | `master` | see D2 |
 
 ## Known gaps
@@ -161,9 +162,13 @@ dependency tree four months stale against a `pnpm-lock.yaml` that was current.
       still open; the factual errors found so far have been corrected in place.
 - [ ] **Test credentials are committed in clear text** in `AGENTS.md` and `.opencodeshare/README.md`,
       and this repository is public on GitHub.
-- [ ] **28 documentation files are entirely in Portuguese** (~7,500 lines): 22 at the repo root, 6 in
-      `docs/`. `INDICE_DOCUMENTACAO.md` indexes nine of them *by filename*, so a rename breaks the index
-      silently. These need a file-by-file delete-or-translate decision, not a bulk pass.
+- [ ] **The Portuguese internal documents still need a file-by-file disposition.** Measured
+      2026-09-03: **26 files, 10,269 lines — 20 at the repo root and 6 under `docs/`**. The previous
+      count here (28 files, ~7,500 lines, 22 at the root) was never measured; only the `docs/` count
+      and the "indexes nine of them by filename" claim survived checking.
+      `INDICE_DOCUMENTACAO.md` indexes nine *by filename*, so a rename breaks the index silently.
+      **The six end-user manuals are no longer part of this gap** — they were decided on 2026-09-03
+      and moved to the Divergences table below. What remains is the genuine internal remainder.
 - [ ] **`scripts/post-merge.sh` runs `pnpm db:push --force`.** It is inert today because nothing wires
       it. Moving it into `.githooks/` would make every merge drop and recreate the schema against the
       local `DATABASE_URL`. Do not move it there.

@@ -195,9 +195,7 @@ Use este checklist para compartilhar documentação:
 ### Médio Prazo (Mês 1)
 - [ ] Integre MANUAL_PLATAFORMA.md em wiki interna
 - [ ] Crie vídeos baseados em FLUXOS_VISUAIS.md
-- [ ] Traduza GUIA_RAPIDO.md para EN e ES — isto e internacionalizacao de PRODUTO, e mora junto
-      de `src/messages/`, nao na traducao da documentacao interna. Os manuais em si ficam em
-      portugues por decisao de 03/09/2026: quem os le e quem usa a plataforma.
+- [ ] Traduza GUIA_RAPIDO.md para EN e ES
 - [ ] Configure visualização automática de MD no GitHub
 
 ### Longo Prazo
