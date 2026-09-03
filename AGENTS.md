@@ -166,7 +166,7 @@ When a comment has to name a Portuguese label, quote the label and keep it byte-
 
 ## Test logins
 
-Password for all of them: `senha123`
+Password for all of them: <seed password: see `defaultPassword` in scripts/seed.ts>
 - `maria@exemplo.com` (person)
 - `empresa@construtorax.com` (company)
 - `ana@exemplo.com` (person)

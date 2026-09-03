@@ -33,6 +33,6 @@ Next.js 15 + React 19 + Tailwind 3 + shadcn/ui + Drizzle ORM + Neon Postgres + U
 
 ## Logins de teste
 
-- maria@exemplo.com / senha123
-- empresa@construtorax.com / senha123
-- admin@comunicamulher.com.br / senha123
+- maria@exemplo.com / <seed password: see `defaultPassword` in scripts/seed.ts>
+- empresa@construtorax.com / <seed password: see `defaultPassword` in scripts/seed.ts>
+- admin@comunicamulher.com.br / <seed password: see `defaultPassword` in scripts/seed.ts>

@@ -44,7 +44,7 @@ The old Supabase-based layer was removed to keep the architecture unambiguous.
 
 ## Test logins
 
-Password for all of them: `senha123`
+Password for all of them: <seed password: see `defaultPassword` in scripts/seed.ts>
 
 - `maria@exemplo.com` (person)
 - `empresa@construtorax.com` (company)

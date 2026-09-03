@@ -132,7 +132,7 @@ PERFORMANCE: Média 0.73s, Máximo 1.64s
 
 **Próximos passos necessários:**
 1. Rodar `npm run seed` para popular BD
-2. Fazer login real com maria@exemplo.com / senha123
+2. Fazer login real com maria@exemplo.com / <seed password: see `defaultPassword` in scripts/seed.ts>
 3. Testar wizard de reclamação completo
 4. Rodar Axe nos 43 URLs
 5. Testar em mobile 375px

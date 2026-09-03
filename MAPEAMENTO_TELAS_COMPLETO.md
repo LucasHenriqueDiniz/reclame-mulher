@@ -9,25 +9,25 @@
 ## 🔐 LOGINS DE TESTE (do seed.ts)
 
 ```
-Senha padrão: senha123
+Senha padrão: <seed password: see `defaultPassword` in scripts/seed.ts>
 
 👤 PESSOA 1:
    Email: maria@exemplo.com
-   Senha: senha123
+   Senha: <seed password: see `defaultPassword` in scripts/seed.ts>
    Role: USER
    Nome: Maria Silva
    Localidade: São Paulo, SP
 
 👤 PESSOA 2:
    Email: ana@exemplo.com
-   Senha: senha123
+   Senha: <seed password: see `defaultPassword` in scripts/seed.ts>
    Role: USER
    Nome: Ana Santos
    Localidade: Rio de Janeiro, RJ
 
 🏢 EMPRESA:
    Email: empresa@construtorax.com
-   Senha: senha123
+   Senha: <seed password: see `defaultPassword` in scripts/seed.ts>
    Role: COMPANY
    Nome: João Costa (representante)
    Empresa: Construtora X
@@ -35,7 +35,7 @@ Senha padrão: senha123
 
 👮 ADMIN:
    Email: admin@comunicamulher.com.br
-   Senha: senha123
+   Senha: <seed password: see `defaultPassword` in scripts/seed.ts>
    Role: ADMIN
    Nome: Admin
    Localidade: São Paulo, SP
