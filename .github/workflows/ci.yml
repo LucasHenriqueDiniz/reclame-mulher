@@ -16,7 +16,7 @@ on:
 
 jobs:
   check:
-    name: Lint & Tests
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +30,43 @@ jobs:
       - name: Lint
         run: pnpm run lint
 
-      - name: Tests
-        run: pnpm run test:demo
+      # `test:demo` deliberately NOT run here. scripts/demo-tests.ts has no assertion
+      # and no failure path in 87 lines — it prints "24 validações concluídas com
+      # sucesso" and exits 0 whatever the code does, so a step calling it reports
+      # green on a broken build. It stays in package.json as a checklist for a human
+      # demo; it is not a test and CI must not treat it as one.
+
+  e2e:
+    name: End-to-end
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+
+      # The suite brings up its own throwaway Postgres from docker-compose.e2e.yml
+      # and reseeds from nothing on every run, so there is no state to carry between
+      # jobs and nothing to clean up. `trust` auth, no password anywhere.
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      # Authentication is programmatic: e2e/global-setup.ts signs one seeded account
+      # in through the app's own login endpoint and saves storageState. The password
+      # is read from scripts/seed.ts by readSeedPassword() and is never written into
+      # a test file, so there is one literal in this repo and CI adds no secret.
+      - name: E2E
+        run: pnpm run test:e2e
+
+      - name: Upload report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: e2e/.report/
+          retention-days: 7
 

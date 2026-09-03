@@ -143,7 +143,8 @@ dependency tree four months stale against a `pnpm-lock.yaml` that was current.
       `api/complaints/[id]/messages`, `api/company/complaints/[id]/messages` and
       `api/uploadthing/core.ts`. Whatever `src/server/repos` is meant to be the only door to, it is not.
 - [ ] **There are no tests.** The `Tests` step in `.github/workflows/ci.yml` runs
-      `pnpm run test:demo`, which is `scripts/demo-tests.ts` — not a test runner. No contract test, no
+      `pnpm run demo:checklist` (renamed from `test:demo`), which is `scripts/demo-tests.ts` — not a
+      test runner. Since 2026-09-03 there is also `pnpm run test:e2e`: Playwright, 11 tests, no
       unit test, nothing that would fail if a repo regressed.
 - [ ] **`pnpm run lint` has no `--max-warnings=0`,** so the CI `Lint` step passes with warnings. It is
       clean as of 2026-09-02, which is the moment to add the flag.
