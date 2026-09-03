@@ -22,7 +22,9 @@
     "test:e2e:report": "playwright show-report e2e/.report",
     "test:e2e:db:down": "docker compose -f docker-compose.e2e.yml down -v",
     "prepare": "git config --get core.hooksPath >/dev/null 2>&1 || git config core.hooksPath .githooks 2>/dev/null || true",
-    "demo:checklist": "node --import tsx scripts/demo-tests.ts"
+    "demo:checklist": "node --import tsx scripts/demo-tests.ts",
+    "manuais:sync": "node --import tsx scripts/sync-manuais.ts",
+    "manuais:check": "node --import tsx scripts/sync-manuais.ts --check"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

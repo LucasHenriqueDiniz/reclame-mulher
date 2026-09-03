@@ -6,6 +6,7 @@ import { Footer } from "@/components/landing/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
+  BookOpen,
   User,
   Building2,
   Shield,
@@ -53,6 +54,7 @@ const TEST_USERS = [
 ];
 
 const QUICK_LINKS = [
+  { href: "/manuais", label: "Manuais da Plataforma", icon: BookOpen },
   { href: "/", label: "Home / Landing", icon: MapPin },
   { href: "/search", label: "Pesquisa de Empresas", icon: Building2 },
   { href: "/company/construtora-x", label: "Perfil Público Empresa", icon: Building2 },
