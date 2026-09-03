@@ -1,5 +1,5 @@
 ---
-status: todo
+status: done
 tags:
   - area/architecture
 kanban: c1d60649-6cbd-4445-8f71-d596b1d14cf7
@@ -120,3 +120,35 @@ type Deps = {
 That takes the classes as they are, keeps the fakes tiny, and stops short of the `createRepos(db)`
 factory `ARCHITECTURE.md` names as *"the cheapest step toward"* a composition root — which is a
 decision for a later pitch, not a side effect of this one.
+
+## Outcome
+
+The three gates turned over as written. One thing the plan did not predict, and it changed the
+shape of the delivery:
+
+**`deps` has no default, and the use case imports nothing at runtime.** The first version had
+the convenient `deps: CreateComplaintDeps = createComplaintDeps` default this document implies,
+which needs the repos imported for their *values*. The repos open with `import "server-only"`,
+so the test could not even load the module:
+
+```
+Error: Cannot find package 'server-only' imported from src/server/repos/companies.ts
+ ❯ src/server/use-cases/create-complaint.ts:1:1
+```
+
+Every import in `create-complaint.ts` is now `import type`, which erases — so the use case has
+no runtime dependency on the adapter layer, only on the shape of three methods. The wiring moved
+to `create-complaint.deps.ts`, which is `server-only` itself, and the handler passes it.
+
+That is a better outcome than the plan asked for: "no database" under *Tests* became a property
+of the module rather than a property of the test. The alternative was aliasing `server-only` to
+a stub in `vitest.config.ts`, which keeps the default parameter and leaves the test transitively
+importing Drizzle and a db client — a unit test by accident only.
+
+A required parameter also closes a hole a default leaves open: a test that forgets its fakes
+would reach the real database and still pass.
+
+**Not divergence, but worth recording:** running `prettier` over the handler reformatted the
+`GET` serializer and both `catch` blocks — 60 insertions for a ~30 line change. This repo has no
+prettier config, so its files are wider than prettier's 80-column default. Reverted and edited by
+hand: 18 insertions, 21 deletions, `catch` untouched.
