@@ -91,7 +91,8 @@ pnpm run db:reset    # Full database reset
 pnpm run email:sync       # Syncs email templates
 pnpm run evidencias:check # Demo evidence checklist
 pnpm run evidencias:docx  # Generates the evidence DOCX
-pnpm run test:demo        # Demo test scripts
+pnpm run demo:checklist   # Demo walkthrough checklist (prints only, asserts nothing)
+pnpm run test:e2e         # Playwright, 11 tests, own Postgres
 ```
 
 ## Code conventions
