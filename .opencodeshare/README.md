@@ -24,7 +24,7 @@ snippets/       # Código reutilizável (boilerplates)
 1. Sempre use os shells (`AppPageShell`, `CompanyPageShell`) para novas páginas
 2. Sempre use repositories para acesso a dados
 3. Sempre serialize datas para ISO string ao enviar do server pro client
-4. Nunca crie `<img>` — use `next/image`
+4. `<img>` is allowed here. `next.config.ts` sets `images.unoptimized: true`, so `<Image />` renders a plain `<img>` and optimizes nothing; `eslint.config.mjs` turns `@next/next/no-img-element` off for that reason. Seven call sites in `src/` rely on it. Re-enable the rule together with an image loader, not before.
 5. Sempre teste o build antes de considerar pronto
 
 ## Stack resumida

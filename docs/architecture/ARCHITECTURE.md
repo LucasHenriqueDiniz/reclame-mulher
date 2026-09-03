@@ -150,20 +150,14 @@ dependency tree four months stale against a `pnpm-lock.yaml` that was current.
 - [ ] **Validation messages hardcoded in `src/server/dto/*` bypass next-intl.** `src/messages/pt-BR/`
       and `src/messages/en/` exist, and these strings sit outside them. This is an i18n gap, not a
       language-rule gap: translating them to English would not fix it.
-- [ ] **Six unreferenced components, 434 lines, in `src/app/app/complaints/new/_components/`** —
-      `complaint-auth-banner`, `complaint-progress`, `complaint-step-{one,two,three,four}-*`. Nothing
-      under `src/` imports them; they are the previous generation of the wizard, superseded by
-      `wizard/`, `steps/` and `fields/`.
 - [ ] **Four files in `src/` are over the 500-line soft limit** and are split candidates.
 - [ ] **Two route segments are in Portuguese:** `src/app/ajuda/` (a real page) and `src/app/empresas/`
       (a redirect to `/companies`). A route segment is a public URL, so changing either is a redirect
       question, not a rename.
-- [ ] **Five orphaned gitlinks under `.claude/worktrees/agent-*` with no `.gitmodules`.** Four of the
-      five commits are not in the local object database, so nothing can resolve them. The fix is
-      `git rm --cached` on the five paths, plus ignoring the directory.
-- [ ] **Two competing agent-context systems:** `AGENTS.md` (162 lines) and `.opencodeshare/`
-      (9 files). Both duplicate the house playbook inside the repo and both are stale. There is no
-      `CLAUDE.md`.
+- [ ] **Two competing agent-context systems:** `AGENTS.md` and `.opencodeshare/` (9 files). Both
+      duplicate the house playbook inside the repo, and `.opencodeshare/` is still entirely in
+      Portuguese. There is no `CLAUDE.md`. Which of the two is canonical is an owner decision and is
+      still open; the factual errors found so far have been corrected in place.
 - [ ] **Test credentials are committed in clear text** in `AGENTS.md` and `.opencodeshare/README.md`,
       and this repository is public on GitHub.
 - [ ] **28 documentation files are entirely in Portuguese** (~7,500 lines): 22 at the repo root, 6 in
