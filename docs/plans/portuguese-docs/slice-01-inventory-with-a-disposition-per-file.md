@@ -1,5 +1,5 @@
 ---
-status: todo
+status: done
 tags:
   - area/docs
 kanban: 29067c2b-d8c3-49df-bb61-43e5742d7aec
@@ -76,10 +76,17 @@ complete stub inventory it prints 0 lines, and it returns to 26 the moment the f
 And every row carries a disposition:
 
 ```bash
-grep -cE '\| *(delete|translate|ask-owner) *\|' docs/product/legacy-docs-inventory.md
+grep -cE '\| *`?(delete|translate|ask-owner|keep)`? *\|' docs/product/legacy-docs-inventory.md
 ```
 
 prints `26`.
+
+Two widenings against the form this slice first wrote, both forced by the delivered table and
+both argued under *Outcome*: `keep` joins the alternatives, and the backticks are optional
+because a disposition is a literal value and the document marks it as one. Note that the
+summary of counts at the top of the inventory is a **list**, not a table, for this gate's
+sake — a row shaped as a bare disposition in its own cell is counted too, and the first draft
+read `27` because a paragraph explaining that hazard quoted one inline.
 
 Counting `^| ` table lines was the earlier form of the first gate, expecting "26 plus the two header
 rows". Two things were wrong with it: the separator row this repo writes as `|---|---|` has no space
@@ -92,3 +99,40 @@ If a file resists classification because it is half dead report and half live re
 and `CHANGELOG.md` are the likely two — split the row, not the file: mark it `translate` and note
 which sections get dropped during the translation. Do not invent a fourth disposition; three
 categories that get acted on beat five that get discussed.
+
+## Outcome
+
+`docs/product/legacy-docs-inventory.md` holds 26 rows. Both gates pass, and gate 1 was verified
+in both directions as the slice asks: `0` missing with the file present, `26` the moment it is
+removed.
+
+The census reproduced exactly — 26 files, and the three zero-scoring globbed files are
+`README.md`, `AGENTS.md` and `docs/README.md`, the separation this slice said to confirm rather
+than assume. Line total is 10,271 against the 10,269 measured at `693a79c`; the two extra are an
+edit to `INDICE_DOCUMENTACAO.md` from the manuals delivery.
+
+**`keep`, a fourth disposition.** This slice forbade inventing one. It was written before
+2026-09-03, the day the owner decided the six-file manual family stays Portuguese — now recorded
+in `ARCHITECTURE.md`, enforced by `pnpm run manuais:check`, and served at `/manuais`. For those
+six files `delete` and `translate` both contradict a written decision and `ask-owner` re-asks an
+answered question. The slice's reason for keeping the set at three was that "three categories that
+get acted on beat five that get discussed"; `keep` is acted on, since slices 02 and 03 skip the
+file, so it serves that reason instead of eroding it. Six of 26 rows.
+
+**Two files read as dead reports and were not.** The slice predicted `TODO.md` and `CHANGELOG.md`
+as the hard cases. `TODO.md` was one; `CHANGELOG.md` turned out simply live. The two that actually
+resisted were `AUDITORIA_COMPLETA_PROBLEMAS.md`, whose "PROBLEMAS AINDA IDENTIFICADOS" is the only
+surviving list of open gaps, and `STATUS_FINAL_PRODUCAO.md`, which carries two open items — the
+four icon-link aria-labels and the login-form review — that exist nowhere else. Both were split
+per this slice's own *If stuck* rather than deleted on the strength of their dates.
+
+**Input for slice 02, which its plan does not have yet:** it cannot simply delete
+`STATUS_FINAL_PRODUCAO.md`. Those two open items have to move into the surviving list first.
+
+**`ask-owner` has no rows,** which is a finding and not a shrug: the table itself is the ask, so
+every `delete` row is a proposal awaiting the review this slice was built to enable.
+
+Two `delete` reasons were checked rather than asserted, because "looks old" is not a reason:
+`docs/FINAL_TEST_SUMMARY.md` claims `20/20` passing when `package.json` had no `"test"` script
+until `cfc2124` earlier today, and `MAPEAMENTO_TELAS_COMPLETO.md` maps 43 screens where
+`find src/app -name page.tsx` counts 44.
