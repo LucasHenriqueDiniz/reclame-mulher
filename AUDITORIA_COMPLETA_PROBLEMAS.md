@@ -55,6 +55,26 @@ PERFORMANCE: Média 0.73s, Máximo 1.64s
 - **Não testadas:** 37+ páginas com Axe, Dark mode, Zoom 200%
 - **Lacuna:** Validação manual não é suficiente para WCAG AA completo
 
+**Itens localizados, herdados de dois relatórios de acessibilidade apagados em 2026-09-03.**
+Estavam só neles e nenhum outro documento os registra. Os originais estão em
+`git log --diff-filter=D --name-only` naquele commit — não os nomeio aqui de propósito, porque
+um nome de arquivo que não existe mais manda o leitor procurar o que não está lá. O relatório que
+tinha o detalhe maior nomeava o commit `dfa9baa`, que continua no histórico:
+
+- **Links de ícone sem texto visível — 4 casos.** Páginas `/`, `/blog`, `/companies`. Ícones/SVG
+  decorativos dentro de links, sem `aria-label`. Prioridade média: afeta leitor de tela.
+- **Labels do formulário de login — 2 casos.** Página `/login`. Os inputs de email/senha não são
+  detectados pelo audit; o campo de senha é componente customizado, então revisar
+  `PasswordField.tsx` para labels associados.
+- **Testar com leitor de tela real (NVDA/JAWS).** Nunca foi feito; a validação existente é manual
+  e visual.
+
+Dois outros itens daqueles relatórios **não** foram herdados, porque são falso positivo do script
+de audit e isso foi conferido no código, não aceito da leitura: o `<h1>` do `/blog` existe em
+`src/app/blog/page.tsx:136`, e o link "Pular para conteúdo principal" existe em
+`src/app/layout.tsx:48` com `sr-only focus:not-sr-only`. O script não os enxergava porque lê HTML
+estático com BeautifulSoup.
+
 ### 3. **Responsividade Não Validada**
 - **Severity:** ⚠️ MÉDIO
 - **Faltam testes em:**
