@@ -7,7 +7,7 @@
     "dev:clean": "rimraf .next && npm run dev",
     "build": "next build --turbopack",
     "start": "next start -p 5000 -H 0.0.0.0",
-    "lint": "eslint",
+    "lint": "eslint --max-warnings=0",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:reset": "node --import tsx scripts/reset-database.ts",
