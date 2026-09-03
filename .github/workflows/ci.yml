@@ -30,6 +30,16 @@ jobs:
       - name: Lint
         run: pnpm run lint
 
+      - name: Unit tests
+        run: pnpm test --run
+
+      # The manuals exist twice: the source at the repo root and the served copy under
+      # public/. This step fails when they diverge, which they did within hours of the
+      # delivery — an edit to the root file after the sync had already run, and no gate
+      # noticed because this check was not wired here yet.
+      - name: Manuals in sync
+        run: pnpm run manuais:check
+
       # `scripts/demo-tests.ts` is deliberately NOT run here. It has no assertion
       # and no failure path in 87 lines — it prints "24 validações concluídas com
       # sucesso" and exits 0 whatever the code does, so a step calling it reports
