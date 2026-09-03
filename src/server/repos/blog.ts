@@ -3,6 +3,7 @@ import { db } from "@/db/client";
 import { blogPosts, blogTags, blogPostTags } from "@/db/schema";
 import { eq, ilike, or, and, desc, inArray, count } from "drizzle-orm";
 import { CreatePostInput, UpdatePostInput } from "../dto/blog";
+import { slugify } from "@/lib/normalize";
 
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -30,28 +31,59 @@ export class BlogRepo {
   }
 
   static async linkTags(postId: string, tagNames: string[]) {
-    if (tagNames.length === 0) {
-      await db.delete(blogPostTags).where(eq(blogPostTags.postId, postId));
-      return;
-    }
-
-    // Upsert tags and get their IDs
-    const tagIds: string[] = [];
-    for (const name of tagNames) {
-      const slug = name.toLowerCase().replace(/\s+/g, "-");
-      const [tag] = await db
-        .insert(blogTags)
-        .values({ name, slug })
-        .onConflictDoUpdate({ target: blogTags.name, set: { name } })
-        .returning({ id: blogTags.id });
-      tagIds.push(tag.id);
-    }
+    const tagIds = await BlogRepo.resolveTagIds(tagNames);
 
     // Replace all tag links
     await db.delete(blogPostTags).where(eq(blogPostTags.postId, postId));
     if (tagIds.length > 0) {
       await db.insert(blogPostTags).values(tagIds.map((tagId) => ({ postId, tagId })));
     }
+  }
+
+  /**
+   * Turns the names a post was tagged with into tag ids, creating the tags that do
+   * not exist yet.
+   *
+   * A tag is its slug, so names match case- and accent-insensitively: a post saved
+   * with "infraestrutura" reuses the seeded "Infraestrutura" instead of standing a
+   * second tag beside it. The spelling of whoever created the tag is the one that
+   * stays — a later mention does not rename it — because the slug is what
+   * `findByTagSlug` resolves, and two tags cannot share one.
+   *
+   * `slugify` is the same derivation the seeded tag slugs use, accents stripped;
+   * `createSlugFromTitle` in the editor is a different one and belongs to post
+   * slugs, not to these.
+   *
+   * The insert is arbitrated on every unique index rather than on a named one:
+   * `blog_tags` is unique on `name` *and* on `slug`, and a targeted `ON CONFLICT`
+   * raises `unique_violation` from the index it does not name — which is what made
+   * saving "infraestrutura" a 500, the row missing on `name` and hitting on `slug`.
+   * Reading the row back by either column then also finds tags whose slug predates
+   * this derivation and is not `slugify(name)`.
+   */
+  private static async resolveTagIds(tagNames: string[]) {
+    const tagIds: string[] = [];
+
+    for (const name of tagNames) {
+      const slug = slugify(name);
+      // Nothing sluggable in the name means no identity and no page to link to.
+      if (!slug) continue;
+
+      await db.insert(blogTags).values({ name, slug }).onConflictDoNothing();
+
+      const [tag] = await db
+        .select({ id: blogTags.id })
+        .from(blogTags)
+        .where(or(eq(blogTags.slug, slug), eq(blogTags.name, name)))
+        .orderBy(blogTags.createdAt)
+        .limit(1);
+
+      // `blog_post_tags` is keyed on (post_id, tag_id), so a post tagged both
+      // "Infraestrutura" and "infraestrutura" has to link that one tag once.
+      if (tag && !tagIds.includes(tag.id)) tagIds.push(tag.id);
+    }
+
+    return tagIds;
   }
 
   static async findBySlug(slug: string, _includeTags = false) {

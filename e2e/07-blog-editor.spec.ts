@@ -17,12 +17,9 @@ test.use({ storageState: STORAGE_STATE.admin });
 const SEEDED_POST = "como-reclamar-com-seguranca";
 
 /**
- * The tag names are deliberately not seeded ones. Saving a post with a tag whose
- * name differs from an existing tag only by case returns a 500: `BlogRepo.linkTags`
- * arbitrates `ON CONFLICT` on `name` alone, while `blog_tags` is also unique on
- * `slug`, so "infraestrutura" against the seeded "Infraestrutura" collides on the
- * constraint the clause does not cover. That is a real bug and not this spec's
- * subject — filed separately rather than encoded here as expected behaviour.
+ * The tag names here are deliberately not seeded ones, so this test covers a tag
+ * being created. The other half — a name that matches a tag already in the table —
+ * is the last test in this file.
  */
 
 test("a new post can be written, tagged, previewed and saved", async ({ page }) => {
@@ -87,4 +84,44 @@ test("an existing post loads into the editor and saves", async ({ page }) => {
   await body.fill("Guia atualizado pelo teste de ponta a ponta.");
   await page.getByRole("button", { name: "Salvar" }).click();
   await page.waitForURL(`/blog/${SEEDED_POST}`);
+});
+
+/**
+ * A tag whose name differs from an existing one only by case used to save as a 500:
+ * `blog_tags` is unique on `name` *and* on `slug`, `BlogRepo.linkTags` arbitrated
+ * `ON CONFLICT` on `name` alone, and "infraestrutura" against the seeded
+ * "Infraestrutura" missed that arbiter and hit the slug index. A tag is now its
+ * slug, so the name matches case-insensitively and the seeded tag is reused.
+ *
+ * Two assertions, because either one passes on its own for the wrong reason: the
+ * rendered name says the post is on the *seeded* tag rather than a new one, and the
+ * count says no second tag was left behind in `blog_tags`.
+ */
+test("a tag differing from a seeded one only by case reuses it", async ({ page }) => {
+  await page.goto("/blog/new/edit");
+  await expect(page.getByRole("heading", { name: "Criar Novo Post" })).toBeVisible();
+
+  const title = `Post de tag existente ${Date.now()}`;
+  await page.getByPlaceholder("Digite o título do post").fill(title);
+  await page
+    .getByPlaceholder("Escreva seu conteúdo em Markdown...")
+    .fill("Corpo do post com conteudo suficiente para salvar.");
+
+  // Lowercase, against the seeded "Infraestrutura".
+  const tagField = page.getByPlaceholder("Adicionar tag...");
+  await tagField.fill("infraestrutura");
+  await tagField.press("Enter");
+  await expect(page.getByText("infraestrutura", { exact: true })).toBeVisible();
+
+  // The regression: the save 500'd and the editor stayed put, so this never resolved.
+  await page.getByRole("button", { name: "Salvar" }).click();
+  await page.waitForURL(/\/blog\/post-de-tag-existente-/);
+
+  // The seeded spelling, not the one that was typed: the existing tag was reused.
+  await expect(page.getByText("Infraestrutura", { exact: true })).toBeVisible();
+
+  const response = await page.request.get("/api/blog/tags");
+  expect(response.ok()).toBe(true);
+  const tags = (await response.json()) as Array<{ name: string; slug: string }>;
+  expect(tags.filter((tag) => tag.slug === "infraestrutura")).toHaveLength(1);
 });
