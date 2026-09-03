@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { CompaniesRepo } from "@/server/repos/companies";
 import { ComplaintsRepo } from "@/server/repos/complaints";
-import { ProjectsRepo } from "@/server/repos/projects";
 import { CreateComplaintDto } from "@/server/dto/complaints";
+import { createComplaint, type CreateComplaintFailure } from "@/server/use-cases/create-complaint";
+import { createComplaintDeps } from "@/server/use-cases/create-complaint.deps";
 
 function serializeComplaintSummary(
   complaint: {
@@ -76,6 +76,17 @@ export async function GET(request: NextRequest) {
   }
 }
 
+/**
+ * The use case reports a reason; this is the only place that turns one into a
+ * status and a body. The `error` strings are byte-identical to what POST
+ * returned before the extraction — the client reads them.
+ */
+const CREATE_COMPLAINT_FAILURES: Record<CreateComplaintFailure, { status: number; error: string }> = {
+  "company-not-found": { status: 404, error: "Company not found" },
+  "project-not-found": { status: 404, error: "Project not found" },
+  "project-company-mismatch": { status: 400, error: "Project does not belong to company" },
+};
+
 export async function POST(request: NextRequest) {
   try {
     const session = await getSession();
@@ -87,28 +98,14 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = CreateComplaintDto.parse(body);
 
-    const company = await CompaniesRepo.findByIdOrNull(validatedData.company_id);
-    if (!company) {
-      return NextResponse.json({ error: "Company not found" }, { status: 404 });
+    const result = await createComplaint(validatedData, session.userId, createComplaintDeps);
+
+    if (!result.ok) {
+      const failure = CREATE_COMPLAINT_FAILURES[result.reason];
+      return NextResponse.json({ error: failure.error }, { status: failure.status });
     }
 
-    if (validatedData.project_id) {
-      const project = await ProjectsRepo.findByIdOrNull(validatedData.project_id);
-      if (!project) {
-        return NextResponse.json({ error: "Project not found" }, { status: 404 });
-      }
-
-      if (project.companyId !== validatedData.company_id) {
-        return NextResponse.json(
-          { error: "Project does not belong to company" },
-          { status: 400 }
-        );
-      }
-    }
-
-    const complaint = await ComplaintsRepo.create(validatedData, session.userId);
-
-    return NextResponse.json(complaint, { status: 201 });
+    return NextResponse.json(result.complaint, { status: 201 });
   } catch (error) {
     console.error("Error creating complaint:", error);
 
