@@ -127,7 +127,7 @@ dependency tree four months stale against a `pnpm-lock.yaml` that was current.
 
 | what | house style says | here | why |
 |---|---|---|---|
-| layering | four layers — `domain/`, `ports/`, `application/`, `adapters/` — plus a composition root | `app/` (pages + route handlers), `server/dto`, `server/repos`, `db/`, `lib/` | Next.js App Router owns file placement: a route handler *is* `app/api/**/route.ts` and cannot be moved into an adapters tree. The layers that remain were shaped by the framework, not chosen against the hexagon |
+| layering | four layers — `domain/`, `ports/`, `application/`, `adapters/` — plus a composition root | `app/` (pages + route handlers), `server/dto`, `server/use-cases`, `server/repos`, `db/`, `lib/` | Next.js App Router owns file placement: a route handler *is* `app/api/**/route.ts` and cannot be moved into an adapters tree. The layers that remain were shaped by the framework, not chosen against the hexagon |
 | ports | every driven dependency gets a port from its first use | no ports; repos import Drizzle directly | see D3. Recording the absence rather than abstracting seven dependencies in one pass |
 | composition root | one place constructs adapters and injects them | no root; repos are static-method classes imported where needed | a serverless function per route has no long-lived root to build in. A `createRepos(db)` factory is the cheapest step toward one if this is ever revisited |
 | product language | everything that lands in the repo is English | `src/messages/pt-BR/`, `email-templates/*.html`, user-visible JSX strings and the Zod error messages in `src/server/dto/*` are Portuguese | that text is read by a Brazilian user. The `language` skill classifies it as a literal — product content, not prose. Code, comments, docs, tests, commits and branch names are English |
@@ -142,13 +142,18 @@ dependency tree four months stale against a `pnpm-lock.yaml` that was current.
       `api/auth/{login,register,register-company,change-password}`, `api/blog/posts` and
       `api/blog/posts/[id]`, `api/search`, `api/me`, `api/user/account`, `api/company/{users,report}`,
       `api/complaints/[id]/messages`, `api/company/complaints/[id]/messages` and
-      `api/uploadthing/core.ts`. Whatever `src/server/repos` is meant to be the only door to, it is not.
-- [ ] **There are no tests.** The `Tests` step in `.github/workflows/ci.yml` runs
-      `pnpm run demo:checklist` (renamed from `test:demo`), which is `scripts/demo-tests.ts` — not a
-      test runner. Since 2026-09-03 there is also `pnpm run test:e2e`: Playwright, 11 tests, no
-      unit test, nothing that would fail if a repo regressed.
-- [ ] **`pnpm run lint` has no `--max-warnings=0`,** so the CI `Lint` step passes with warnings. It is
-      clean as of 2026-09-02, which is the moment to add the flag.
+      `api/uploadthing/core.ts`. Two server actions do the same —
+      `onboarding/{company,person}/step2/actions.ts` — so the real count of files under `src/app`
+      reaching past the repos is 16. Whatever `src/server/repos` is meant to be the only door to,
+      it is not.
+- [ ] **Unit coverage is two files.** Since 2026-09-03 there is a runner: Vitest, wired into CI as
+      `pnpm test --run`, alongside `pnpm run test:e2e` (Playwright, 20 tests) and
+      `pnpm run manuais:check`. What it covers is `src/server/dto/complaints.ts` and
+      `src/server/use-cases/create-complaint.ts` — 10 tests, both mutation-verified. Everything else
+      in `src/` is still untested, and the repos in particular have no test at all, so a regression
+      inside one is caught only if an E2E path happens to cross it. `scripts/demo-tests.ts` still
+      exists as `pnpm run demo:checklist`, but nothing calls it: no assertion in 87 lines, and the
+      CI file carries a comment saying why it must not be run as a test.
 - [ ] **Validation messages hardcoded in `src/server/dto/*` bypass next-intl.** `src/messages/pt-BR/`
       and `src/messages/en/` exist, and these strings sit outside them. This is an i18n gap, not a
       language-rule gap: translating them to English would not fix it.
@@ -162,13 +167,15 @@ dependency tree four months stale against a `pnpm-lock.yaml` that was current.
       still open; the factual errors found so far have been corrected in place.
 - [ ] **Test credentials are committed in clear text** in `AGENTS.md` and `.opencodeshare/README.md`,
       and this repository is public on GitHub.
-- [ ] **The Portuguese internal documents still need a file-by-file disposition.** Measured
-      2026-09-03: **26 files, 10,269 lines — 20 at the repo root and 6 under `docs/`**. The previous
-      count here (28 files, ~7,500 lines, 22 at the root) was never measured; only the `docs/` count
-      and the "indexes nine of them by filename" claim survived checking.
-      `INDICE_DOCUMENTACAO.md` indexes nine *by filename*, so a rename breaks the index silently.
-      **The six end-user manuals are no longer part of this gap** — they were decided on 2026-09-03
-      and moved to the Divergences table below. What remains is the genuine internal remainder.
+- [ ] **Six internal documents are still in Portuguese.** The disposition question is settled:
+      `docs/product/legacy-docs-inventory.md` carries one row per file with a reason, and on
+      2026-09-03 the 14 marked `delete` were removed — 3,954 lines of point-in-time sprint reports
+      whose claims the code had outgrown. What is left of the original 26 is 12 files, 6,337 lines:
+      the six end-user manuals, which are Portuguese by decision and recorded in the Divergences
+      table, and six internal docs awaiting translation — `docs/acessibilidade-inclusiva.md`,
+      `AUDITORIA_COMPLETA_PROBLEMAS.md`, `TODO.md`, `CHANGELOG.md`, `docs/project-status.md` and
+      `docs/mvp-backlog.md`. `INDICE_DOCUMENTACAO.md` names files by filename, so a rename among them
+      breaks the index silently, and its served copy under `public/manuais/` has to move with it.
 - [ ] **`scripts/post-merge.sh` runs `pnpm db:push --force`.** It is inert today because nothing wires
       it. Moving it into `.githooks/` would make every merge drop and recreate the schema against the
       local `DATABASE_URL`. Do not move it there.
