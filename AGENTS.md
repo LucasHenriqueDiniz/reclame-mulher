@@ -163,7 +163,7 @@ When a comment has to name a Portuguese label, quote the label and keep it byte-
 
 - `docs/project-status.md` — current technical state
 - `docs/mvp-backlog.md` — prioritised technical backlog
-- `docs/acessibilidade-inclusiva.md` — guidelines for low literacy and low digital familiarity
+- `docs/inclusive-accessibility.md` — guidelines for low literacy and low digital familiarity
 
 ## Test logins
 

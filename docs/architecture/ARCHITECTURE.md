@@ -167,15 +167,15 @@ dependency tree four months stale against a `pnpm-lock.yaml` that was current.
       still open; the factual errors found so far have been corrected in place.
 - [ ] **Test credentials are committed in clear text** in `AGENTS.md` and `.opencodeshare/README.md`,
       and this repository is public on GitHub.
-- [ ] **Six internal documents are still in Portuguese.** The disposition question is settled:
+- [x] **The Portuguese internal documents are dispositioned and translated.** The disposition question is settled:
       `docs/product/legacy-docs-inventory.md` carries one row per file with a reason, and on
       2026-09-03 the 14 marked `delete` were removed — 3,954 lines of point-in-time sprint reports
       whose claims the code had outgrown. What is left of the original 26 is 12 files, 6,337 lines:
       the six end-user manuals, which are Portuguese by decision and recorded in the Divergences
-      table, and six internal docs awaiting translation — `docs/acessibilidade-inclusiva.md`,
-      `AUDITORIA_COMPLETA_PROBLEMAS.md`, `TODO.md`, `CHANGELOG.md`, `docs/project-status.md` and
-      `docs/mvp-backlog.md`. `INDICE_DOCUMENTACAO.md` names files by filename, so a rename among them
-      breaks the index silently, and its served copy under `public/manuais/` has to move with it.
+      table, and six internal docs translated the same day: `docs/mvp-backlog.md`,
+      `docs/project-status.md`, `docs/qa-gaps.md`, `TODO.md`, `CHANGELOG.md` and
+      `docs/inclusive-accessibility.md`. Two of those were renamed out of Portuguese; the inventory
+      records both old names. What is left in Portuguese is the six manuals alone.
 - [ ] **`scripts/post-merge.sh` runs `pnpm db:push --force`.** It is inert today because nothing wires
       it. Moving it into `.githooks/` would make every merge drop and recreate the schema against the
       local `DATABASE_URL`. Do not move it there.
