@@ -1,5 +1,5 @@
 ---
-status: todo
+status: done
 tags:
   - area/ci
   - area/lint
@@ -55,3 +55,18 @@ Node or ESLint version resolves a rule this machine does not — do not weaken t
 `--max-warnings=9`. Turn the specific offending rule off in `eslint.config.mjs` with a comment naming
 the reason, the way `no-img-element` already is. A number in the flag decays silently; a disabled rule
 with an argument beside it does not.
+
+## Outcome
+
+Landed as one flag, as predicted. Two numbers moved between the plan and the work:
+
+- The window was measured at 262 files on `643e3fb`; the tree is **279** now. The extra 17
+  are the E2E suite, `scripts/sync-manuais.ts` and `vitest.config.ts`, all added by later
+  slices of this epic. Still 0 errors and 0 warnings, so the window never closed.
+- The `--max-warnings=9` escape hatch was not needed. CI's `Lint` step passed on the first
+  run with the flag, so the Node/ESLint divergence this slice worried about does not exist
+  here — `.nvmrc` pins CI to `24.19.0`, the version the numbers were measured on.
+
+The proof that matters is the third run, which the slice did not ask for: the same introduced
+warning under the *old* bare `eslint` still exits 0. The finding was always available and
+nothing failed on it, which is the claim the whole epic rests on.
