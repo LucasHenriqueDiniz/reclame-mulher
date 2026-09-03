@@ -1,5 +1,5 @@
 ---
-status: todo
+status: done
 tags:
   - area/docs
 kanban: ff0c8a39-1508-4d74-8b87-ca2de59e3369
@@ -56,7 +56,7 @@ and slice 01 is what decides:
 ```bash
 inv=docs/product/legacy-docs-inventory.md
 test -f "$inv" || echo "FAIL: no inventory at $inv — slice 01 is not done"
-del=$(grep -E '\| *delete *\|' "$inv" 2>/dev/null | grep -oE '[A-Za-z0-9_./-]+\.(md|txt|html)' | sort -u)
+del=$(awk -F'|' '/\| *`?delete`? *\|/ { gsub(/[` ]/,"",$2); if ($2 != "") print $2 }' "$inv" | sort -u)
 test -n "$del" && printf '%s\n' "$del" | wc -l || echo "FAIL: the inventory marks nothing delete"
 printf '%s\n' "$del" | while read -r f; do
   [ -n "$f" ] && [ -e "$f" ] && echo "STILL PRESENT: $f"
@@ -105,3 +105,52 @@ If a report turns out to be the only record of a decision — an accessibility f
 paragraph. Move the paragraph: a decision belongs in `docs/architecture/ARCHITECTURE.md` under
 Decisions, a finished piece of work belongs in `docs/postmortem/`. Then delete the report. Both
 destinations already exist with READMEs.
+
+## Outcome
+
+14 files, 3,954 deletions — matching the total the inventory states, which is a useful
+cross-check that the list acted on is the list reviewed. Both gates are quiet: gate 1 prints
+`14` and nothing else, gate 2 prints nothing.
+
+### The `del` derivation in this document was dangerous and is now fixed
+
+The form this slice shipped read the delete rows and then pulled filenames with
+`grep -oE '[A-Za-z0-9_./-]+\.(md|txt|html)'` — **over the whole line**, including the reason
+column. The inventory's reason column cites other files by design, so the derived list came back
+with 16 entries instead of 14:
+
+- `INDICE_DOCUMENTACAO.md`, disposition `keep`. It is an end-user manual served at `/manuais` and
+  held byte-identical by `pnpm run manuais:check`. It appears in the `README_DOCUMENTACAO.txt`
+  row, which says that file is superseded *by it*.
+- `AUDITORIA_COMPLETA_PROBLEMAS.md`, disposition `translate`. It is the only surviving list of
+  open gaps, and two `delete` rows point at it as the place their content survives.
+
+So the better the reasons were written, the more files the gate would have destroyed. It now reads
+field 2 of the table row with `awk -F'|'`, which is the file column and only that, and tolerates
+the backticks the inventory writes a literal value in.
+
+### One inventory row was wrong and is corrected here
+
+`RELATORIO_CORRECOES_ACESSIBILIDADE.md` was marked `delete` on the grounds that it records work
+already in git and names its own commit. True, and incomplete: it also carried
+"PROBLEMAS PENDENTES (6 de 14)" with pages, case counts and a named component — two of which
+appear nowhere else. That is the same defect slice 01 caught in `STATUS_FINAL_PRODUCAO.md` and
+missed one file later, and it is precisely the case this slice's *If stuck* predicted.
+
+Three items moved into `AUDITORIA_COMPLETA_PROBLEMAS.md` under the accessibility gap: the four
+icon links without accessible names on `/`, `/blog` and `/companies`; the two login form labels
+with `PasswordField.tsx` named as the thing to review; and screen-reader testing, never done.
+
+Two items were deliberately **not** carried, because the documents call them audit-script false
+positives and that was verified in the code rather than believed: `/blog` does have an `<h1>`, at
+`src/app/blog/page.tsx:136` — the very line the report cited — and the "Pular para conteúdo
+principal" link is at `src/app/layout.tsx:48` with `sr-only focus:not-sr-only`. The script missed
+both because it parses static HTML with BeautifulSoup.
+
+### The provenance note does not name the deleted files
+
+Writing "inherited from `RELATORIO_CORRECOES_ACESSIBILIDADE.md`" made gate 2 fire, correctly: a
+surviving document named a file that no longer exists, which sends a reader looking for something
+that is not there. Rather than widen a second gate in this epic, the note points at
+`git log --diff-filter=D --name-only` and at commit `dfa9baa`, which the original named and which
+is still in history — a better pointer than a filename anyway.
