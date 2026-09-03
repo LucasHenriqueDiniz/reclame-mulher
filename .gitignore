@@ -54,3 +54,8 @@ next-env.d.ts
 
 # derived kanban board — regenerate with /hexagram:board, never track it
 .kanban.json
+
+# Claude Code agent worktrees. These were tracked as five gitlinks with no
+# .gitmodules, which made `git submodule status` abort for everyone. They are
+# per-machine scratch checkouts, so they belong outside the index.
+.claude/worktrees/
