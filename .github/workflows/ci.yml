@@ -16,7 +16,7 @@ on:
 
 jobs:
   check:
-    name: Lint
+    name: Lint, unit tests & docs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
