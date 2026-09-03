@@ -1,9 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Share2,
@@ -15,39 +13,14 @@ import {
   Clock,
   FileText,
   ExternalLink,
-  Send,
 } from "lucide-react";
 import { ShareModal } from "@/components/share-modal";
 import { formatDateTime } from "@/lib/utils";
 import { protocolId } from "@/components/company/utils";
 import { companyTheme as S } from "@/components/company/theme";
 import { Button } from "@/components/ui/button";
-
-const STATUS_LABELS: Record<string, string> = {
-  OPEN: "Em aberto",
-  RESPONDED: "Respondida",
-  RESOLVED: "Concluído",
-  CANCELLED: "Cancelada",
-};
-
-const CATEGORY_LABELS: Record<string, string> = {
-  meio_ambiente: "Meio Ambiente",
-  seguranca: "Segurança",
-  infraestrutura: "Infraestrutura",
-  social: "Social",
-  economico: "Econômico",
-  outro: "Outro",
-  poluicao_sonora: "Poluição Sonora",
-  horario_obras: "Horário de obras",
-  individual: "Individual",
-  comunitario: "Comunitário",
-  regional: "Regional",
-  nacional: "Nacional",
-  baixa: "Baixa",
-  media: "Média",
-  alta: "Alta",
-  emergencial: "Emergencial",
-};
+import { categoryLabel, statusLabel } from "./complaint-labels";
+import { ComplaintReplyForm } from "./complaint-reply-form";
 
 interface ComplaintDetail {
   id: string;
@@ -99,43 +72,13 @@ export function ComplaintDetailContent({
   isAuthor = false,
   isLoggedIn = false,
 }: ComplaintDetailContentProps) {
-  const [reply, setReply] = useState("");
-  const [feedback, setFeedback] = useState<{ type: "error" | "success"; message: string } | null>(null);
-  const [pending, startTransition] = useTransition();
-  const router = useRouter();
-  const statusLabel = STATUS_LABELS[complaint.status] ?? complaint.status;
+  const statusText = statusLabel(complaint.status);
   const isResolved = complaint.status === "RESOLVED";
   const categories = [
-    complaint.impactCategory ? (CATEGORY_LABELS[complaint.impactCategory] ?? complaint.impactCategory) : null,
-    complaint.urgencyLevel ? (CATEGORY_LABELS[complaint.urgencyLevel] ?? complaint.urgencyLevel) : null,
-    complaint.impactScope ? (CATEGORY_LABELS[complaint.impactScope] ?? complaint.impactScope) : null,
+    complaint.impactCategory ? categoryLabel(complaint.impactCategory) : null,
+    complaint.urgencyLevel ? categoryLabel(complaint.urgencyLevel) : null,
+    complaint.impactScope ? categoryLabel(complaint.impactScope) : null,
   ].filter(Boolean) as string[];
-
-  function submitReply() {
-    setFeedback(null);
-    if (!reply.trim()) {
-      setFeedback({ type: "error", message: "Digite uma resposta antes de enviar." });
-      return;
-    }
-
-    startTransition(async () => {
-      const res = await fetch(`/api/complaints/${complaint.id}/messages`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: reply.trim() }),
-      });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        setFeedback({ type: "error", message: data.error ?? "Erro ao enviar resposta." });
-        return;
-      }
-
-      setReply("");
-      setFeedback({ type: "success", message: "Resposta enviada com sucesso." });
-      router.refresh();
-    });
-  }
 
   return (
     <main style={{ minHeight: "100vh", background: S.bg }}>
@@ -190,7 +133,7 @@ export function ComplaintDetailContent({
               whiteSpace: "nowrap",
             }}
           >
-            {statusLabel}
+            {statusText}
           </span>
         </div>
 
@@ -353,62 +296,8 @@ export function ComplaintDetailContent({
               )}
             </div>
 
-            {/* Reply form */}
-            {isAuthor && (
-              <div
-                style={{
-                  background: S.white,
-                  border: `1px solid ${S.border}`,
-                  borderRadius: 16,
-                  padding: "20px 24px",
-                  boxShadow: "0 1px 3px 0 rgba(0,0,0,0.05)",
-                }}
-              >
-                <h3 style={{ fontSize: 15, fontWeight: 700, color: S.text, margin: "0 0 12px 0" }}>Enviar resposta</h3>
-                {feedback ? (
-                  <div
-                    style={{
-                      borderRadius: 8,
-                      padding: "10px 12px",
-                      marginBottom: 12,
-                      fontSize: 13,
-                      background: feedback.type === "error" ? "#fef2f2" : "#f0fdf4",
-                      color: feedback.type === "error" ? "#b91c1c" : "#166534",
-                      border: `1px solid ${feedback.type === "error" ? "#fecaca" : "#bbf7d0"}`,
-                    }}
-                  >
-                    {feedback.message}
-                  </div>
-                ) : null}
-                <textarea
-                  placeholder="Escrever sua resposta..."
-                  rows={4}
-                  value={reply}
-                  disabled={pending}
-                  onChange={(event) => setReply(event.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: 12,
-                    borderRadius: 8,
-                    border: `1px solid ${S.border}`,
-                    fontSize: 14,
-                    resize: "vertical",
-                    marginBottom: 12,
-                  }}
-                />
-                <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Button
-                    type="button"
-                    disabled={pending}
-                    onClick={submitReply}
-                    style={{ background: S.primary, color: S.white }}
-                    className="gap-2"
-                  >
-                    <Send style={{ width: 16, height: 16 }} /> Enviar resposta
-                  </Button>
-                </div>
-              </div>
-            )}
+            {/* Reply form. Owns its own state and its own transition — see complaint-reply-form.tsx */}
+            {isAuthor && <ComplaintReplyForm complaintId={complaint.id} />}
           </div>
 
           {/* Sidebar: company + CTA */}
