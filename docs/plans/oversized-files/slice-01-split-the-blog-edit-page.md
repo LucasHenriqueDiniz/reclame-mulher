@@ -53,11 +53,33 @@ The extraction that follows that seam:
 ## Done when
 
 ```bash
-wc -l 'src/app/blog/[slug]/edit/page.tsx' && pnpm run build 2>&1 | tail -3 && pnpm test -- --run 2>&1 | tail -3
+wc -l 'src/app/blog/[slug]/edit/page.tsx'
+grep -q '"test":' package.json || echo "FAIL: no test script — honest-ci slice 02 is not done"
+pnpm test -- --run >/dev/null 2>&1 && echo "tests: ok" || echo "tests: FAILED"
+pnpm run build  >/dev/null 2>&1 && echo "build: ok" || echo "build: FAILED"
 ```
 
-prints a line count below 500 for the page, a build that ends in `Compiled successfully`, and a test
-summary with `0 failed`.
+prints a line count below 500 for the page, then `tests: ok`, then `build: ok`. Today it prints `664`,
+the `FAIL: no test script` line, `tests: FAILED` and `build: ok` — the line count and the runner are
+what this slice and its dependency move.
+
+Three things about that block, because the obvious phrasings are all wrong here:
+
+- **The build is checked by its exit code, not by grepping its output.** `next build` prints
+  `✓ Compiled successfully` on line 8 of 108 and *then* runs `Linting and checking validity of types`,
+  so a type error still leaves `Compiled successfully` in the log. Grepping for it would go green on a
+  broken build. `| tail -3` is worse: the last three lines are the
+  `○ (Static) prerendered as static content` legend, never the compile line.
+- **The runner is checked for existence first.** With no `test` script in `package.json`,
+  `pnpm test --run` exits **0** and prints nothing — a silent pass. (`pnpm test -- --run` exits 2 with
+  `test: --: unexpected operator`, which is at least loud.) The `grep -q '"test":'` line is what stops
+  a missing runner from reading as a green gate; `"test:demo"` does not match it.
+- **No literal from the test summary is asserted**, because the runner is not chosen until honest-ci
+  slice 02 and the two candidates disagree: Vitest prints `Tests  5 passed (5)` and emits no `N failed`
+  at all when green, while `node --test` prints `# fail 0`. Both exit non-zero on failure, so the exit
+  code is the one signal that holds either way. If the runner turns out to be Vitest, note that its
+  final block is Test Files / Tests / Start at / Duration plus a blank line, so `tail -3` cuts the
+  `Tests` line off — use `tail -5`, as honest-ci slice 02 does.
 
 ## If stuck
 

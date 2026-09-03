@@ -43,22 +43,47 @@ Against `createComplaint` with fake repos, no database:
 
 Plus one that keeps the handler honest:
 
-- `src/app/api/complaints/route.ts` imports no repository module.
+- `src/app/api/complaints/route.ts` no longer imports `CompaniesRepo` or `ProjectsRepo`. It keeps its
+  `ComplaintsRepo` import, because `GET` still calls that repo directly at lines 65, 67 and 69 and this
+  slice does not touch `GET`.
 
 ## Done when
 
 ```bash
-pnpm test -- --run src/server/use-cases/create-complaint.test.ts 2>&1 | tail -3
+grep -q '"test":' package.json || echo "FAIL: no test script — honest-ci slice 02 is not done"
+pnpm test -- --run src/server/use-cases/create-complaint.test.ts >/dev/null 2>&1 \
+  && echo "tests: ok" || echo "tests: FAILED"
 ```
 
-prints `Tests  5 passed (5)`, and
+prints `tests: ok` — five tests, and the run is judged by its exit code. Drop the `>/dev/null` to read
+the summary; Vitest writes `Tests  5 passed (5)` in a four-line final block, so use `tail -5` if you
+pipe it. The existence check comes first because `pnpm test --run` exits **0** and prints nothing when
+`package.json` has no `test` script, which would make a missing runner look like a passing suite
+(`"test:demo"` does not satisfy the grep).
+
+Then, for the handler:
 
 ```bash
-grep -cE 'CompaniesRepo|ProjectsRepo|ComplaintsRepo' src/app/api/complaints/route.ts
+grep -nwE 'CompaniesRepo|ProjectsRepo' src/app/api/complaints/route.ts
+echo "grep exit=$?  (1 = clean, 0 = POST still reaches a repo, 2 = file missing)"
 ```
 
-prints `1` — the `GET` handler still calls `ComplaintsRepo` directly, which this slice does not touch;
-anything above `1` means `POST` kept a repository call it was supposed to hand over.
+prints no lines and `grep exit=1`. Today it prints four lines — the two imports at 3 and 5, and the two
+`findByIdOrNull` calls at 90 and 96 — and `grep exit=0`. Those four are exactly what moves into the use
+case, so this is the gate that turns over.
+
+```bash
+grep -cwE 'ComplaintsRepo' src/app/api/complaints/route.ts
+```
+
+prints `4`: the import on line 4 plus the three `GET` calls on 65, 67 and 69. Today it prints `5` — the
+fifth is `ComplaintsRepo.create` on line 109, the one `POST` hands to the use case. Above `4` means
+`POST` kept a repository call.
+
+The old form of this gate demanded `1` from `grep -cE 'CompaniesRepo|ProjectsRepo|ComplaintsRepo'`,
+which no correct refactor could ever produce: `grep -c` counts **matching lines**, not occurrences, so
+it printed `9` before the work and would print `4` after. Splitting it in two also makes it sharper —
+a single total of `4` could be reached with the wrong four lines.
 
 ## If stuck
 

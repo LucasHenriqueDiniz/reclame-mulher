@@ -51,13 +51,20 @@ visible.
 ## Done when
 
 ```bash
-wc -l src/app/app/company/dashboard/_components/*.tsx && \
-  grep -rlE 'function (Reclamacoes|Projetos|Configuracoes)Tab' src/app/app/company/ ; \
-  pnpm run build 2>&1 | tail -3
+wc -l src/app/app/company/dashboard/_components/*.tsx
+grep -rlE 'function (Reclamacoes|Projetos|Configuracoes)Tab' src/app/app/company/; echo "grep exit=$?"
+pnpm run build >/dev/null 2>&1 && echo "build: ok" || echo "build: FAILED"
 ```
 
-prints every file in that directory under 500 lines, prints nothing for the grep, and ends in
-`Compiled successfully`.
+prints every file in that directory under 500 lines, then `grep exit=1` with no filename above it,
+then `build: ok`. Today it prints `524 .../company-dashboard.tsx`, that same path from the grep
+followed by `grep exit=0`, and `build: ok`.
+
+The build is asserted by exit code, not by `| tail -3` looking for `Compiled successfully`: that string
+lands on line 8 of a 108-line log, *before* `Linting and checking validity of types`, so it is present
+even when the build then fails — and the last three lines are the `○ (Static)` / `ƒ (Dynamic)` legend,
+so the tail never contained it. The grep keeps its own `echo` because exit 1 is its passing outcome and
+`&&` would swallow it.
 
 ## If stuck
 

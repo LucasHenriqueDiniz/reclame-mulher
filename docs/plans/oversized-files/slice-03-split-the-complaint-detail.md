@@ -47,11 +47,21 @@ Two things are extractable without touching the component's state:
 ## Done when
 
 ```bash
-wc -l 'src/app/app/complaints/[id]/_components/complaint-detail-content.tsx' && \
-  pnpm test -- --run 2>&1 | tail -3 && pnpm run build 2>&1 | tail -3
+wc -l 'src/app/app/complaints/[id]/_components/complaint-detail-content.tsx'
+grep -q '"test":' package.json || echo "FAIL: no test script — honest-ci slice 02 is not done"
+pnpm test -- --run >/dev/null 2>&1 && echo "tests: ok" || echo "tests: FAILED"
+pnpm run build  >/dev/null 2>&1 && echo "build: ok" || echo "build: FAILED"
 ```
 
-prints a line count below 500, a test summary with `0 failed`, and `Compiled successfully`.
+prints a line count below 500, then `tests: ok`, then `build: ok`. Today it prints `538`, the
+`FAIL: no test script` line, `tests: FAILED` and `build: ok`.
+
+Both runs are asserted by exit code rather than by a string in their output, for the reasons slice 01
+records in full: `next build` prints `✓ Compiled successfully` before it type-checks, so that string
+survives a broken build; `pnpm test --run` exits **0** and prints nothing when no `test` script exists,
+so a missing runner reads as a pass unless existence is asserted first; and no runner in play prints
+`0 failed` on success — Vitest prints `Tests  5 passed (5)` and omits the failed count entirely, while
+`node --test` prints `# fail 0`.
 
 ## If stuck
 

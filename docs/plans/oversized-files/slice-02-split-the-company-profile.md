@@ -52,13 +52,25 @@ English names on the way out rather than a second pass later.
 ## Done when
 
 ```bash
-wc -l src/app/company/[slug]/_components/*.tsx && \
-  grep -rlE 'function (Informacoes|Projetos|Reclamacoes)Tab' src/app/company/ ; \
-  pnpm run build 2>&1 | tail -3
+wc -l 'src/app/company/[slug]/_components/'*.tsx
+grep -rlE 'function (Informacoes|Projetos|Reclamacoes)Tab' src/app/company/; echo "grep exit=$?"
+pnpm run build >/dev/null 2>&1 && echo "build: ok" || echo "build: FAILED"
 ```
 
-prints every file in that directory under 500 lines, prints nothing for the grep, and ends in
-`Compiled successfully`.
+prints every file in that directory under 500 lines, then `grep exit=1` with no filename above it,
+then `build: ok`. Today it prints `574 .../company-profile-content.tsx`, that same path from the grep
+followed by `grep exit=0`, and `build: ok`.
+
+The directory is quoted and only `*.tsx` is left to the shell, because `[slug]` is a glob character
+class: unquoted, `wc -l src/app/company/[slug]/_components/*.tsx` matches nothing and dies with
+`no matches found` in zsh and `No such file or directory` in bash — a gate that fails before it has
+looked at anything.
+
+The build is checked by its exit code because `next build` prints `✓ Compiled successfully` on line 8
+of 108 and only afterwards runs `Linting and checking validity of types` — so that string is already in
+the log before the build can fail, and `| tail -3` never reaches it anyway (the last three lines are the
+`○ (Static)` / `ƒ (Dynamic)` legend). The `echo "grep exit=$?"` reports the grep and nothing else: an
+exit of 1 is the wanted outcome here, which is exactly why it cannot be chained with `&&`.
 
 ## If stuck
 

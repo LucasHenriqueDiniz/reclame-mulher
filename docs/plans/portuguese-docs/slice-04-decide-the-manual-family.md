@@ -47,7 +47,10 @@ always to be translated.
 
 - `ARCHITECTURE.md` gains a dated decision entry naming all six files and the choice.
 - If the answer is *product*: the `Known gaps` bullet about 28 Portuguese documentation files is
-  rewritten to name only what is actually a gap, and these six move to the Divergences table.
+  rewritten to name only what is actually a gap, and these six move to the Divergences table. That
+  bullet's numbers are stale and get corrected in the same edit: slice 01's census measures **26 files,
+  10,269 lines, 20 at the repo root and 6 under `docs/`**, not "28 … (~7,500 lines): 22 at the repo
+  root, 6 in `docs/`". Only the `docs/` count and the "indexes nine of them by filename" claim hold.
 - If the answer is *internal*: `slice-05` exists in this directory with its own `Done when`, and the
   gap bullet stays until it ships.
 - Either way `INDICE_DOCUMENTACAO.md` is reconciled — it indexes nine files by filename, and slice 02
@@ -56,12 +59,24 @@ always to be translated.
 ## Done when
 
 ```bash
-grep -n 'MANUAL_PLATAFORMA' docs/architecture/ARCHITECTURE.md
+awk '/^## Decisions/{d=1;next} /^## Divergences/{d=0} d' docs/architecture/ARCHITECTURE.md \
+  | grep -c MANUAL_PLATAFORMA
 ```
 
-prints a line inside the `## Decisions` section carrying a `Decided 2026-` date — not inside
-`## Known gaps`. A gap says nobody has decided; a decision says somebody has, which is the whole
-deliverable of this slice.
+prints `1` or more, and
+
+```bash
+awk '/^## Known gaps/{d=1} d' docs/architecture/ARCHITECTURE.md | grep -c MANUAL_PLATAFORMA
+```
+
+prints `0`. Today both print `0`, so the first is what turns over. A gap says nobody has decided; a
+decision says somebody has, which is the whole deliverable of this slice.
+
+The bare `grep -n 'MANUAL_PLATAFORMA' docs/architecture/ARCHITECTURE.md` this replaces also failed
+today (it printed nothing, exit 1), but it could not tell the two sections apart — adding the six
+filenames to `Known gaps` would have satisfied it while deciding nothing. The `awk` window is bounded
+by `## Divergences`, the section that follows `## Decisions` in that file. Entries there are shaped
+`### D3 — …` with a `**Decision.** … Decided 2026-09-02.` line; match that shape.
 
 ## If stuck
 

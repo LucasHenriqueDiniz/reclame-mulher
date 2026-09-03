@@ -35,7 +35,11 @@ the decision.
 
 - Slice 01 done. Deleting without the inventory is deleting without a written reason.
 - The link sweep: `INDICE_DOCUMENTACAO.md` names files by filename in headings, in an audience table
-  and in a checklist. Any deleted file named there is edited out in the same commit.
+  and in a checklist. Any deleted file named there is edited out in the same commit. Measured on
+  `693a79c`: the nine existing files it names are the three manual-family docs plus `README.md`,
+  `GUIA_RAPIDO.md`, `LEIA_ME_PRIMEIRO.md`, `docs/acessibilidade-inclusiva.md`,
+  `docs/mvp-backlog.md` and `docs/project-status.md` — **none of the eleven candidates above**. So this
+  is a check to run, not work to plan for; it is slice 03's renames that will actually touch that file.
 
 ## Tests
 
@@ -46,20 +50,53 @@ the decision.
 
 ## Done when
 
-```bash
-ls RELATORIO_*.md AUDITORIA_*.md STATUS_FINAL_PRODUCAO.md GITHUB_PUSH_SUMMARY.md \
-   MAPEAMENTO_TELAS_COMPLETO.md PLANO_IMPLEMENTACAO_SPRINT.md VALIDACAO_APP_FUNCIONANDO.md 2>&1
-```
-
-prints `No such file or directory` for each, and the dangling-reference sweep is silent:
+The list to check is read out of the inventory, not written here — the table above is a candidate set
+and slice 01 is what decides:
 
 ```bash
-for f in $(git log --diff-filter=D --name-only --pretty=format: -1); do
-  grep -rln "$(basename "$f")" --include='*.md' --include='*.txt' . --exclude-dir=node_modules
+inv=docs/product/legacy-docs-inventory.md
+test -f "$inv" || echo "FAIL: no inventory at $inv — slice 01 is not done"
+del=$(grep -E '\| *delete *\|' "$inv" 2>/dev/null | grep -oE '[A-Za-z0-9_./-]+\.(md|txt|html)' | sort -u)
+test -n "$del" && printf '%s\n' "$del" | wc -l || echo "FAIL: the inventory marks nothing delete"
+printf '%s\n' "$del" | while read -r f; do
+  [ -n "$f" ] && [ -e "$f" ] && echo "STILL PRESENT: $f"
 done
 ```
 
-prints nothing.
+prints the count of `delete` rows and then nothing else. Today it prints the two `FAIL:` lines, because
+the inventory does not exist yet. Against a stub inventory carrying the eleven candidates above as
+`delete`, it prints `11` and then eleven `STILL PRESENT:` lines — so the gate turns over on the
+deletions themselves, and the `test -n "$del"` guard is what stops an absent inventory from yielding an
+empty list and a silent pass.
+
+Then the dangling-reference sweep, over the same derived list:
+
+```bash
+printf '%s\n' "$del" | while read -r f; do
+  [ -n "$f" ] && git grep -lF "$f" -- '*.md' '*.txt' ':!docs/plans' ':!docs/pitches' ':!docs/product'
+done | sort -u
+```
+
+prints nothing. Against the same stub it prints two paths today, `GITHUB_PUSH_SUMMARY.md` and
+`RELATORIO_FINAL_SPRINT_COMPLETO.md` — both on the `delete` list themselves, so the sweep goes quiet
+once the deletions land.
+
+Two corrections are baked into those blocks:
+
+- **The `ls` form fixed all eleven filenames**, which contradicted this slice's own sentence that the
+  table is a starting point, and left no room for slice 01's `ask-owner` disposition. Reading the
+  `delete` rows keeps the inventory in charge.
+- **The old sweep could never be silent.** It grepped the whole tree for the deleted basenames, and
+  this file's candidate table together with `docs/pitches/portuguese-docs.md` name all eleven — so
+  every deletion guaranteed itself two hits. Measured: grepping the eleven names returns
+  `docs/plans/portuguese-docs/slice-02-delete-the-dead-sprint-reports.md` eleven times and
+  `docs/pitches/portuguese-docs.md` eleven times. The pathspec exclusions drop the three directories
+  whose job is to *name* the files being removed (`docs/product` holds the inventory, which lists all
+  26 by design), and `git grep` searches tracked files only, which also keeps `node_modules` and
+  `.opencodeshare/` out without an `--exclude-dir` list. It no longer keys off
+  `git log --diff-filter=D -1` either: that read whatever the last commit happened to delete, which on
+  `693a79c` is five agent worktrees and seven `.tsx` files, and reported `docs/e2e-test-report.md` four
+  times for reasons having nothing to do with this slice.
 
 ## If stuck
 
