@@ -16,6 +16,10 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/privacy") ||
     pathname.startsWith("/terms") ||
     pathname.startsWith("/ajuda") ||
+    // End-user manuals. They document how to use the platform, so gating them behind a
+    // session means the people who most need them — someone deciding whether to sign up,
+    // or stuck at the login screen — cannot read them.
+    pathname.startsWith("/manuais") ||
     pathname === "/api/me" ||
     pathname.startsWith("/api/blog/") ||
     pathname.startsWith("/api/auth/") ||
