@@ -1,5 +1,5 @@
 ---
-status: todo
+status: done
 tags:
   - area/clean-code
 kanban: 5c863774-abfd-4981-92f1-304c12728b42
@@ -78,3 +78,78 @@ If a tab turns out to read half a dozen values from the parent scope and the pro
 pass the `company` object itself rather than destructuring it into eight props. It is already the
 shape the parent holds. If even that does not fit, leave that one tab in place and extract the other
 six — the target is under 500, not zero functions in the file.
+
+## Outcome
+
+574 → **112 lines**, all seven extractions taken, and the gate prints eight files with 132 as the
+largest, then `grep exit=1` with nothing above it, then `build: ok`. `pnpm run lint`,
+`pnpm test --run`, `npx tsc --noEmit` and `pnpm run build` each exited 0; all four also exited 0 on
+the branch point, so none of them is reporting on something this slice repaired.
+
+### The 20 minutes of closure reading found nothing to do
+
+This document budgeted that reading as "the only real work in this slice", on the premise that a
+section might turn out to read from the parent scope rather than from props. None does. All seven
+were already top-level functions with complete parameter lists, so the closure list is entirely
+module scope — imports and three local types — and **not one new prop was added**. What each one
+reads:
+
+| file | module-scope reads |
+|---|---|
+| `info-row.tsx` | nothing at all; no import but the directive |
+| `company-hero.tsx` | `BarChart3` `MapPin` `FileText` `Shield`, `Badge`, `Button`, `Link`, `CompanyStats`, `Company` |
+| `metrics-bar.tsx` | `MessageCircle` `Clock` `Check`, `Card`/`CardContent`, `CompanyStats` |
+| `overview-tab.tsx` | six `Company*Card`s, `CompanyStats`, `Company`, `Complaint` |
+| `information-tab.tsx` | `Card`/`CardContent`, `formatDate`, **`InfoRow`**, `Company` |
+| `projects-tab.tsx` | `useState`/`useMemo`, `SearchInput`, `CompanyProjectList`, `CompanyComplaintCtaCard`, `Project` |
+| `complaints-tab.tsx` | `useState`, `MessageCircle`, `Link`, `Button`, `CompanyComplaintList`, `CompanyPerformanceCard`, `CompanyStats`, `Complaint` |
+
+`InfoRow` is the one dependency that crosses between two of the new files: `information-tab.tsx` is
+its only caller and now imports it from `./info-row`. Every other new file depends only on things
+outside the directory. The *If stuck* clause — pass `company` whole rather than destructure it into
+eight props — was already how the author had written it, so it never came up.
+
+Each of the seven function bodies was diffed against its line range in the pre-split file and is
+**byte-identical**, renames aside; so is the orchestrator that stayed. The only hand-written lines
+in this change are import blocks.
+
+### One file this document does not list
+
+The three types the sections share — `Company`, `Complaint`, `Project` — were declared in
+`company-profile-content.tsx` and exported by nothing, and the table says where seven *functions*
+go without saying where those go. They are now `_components/types.ts`, an eighth file, because
+`Company` is read by four of the split files and `Complaint` by three. The alternative was to export
+them from the orchestrator and have each child import from its own parent; type-only, so it would
+erase at build time and work, but it points every arrow backwards. Re-declaring `Company` in four
+files was the third option and is worse than either.
+
+`types.ts` is invisible to the gate, which globs `*.tsx`. It is 32 lines.
+
+### Smaller notes
+
+- The line numbers in this document's table are exact, all eight of them.
+- `reportOpen` stayed in the parent as specified, and is still the only piece of state there beyond
+  `tab`.
+- The `// ─── SECTION ───` banners left with the code they introduced. The last one, `// ─── MAIN
+  ───`, was dropped rather than carried: with one function left in the file it labels nothing.
+- Confirmed as described: `✓ Compiled successfully` really does land on line 8 of the build log, so
+  checking the build by that string rather than by its exit code would have passed a failing build.
+- `next build` dirtied no tracked file here — `git status` after it showed only the nine paths of
+  this change.
+
+### What was not verified
+
+The Tests section asks for the four tabs to be **walked by hand**, and they were not: this ran in a
+worktree with no browser and no database, so nothing rendered. Four of the five test items are
+therefore covered only by (a) the byte-identical bodies above, (b) `tsc` agreeing every prop still
+type-checks at every call site, and (c) a production build:
+
+- the four tabs rendering,
+- the projects tab's search box and status filter,
+- the complaints tab's filter,
+- the report dialog opening.
+
+That is a strong argument that behaviour is unchanged — the code is the same code, wired the same
+way — and it is not the same thing as having seen it. Whoever runs the E2E suite after the merge is
+the first to actually look. The fifth item, no extracted file exporting a Portuguese identifier, is
+the one this environment can and did check: `grep exit=1`.
