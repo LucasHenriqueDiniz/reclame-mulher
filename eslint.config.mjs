@@ -21,6 +21,13 @@ const eslintConfig = [
       // Snippet templates for the editor, not application code. They are written to
       // be pasted and filled in, so their placeholder parameters are unused by design.
       ".opencodeshare/**",
+      // Playwright output. `.report/` is a minified HTML bundle, so linting it produces
+      // thousands of findings in generated code and makes `pnpm lint` exit 1 for anyone
+      // who has run the suite — measured at 3027 problems, 254 of them errors.
+      "e2e/.report/**",
+      "e2e/.results/**",
+      "test-results/**",
+      "playwright-report/**",
     ],
   },
   {
