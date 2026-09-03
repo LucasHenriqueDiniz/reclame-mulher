@@ -41,7 +41,7 @@ src/
     blog/        # Public blog
     companies/   # Company listing
     company/     # Public company profile
-    empresas/    # Signed-in area for companies
+    empresas/    # Redirect-only segment; forwards to /companies
     onboarding/  # Onboarding flow
     ...
   components/    # React components (shadcn under components/ui/)
@@ -72,26 +72,26 @@ serves, so they stay as they are — renaming one breaks a public link.
 
 ```bash
 # Development
-npm run dev          # Next.js dev with Turbopack on port 5000
-npm run dev:clean    # Clears .next and restarts dev
+pnpm run dev         # Next.js dev with Turbopack on port 5000
+pnpm run dev:clean   # Clears .next and restarts dev
 
 # Build
-npm run build        # Production build
-npm run lint         # ESLint
+pnpm run build       # Production build
+pnpm run lint        # ESLint
 
 # Database
-npm run db:generate  # Generates Drizzle migrations
-npm run db:migrate   # Applies migrations
-npm run db:push      # Pushes the schema (dev)
-npm run db:studio    # Drizzle Studio
-npm run db:seed      # Seeds the database
-npm run db:reset     # Full database reset
+pnpm run db:generate # Generates Drizzle migrations
+pnpm run db:migrate  # Applies migrations
+pnpm run db:push     # Pushes the schema (dev)
+pnpm run db:studio   # Drizzle Studio
+pnpm run db:seed     # Seeds the database
+pnpm run db:reset    # Full database reset
 
 # Utility scripts
-npm run email:sync           # Syncs email templates
-npm run evidencias:check     # Demo evidence checklist
-npm run evidencias:docx      # Generates the evidence DOCX
-npm run test:demo            # Demo test scripts
+pnpm run email:sync       # Syncs email templates
+pnpm run evidencias:check # Demo evidence checklist
+pnpm run evidencias:docx  # Generates the evidence DOCX
+pnpm run test:demo        # Demo test scripts
 ```
 
 ## Code conventions
@@ -104,7 +104,7 @@ npm run test:demo            # Demo test scripts
   (interactivity, hooks, browser APIs)
 
 ### Drizzle / DB
-- Every schema change goes: edit `src/db/schema.ts` → `npm run db:generate` → `npm run db:migrate`
+- Every schema change goes: edit `src/db/schema.ts` → `pnpm run db:generate` → `pnpm run db:migrate`
 - Never edit a migration that is already applied in production
 - Use `db.transaction()` for multi-table operations that need atomicity
 

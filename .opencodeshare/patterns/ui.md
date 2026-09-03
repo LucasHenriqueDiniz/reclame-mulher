@@ -74,7 +74,7 @@ const config = getComplaintStatusConfig("OPEN");
 - Body: text-sm, text-[#2A3F54]
 
 ## Regras de ouro
-1. **Nunca use `<img>`** — use `next/image` quando possível
+1. `<img>` is allowed here — `images.unoptimized` is on in `next.config.ts` and `eslint.config.mjs` disables `@next/next/no-img-element`. See `.opencodeshare/README.md`.
 2. **Botões principais:** `bg-[#1E88E5] hover:bg-[#1976D2]`
 3. **Cards:** `border-0 shadow-md` ou `shadow-sm`
 4. **Inputs:** `rounded-xl border-gray-200 focus:border-[#1E88E5]`
