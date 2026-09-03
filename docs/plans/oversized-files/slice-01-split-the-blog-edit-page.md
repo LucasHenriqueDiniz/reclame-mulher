@@ -1,5 +1,5 @@
 ---
-status: todo
+status: done
 tags:
   - area/clean-code
 kanban: b465755d-aaf6-4a7d-a368-a385d669ea2c
@@ -102,3 +102,49 @@ the state in the page: `zustand` is already a dependency and reaching for it her
 state model to a file being split for having one too many concerns. If the file still will not go
 under 500 after the four extractions, stop at three of them and say so in the PR. 520 lines with clean
 seams beats 480 with a component nobody can name.
+
+## Outcome
+
+664 → **345 lines**, and the gate prints `tests: ok` then `build: ok`. Five extractions, not four.
+
+### The seam this document described is not the seam in the code
+
+It assigned `uploading` **and** `dragActive` to `featured-image-field.tsx`. `dragActive` is not the
+cover field's: lines 489–507 of the original are the *textarea* overlay, for dropping an image into
+the Markdown body at the cursor. Two unrelated uploads shared one `uploading` flag, so either one
+put the other's spinner on screen. The cover field now owns its own upload state and its own
+`startUpload`; the page keeps `dragActive` and `uploading` for the editor drop.
+
+### A fifth extraction, because four did not reach 500
+
+After the four this document names, the page was at 526. The remaining block with an obvious name
+was the formatting toolbar — `insertMarkdown`, a 68-line switch, plus 96 lines of buttons — so it
+became `markdown-toolbar.tsx`. That is the *If stuck* trade taken in the other direction: rather
+than stop at three and ship 526, there was a fifth seam that names itself.
+
+`--max-warnings=0`, added earlier the same day, caught 13 imports orphaned by the extractions. The
+gate landing before this slice is why they did not ship.
+
+### The walkthrough is a spec, not a paragraph
+
+This document asks for a manual walkthrough recorded in the PR. `e2e/07-blog-editor.spec.ts` does
+it instead: a new post written, tagged, previewed and saved, and a seeded post loaded into the
+editor and saved. That covers four of the five items — the fifth, uploading a cover image by picker
+or by drop, goes through UploadThing and has no offline stand-in, so the field's typed-URL path is
+covered and the upload is not. Said in the spec's header rather than left to be discovered.
+
+The `useEffect` this document flagged is the reason the second test exists: it asserts the seeded
+post's title arrives in the field, which is what an extra fetch loop or a dropped dependency would
+break.
+
+### Two things the test found that a walkthrough would not have
+
+- **The tag remove button had no accessible name.** The test could not address an icon-only button,
+  which is the same defect `docs/qa-gaps.md` item 1 lists as open across `/`, `/blog` and
+  `/companies`. Fixed at the source with an `aria-label` rather than worked around with a brittle
+  locator — one instance of that gap closed.
+- **Saving a post with a tag whose name differs from an existing one only by case returns a 500.**
+  `BlogRepo.linkTags` arbitrates `ON CONFLICT` on `name`, while `blog_tags` is unique on `slug` too,
+  so "infraestrutura" against the seeded "Infraestrutura" hits a constraint the clause does not
+  cover. Real, reproducible, and not this slice's subject: the spec uses non-colliding tag names and
+  says why, and the bug is filed on its own rather than encoded as expected behaviour.
