@@ -30,7 +30,7 @@ jobs:
       - name: Lint
         run: pnpm run lint
 
-      # `test:demo` deliberately NOT run here. scripts/demo-tests.ts has no assertion
+      # `scripts/demo-tests.ts` is deliberately NOT run here. It has no assertion
       # and no failure path in 87 lines — it prints "24 validações concluídas com
       # sucesso" and exits 0 whatever the code does, so a step calling it reports
       # green on a broken build. It stays in package.json as a checklist for a human

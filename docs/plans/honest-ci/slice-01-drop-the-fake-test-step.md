@@ -1,11 +1,17 @@
 ---
-status: todo
+status: done
 tags:
   - area/ci
 kanban: d69445bf-4af5-4afc-bc2e-bb8eab1f24e2
 ---
 
 # Slice 01 — Drop the fake test step from CI
+
+> **Closed 2026-09-03, and the outcome is better than this slice asked for.** The plan was to delete
+> the `Tests` step and leave CI with one honest job. What happened instead: the step was replaced by
+> an `e2e` job running a real Playwright suite (11 tests) that had landed the same day, so CI gained
+> a test gate rather than losing a fake one. `test:demo` is renamed `demo:checklist` as written
+> below, and `pnpm exec grep -c 'test:demo'` across the three files returns 0.
 
 ## Delivers
 
