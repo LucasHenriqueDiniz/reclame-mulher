@@ -1,54 +1,62 @@
-# Backlog Tecnico Prioritario
+# Technical backlog
+
+Ordered by priority. P0 is what blocks calling the product complete; the last section is work that
+was deliberately dropped.
 
 ## P0
 
-- Persistir `onboardingCompletedAt` no final dos fluxos de onboarding de pessoa e empresa.
-- Revisar `ProfilesRepo.getRequiredOnboardingStep()` para virar uma regra simples e previsivel.
-- Restringir rotas sensiveis da empresa para `OWNER` ou `ADMIN` quando aplicavel:
-  - criacao/edicao/remocao de projetos
-  - edicao de perfil da empresa
-  - exclusao/soft delete da empresa
-- Implementar backend administrativo minimo para verificacao de empresas:
-  - listar pendencias
-  - aprovar
-  - rejeitar
-  - registrar quem executou a acao
+- Persist `onboardingCompletedAt` at the end of both the person and company onboarding flows.
+- Rework `ProfilesRepo.getRequiredOnboardingStep()` into a rule that is simple and predictable.
+- Restrict the sensitive company routes to `OWNER` or `ADMIN` where it applies:
+  - creating, editing and removing projects
+  - editing the company profile
+  - deleting or soft-deleting the company
+- Build the minimum admin backend for company verification:
+  - list what is pending
+  - approve
+  - reject
+  - record who took the action
 
 ## P1
 
-- Implementar auditoria real:
-  - tabela
-  - repo
-  - endpoint
-  - tela admin ligada a dados reais
-- Trocar `/api/blog/featured` mock por consulta real ao banco.
-- Alinhar regra de publicacao do blog:
-  - lista publica
-  - detalhe publico
-  - filtros por tag
-- Definir storage de producao para anexos de reclamacoes.
-- Expor leitura/download de anexos de forma controlada.
+- Build real auditing: the table, the repo, the endpoint, and an admin screen wired to real data
+  rather than to a fixture.
+- Replace the `/api/blog/featured` mock with a real query.
+- Settle one publishing rule for the blog and apply it to the public list, the public detail page
+  and the tag filters alike.
+- Choose production storage for complaint attachments.
+- Expose reading and downloading an attachment in a controlled way.
 
 ## P2
 
-- Corrigir `components.json` para refletir o setup real.
-- Reduzir inconsistencia tecnica entre telas de empresa e restante da app.
-- Limpar warnings de lint e pequenos pontos de codigo morto.
-- Revisar uso de `<img>` e migrar o que fizer sentido para `next/image`.
+- Reduce the technical inconsistency between the company screens and the rest of the app.
+- Remove the small pieces of dead code still around.
+- Review the `<img>` call sites. ⚠️ **Read the decision first:** `next.config` sets
+  `images.unoptimized` because Vercel's image optimizer started answering 402, and with that flag
+  on `<Image />` renders a plain `<img>` and optimizes nothing. Migrating the seven call sites buys
+  nothing until that decision is revisited — see `docs/architecture/ARCHITECTURE.md`.
 
-## Fora do caminho critico
+## Off the critical path
 
-- Melhorar i18n alem do provider atual, se o produto realmente precisar de rotas por locale.
-- Expandir SEO e metadados do blog.
-- Refinar dashboard com metricas mais confiaveis.
+- Improve i18n beyond the current provider, if the product genuinely needs per-locale routes.
+- Expand the blog's SEO and metadata.
+- Refine the dashboard with metrics worth trusting.
 
-## Itens removidos nesta limpeza
+## Dropped in the cleanup
 
-Os itens abaixo foram retirados do repositorio por nao refletirem mais o estado real do projeto:
+Removed from the repository because they no longer described the project:
 
-- migrations antigas de `supabase/`
-- docs antigos de implementacao do blog
-- troubleshooting legado
-- script `dev-clean.bat`
+- the old `supabase/` migrations
+- the old blog implementation docs
+- the legacy troubleshooting notes
+- the `dev-clean.bat` script
 
-Esses arquivos nao eram mais fonte de verdade nem parte do runtime atual.
+None of them were a source of truth or part of the runtime any more.
+
+## Closed since this list was written
+
+- **Lint warnings.** `pnpm run lint` is `eslint --max-warnings=0` as of 2026-09-03 and the tree is
+  clean: 279 files, 0 errors, 0 warnings. A warning now fails CI, so there is nothing left to
+  "clean up" on a schedule.
+- **`components.json`.** It already points at `tailwind.config.ts` and `src/app/globals.css`, both
+  of which exist. Checked 2026-09-03.

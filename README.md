@@ -40,7 +40,7 @@ The old Supabase-based layer was removed to keep the architecture unambiguous.
 
 - `docs/project-status.md`: current technical state of the project
 - `docs/mvp-backlog.md`: technical backlog, prioritised from that state
-- `docs/acessibilidade-inclusiva.md`: guidelines for low literacy and low digital familiarity
+- `docs/inclusive-accessibility.md`: guidelines for low literacy and low digital familiarity
 
 ## Test logins
 

@@ -24,11 +24,19 @@ mechanical, and so the owner reviews a table instead of a 10,269-line diff.
 - The file list is reproducible, not hand-kept. This is the census; call it `PT_MARKERS` below:
 
   ```bash
-  for f in $(ls *.md *.txt *.html docs/*.md 2>/dev/null); do
+  for f in $(find . docs -maxdepth 1 \( -name '*.md' -o -name '*.txt' -o -name '*.html' \) -type f | sed 's|^\./||'); do
     n=$(grep -ciwE 'não|nao|está|esta|são|sao|que|para|uma|dos|das|usuário|usuario|reclamação|reclamacao' "$f")
     [ "$n" -gt 0 ] && printf '%s\t%s\t%s\n' "$n" "$(wc -l < "$f")" "$f"
   done | sort -rn
   ```
+⚠️ **`ls *.md *.txt *.html` is not the census command any more.** `README_DOCUMENTACAO.txt` was the
+only `.txt` in the repository and slice 02 deleted it, so the `*.txt` glob now matches nothing —
+and zsh treats a glob with no match as a hard error that aborts the whole command *before* `ls`
+runs, which `2>/dev/null` cannot suppress. The result is zero files censused and zero output, which
+reads as a pass. Measured on 2026-09-03: the `ls` form printed nothing in zsh while six Portuguese
+files sat in the tree. `find` does not expand globs in the shell, so it gives the same 15 files in
+both bash and zsh — verified as identical sets.
+
 
   Run on `693a79c` this prints **26 rows totalling 10,269 lines** — 20 at the repo root and 6 under
   `docs/` — with `MANUAL_PLATAFORMA.md` highest at 81 marker lines and
@@ -62,7 +70,7 @@ mechanical, and so the owner reviews a table instead of a 10,269-line diff.
 Every censused file has a row — this is the gate, and it checks identity rather than arithmetic:
 
 ```bash
-for f in $(ls *.md *.txt *.html docs/*.md 2>/dev/null); do
+for f in $(find . docs -maxdepth 1 \( -name '*.md' -o -name '*.txt' -o -name '*.html' \) -type f | sed 's|^\./||'); do
   n=$(grep -ciwE 'não|nao|está|esta|são|sao|que|para|uma|dos|das|usuário|usuario|reclamação|reclamacao' "$f")
   [ "$n" -gt 0 ] && { grep -qF "$f" docs/product/legacy-docs-inventory.md 2>/dev/null \
     || echo "NOT IN INVENTORY: $f"; }

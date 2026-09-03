@@ -287,7 +287,7 @@ Selo de confiabilidade que empresa pode solicitar. Requer validação de documen
 - `src/db/schema.ts` - Estrutura de banco de dados
 - `docs/project-status.md` - Status técnico
 - `docs/mvp-backlog.md` - Features planejadas
-- `docs/acessibilidade-inclusiva.md` - Diretrizes de design
+- `docs/inclusive-accessibility.md` - Diretrizes de design
 
 ### Stack Técnico
 - **Frontend**: Next.js (React), TypeScript, Tailwind CSS

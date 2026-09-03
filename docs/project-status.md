@@ -1,209 +1,160 @@
-# Estado Atual do Projeto
+# Current state of the project
 
-## Resumo
+## Summary
 
-O projeto atual nao roda em Supabase no runtime. A arquitetura real hoje e:
+This project does not run on Supabase. The architecture as it actually stands:
 
 - Next.js App Router
 - TypeScript
-- Tailwind CSS + componentes shadcn/ui
+- Tailwind CSS with shadcn/ui components
 - Drizzle ORM
-- Postgres/Neon
-- autenticacao propria com cookie HTTP-only + JWT assinado
-- React Hook Form + Zod
-- next-intl com provider customizado
+- Postgres on Neon
+- own authentication: HTTP-only cookie plus a signed JWT
+- React Hook Form and Zod
+- next-intl behind a custom provider
 
-Isso nao e necessariamente pior que o plano original. A troca de Supabase por Drizzle + auth propria da mais controle sobre schema, sessao e regras de dominio. O problema atual nao e a troca em si, e a coexistencia de legado antigo no repositorio.
+That is not necessarily worse than the original plan. Trading Supabase for Drizzle and hand-rolled
+auth buys more control over the schema, the session and the domain rules. The problem was never the
+trade itself — it was the old Supabase legacy sitting in the repository alongside it.
 
-## Estrutura
+## Structure
 
-O workspace esta razoavelmente organizado:
+The workspace is reasonably organised:
 
-- `src/app`: rotas App Router, layouts, paginas, APIs
-- `src/components`: UI compartilhada, layout, landing, blog, empresa
-- `src/server/repos`: camada de acesso a dados
-- `src/server/dto`: validacao e contratos de entrada
-- `src/db`: schema Drizzle, client e migrations
-- `src/lib`: auth, env, utilitarios, constantes
-- `src/messages` e `src/i18n`: internacionalizacao
+- `src/app` — App Router routes, layouts, pages and API handlers
+- `src/components` — shared UI: layout, landing, blog, company
+- `src/server/use-cases` — domain rules callable without a request object
+- `src/server/repos` — data access
+- `src/server/dto` — input validation and contracts
+- `src/db` — Drizzle schema, client and migrations
+- `src/lib` — auth, env, utilities, constants
+- `src/messages` and `src/i18n` — internationalisation
 
-A arquitetura geral e coerente. O principal problema estrutural e a mistura de duas historias tecnicas:
+The overall shape is coherent. The structural problem was two technical histories mixed together:
+the real architecture in `src/db` and `src/lib/auth`, and the Supabase legacy that lived in
+`supabase/`.
 
-- a arquitetura real atual em `src/db` e `src/lib/auth`
-- o legado de Supabase que existia em `supabase/`
+## Setup and technical base
 
-## Setup e base tecnica
+What is in good shape:
 
-Pontos positivos:
+- `tsconfig.json` has `strict: true`
+- the `@/*` alias is configured
+- the global provider is mounted in `src/app/layout.tsx` and `src/app/providers.tsx`
+- `next-intl` works through `LocaleProvider`
+- the production build passes
 
-- `tsconfig.json` esta com `strict: true`
-- alias `@/*` esta configurado
-- provider global esta montado em `src/app/layout.tsx` e `src/app/providers.tsx`
-- `next-intl` esta funcional via `LocaleProvider`
-- build de producao passa
+What is inconsistent:
 
-Pontos inconsistentes:
+- part of the UI uses Tailwind and shadcn the standard way, while the company screens lean heavily
+  on inline styles
 
-- `components.json` estava apontando para caminhos errados do shadcn (`tailwind.config.js` e `app/globals.css`), enquanto o projeto usa `tailwind.config.ts` e `src/app/globals.css`
-- parte da UI usa Tailwind/shadcn de forma padrao e outra parte usa muito estilo inline em telas de empresa
+## Database and persistence
 
-## Banco e persistencia
+The schema covers the core domain well: `users`, `profiles`, `companies`, `company_users`,
+`projects`, `complaints`, `complaint_messages`, `complaint_attachments`, `blog_posts`, `blog_tags`,
+`blog_post_tags` and `reports`.
 
-O schema atual cobre bem o dominio principal:
+The migrations that count are the ones in `src/db/migrations`.
 
-- `users`
-- `profiles`
-- `companies`
-- `company_users`
-- `projects`
-- `complaints`
-- `complaint_messages`
-- `complaint_attachments`
-- `blog_posts`
-- `blog_tags`
-- `blog_post_tags`
-- `reports`
+The repository used to carry an older set under `supabase/migrations` built on RLS, RPC and
+`auth.uid()`, which no longer described the runtime. It was removed so the database has a single
+source of truth.
 
-As migrations validas hoje sao as de `src/db/migrations`.
+## Auth and onboarding
 
-O repositorio tinha um conjunto antigo de migrations em `supabase/migrations` baseado em RLS, RPC e `auth.uid()`, mas isso nao refletia mais o runtime atual. Esse legado foi removido para manter uma unica fonte de verdade no banco.
+The basics are implemented: person registration, company registration, login, logout, password
+change, and a temporary password for company members. The session is a `__session` cookie holding
+a signed JWT, in `src/lib/auth/session.ts`.
 
-## Auth e onboarding
+Onboarding is still the weakest part of the project:
 
-Auth basico esta implementado:
+- the schema has an `onboardingCompletedAt` column
+- the onboarding server actions do not persist it consistently
+- the redirect depends on heuristics inside `ProfilesRepo`
 
-- registro pessoa
-- registro empresa
-- login
-- logout
-- troca de senha
-- senha temporaria para membros de empresa
+So auth exists and works; onboarding still needs to become an explicit state machine rather than a
+set of inferences.
 
-O fluxo de sessao usa cookie `__session` com JWT assinado em `src/lib/auth/session.ts`.
+## The main domains
 
-O ponto mais fragil do projeto continua sendo o onboarding:
+### Companies
 
-- existe campo `onboardingCompletedAt` no schema
-- mas as server actions de onboarding nao o persistem de forma consistente
-- o redirecionamento depende de heuristicas no `ProfilesRepo`
+Working: the public listing, the public profile by slug, the company dashboard, profile editing,
+project management, member management, and reporting a company.
 
-Conclusao: auth existe e funciona, onboarding ainda precisa ser consolidado como fluxo de estado explicito.
+Actually open:
 
-## Dominios principais
+- harden the per-role permissions on the sensitive routes
+- finish the administrative verification flow
 
-### Empresas
+### Complaints
 
-Ja existe:
+Working: creation, the reporter's own listing, the detail page, messages, status, and the public
+listing per company.
 
-- listagem publica
-- perfil publico por slug
-- dashboard da empresa
-- edicao de perfil
-- gestao de projetos
-- gestao de membros
-- denuncia de empresa
+Actually open:
 
-Pendencias reais:
-
-- endurecer permissoes por papel em rotas sensiveis
-- fechar fluxo administrativo de verificacao
-
-### Reclamacoes
-
-Ja existe:
-
-- criacao
-- listagem da usuaria
-- detalhe
-- mensagens
-- status
-- listagem publica por empresa
-
-Pendencias reais:
-
-- storage de anexos pronto para producao
-- revisar autorizacao e download/consulta de anexos
+- production-ready storage for attachments
+- review authorisation for reading and downloading an attachment
 
 ### Blog
 
-Ja existe:
+Working: admin CRUD, tags, the Markdown editor, image upload through UploadThing, and the public
+listing and detail pages.
 
-- CRUD admin
-- tags
-- editor markdown
-- upload de imagem com UploadThing
-- listagem publica e detalhe
+Actually open:
 
-Pendencias reais:
-
-- alinhar regra de publicacao entre lista e detalhe
-- remover endpoint mock de destaque e usar dados reais
+- apply one publishing rule to both the list and the detail page
+- drop the featured-post mock endpoint and read real data
 
 ### Admin
 
-Ja existe:
+Working: a layout gated on the `ADMIN` role, a starting panel, and the blog admin CRUD.
 
-- layout protegido por role `ADMIN`
-- painel inicial
-- CRUD de blog admin
+Not really there:
 
-Nao existe de verdade:
-
-- auditoria real
-- moderacao/verificacao real de empresas
+- real auditing
+- real company moderation and verification
 
 ## Frontend
 
-Telas com fluxo real:
+Screens with a real flow: login and registration, person and company onboarding, the user's own
+area, complaints, the public company profile, the company dashboard, the blog, and settings.
 
-- login e registro
-- onboarding pessoa e empresa
-- area da usuaria
-- reclamacoes
-- perfil publico de empresa
-- dashboard da empresa
-- blog
-- settings
+Still partial or placeholders: `app/admin/companies` and `app/admin/audit`.
 
-Telas ainda parciais ou placeholders:
+The project is visually advanced, with uneven maturity between areas.
 
-- `app/admin/companies`
-- `app/admin/audit`
+## Security
 
-O projeto esta visualmente avancado, mas com maturidade desigual entre as areas.
+What is good: the session is an HTTP-only cookie, admin is checked server-side, and the main API
+handlers check for a session.
 
-## Seguranca
+What needs work:
 
-Pontos bons:
+- the company-area routes still accept any member for operations that ought to require `OWNER` or
+  `ADMIN`
+- complaint attachment upload writes to local disk, which is fine in development and not in a real
+  deployment
 
-- sessao via cookie HTTP-only
-- checagem server-side para admin
-- checagem de sessao nas APIs principais
+## Technical quality
 
-Pontos que exigem ajuste:
+What is good: the repo layer exists, the Zod DTOs exist, the build passes, and since 2026-09-03
+there is a test runner — Vitest in CI, plus Playwright end-to-end and a check that keeps the
+manuals in sync.
 
-- rotas da area empresa ainda aceitam qualquer membro em operacoes que deveriam exigir `OWNER` ou `ADMIN`
-- upload de anexos de reclamacao grava em disco local, o que e aceitavel em dev, nao em deploy real
+Debt worth naming:
 
-## Qualidade tecnica
+- onboarding is still poorly defined as state
+- part of the company UI follows a different technical pattern from the rest
+- unit coverage is two files; see the gap list in `docs/architecture/ARCHITECTURE.md`
 
-Pontos bons:
+## Conclusion
 
-- camada `repo` existe
-- DTOs com Zod existem
-- build passa
+This is closer to a navigable MVP than to an empty prototype. The base is there, and three things
+still need closing:
 
-Divida tecnica relevante:
-
-- onboarding ainda mal definido como estado
-- legado documental antigo e contraditorio
-- parte da UI de empresa usa padrao tecnico diferente do restante
-- warnings de lint ainda existem
-
-## Conclusao
-
-O projeto esta mais proximo de um MVP navegavel do que de um prototipo vazio. A base principal existe, mas ainda faltam tres fechamentos importantes:
-
-1. consolidar onboarding
-2. endurecer autorizacao da area empresa
-3. implementar admin real para verificacao e auditoria
+1. consolidate onboarding
+2. harden authorisation in the company area
+3. build real admin for verification and auditing

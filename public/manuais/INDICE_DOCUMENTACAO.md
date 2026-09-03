@@ -443,7 +443,7 @@ Detalhamento:
 - `src/db/schema.ts` - Estrutura de dados
 - `docs/project-status.md` - Status do projeto
 - `docs/mvp-backlog.md` - Features planejadas
-- `docs/acessibilidade-inclusiva.md` - Diretrizes
+- `docs/inclusive-accessibility.md` - Diretrizes
 
 ### Guias Externos
 - [Next.js Documentation](https://nextjs.org/docs)
