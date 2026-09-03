@@ -11,12 +11,12 @@
 Todos os logins do seed.ts funcionam:
 
 ```
-✅ maria@exemplo.com / senha123 (USER)
-✅ empresa@construtorax.com / senha123 (COMPANY)  
-✅ ana@exemplo.com / senha123 (USER)
-✅ admin@comunicamulher.com.br / senha123 (ADMIN)
+✅ maria@exemplo.com / <seed password: see `defaultPassword` in scripts/seed.ts> (USER)
+✅ empresa@construtorax.com / <seed password: see `defaultPassword` in scripts/seed.ts> (COMPANY)  
+✅ ana@exemplo.com / <seed password: see `defaultPassword` in scripts/seed.ts> (USER)
+✅ admin@comunicamulher.com.br / <seed password: see `defaultPassword` in scripts/seed.ts> (ADMIN)
 
-Senha padrão: senha123
+Senha padrão: <seed password: see `defaultPassword` in scripts/seed.ts>
 ```
 
 ---
@@ -197,10 +197,10 @@ O ReclameMulher MVP v0.1.0 está:
 
 **Logins Válidos:**
 ```
-maria@exemplo.com / senha123 (pessoa)
-empresa@construtorax.com / senha123 (empresa)
-ana@exemplo.com / senha123 (pessoa)
-admin@comunicamulher.com.br / senha123 (admin)
+maria@exemplo.com / <seed password: see `defaultPassword` in scripts/seed.ts> (pessoa)
+empresa@construtorax.com / <seed password: see `defaultPassword` in scripts/seed.ts> (empresa)
+ana@exemplo.com / <seed password: see `defaultPassword` in scripts/seed.ts> (pessoa)
+admin@comunicamulher.com.br / <seed password: see `defaultPassword` in scripts/seed.ts> (admin)
 ```
 
 **Próxima Etapa:** Teste completo de todos os 43 fluxos mapeados

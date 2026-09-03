@@ -11,7 +11,7 @@
 ### 1. **Login Flow - Pessoa** ✅
 ```
 Email: maria@exemplo.com
-Senha: senha123
+Senha: <seed password: see `defaultPassword` in scripts/seed.ts>
 Resultado:
   ✅ POST /api/auth/login: 200 OK
   ✅ GET /app (dashboard): 307 (redirect OK)
@@ -21,7 +21,7 @@ Status: FUNCIONANDO
 ### 2. **Login Flow - Empresa** ✅
 ```
 Email: empresa@construtorax.com
-Senha: senha123
+Senha: <seed password: see `defaultPassword` in scripts/seed.ts>
 Resultado:
   ✅ POST /api/auth/login: 200 OK
   ✅ GET /app/company/dashboard: 200 OK
@@ -31,7 +31,7 @@ Status: FUNCIONANDO
 ### 3. **Login Flow - Admin** ✅
 ```
 Email: admin@comunicamulher.com.br
-Senha: senha123
+Senha: <seed password: see `defaultPassword` in scripts/seed.ts>
 Resultado:
   ✅ POST /api/auth/login: 200 OK
   ✅ GET /app/admin: 200 OK
@@ -168,7 +168,7 @@ curl -X POST http://localhost:5000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "maria@exemplo.com",
-    "password": "senha123"
+    "password": "<seed password: see `defaultPassword` in scripts/seed.ts>"
   }'
 ```
 

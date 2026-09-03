@@ -116,7 +116,7 @@ async function main() {
   );
   children.push(
     new Paragraph(
-      "Ambiente local: npm run dev → http://localhost:5000. Logins de teste no README do repositório (senha senha123).",
+      "Ambiente local: npm run dev → http://localhost:5000. Logins de teste no README do repositório (see scripts/seed.ts).",
     ),
   );
   children.push(

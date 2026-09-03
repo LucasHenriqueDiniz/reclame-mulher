@@ -601,7 +601,7 @@ Esse futuro começa com sua participação hoje.
   console.log("✓ Tags attached to the posts");
 
   console.log("\n✅ Seed finished.\n");
-  console.log("Test logins (password for all of them: senha123):");
+  console.log(`Test logins (password for all of them: ${defaultPassword}):`);
   console.log("  - maria@exemplo.com (person)");
   console.log("  - empresa@construtorax.com (company – Construtora X)");
   console.log("  - ana@exemplo.com (person)");

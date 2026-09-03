@@ -102,7 +102,7 @@ async function main() {
   console.log(line("─"));
   console.log("  Próximos passos para o PDF:");
   console.log("  • Rodar o app: npm run dev → http://localhost:5000");
-  console.log("  • Logins de teste: ver README.md (senha: senha123)");
+  console.log("  • Logins de teste: ver README.md (see scripts/seed.ts)");
   console.log("  • Preencher assets/evidencias-desenvolvimento-tcc.md");
   console.log(line("─"));
   console.log("");

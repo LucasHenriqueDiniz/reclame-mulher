@@ -49,10 +49,10 @@
 
 ### 3. Autenticação
 - ✅ **Seed:** 4 usuários de teste criados com sucesso
-  - maria@exemplo.com (pessoa) / senha123
-  - empresa@construtorax.com (empresa) / senha123
-  - ana@exemplo.com (pessoa) / senha123
-  - admin@comunicamulher.com.br (admin) / senha123
+  - maria@exemplo.com (pessoa) / <seed password: see `defaultPassword` in scripts/seed.ts>
+  - empresa@construtorax.com (empresa) / <seed password: see `defaultPassword` in scripts/seed.ts>
+  - ana@exemplo.com (pessoa) / <seed password: see `defaultPassword` in scripts/seed.ts>
+  - admin@comunicamulher.com.br (admin) / <seed password: see `defaultPassword` in scripts/seed.ts>
 
 - ✅ **Proteção:** Rotas autenticadas protegidas
 - ✅ **Dados:** Reclamações, mensagens, projetos criados

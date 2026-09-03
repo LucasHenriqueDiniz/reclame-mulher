@@ -62,7 +62,7 @@ src/
 - `/blog` — Blog
 - `/ajuda` — Logins de teste e links
 
-## Logins de teste (senha: senha123)
+## Logins de teste (senha: <seed password: see `defaultPassword` in scripts/seed.ts>)
 - `maria@exemplo.com` — Pessoa
 - `empresa@construtorax.com` — Empresa
 - `admin@comunicamulher.com.br` — Admin
