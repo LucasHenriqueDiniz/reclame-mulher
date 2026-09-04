@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth/session";
 import { CompaniesRepo } from "@/server/repos/companies";
-import { ProjectsRepo } from "@/server/repos/projects";
 import { ComplaintsRepo } from "@/server/repos/complaints";
 import { CompanyUsersRepo } from "@/server/repos/company-users";
 import { CompanyDashboard } from "./_components/company-dashboard";
@@ -21,10 +20,12 @@ export default async function CompanyDashboardPage({
   const companyRow = userCompanies[0];
   const companyId = companyRow.company.id;
 
-  const [company, stats, projects, complaints] = await Promise.all([
+  // The projects tab fetches its own list through `useCompanyProjects`, so that
+  // query is not here: it would be paid for on every dashboard visit, and
+  // `complaints` is the tab that opens by default.
+  const [company, stats, complaints] = await Promise.all([
     CompaniesRepo.findById(companyId),
     CompaniesRepo.getStats(companyId),
-    ProjectsRepo.findByCompany(companyId),
     ComplaintsRepo.findByCompany(companyId),
   ]);
 
@@ -41,13 +42,6 @@ export default async function CompanyDashboardPage({
       scheduledPermanentDeletionAt: company.scheduledPermanentDeletionAt?.toISOString() ?? null,
     },
     stats,
-    projects: projects.map((p: (typeof projects)[number]) => ({
-      ...p,
-      createdAt: p.createdAt.toISOString(),
-      updatedAt: p.updatedAt?.toISOString() ?? null,
-      startDate: p.startDate?.toISOString() ?? null,
-      endDate: p.endDate?.toISOString() ?? null,
-    })),
     complaints: complaints.map((c: (typeof complaints)[number]) => ({
       ...c,
       createdAt: c.createdAt instanceof Date ? c.createdAt.toISOString() : String(c.createdAt),

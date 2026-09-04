@@ -184,8 +184,14 @@ async function main() {
   console.log("✓ Companies created (Construtora X, Transportes Sul)");
 
   // ─── Company users (João = Construtora X) ────────────────────────────────
+  // OWNER, because that is the role `POST /api/auth/register-company` gives the
+  // person who registers a company — this seeded membership stands in for one.
+  // It was "MEMBER", which no signup path produces: it left Construtora X with
+  // no owner, and `canManageCompany` refuses MEMBER, so the only seeded company
+  // account got a 403 from every project, profile and team route it has a
+  // button for.
   await db.insert(schema.companyUsers).values([
-    { userId: user2.id, companyId: company1.id, role: "MEMBER" },
+    { userId: user2.id, companyId: company1.id, role: "OWNER" },
   ]);
   console.log("✓ Company user: empresa@construtorax.com → Construtora X");
 
