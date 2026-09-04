@@ -143,3 +143,6 @@ real E2E pass.
   own card — `@tanstack/react-query` is already a dependency.
 - `ProjectsTab` passes `companyId=""` to `CompanyProjectList`, whose props declare `companyId?: string`
   and never read it. A dead prop with a misleading empty-string value. Pre-existing, moved verbatim.
+
+Both were taken up by `docs/plans/projects-tab-query/slice-01-replace-the-hand-rolled-cache.md`, which
+also ran the E2E pass the four project paths were left needing above.

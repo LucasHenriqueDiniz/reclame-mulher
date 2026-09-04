@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useId, useState, useTransition } from "react";
 import { companyTheme as S } from "./theme";
 import { ModalShell } from "./ModalShell";
 
@@ -11,6 +11,20 @@ export type ProjectFormValues = {
   status: string;
   start_date: string;
   end_date: string;
+};
+
+/**
+ * What leaves the form on save: the fields above with the untouched ones dropped
+ * rather than sent as empty strings, which is what the update route needs to
+ * tell "clear this" from "leave this alone".
+ */
+export type ProjectSubmitValues = {
+  name: string;
+  description?: string;
+  location?: string;
+  status: string;
+  start_date?: string;
+  end_date?: string;
 };
 
 const STATUS_OPTIONS = [
@@ -29,10 +43,17 @@ const emptyForm: ProjectFormValues = {
   end_date: "",
 };
 
+/**
+ * The create-and-edit form. It owns the fields, the required-title check and the
+ * pending and error state around the save, but not the save itself: `onSubmit`
+ * is handed in, so the caller decides where a project is written and what is
+ * refreshed afterwards. It used to `fetch` the route directly, which is why a
+ * saved project could reach the server without reaching the caller's list.
+ */
 export function CompanyProjectFormModal({
   project,
   onClose,
-  onSuccess,
+  onSubmit,
 }: {
   project?: {
     id: string;
@@ -44,7 +65,7 @@ export function CompanyProjectFormModal({
     endDate?: string | null;
   } | null;
   onClose: () => void;
-  onSuccess?: (p: unknown) => void;
+  onSubmit: (values: ProjectSubmitValues) => Promise<unknown>;
 }) {
   const [form, setForm] = useState<ProjectFormValues>(
     project
@@ -60,6 +81,7 @@ export function CompanyProjectFormModal({
   );
   const [pending, startTransition] = useTransition();
   const [err, setErr] = useState("");
+  const statusId = useId();
 
   function submit() {
     setErr("");
@@ -68,29 +90,19 @@ export function CompanyProjectFormModal({
       return;
     }
     startTransition(async () => {
-      const url = project
-        ? `/api/company/projects/${project.id}`
-        : "/api/company/projects";
-      const method = project ? "PATCH" : "POST";
-      const body = {
-        name: form.name,
-        description: form.description || undefined,
-        location: form.location || undefined,
-        status: form.status,
-        start_date: form.start_date || undefined,
-        end_date: form.end_date || undefined,
-      };
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        setErr(data.error ?? "Erro ao salvar");
+      try {
+        await onSubmit({
+          name: form.name,
+          description: form.description || undefined,
+          location: form.location || undefined,
+          status: form.status,
+          start_date: form.start_date || undefined,
+          end_date: form.end_date || undefined,
+        });
+      } catch (error) {
+        setErr(error instanceof Error ? error.message : "Erro ao salvar");
         return;
       }
-      onSuccess?.(data.project ?? data);
       onClose();
     });
   }
@@ -143,6 +155,7 @@ export function CompanyProjectFormModal({
       />
       <div style={{ marginBottom: 16 }}>
         <label
+          htmlFor={statusId}
           style={{
             display: "block",
             fontSize: 13,
@@ -154,6 +167,7 @@ export function CompanyProjectFormModal({
           Status do projeto
         </label>
         <select
+          id={statusId}
           value={form.status}
           onChange={(e) => set("status", e.target.value)}
           style={{
@@ -248,6 +262,7 @@ function Input({
   placeholder?: string;
   textarea?: boolean;
 }) {
+  const id = useId();
   const style = {
     width: "100%" as const,
     padding: "10px 14px",
@@ -263,6 +278,7 @@ function Input({
   return (
     <div style={{ marginBottom: 16 }}>
       <label
+        htmlFor={id}
         style={{
           display: "block",
           fontSize: 13,
@@ -275,6 +291,7 @@ function Input({
       </label>
       {textarea ? (
         <textarea
+          id={id}
           rows={3}
           style={style}
           value={value}
@@ -283,6 +300,7 @@ function Input({
         />
       ) : (
         <input
+          id={id}
           type={type}
           style={style}
           value={value}

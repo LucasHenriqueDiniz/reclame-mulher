@@ -141,6 +141,7 @@ export function CompanyProjectList({
               <button
                 type="button"
                 onClick={() => onEdit(p)}
+                aria-label={`Editar ${p.name}`}
                 style={{
                   fontSize: 12,
                   color: S.primary,
@@ -156,6 +157,7 @@ export function CompanyProjectList({
               <button
                 type="button"
                 onClick={() => onDelete(p)}
+                aria-label={`Excluir ${p.name}`}
                 style={{
                   fontSize: 12,
                   color: S.red,
