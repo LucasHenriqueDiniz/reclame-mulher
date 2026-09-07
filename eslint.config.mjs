@@ -21,6 +21,12 @@ const eslintConfig = [
       // Snippet templates for the editor, not application code. They are written to
       // be pasted and filled in, so their placeholder parameters are unused by design.
       ".opencodeshare/**",
+      // Claude Code agent worktrees: per-machine scratch checkouts of this same
+      // repository, already untracked by .gitignore. Without this, every file in
+      // the working copy gets linted twice, and the ignores above do not reach the
+      // second copy because they are anchored at the root — a worktree with an
+      // agent's work in progress makes `pnpm lint` exit 1 here.
+      ".claude/worktrees/**",
       // Playwright output. `.report/` is a minified HTML bundle, so linting it produces
       // thousands of findings in generated code and makes `pnpm lint` exit 1 for anyone
       // who has run the suite — measured at 3027 problems, 254 of them errors.
