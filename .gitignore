@@ -67,3 +67,8 @@ next-env.d.ts
 /e2e/.report/
 /test-results/
 /playwright-report/
+
+# Screenshot capture run output. The figures themselves live in assets/telas/
+# and are tracked, the same way assets/figma/ already is — this is only the
+# Playwright run's scratch directory.
+/screens/.results/

@@ -25,7 +25,10 @@
     "demo:checklist": "node --import tsx scripts/demo-tests.ts",
     "manuais:sync": "node --import tsx scripts/sync-manuais.ts",
     "manuais:check": "node --import tsx scripts/sync-manuais.ts --check",
-    "test": "vitest"
+    "test": "vitest",
+    "telas": "playwright test --config=playwright.screens.config.ts",
+    "manual:docx": "node --import tsx scripts/generate-docx.ts manual",
+    "relatorio:docx": "node --import tsx scripts/generate-docx.ts relatorio"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
