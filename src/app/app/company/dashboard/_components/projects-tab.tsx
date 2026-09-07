@@ -7,74 +7,56 @@ import {
   CompanyProjectFormModal,
   CompanyDeleteProjectModal,
   SearchInput,
+  type ProjectSubmitValues,
 } from "@/components/company";
-
-export type Project = {
-  id: string;
-  name: string;
-  description: string | null;
-  location: string | null;
-  status: string;
-  startDate: string | null;
-  endDate: string | null;
-  createdAt?: string;
-};
+import {
+  useCompanyProjects,
+  useCreateProject,
+  useDeleteProject,
+  useUpdateProject,
+  type CompanyProject,
+} from "@/hooks/use-company-projects";
+import { filterProjects } from "./projects-tab-helpers";
 
 /**
  * The dashboard's projects tab, with create, edit, delete and search.
  *
- * It keeps a local copy of the server's list: `projects` is seeded from the
- * `initial` prop and then mutated by hand on every save and delete, so the
- * component's list and the database can drift until the page is reloaded. That
- * cache predates this file — moving the tab out of the dashboard only made it
- * easier to see. Replacing it with `@tanstack/react-query`, already a
- * dependency, is its own change and wants its own proof.
+ * The list is a `@tanstack/react-query` query, not component state seeded from a
+ * prop: create, edit and delete each invalidate that query, so what is rendered
+ * comes from a read of the database rather than from the payload the modal
+ * happened to return. Before this, the tab hand-mutated a local array on every
+ * save and delete and nothing refetched — so its list and the database drifted
+ * until the page was reloaded.
+ *
+ * Nothing is fetched on the server for this tab. `projects` was in the
+ * dashboard page's `Promise.all`, which paid for the query on every dashboard
+ * visit even though `complaints` is the tab that opens by default; the query
+ * runs when this component first mounts instead.
  */
-export function ProjectsTab({ initial }: { initial: Project[] }) {
-  const [projects, setProjects] = useState(initial);
+export function ProjectsTab() {
+  const projects = useCompanyProjects();
+  const createProject = useCreateProject();
+  const updateProject = useUpdateProject();
+  const deleteProject = useDeleteProject();
+
   const [showFormModal, setShowFormModal] = useState(false);
-  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [editingProject, setEditingProject] = useState<CompanyProject | null>(null);
   const [deletingProject, setDeletingProject] = useState<{
     id: string;
     name: string;
   } | null>(null);
   const [search, setSearch] = useState("");
 
-  const filtered = search.trim()
-    ? projects.filter(
-        (p) =>
-          p.name.toLowerCase().includes(search.toLowerCase()) ||
-          (p.description?.toLowerCase().includes(search.toLowerCase()) ?? false)
-      )
-    : projects;
+  const filtered = filterProjects(projects.data ?? [], search);
 
-  const handleSave = (p: unknown) => {
-    const proj = p as Project & { createdAt?: string };
-    if (editingProject) {
-      setProjects((prev) =>
-        prev.map((x) =>
-          x.id === editingProject.id
-            ? {
-                ...x,
-                ...proj,
-                startDate: proj.startDate ?? x.startDate,
-                endDate: proj.endDate ?? x.endDate,
-              }
-            : x
-        )
-      );
-    } else {
-      setProjects((prev) => [...prev, { ...proj }]);
-    }
+  const submitProject = (values: ProjectSubmitValues) =>
+    editingProject
+      ? updateProject.mutateAsync({ id: editingProject.id, input: values })
+      : createProject.mutateAsync(values);
+
+  const closeFormModal = () => {
     setShowFormModal(false);
     setEditingProject(null);
-  };
-
-  const handleDeleteSuccess = () => {
-    if (deletingProject) {
-      setProjects((prev) => prev.filter((x) => x.id !== deletingProject.id));
-      setDeletingProject(null);
-    }
   };
 
   const projectForEdit = editingProject
@@ -126,40 +108,62 @@ export function ProjectsTab({ initial }: { initial: Project[] }) {
           Adicionar novo projeto
         </button>
       </div>
-      <CompanyProjectList
-        projects={filtered}
-        companyId=""
-        isLoggedIn={true}
-        showActions={true}
-        onEdit={(p) => {
-          setEditingProject({
-            ...p,
-            description: p.description ?? null,
-            location: p.location ?? null,
-            startDate: p.startDate ?? null,
-            endDate: p.endDate ?? null,
-          } as Project);
-          setShowFormModal(true);
-        }}
-        onDelete={(p) => setDeletingProject({ id: p.id, name: p.name })}
-      />
+      {projects.isPending ? (
+        <Notice>Carregando projetos…</Notice>
+      ) : projects.isError ? (
+        <Notice color={S.red}>
+          {projects.error instanceof Error
+            ? projects.error.message
+            : "Erro ao carregar projetos"}
+        </Notice>
+      ) : (
+        <CompanyProjectList
+          projects={filtered}
+          isLoggedIn={true}
+          showActions={true}
+          onEdit={(p) => {
+            setEditingProject({
+              ...p,
+              description: p.description ?? null,
+              location: p.location ?? null,
+              startDate: p.startDate ?? null,
+              endDate: p.endDate ?? null,
+            } as CompanyProject);
+            setShowFormModal(true);
+          }}
+          onDelete={(p) => setDeletingProject({ id: p.id, name: p.name })}
+        />
+      )}
       {showFormModal && (
         <CompanyProjectFormModal
           project={projectForEdit}
-          onClose={() => {
-            setShowFormModal(false);
-            setEditingProject(null);
-          }}
-          onSuccess={handleSave}
+          onClose={closeFormModal}
+          onSubmit={submitProject}
         />
       )}
       {deletingProject && (
         <CompanyDeleteProjectModal
           project={{ id: deletingProject.id, name: deletingProject.name }}
           onClose={() => setDeletingProject(null)}
-          onSuccess={handleDeleteSuccess}
+          onConfirm={() => deleteProject.mutateAsync(deletingProject.id)}
         />
       )}
+    </div>
+  );
+}
+
+/** The loading and error lines, styled like the list's own empty state. */
+function Notice({ children, color }: { children: string; color?: string }) {
+  return (
+    <div
+      style={{
+        textAlign: "center",
+        padding: "48px 0",
+        color: color ?? S.muted,
+        fontSize: 14,
+      }}
+    >
+      {children}
     </div>
   );
 }

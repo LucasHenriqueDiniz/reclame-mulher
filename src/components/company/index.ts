@@ -34,7 +34,7 @@ export type { SearchCompanyItem } from "./SearchCompany";
 
 export { CompanyReportModal } from "./CompanyReportModal";
 export { CompanyProjectFormModal } from "./CompanyProjectFormModal";
-export type { ProjectFormValues } from "./CompanyProjectFormModal";
+export type { ProjectFormValues, ProjectSubmitValues } from "./CompanyProjectFormModal";
 export { CompanyDeleteProjectModal } from "./CompanyDeleteProjectModal";
 export type { ProjectItem } from "./CompanyDeleteProjectModal";
 export { CompanyDeleteAccountModal } from "./CompanyDeleteAccountModal";

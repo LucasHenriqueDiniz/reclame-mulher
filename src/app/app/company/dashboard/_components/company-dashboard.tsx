@@ -7,7 +7,7 @@ import {
   MetricCard,
 } from "@/components/company";
 import { ComplaintsTab, type Complaint } from "./complaints-tab";
-import { ProjectsTab, type Project } from "./projects-tab";
+import { ProjectsTab } from "./projects-tab";
 import { SettingsTab, type Company } from "./settings-tab";
 
 type Stats = {
@@ -23,13 +23,11 @@ type Stats = {
 export function CompanyDashboard({
   company,
   stats,
-  projects,
   complaints,
   initialTab,
 }: {
   company: Company;
   stats: Stats;
-  projects: Project[];
   complaints: Complaint[];
   initialTab: string;
 }) {
@@ -118,7 +116,7 @@ export function CompanyDashboard({
             detailBasePath="/app/company/complaints"
           />
         )}
-        {tab === "projects" && <ProjectsTab initial={projects} />}
+        {tab === "projects" && <ProjectsTab />}
         {tab === "settings" && <SettingsTab company={company} />}
       </div>
     </div>
