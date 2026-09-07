@@ -197,7 +197,7 @@ export function CompanyComplaintDetailContent({
                 {complaint.title}
               </h1>
               <p className="text-sm text-white/80 font-['Poppins']">
-                Relato <span className="font-mono font-semibold">#{protocolId(complaint.id)}</span>
+                Relato <span className="font-mono font-semibold">{protocolId(complaint.id)}</span>
               </p>
             </div>
             <StatusBadge status={complaint.status} />
