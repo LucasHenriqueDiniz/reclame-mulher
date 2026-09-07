@@ -49,7 +49,7 @@ export type CompanyStats = {
  *
  * `CompaniesRepo.getStats` returns null — not zero — for that company, and every call site
  * used to fall back to a bare "-", which reads as a rendering failure rather than as an
- * absence. The two formatters below share this constant so the three places that display
+ * absence. The two formatters below share this constant so the four places that display
  * the metric cannot drift apart on what "no data" is called.
  */
 const NO_RESPONSE_HISTORY = "Sem histórico";

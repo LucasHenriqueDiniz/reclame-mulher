@@ -2,17 +2,15 @@ import { describe, expect, it } from "vitest";
 import { responseTimeLabel, responseTimeValue } from "./utils";
 
 /**
- * Three components display a company's average response time, in two different shapes: a
- * bare value under its own label (the public profile's metric tiles and performance card)
- * and a standalone sentence (the complaint detail sidebar, whose icon row has no label).
+ * Four components display a company's average response time, in two different shapes: a
+ * bare value under a label of its own — the public profile's metric tiles and performance
+ * card, and the dashboard's sub-line, which prefixes its own "Resp. média:" — and a
+ * standalone sentence in the complaint detail sidebar, whose icon row has no label.
  *
- * They share this module so the empty case cannot drift — all three used to write their own
- * `avgResponseHours != null ? ... : "-"`, and the dash was the bug.
- *
- * A fourth reader, the company dashboard, is deliberately not on these helpers: its average
- * is a sub-line under another metric and it already falls back to `undefined`, which drops
- * the line rather than printing a dash. Routing it through here would put a placeholder
- * where today there is nothing.
+ * They share this module so the empty case cannot drift. Three of them used to write their
+ * own `avgResponseHours != null ? ... : "-"`, and the dash was the bug; the dashboard fell
+ * back to `undefined`, which hid the line instead, so a company with no history could not
+ * tell the metric apart from one that had scrolled off.
  */
 describe("responseTimeValue", () => {
   it("renders the average as a duration", () => {
