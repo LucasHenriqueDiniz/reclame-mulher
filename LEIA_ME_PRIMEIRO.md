@@ -1,8 +1,8 @@
-# 📖 Manual da Plataforma ReclameMulher
+# 📖 Manual da Plataforma ComunicaMulher
 
 ## Bem-vinda ao Guia Completo!
 
-Você está recebendo um **manual visual e completo** da plataforma ReclameMulher com fluxos, guias e documentação estruturada.
+Você está recebendo um **manual visual e completo** da plataforma ComunicaMulher com fluxos, guias e documentação estruturada.
 
 ---
 
@@ -100,7 +100,7 @@ Você está recebendo um **manual visual e completo** da plataforma ReclameMulhe
 ## 📊 O Que a Plataforma Faz
 
 ### Em Uma Frase
-**ReclameMulher conecta mulheres impactadas por obras de infraestrutura com as empresas responsáveis, permitindo registro de reclamações, respostas estruturadas, acompanhamento e resolução.**
+**ComunicaMulher conecta mulheres impactadas por obras de infraestrutura com as empresas responsáveis, permitindo registro de reclamações, respostas estruturadas, acompanhamento e resolução.**
 
 ### Três Pilares
 
@@ -194,10 +194,10 @@ Você tem 3 formatos para diferentes contextos:
 ## 📞 Informações de Suporte
 
 ### Canais Oficiais
-- **Email**: suporte@reclamemulher.com.br
+- **Email**: suporte@comunicamulher.com.br
 - **WhatsApp**: (11) 9XXXX-XXXX
-- **Redes Sociais**: @reclamemulher (Instagram, Twitter)
-- **Website**: reclamemulher.com.br
+- **Redes Sociais**: @comunicamulher (Instagram, Twitter)
+- **Website**: comunicamulher.com.br
 - **Página de Ajuda**: /ajuda (sem login necessário)
 
 ### Em Caso de Dúvidas
@@ -346,7 +346,7 @@ Selo de confiabilidade que empresa pode solicitar. Requer validação de documen
 
 ## 🎯 Objetivo Final
 
-**ReclameMulher busca:**
+**ComunicaMulher busca:**
 - 🎯 Empoderar mulheres com voz
 - 🎯 Tornar empresas mais responsáveis
 - 🎯 Melhorar infraestrutura urbana
@@ -359,7 +359,7 @@ Selo de confiabilidade que empresa pode solicitar. Requer validação de documen
 
 **Data de Criação**: 2025  
 **Versão**: 1.0  
-**Plataforma**: ReclameMulher  
+**Plataforma**: ComunicaMulher  
 **Stack**: Next.js + PostgreSQL  
 
 ### Changelog
@@ -369,7 +369,7 @@ Selo de confiabilidade que empresa pode solicitar. Requer validação de documen
 
 ## 👨‍⚖️ Termos Importantes
 
-- **ReclameMulher**: Plataforma de denúncias e acompanhamento
+- **ComunicaMulher**: Plataforma de denúncias e acompanhamento
 - **Usuária**: Qualquer pessoa que usa a plataforma
 - **Empresa**: Organização que responde reclamações
 - **Admin**: Moderador que gerencia plataforma
@@ -381,7 +381,7 @@ Selo de confiabilidade que empresa pode solicitar. Requer validação de documen
 
 ## 🙏 Agradecimentos
 
-Este manual foi desenvolvido para tornar a plataforma ReclameMulher mais acessível, compreensível e impactante para todos os usuários.
+Este manual foi desenvolvido para tornar a plataforma ComunicaMulher mais acessível, compreensível e impactante para todos os usuários.
 
 **Versões Disponíveis:**
 - 📄 HTML (interativo) - MANUAL_PLATAFORMA.html
@@ -401,12 +401,12 @@ Este manual foi desenvolvido para tornar a plataforma ReclameMulher mais acessí
 
 ---
 
-**Bem-vinda ao ReclameMulher! 💪👩**
+**Bem-vinda ao ComunicaMulher! 💪👩**
 
 *Juntas, podemos fazer diferença.*
 
 ---
 
-**Documento preparado em 2025 | ReclameMulher Platform**
+**Documento preparado em 2025 | ComunicaMulher Platform**
 
-Para atualizações e mais informações: reclamemulher.com.br
+Para atualizações e mais informações: comunicamulher.com.br

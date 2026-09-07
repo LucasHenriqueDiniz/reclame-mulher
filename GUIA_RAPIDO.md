@@ -1,4 +1,4 @@
-# Guia Rápido ReclameMulher
+# Guia Rápido ComunicaMulher
 
 **Referência rápida para usuários e equipe**
 
@@ -9,7 +9,7 @@
 ### Para Novos Usuários
 
 #### Como Criar uma Reclamação?
-1. Acesse reclamemulher.com.br
+1. Acesse comunicamulher.com.br
 2. Clique em "Criar Reclamação" (no topo ou botão flutuante)
 3. Faça login ou continue sem account
 4. Siga 4 etapas simples:
@@ -229,7 +229,7 @@ Ao criar reclamação, escolha qual afetou você:
 ### "Não recebo email de resposta"
 - [ ] Verifique pasta de spam
 - [ ] Atualize email em `/app/settings/account`
-- [ ] Adicione suporte@reclamemulher.com.br à agenda
+- [ ] Adicione suporte@comunicamulher.com.br à agenda
 - [ ] Acesse painel direto para ler resposta
 
 ### "Esqueci minha senha"
@@ -249,17 +249,17 @@ Ao criar reclamação, escolha qual afetou você:
 
 | Canal | Acesso | Tempo Resposta |
 |-------|--------|-----------------|
-| **Email** | suporte@reclamemulher.com.br | 24-48h |
+| **Email** | suporte@comunicamulher.com.br | 24-48h |
 | **WhatsApp** | [11] 9XXXX-XXXX | 2-4h (dias úteis) |
 | **FAQ** | /ajuda (público, sem login) | Imediato |
-| **Redes Sociais** | @reclamemulher | 12-24h |
+| **Redes Sociais** | @comunicamulher | 12-24h |
 
 ---
 
 ## 📚 Recursos Úteis
 
 ### Páginas Públicas (não precisa login)
-- 🏠 **Homepage**: reclamemulher.com.br
+- 🏠 **Homepage**: comunicamulher.com.br
 - 📝 **Criar Reclamação**: /app/complaints/new (sem login)
 - 🏢 **Ver Empresa**: /company/[nome-da-empresa]
 - 📰 **Blog**: /blog (artigos e notícias)
@@ -387,7 +387,7 @@ A plataforma está disponível em:
 
 ### Se é Primeira Vez
 1. **Leia** este guia até o fim
-2. **Acesse** reclamemulher.com.br
+2. **Acesse** comunicamulher.com.br
 3. **Crie conta** (5 min)
 4. **Crie primeira reclamação** (10 min)
 5. **Compartilhe** para aumentar impacto
@@ -410,10 +410,10 @@ A plataforma está disponível em:
 
 ## 📞 Contato Direto
 
-**Email**: suporte@reclamemulher.com.br  
+**Email**: suporte@comunicamulher.com.br  
 **WhatsApp**: (11) 9XXXX-XXXX  
-**Instagram**: @reclamemulher  
-**Twitter**: @reclamemulher  
+**Instagram**: @comunicamulher  
+**Twitter**: @comunicamulher  
 
 ---
 

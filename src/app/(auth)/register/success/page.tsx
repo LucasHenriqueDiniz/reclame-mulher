@@ -28,7 +28,7 @@ export default function RegisterSuccessPage() {
               <h2 className="font-semibold text-blue-900">Verifique seu e-mail</h2>
               <p className="text-sm text-blue-800">
                 Enviamos um link de confirmação para o seu e-mail. Clique no link para ativar sua
-                conta e começar a usar o Reclame Mulher.
+                conta e começar a usar o ComunicaMulher.
               </p>
             </div>
           </div>

@@ -1,4 +1,4 @@
-# 📚 Índice Completo de Documentação - ReclameMulher
+# 📚 Índice Completo de Documentação - ComunicaMulher
 
 ## 📂 Arquivos de Documentação Criados
 
@@ -424,8 +424,8 @@ Detalhamento:
 ## 📞 Contato para Atualizações
 
 **Responsável pela Documentação:**
-- Email: docs@reclamemulher.com.br
-- Repository: github.com/reclamemulher/docs
+- Email: docs@comunicamulher.com.br
+- Repository: github.com/comunicamulher/docs
 - Issues: Use GitHub Issues para sugestões
 
 **Como Contribuir:**
@@ -471,7 +471,7 @@ Detalhamento:
 
 ## 🎉 Conclusão
 
-Você agora possui um **manual completo, visual e acessível** da plataforma ReclameMulher com:
+Você agora possui um **manual completo, visual e acessível** da plataforma ComunicaMulher com:
 
 ✅ 6 arquivos complementares  
 ✅ ~500 KB de conteúdo  
@@ -484,7 +484,7 @@ Você agora possui um **manual completo, visual e acessível** da plataforma Rec
 
 ---
 
-**Documentação da Plataforma ReclameMulher**  
+**Documentação da Plataforma ComunicaMulher**  
 *Versão 1.0 | 2025*
 
 Desenvolvido com ❤️ para empoderar mulheres
