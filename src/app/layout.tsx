@@ -35,7 +35,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Reclame Mulher",
+  title: "ComunicaMulher",
   description: "Plataforma de denúncias e reclamações",
 };
 

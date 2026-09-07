@@ -1,4 +1,4 @@
-# Diagramas de Fluxo - ReclameMulher
+# Diagramas de Fluxo - ComunicaMulher
 
 Representação visual dos principais processos da plataforma.
 
@@ -8,7 +8,7 @@ Representação visual dos principais processos da plataforma.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                        HOMEPAGE RECLAMEMULHER                           │
+│                        HOMEPAGE COMUNICAMULHER                          │
 └─────────────────────┬───────────────────────────────┬───────────────────┘
                       │                               │
              ┌────────▼─────────┐          ┌──────────▼──────────┐
@@ -143,7 +143,7 @@ Representação visual dos principais processos da plataforma.
     │ ID da Reclamação: RM-2024-0001234      │
     │                                         │
     │ Link de Acompanhamento:                 │
-    │ https://reclamemulher.com/comp/abc123  │
+    │ https://comunicamulher.com/comp/abc123 │
     │                                         │
     │ [Compartilhar ►]                        │
     │ [Ir para Dashboard]                     │
@@ -442,7 +442,7 @@ Representação visual dos principais processos da plataforma.
                         │
                         ▼
     ┌─────────────────────────────────────────┐
-    │  ✅ BEM-VINDA À RECLAMEMULHER!          │
+    │  ✅ BEM-VINDA À COMUNICAMULHER!         │
     ├─────────────────────────────────────────┤
     │                                         │
     │ Seu cadastro foi concluído com sucesso │
@@ -755,4 +755,4 @@ TIMELINE DE UMA RECLAMAÇÃO:
 
 ---
 
-**Documento criado em 2025 | ReclameMulher Platform Flows**
+**Documento criado em 2025 | ComunicaMulher Platform Flows**

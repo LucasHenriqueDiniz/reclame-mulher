@@ -1,4 +1,4 @@
-# Manual da Plataforma ReclameMulher
+# Manual da Plataforma ComunicaMulher
 
 **Guia Completo de Fluxos e Funcionalidades**
 
@@ -22,7 +22,7 @@ A homepage é o ponto de entrada da plataforma, acessível por usuários não au
 ### Elementos Principais
 
 #### 🎯 Header Principal
-- Logo ReclameMulher
+- Logo ComunicaMulher
 - Menu de navegação
 - Botões de Login/Registro
 - Seletor de idioma (PT/EN/ES)
@@ -732,7 +732,7 @@ Após criar reclamação, modal com opções:
 ┌─────────────────────────────────┐
 │ COMPARTILHAR RECLAMAÇÃO         │
 ├─────────────────────────────────┤
-│ Link: https://reclamemulher...  │ [Copiar]
+│ Link: https://comunicamulher... │ [Copiar]
 │                                 │
 │ Compartilhar em:                │
 │ 🟢 WhatsApp                     │
@@ -987,13 +987,13 @@ R: Atualmente não (1 role por conta). Crie segunda conta se necessário.
 
 ## Contato e Suporte
 
-- **Email**: suporte@reclamemulher.com.br
+- **Email**: suporte@comunicamulher.com.br
 - **WhatsApp**: (11) 9XXXX-XXXX
-- **Redes Sociais**: @reclamemulher (Instagram, Twitter)
-- **Página de Ajuda**: https://reclamemulher.com.br/ajuda
+- **Redes Sociais**: @comunicamulher (Instagram, Twitter)
+- **Página de Ajuda**: https://comunicamulher.com.br/ajuda
 
 ---
 
-**Documento criado em 2025 | ReclameMulher Platform Manual**
+**Documento criado em 2025 | ComunicaMulher Platform Manual**
 
 Para sugestões ou correções, entre em contato com a equipe de desenvolvimento.

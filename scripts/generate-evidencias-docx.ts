@@ -33,6 +33,9 @@ function walkImages(dir: string): string[] {
   }
   for (const name of names) {
     if (name.startsWith(".")) continue;
+    // assets/telas belongs to the end-user manual and the report;
+    // generate-docx.ts places those figures under their own captions.
+    if (name === "telas") continue;
     const full = join(dir, name);
     const st = statSync(full);
     if (st.isDirectory()) {
