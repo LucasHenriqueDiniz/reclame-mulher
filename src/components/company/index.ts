@@ -3,6 +3,8 @@ export {
   formatCnpj,
   formatDate,
   protocolId,
+  responseTimeLabel,
+  responseTimeValue,
   type CompanyBase,
   type CompanyStats,
 } from "./utils";

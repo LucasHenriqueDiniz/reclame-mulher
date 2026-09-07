@@ -1,7 +1,7 @@
 "use client";
 
 import { companyTheme as S } from "./theme";
-import type { CompanyStats } from "./utils";
+import { responseTimeValue, type CompanyStats } from "./utils";
 
 export function CompanyPerformanceCard({ stats }: { stats: CompanyStats }) {
   return (
@@ -46,11 +46,8 @@ export function CompanyPerformanceCard({ stats }: { stats: CompanyStats }) {
         />
         <Item
           label="Tempo médio de resposta"
-          value={
-            stats.avgResponseHours != null
-              ? `${stats.avgResponseHours}h`
-              : "-"
-          }
+          value={responseTimeValue(stats.avgResponseHours)}
+          muted={stats.avgResponseHours == null}
         />
         <Item
           label="Taxa de resolução"
@@ -62,14 +59,22 @@ export function CompanyPerformanceCard({ stats }: { stats: CompanyStats }) {
   );
 }
 
+/**
+ * `muted` is for a value that is a placeholder rather than a measurement — "Sem histórico"
+ * where the other items show a number. It drops the 20px figure type, which that phrase
+ * overflows in a 140px grid column, and greys the text so the tile does not read as though
+ * the company scored a word.
+ */
 function Item({
   label,
   value,
   color,
+  muted = false,
 }: {
   label: string;
   value: string | number;
   color?: string;
+  muted?: boolean;
 }) {
   return (
     <div>
@@ -78,9 +83,9 @@ function Item({
       </div>
       <div
         style={{
-          fontSize: 20,
-          fontWeight: 700,
-          color: color ?? S.text,
+          fontSize: muted ? 13 : 20,
+          fontWeight: muted ? 600 : 700,
+          color: muted ? S.muted : (color ?? S.text),
         }}
       >
         {value}

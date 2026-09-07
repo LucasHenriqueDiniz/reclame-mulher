@@ -1,14 +1,21 @@
 "use client";
 
 import { MessageCircle, Clock, Check } from "lucide-react";
-import { type CompanyStats } from "@/components/company";
+import { responseTimeValue, type CompanyStats } from "@/components/company";
 import { Card, CardContent } from "@/components/ui/card";
 
 export function MetricsBar({ stats }: { stats: CompanyStats }) {
   const metrics = [
     {
       label: "Tempo médio de resposta",
-      value: stats.avgResponseHours != null ? `${stats.avgResponseHours}h` : "-",
+      value: responseTimeValue(stats.avgResponseHours),
+      /**
+       * The placeholder is two words where every other tile shows three characters, so it
+       * cannot take the 24px type sized for "43h" without wrapping over the icon. The flag
+       * is set from the stat rather than from the returned string: comparing against the
+       * text would re-encode the copy here and break silently when it is reworded.
+       */
+      muted: stats.avgResponseHours == null,
       icon: <Clock className="w-4 h-4" />,
       color: "#1E88E5",
       bg: "#E3F2FD",
@@ -49,7 +56,14 @@ export function MetricsBar({ stats }: { stats: CompanyStats }) {
                 >
                   {m.icon}
                 </div>
-                <span className="text-2xl font-bold font-['Poppins']" style={{ color: m.color }}>
+                <span
+                  className={
+                    m.muted
+                      ? "text-sm font-semibold text-right font-['Poppins']"
+                      : "text-2xl font-bold font-['Poppins']"
+                  }
+                  style={{ color: m.muted ? "#94A3B8" : m.color }}
+                >
                   {m.value}
                 </span>
               </div>
