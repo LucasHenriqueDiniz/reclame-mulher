@@ -63,3 +63,28 @@ export function statusLabel(status: string) {
 export function categoryLabel(value: string) {
   return CATEGORY_LABELS[value] ?? value;
 }
+
+/**
+ * A count followed by its noun phrase, agreeing in number. Portuguese inflects the
+ * adjective along with the noun ("1 diálogo ativo" / "2 diálogos ativos"), so the caller
+ * passes both whole phrases rather than a stem and a suffix.
+ *
+ * Only `1` takes the singular: zero is plural in Portuguese ("0 casos resolvidos"), which
+ * is the reading a company with no history gets.
+ */
+export function countLabel(count: number, singular: string, plural: string) {
+  return `${count} ${count === 1 ? singular : plural}`;
+}
+
+/**
+ * The company's average response time, as a line for the sidebar card.
+ *
+ * `avgResponseHours` is null when the company has never answered a complaint —
+ * `CompaniesRepo.getStats` in `src/server/repos/companies.ts` returns null rather than zero for
+ * that case. Rendering the number straight left the card reading "Resposta em -", so the
+ * empty case gets a sentence of its own instead of a dash where a duration should be.
+ */
+export function responseTimeLabel(avgResponseHours: number | null) {
+  if (avgResponseHours == null) return "Sem histórico de resposta";
+  return `Resposta em ${avgResponseHours}h`;
+}

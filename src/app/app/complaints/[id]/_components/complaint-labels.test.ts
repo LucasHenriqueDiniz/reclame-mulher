@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { complaintStatus } from "@/db/schema";
-import { categoryLabel, statusLabel } from "./complaint-labels";
+import { categoryLabel, countLabel, responseTimeLabel, statusLabel } from "./complaint-labels";
 
 /**
  * Two things are worth asserting about a lookup table that feeds JSX: that it covers
@@ -57,5 +57,46 @@ describe("categoryLabel", () => {
    */
   it("falls back to the raw value when the map has no entry", () => {
     expect(categoryLabel("assunto_desconhecido")).toBe("assunto_desconhecido");
+  });
+});
+
+describe("countLabel", () => {
+  /**
+   * The bug this replaced: the card interpolated the number in front of a hardcoded plural,
+   * so a company with one open dialogue read "1 diálogos ativos". Portuguese inflects the
+   * adjective too, which is why the helper takes two whole phrases and not a stem plus "s".
+   */
+  it("uses the singular phrase for exactly one", () => {
+    expect(countLabel(1, "diálogo ativo", "diálogos ativos")).toBe("1 diálogo ativo");
+    expect(countLabel(1, "caso resolvido", "casos resolvidos")).toBe("1 caso resolvido");
+    expect(countLabel(1, "projeto em andamento", "projetos em andamento")).toBe(
+      "1 projeto em andamento"
+    );
+  });
+
+  /**
+   * Zero is plural in Portuguese, unlike English's "no cases". A company that has never been
+   * complained about is the common way to reach this branch, so it is not a corner case.
+   */
+  it("uses the plural phrase for zero and for counts above one", () => {
+    expect(countLabel(0, "caso resolvido", "casos resolvidos")).toBe("0 casos resolvidos");
+    expect(countLabel(2, "caso resolvido", "casos resolvidos")).toBe("2 casos resolvidos");
+    expect(countLabel(143, "caso resolvido", "casos resolvidos")).toBe("143 casos resolvidos");
+  });
+});
+
+describe("responseTimeLabel", () => {
+  it("renders the average as a duration when the company has answered", () => {
+    expect(responseTimeLabel(43)).toBe("Resposta em 43h");
+  });
+
+  /**
+   * The null branch is the whole point of the helper: `CompaniesRepo.getStats` returns null
+   * for a company with no answered complaint, and the card used to fall back to a bare dash,
+   * rendering "Resposta em -".
+   */
+  it("says there is no history instead of leaving a dash where a duration goes", () => {
+    expect(responseTimeLabel(null)).toBe("Sem histórico de resposta");
+    expect(responseTimeLabel(null)).not.toContain("-");
   });
 });

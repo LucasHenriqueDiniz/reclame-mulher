@@ -19,7 +19,7 @@ import { formatDateTime } from "@/lib/utils";
 import { protocolId } from "@/components/company/utils";
 import { companyTheme as S } from "@/components/company/theme";
 import { Button } from "@/components/ui/button";
-import { categoryLabel, statusLabel } from "./complaint-labels";
+import { categoryLabel, countLabel, responseTimeLabel, statusLabel } from "./complaint-labels";
 import { ComplaintReplyForm } from "./complaint-reply-form";
 
 interface ComplaintDetail {
@@ -364,19 +364,19 @@ export function ComplaintDetailContent({
                       <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 14 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: S.text }}>
                           <MessageCircle style={{ width: 16, height: 16, color: S.muted }} />
-                          {complaint.companyStats.activeDialogsCount} diálogos ativos
+                          {countLabel(complaint.companyStats.activeDialogsCount, "diálogo ativo", "diálogos ativos")}
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: S.text }}>
                           <Check style={{ width: 16, height: 16, color: S.green }} />
-                          {complaint.companyStats.resolvedCases} casos resolvidos
+                          {countLabel(complaint.companyStats.resolvedCases, "caso resolvido", "casos resolvidos")}
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: S.text }}>
                           <BarChart3 style={{ width: 16, height: 16, color: S.muted }} />
-                          {complaint.companyStats.activeProjectsCount} projetos em andamento
+                          {countLabel(complaint.companyStats.activeProjectsCount, "projeto em andamento", "projetos em andamento")}
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: S.text }}>
                           <Clock style={{ width: 16, height: 16, color: S.muted }} />
-                          Resposta em {complaint.companyStats.avgResponseHours != null ? `${complaint.companyStats.avgResponseHours}h` : "-"}
+                          {responseTimeLabel(complaint.companyStats.avgResponseHours)}
                         </div>
                       </div>
                     </>
