@@ -75,16 +75,3 @@ export function categoryLabel(value: string) {
 export function countLabel(count: number, singular: string, plural: string) {
   return `${count} ${count === 1 ? singular : plural}`;
 }
-
-/**
- * The company's average response time, as a line for the sidebar card.
- *
- * `avgResponseHours` is null when the company has never answered a complaint —
- * `CompaniesRepo.getStats` in `src/server/repos/companies.ts` returns null rather than zero for
- * that case. Rendering the number straight left the card reading "Resposta em -", so the
- * empty case gets a sentence of its own instead of a dash where a duration should be.
- */
-export function responseTimeLabel(avgResponseHours: number | null) {
-  if (avgResponseHours == null) return "Sem histórico de resposta";
-  return `Resposta em ${avgResponseHours}h`;
-}

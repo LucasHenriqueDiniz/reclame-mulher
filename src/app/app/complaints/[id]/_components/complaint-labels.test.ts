@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { complaintStatus } from "@/db/schema";
-import { categoryLabel, countLabel, responseTimeLabel, statusLabel } from "./complaint-labels";
+import { categoryLabel, countLabel, statusLabel } from "./complaint-labels";
 
 /**
  * Two things are worth asserting about a lookup table that feeds JSX: that it covers
@@ -82,21 +82,5 @@ describe("countLabel", () => {
     expect(countLabel(0, "caso resolvido", "casos resolvidos")).toBe("0 casos resolvidos");
     expect(countLabel(2, "caso resolvido", "casos resolvidos")).toBe("2 casos resolvidos");
     expect(countLabel(143, "caso resolvido", "casos resolvidos")).toBe("143 casos resolvidos");
-  });
-});
-
-describe("responseTimeLabel", () => {
-  it("renders the average as a duration when the company has answered", () => {
-    expect(responseTimeLabel(43)).toBe("Resposta em 43h");
-  });
-
-  /**
-   * The null branch is the whole point of the helper: `CompaniesRepo.getStats` returns null
-   * for a company with no answered complaint, and the card used to fall back to a bare dash,
-   * rendering "Resposta em -".
-   */
-  it("says there is no history instead of leaving a dash where a duration goes", () => {
-    expect(responseTimeLabel(null)).toBe("Sem histórico de resposta");
-    expect(responseTimeLabel(null)).not.toContain("-");
   });
 });

@@ -16,10 +16,10 @@ import {
 } from "lucide-react";
 import { ShareModal } from "@/components/share-modal";
 import { formatDateTime } from "@/lib/utils";
-import { protocolId } from "@/components/company/utils";
+import { protocolId, responseTimeLabel } from "@/components/company/utils";
 import { companyTheme as S } from "@/components/company/theme";
 import { Button } from "@/components/ui/button";
-import { categoryLabel, countLabel, responseTimeLabel, statusLabel } from "./complaint-labels";
+import { categoryLabel, countLabel, statusLabel } from "./complaint-labels";
 import { ComplaintReplyForm } from "./complaint-reply-form";
 
 interface ComplaintDetail {
