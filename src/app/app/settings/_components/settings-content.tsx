@@ -158,7 +158,7 @@ export function SettingsContent({
 }: Props) {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<SettingsTabKey>(
-    forcePasswordChange ? "senha" : "senha"
+    forcePasswordChange ? "senha" : "informacoes"
   );
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 

@@ -36,6 +36,10 @@ function contextOptions(role: ScreenRole) {
  * Waits for the page to stop moving. `networkidle` alone is not enough: the
  * app fades content in, and a screenshot taken mid-transition shows a
  * half-transparent card.
+ *
+ * The fixed pause covers what the browser cannot report — content rendered a
+ * frame after the last response — and `waitForMotionToStop` covers what it
+ * can: the animations and transitions that pause was being asked to outlast.
  */
 async function settle(page: Page): Promise<void> {
   await page.waitForLoadState("networkidle").catch(() => {
@@ -46,6 +50,31 @@ async function settle(page: Page): Promise<void> {
   // read it as a control they are missing.
   await page.addStyleTag({ content: "nextjs-portal { display: none !important; }" });
   await page.waitForTimeout(600);
+  await waitForMotionToStop(page);
+}
+
+/**
+ * Resolves once every finite animation and CSS transition on the page has
+ * finished.
+ *
+ * Infinite ones — spinners, pulses — never finish, so they are skipped rather
+ * than waited on: a figure with a spinner in it is a data problem, not a
+ * timing one, and waiting on one would hang the whole run.
+ */
+async function waitForMotionToStop(page: Page): Promise<void> {
+  await page.waitForFunction(
+    () =>
+      document.getAnimations().every((animation) => {
+        const iterations = animation.effect?.getComputedTiming().iterations ?? 1;
+        return (
+          !Number.isFinite(iterations) ||
+          animation.playState === "finished" ||
+          animation.playState === "idle"
+        );
+      }),
+    undefined,
+    { timeout: 15_000 }
+  );
 }
 
 async function capture(browser: Browser, screen: Screen): Promise<void> {

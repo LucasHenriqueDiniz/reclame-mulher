@@ -15,6 +15,9 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/company") ||
     pathname.startsWith("/privacy") ||
     pathname.startsWith("/terms") ||
+    // Stays public on purpose. The page is a development aid and gates itself on
+    // NODE_ENV, answering 404 in production for everyone; a session check here would
+    // only break it in development, where its whole job is to hand you a login.
     pathname.startsWith("/ajuda") ||
     // End-user manuals. They document how to use the platform, so gating them behind a
     // session means the people who most need them — someone deciding whether to sign up,

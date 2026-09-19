@@ -36,6 +36,11 @@ async function main() {
 
   // Wipe existing data (dev only)
   console.log("🗑️  Clearing existing rows...");
+  // Audit rows first: they point at profiles, and they are the one table the
+  // seed writes that nothing else deletes. Left in place they would pile up
+  // one more copy of the same history on every re-seed of a reused database,
+  // and the admin audit figure would grow a new set of duplicates each run.
+  await db.delete(schema.auditLogs);
   await db.delete(schema.complaintMessages);
   await db.delete(schema.complaints);
   await db.delete(schema.reports);
@@ -50,6 +55,7 @@ async function main() {
   console.log("✓ Rows cleared\n");
 
   const now = new Date();
+  const daysAgo = (days: number) => new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
   const defaultPassword = "senha123";
   const passwordHash = await hashPassword(defaultPassword);
 
@@ -73,15 +79,31 @@ async function main() {
         email: "admin@comunicamulher.com.br",
         passwordHash,
       },
+      // The two accounts below stopped halfway through the sign-up: they have
+      // a session but no finished onboarding, which is the only state in which
+      // step 2 of either wizard can be seen. `screens/catalog.ts` captures
+      // those two screens with them; without a signed-in account the page
+      // bounces to /login and the figure came out as a copy of the login one.
+      {
+        email: "julia@exemplo.com",
+        passwordHash,
+      },
+      {
+        email: "contato@obrasaurora.com",
+        passwordHash,
+        // What POST /api/auth/register-company stores for a company that has
+        // only finished step 1. The step 2 screen reads company_name from here.
+        metadata: JSON.stringify({ company_name: "Obras Aurora", cnpj: "45678901000122" }),
+      },
     ])
     .returning({ id: schema.users.id });
 
-  const [user1, user2, user3, adminUser] = usersInserted;
-  if (!user1 || !user2 || !user3 || !adminUser) {
+  const [user1, user2, user3, adminUser, pendingPersonUser, pendingCompanyUser] = usersInserted;
+  if (!user1 || !user2 || !user3 || !adminUser || !pendingPersonUser || !pendingCompanyUser) {
     throw new Error("Falha ao criar users");
   }
 
-  console.log("✓ Users created (maria, empresa@construtorax, ana, admin)");
+  console.log("✓ Users created (maria, empresa@construtorax, ana, admin, julia, obras aurora)");
 
   // ─── Profiles ───────────────────────────────────────────────────────────
   await db.insert(schema.profiles).values([
@@ -134,12 +156,38 @@ async function main() {
       onboardingCompletedAt: now,
       acceptedTermsAt: now,
     },
+    // Mid-onboarding, so no onboardingCompletedAt and no acceptedTermsAt: this
+    // is exactly the row POST /api/auth/register writes before the person ever
+    // reaches step 2. Address, city and state are the fields step 2 asks for,
+    // so they are still empty here.
+    {
+      userId: pendingPersonUser.id,
+      name: "Júlia Ramos",
+      role: "USER",
+      email: "julia@exemplo.com",
+      cpf: "52998224725",
+      provider: "email",
+    },
+    // The same halfway state for a company: POST /api/auth/register-company
+    // names the profile after the company and waits for step 2 for the rest.
+    {
+      userId: pendingCompanyUser.id,
+      name: "Obras Aurora",
+      role: "COMPANY",
+      email: "contato@obrasaurora.com",
+      provider: "email",
+    },
   ]);
   console.log("✓ Profiles created");
   console.log(`✓ Admin seed: admin@comunicamulher.com.br / ${defaultPassword}`);
 
   // ─── Companies ──────────────────────────────────────────────────────────
-  const [company1, company2] = await db
+  // Construtora X was verified by the admin two weeks ago, Transportes Sul had
+  // its badge taken back — see the audit trail at the end of this file, which
+  // has to agree with these two fields to be worth reading.
+  const verifiedConstrutoraXAt = daysAgo(14);
+
+  const [company1, company2, company3] = await db
     .insert(schema.companies)
     .values([
       {
@@ -160,7 +208,7 @@ async function main() {
         streetNumber: "100",
         responsibleName: "João Costa",
         responsibleEmail: "empresa@construtorax.com",
-        verifiedAt: now,
+        verifiedAt: verifiedConstrutoraXAt,
       },
       {
         name: "Transportes Sul",
@@ -178,10 +226,17 @@ async function main() {
         neighborhood: "Industrial",
         streetNumber: "500",
       },
+      // Registered through step 1 and never finished: name, CNPJ and slug are
+      // all POST /api/auth/register-company writes, and step 2 fills the rest.
+      {
+        name: "Obras Aurora",
+        slug: "obras-aurora",
+        cnpj: "45678901000122",
+      },
     ])
     .returning({ id: schema.companies.id });
 
-  console.log("✓ Companies created (Construtora X, Transportes Sul)");
+  console.log("✓ Companies created (Construtora X, Transportes Sul, Obras Aurora)");
 
   // ─── Company users (João = Construtora X) ────────────────────────────────
   // OWNER, because that is the role `POST /api/auth/register-company` gives the
@@ -192,6 +247,8 @@ async function main() {
   // button for.
   await db.insert(schema.companyUsers).values([
     { userId: user2.id, companyId: company1.id, role: "OWNER" },
+    // The half-registered company owns its company row from step 1 onwards.
+    { userId: pendingCompanyUser.id, companyId: company3.id, role: "OWNER" },
   ]);
   console.log("✓ Company user: empresa@construtorax.com → Construtora X");
 
@@ -606,12 +663,53 @@ Esse futuro começa com sua participação hoje.
 
   console.log("✓ Tags attached to the posts");
 
+  // ─── Audit log ──────────────────────────────────────────────────────────
+  // The report presents the audit trail as a reliability requirement, and the
+  // figure under that paragraph was an empty table: `AuditRepo` is only ever
+  // written by the company verification route, which nothing in the seed calls.
+  //
+  // These rows are the history the seed's own state implies, written by the
+  // same hand and in the same shape as that route: Construtora X carries a
+  // verification badge, Transportes Sul does not and has an open abuse report
+  // saying its CNPJ does not check out. So: both were verified, and one of the
+  // two had it taken back when the report came in. The dates run behind `now`
+  // in the same order as the story.
+  await db.insert(schema.auditLogs).values([
+    {
+      actorUserId: adminUser.id,
+      action: "COMPANY_VERIFIED",
+      entityType: "company",
+      entityId: company1.id,
+      metadata: JSON.stringify({ verified: true }),
+      createdAt: verifiedConstrutoraXAt,
+    },
+    {
+      actorUserId: adminUser.id,
+      action: "COMPANY_VERIFIED",
+      entityType: "company",
+      entityId: company2.id,
+      metadata: JSON.stringify({ verified: true }),
+      createdAt: daysAgo(9),
+    },
+    {
+      actorUserId: adminUser.id,
+      action: "COMPANY_UNVERIFIED",
+      entityType: "company",
+      entityId: company2.id,
+      metadata: JSON.stringify({ verified: false }),
+      createdAt: daysAgo(4),
+    },
+  ]);
+  console.log("✓ Audit log entries created");
+
   console.log("\n✅ Seed finished.\n");
   console.log(`Test logins (password for all of them: ${defaultPassword}):`);
   console.log("  - maria@exemplo.com (person)");
   console.log("  - empresa@construtorax.com (company – Construtora X)");
   console.log("  - ana@exemplo.com (person)");
   console.log("  - admin@comunicamulher.com.br (admin)");
+  console.log("  - julia@exemplo.com (person, onboarding unfinished)");
+  console.log("  - contato@obrasaurora.com (company, onboarding unfinished)");
   console.log("\nPublic company profile: /company/construtora-x");
 }
 

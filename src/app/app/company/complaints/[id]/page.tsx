@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 
 import { getCurrentCompanyContext } from "@/server/auth/company";
+import { CompaniesRepo } from "@/server/repos/companies";
 import { ComplaintsRepo } from "@/server/repos/complaints";
 import { MessagesRepo } from "@/server/repos/messages";
 import { CompanyComplaintDetailContent } from "./_components/company-complaint-detail-content";
@@ -33,8 +34,19 @@ export default async function CompanyComplaintDetailPage({
 
   const messages = await MessagesRepo.findByComplaint(id);
 
+  // Same source the person-facing detail page reads (src/app/app/complaints/[id]/page.tsx),
+  // so both sides of one complaint quote the same numbers for the same company.
+  let companyStats: Awaited<ReturnType<typeof CompaniesRepo.getStats>> | null = null;
+  try {
+    companyStats = await CompaniesRepo.getStats(companyContext.companyId);
+  } catch {
+    // The sidebar card hides its stats block when they cannot be read, rather than
+    // failing the whole page over a panel.
+  }
+
   return (
     <CompanyComplaintDetailContent
+      companyStats={companyStats}
       complaint={{
         id: complaint.id,
         title: complaint.title,

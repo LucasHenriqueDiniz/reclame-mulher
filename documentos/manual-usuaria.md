@@ -37,9 +37,9 @@ A página inicial é o primeiro contato de quem ainda não tem cadastro. Ela exp
 ### Passo a passo
 
 1. Na página inicial, escolha **Entrar** ou **Criar conta**.
-2. Informe seu e-mail e crie uma senha.
-3. Escolha se você está entrando como **pessoa** ou como **empresa**.
-4. Complete as duas etapas do cadastro do perfil escolhido.
+2. Escolha se vai usar a plataforma como **pessoa** ou como **empresa**.
+3. Na etapa 1, preencha seus dados e crie sua senha.
+4. Na etapa 2, informe endereço, contato e como conheceu a plataforma.
 
 A tela de login é a mesma para os três perfis. É o cadastro que determina o que você vê depois de entrar.
 
@@ -55,7 +55,7 @@ No primeiro acesso a plataforma pergunta quem é você. **Sou uma Pessoa** é o 
 
 ### Cadastro da pessoa
 
-O cadastro da pessoa tem duas etapas. A primeira reúne os dados básicos; a segunda trata das preferências e das opções de privacidade — inclusive a de aparecer ou não com o seu nome nas reclamações públicas.
+O cadastro da pessoa tem duas etapas. A primeira reúne nome, CPF, e-mail e senha; a segunda, o endereço, o telefone de contato e como você conheceu a plataforma.
 
 {{figura:05-onboarding-pessoa-etapa1}}
 
@@ -63,7 +63,7 @@ O cadastro da pessoa tem duas etapas. A primeira reúne os dados básicos; a seg
 
 ### Cadastro da empresa
 
-O cadastro da empresa também tem duas etapas: identificação na primeira, dados complementares na segunda. Depois de cadastrada, a empresa passa por uma verificação antes de exibir o selo **Verificada** no perfil público.
+O cadastro da empresa também tem duas etapas: a identificação da empresa na primeira; o responsável, o contato e o endereço da sede na segunda. Depois de cadastrada, a empresa passa por uma verificação antes de exibir o selo **Verificada** no perfil público.
 
 {{figura:07-onboarding-empresa-etapa1}}
 
@@ -112,7 +112,12 @@ Na última etapa você classifica o relato em três perguntas:
 - **Quão urgente é?** — de baixa a alta urgência.
 - **Quem mais está sendo afetado?** — só você, sua família, a vizinhança ou a comunidade.
 
-Depois de responder às três, clique em **Enviar relato**.
+A mesma tela traz os dois controles de privacidade do relato:
+
+- **Quero fazer este relato sem mostrar meu nome** — a empresa recebe e responde normalmente; o que não aparece publicamente é a sua identificação.
+- **Quero que outras pessoas possam ver este relato** — define se o relato entra no perfil público da empresa.
+
+Depois de responder às três perguntas e conferir esses dois controles, clique em **Enviar relato**.
 
 {{figura:17d-nova-reclamacao-etapa4}}
 
@@ -162,15 +167,13 @@ Na figura abaixo o relato ainda está **em aberto**: só existe a mensagem que a
 
 ### Conta e dados pessoais
 
-Em **Configurações** você altera seus dados pessoais e as opções de privacidade — entre elas, a de publicar seus relatos de forma anônima.
+Na aba **Informações** você altera seu nome, o telefone de contato e o endereço.
 
 {{figura:19-configuracoes}}
 
-{{figura:20-configuracoes-dados}}
-
 ### Segurança
 
-A aba de segurança concentra a troca de senha.
+A aba **Senha** concentra a troca da senha de acesso.
 
 {{figura:21-configuracoes-seguranca}}
 
@@ -200,13 +203,11 @@ O blog reúne materiais de orientação, direitos e casos.
 
 {{figura:12-blog-post}}
 
-### Manuais e ajuda
+### Manuais
 
-Os manuais da plataforma ficam disponíveis sem necessidade de login, junto com a página de ajuda e seus acessos rápidos.
+Os manuais da plataforma ficam disponíveis sem necessidade de login.
 
 {{figura:13-manuais}}
-
-{{figura:14-ajuda}}
 
 ---
 
@@ -284,7 +285,7 @@ O registro de auditoria guarda as ações realizadas na plataforma.
 Não. A busca de empresas, os perfis públicos, o blog e os manuais estão abertos. O cadastro só é necessário para registrar uma reclamação e acompanhá-la.
 
 **Posso reclamar sem que meu nome apareça?**
-Sim. Nas opções de privacidade é possível publicar o relato de forma anônima. A empresa recebe e responde normalmente; o que não aparece publicamente é a sua identificação.
+Sim. Na última etapa do relato, marque **Quero fazer este relato sem mostrar meu nome**. A empresa recebe e responde normalmente; o que não aparece publicamente é a sua identificação.
 
 **As fotos são obrigatórias?**
 Não. A etapa de fotos pode ser pulada em **Continuar sem foto**.
