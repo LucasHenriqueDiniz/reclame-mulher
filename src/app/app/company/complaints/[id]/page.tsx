@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 
 import { getCurrentCompanyContext } from "@/server/auth/company";
+import { CompaniesRepo } from "@/server/repos/companies";
 import { ComplaintsRepo } from "@/server/repos/complaints";
 import { MessagesRepo } from "@/server/repos/messages";
 import { CompanyComplaintDetailContent } from "./_components/company-complaint-detail-content";
@@ -33,8 +34,32 @@ export default async function CompanyComplaintDetailPage({
 
   const messages = await MessagesRepo.findByComplaint(id);
 
+  // Same sources the person-facing detail page reads (src/app/app/complaints/[id]/page.tsx),
+  // so both sides of one complaint quote the same numbers, the same verification and
+  // the same profile link for the same company.
+  let companyStats: Awaited<ReturnType<typeof CompaniesRepo.getStats>> | null = null;
+  let companyVerified = false;
+  let companySlug: string | null = null;
+  try {
+    const [company, stats] = await Promise.all([
+      CompaniesRepo.findByIdOrNull(companyContext.companyId),
+      CompaniesRepo.getStats(companyContext.companyId),
+    ]);
+    companyStats = stats;
+    companyVerified = company?.verifiedAt != null;
+    // The stored slug, never one derived from the display name: generateUniqueSlug
+    // strips accents and appends -2 on a collision, so a guess misses both cases.
+    companySlug = company?.slug ?? null;
+  } catch {
+    // The sidebar card hides its stats block when they cannot be read, rather than
+    // failing the whole page over a panel.
+  }
+
   return (
     <CompanyComplaintDetailContent
+      companyStats={companyStats}
+      companySlug={companySlug}
+      companyVerified={companyVerified}
       complaint={{
         id: complaint.id,
         title: complaint.title,

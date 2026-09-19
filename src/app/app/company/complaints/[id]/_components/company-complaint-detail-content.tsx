@@ -95,6 +95,14 @@ type MessageItem = {
   author: { name: string | null } | null;
 };
 
+type CompanyStats = {
+  resolutionRate: number;
+  activeDialogsCount: number;
+  resolvedCases: number;
+  activeProjectsCount: number;
+  avgResponseHours: number | null;
+};
+
 function StatusBadge({ status }: { status: string }) {
   const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.OPEN;
   return (
@@ -111,9 +119,16 @@ function StatusBadge({ status }: { status: string }) {
 export function CompanyComplaintDetailContent({
   complaint,
   messages,
+  companyStats,
+  companySlug,
+  companyVerified,
 }: {
   complaint: ComplaintDetail;
   messages: MessageItem[];
+  companyStats: CompanyStats | null;
+  /** The stored slug, or null when the company has none. */
+  companySlug: string | null;
+  companyVerified: boolean;
 }) {
   const [response, setResponse] = useState("");
   const [status, setStatus] = useState(complaint.status);
@@ -181,7 +196,7 @@ export function CompanyComplaintDetailContent({
   return (
     <CompanyPageShell>
       {/* Blue header */}
-      <div className="bg-gradient-to-br from-[#1E88E5] to-[#1565C0] -mx-6 -mt-8 px-6 py-8 mb-6">
+      <div className="bg-gradient-to-br from-[#1E88E5] to-[#1565C0] -mx-6 px-6 py-8 mb-6">
         <div className="max-w-[960px] mx-auto">
           <Link
             href="/app/company/complaints"
@@ -389,52 +404,72 @@ export function CompanyComplaintDetailContent({
               <h3 className="font-['Poppins'] font-semibold text-[#2A3F54] text-lg mb-1">
                 {complaint.company.name ?? "Empresa"}
               </h3>
-              <Badge className="bg-[#1E88E5]/10 text-[#1E88E5] hover:bg-[#1E88E5]/10 mb-4">
-                <Shield className="w-3 h-3 mr-1" />
-                VERIFICADA
-              </Badge>
+              {companyVerified && (
+                <Badge className="bg-[#1E88E5]/10 text-[#1E88E5] hover:bg-[#1E88E5]/10 mb-4">
+                  <Shield className="w-3 h-3 mr-1" />
+                  VERIFICADA
+                </Badge>
+              )}
 
               {/* Stats */}
-              <div className="space-y-3 text-left">
-                <div>
-                  <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-gray-500">Taxa de resolução</span>
-                    <span className="font-semibold text-[#2A3F54]">92%</span>
+              {companyStats != null && (
+                <div className="space-y-3 text-left">
+                  <div>
+                    <div className="flex items-center justify-between text-xs mb-1">
+                      <span className="text-gray-500">Taxa de resolução</span>
+                      <span className="font-semibold text-[#2A3F54]">
+                        {companyStats.resolutionRate}%
+                      </span>
+                    </div>
+                    <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-green-500 rounded-full"
+                        style={{ width: `${companyStats.resolutionRate}%` }}
+                      />
+                    </div>
                   </div>
-                  <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-green-500 rounded-full" style={{ width: "92%" }} />
+
+                  <div className="grid grid-cols-2 gap-3 pt-2">
+                    <div className="flex items-center gap-2">
+                      <MessageCircle className="w-4 h-4 text-[#1E88E5]" />
+                      <span className="text-xs text-gray-600">
+                        <strong className="text-[#2A3F54]">{companyStats.activeDialogsCount}</strong>{" "}
+                        diálogos ativos
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-green-500" />
+                      <span className="text-xs text-gray-600">
+                        <strong className="text-[#2A3F54]">{companyStats.resolvedCases}</strong>{" "}
+                        casos resolvidos
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <BarChart3 className="w-4 h-4 text-[#1E88E5]" />
+                      <span className="text-xs text-gray-600">
+                        {companyStats.activeProjectsCount} projetos em andamento
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-[#1E88E5]" />
+                      <span className="text-xs text-gray-600">
+                        Resposta em{" "}
+                        {companyStats.avgResponseHours != null
+                          ? `${companyStats.avgResponseHours}h`
+                          : "-"}
+                      </span>
+                    </div>
                   </div>
                 </div>
+              )}
 
-                <div className="grid grid-cols-2 gap-3 pt-2">
-                  <div className="flex items-center gap-2">
-                    <MessageCircle className="w-4 h-4 text-[#1E88E5]" />
-                    <span className="text-xs text-gray-600">
-                      <strong className="text-[#2A3F54]">27</strong> diálogos ativos
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-green-500" />
-                    <span className="text-xs text-gray-600">
-                      <strong className="text-[#2A3F54]">143</strong> casos resolvidos
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <BarChart3 className="w-4 h-4 text-[#1E88E5]" />
-                    <span className="text-xs text-gray-600">3 projetos em andamento</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-[#1E88E5]" />
-                    <span className="text-xs text-gray-600">Resposta em 43h</span>
-                  </div>
-                </div>
-              </div>
-
-              <Link href={`/company/${complaint.company.name?.toLowerCase().replace(/\s+/g, "-") ?? ""}`}>
-                <Button variant="link" className="mt-4 text-[#1E88E5]">
-                  Ver página da empresa →
-                </Button>
-              </Link>
+              {companySlug && (
+                <Link href={`/company/${companySlug}`}>
+                  <Button variant="link" className="mt-4 text-[#1E88E5]">
+                    Ver página da empresa →
+                  </Button>
+                </Link>
+              )}
             </CardContent>
           </Card>
 

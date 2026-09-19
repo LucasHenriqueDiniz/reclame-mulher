@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -99,6 +99,25 @@ export function NewComplaintContent({
     companyName: string;
     verified?: boolean;
   } | null>(null);
+
+  const stepViewportRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * `overflow-hidden` hides the other steps, but it does not stop the browser
+   * from scrolling this element programmatically. Closing the company dialog
+   * returns focus to the trigger inside step 1, the browser scrolls the frame to
+   * bring that trigger into view, and nothing ever scrolls it back — so every
+   * step after it was drawn 41px too far left, first word cut off and the next
+   * step showing at the right edge. Nothing in this frame is meant to scroll,
+   * so any scroll is undone. Setting it back to zero fires one more scroll
+   * event, which finds it already at zero and stops.
+   */
+  const resetStepViewportScroll = useCallback(() => {
+    const viewport = stepViewportRef.current;
+    if (!viewport) return;
+    if (viewport.scrollLeft !== 0) viewport.scrollLeft = 0;
+    if (viewport.scrollTop !== 0) viewport.scrollTop = 0;
+  }, []);
 
   const handleUpload = useCallback(async (file: File) => {
     const res = await uploadFiles("complaintAttachment", {
@@ -317,7 +336,11 @@ export function NewComplaintContent({
           <ComplaintStepProgress currentStep={step} totalSteps={TOTAL_STEPS} />
 
           {/* Steps, with the transition animation */}
-          <div className="relative overflow-hidden w-full">
+          <div
+            ref={stepViewportRef}
+            onScroll={resetStepViewportScroll}
+            className="relative overflow-hidden w-full"
+          >
             <div
               className="flex transition-all duration-500 ease-out"
               style={{

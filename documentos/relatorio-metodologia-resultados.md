@@ -143,7 +143,7 @@ A plataforma foi construída e está em funcionamento, publicada em ambiente de 
 | Migrações do esquema | 13 |
 | Linhas de TypeScript | 26.602 |
 | Testes automatizados | 54 (29 unitários e 25 de ponta a ponta) |
-| Telas documentadas em figuras | 35 |
+| Telas documentadas em figuras | 33 |
 
 ### 5.2 Página inicial e perfis de acesso
 
@@ -231,7 +231,7 @@ O trabalho gerou quatro produtos:
 
 1. **A plataforma em funcionamento**, publicada e acessível pela internet.
 2. **O código-fonte**, versionado, documentado e acompanhado de 54 testes automatizados que verificam seu funcionamento a cada alteração.
-3. **O Manual de Uso da Plataforma**, documento ilustrado com 35 figuras, organizado na ordem de utilização do sistema e escrito para a usuária final.
+3. **O Manual de Uso da Plataforma**, documento ilustrado com 33 figuras, organizado na ordem de utilização do sistema e escrito para a usuária final.
 4. **O procedimento automatizado de documentação visual**, que regenera todas as figuras da plataforma com um comando, e que torna tanto o manual quanto este relatório atualizáveis sem retrabalho manual.
 
 ### 5.10 Limitações e trabalhos futuros
@@ -278,4 +278,4 @@ W3C. **Web Content Accessibility Guidelines (WCAG) 2.1**. W3C Recommendation, 5 
 
 ## Observação para a montagem final do relatório
 
-Este documento cobre a metodologia e os resultados **do desenvolvimento da plataforma**. As seções 4 e 5 foram atribuídas conjuntamente a três bolsistas, e as contribuições de Marina e Bruna precisam ser integradas antes da entrega ao orientador — em especial, o que couber a cada uma nas etapas de levantamento de requisitos (4.2), diretrizes de acessibilidade (4.3) e prototipagem da interface (4.4), além dos resultados correspondentes.
+TODO

@@ -14,7 +14,19 @@ import type { Page } from "@playwright/test";
  * divergence `docs/architecture/ARCHITECTURE.md` records for the manuals.
  */
 
-export type ScreenRole = "public" | "person" | "company" | "admin";
+/**
+ * Which context the screen is captured in. The four first values are the roles
+ * the manual describes; the last two are accounts that are signed in but have
+ * not finished onboarding, which is the only state in which step 2 of either
+ * onboarding wizard can be reached. See `e2e/seed-credentials.ts`.
+ */
+export type ScreenRole =
+  | "public"
+  | "person"
+  | "company"
+  | "admin"
+  | "personOnboarding"
+  | "companyOnboarding";
 
 export interface Screen {
   /** File name, without extension, under assets/telas/. Ordered by the prefix. */
@@ -65,10 +77,12 @@ async function openWizard(page: Page, upTo: 1 | 2 | 3 | 4 | 5): Promise<void> {
   await page.getByRole("button", { name: "Buscar", exact: true }).click();
   await page.locator("#company-search").fill("Construtora");
   await page.getByRole("button", { name: "Selecionar Construtora X" }).click();
+  await settleWizardStep(page, 1);
   if (upTo === 1) return;
 
   await page.locator("#previous-complaint-no").click();
   await page.getByRole("button", { name: "Continuar", exact: true }).click();
+  await settleWizardStep(page, 2);
   if (upTo === 2) return;
 
   await page.locator("#complaint-title").fill("Poeira da obra entrando em casa");
@@ -80,9 +94,11 @@ async function openWizard(page: Page, upTo: 1 | 2 | 3 | 4 | 5): Promise<void> {
     );
   await page.locator("#complaint-location").fill("Rua das Flores, 123 - São Paulo");
   await page.getByRole("button", { name: "Continuar", exact: true }).click();
+  await settleWizardStep(page, 3);
   if (upTo === 3) return;
 
   await page.getByRole("button", { name: "Continuar sem foto" }).click();
+  await settleWizardStep(page, 4);
   if (upTo === 4) return;
 
   await selectOption(page, "Qual tipo de problema?", "Saúde");
@@ -90,6 +106,77 @@ async function openWizard(page: Page, upTo: 1 | 2 | 3 | 4 | 5): Promise<void> {
   await selectOption(page, "Quem mais está sendo afetado?", "Minha família");
   await page.getByRole("button", { name: "Enviar relato" }).click();
   await page.getByRole("heading", { name: "Seu relato foi criado com sucesso!" }).waitFor();
+}
+
+/**
+ * Opens one tab of the settings page.
+ *
+ * The tabs are client state, not routes: `/app/settings/account` and
+ * `/app/settings/security` are both `redirect("/app/settings")`, so navigating
+ * to them captured the same screen three times over. Clicking the tab also
+ * makes each figure independent of whichever tab the page opens on by default.
+ */
+async function openSettingsTab(page: Page, tab: "Informações" | "Senha"): Promise<void> {
+  await page.goto("/app/settings");
+  await page.getByRole("button", { name: tab, exact: true }).click();
+}
+
+/**
+ * Waits for the wizard to come to rest on `step`, squarely inside its frame.
+ *
+ * Two different things were cutting these figures in half, and both are here.
+ *
+ * The slide: the four steps sit side by side in one strip, and changing step
+ * animates `transform: translateX(-(step - 1) * 100%)` on that strip for
+ * 500ms. `networkidle` cannot see that — the data arrived long before the
+ * pixels stopped — so the figures were taken mid-slide. `m41` is the
+ * horizontal offset of the computed transform matrix, in pixels: the slide is
+ * over when it reaches the resting offset, and `ease-out` never overshoots, so
+ * reaching it once is enough.
+ *
+ * The second wait is a regression check, not a wait. Selecting a company in the
+ * search dialog used to leave the clipping frame scrolled 41px to the right for
+ * the rest of the wizard, and every step after it was drawn 41px too far left.
+ * The wizard now undoes that scroll itself, so this asserts the step really does
+ * line up with its frame instead of a capture-side fix-up making it line up.
+ */
+async function settleWizardStep(page: Page, step: 1 | 2 | 3 | 4): Promise<void> {
+  const strip = page.locator('div[style*="translateX"]', {
+    has: page.getByRole("heading", { name: "Conte o que aconteceu" }),
+  });
+
+  const element = await strip.elementHandle();
+  if (!element) {
+    throw new Error("The complaint wizard's step strip is not on the page.");
+  }
+
+  try {
+    await page.waitForFunction(
+      ([node, targetStep]) => {
+        const frame = node.parentElement;
+        if (!frame) return false;
+        const transform = getComputedStyle(node).transform;
+        const offset = transform === "none" ? 0 : new DOMMatrixReadOnly(transform).m41;
+        const resting = -(targetStep - 1) * frame.getBoundingClientRect().width;
+        return Math.abs(offset - resting) < 0.5;
+      },
+      [element, step] as const,
+      { timeout: 15_000 }
+    );
+
+    await page.waitForFunction(
+      ([node, targetStep]) => {
+        const frame = node.parentElement;
+        const current = node.children[targetStep - 1];
+        if (!frame || !current) return false;
+        return Math.abs(current.getBoundingClientRect().left - frame.getBoundingClientRect().left) < 0.5;
+      },
+      [element, step] as const,
+      { timeout: 15_000 }
+    );
+  } finally {
+    await element.dispose();
+  }
 }
 
 /**
@@ -129,7 +216,10 @@ export const SCREENS: Screen[] = [
     role: "public",
     path: "/register",
     section: SECTION_PUBLIC,
-    caption: "Formulário de criação de conta.",
+    // /register is not a form: it asks which of the two accounts to create and
+    // hands the visitor to the matching wizard. The form is step 1 of each.
+    caption:
+      "Início do cadastro: a plataforma pergunta como a conta será usada, como pessoa ou como empresa.",
   },
   {
     id: "04-onboarding-perfil",
@@ -147,10 +237,15 @@ export const SCREENS: Screen[] = [
   },
   {
     id: "06-onboarding-pessoa-etapa2",
-    role: "public",
+    // Step 2 sends a visitor with no session to /login, so this screen cannot
+    // be captured as "public" — it came out as a byte-for-byte copy of the
+    // login figure. The account is signed in and mid-onboarding, which is the
+    // state a real user is in when she sees this page.
+    role: "personOnboarding",
     path: "/onboarding/person/step2",
     section: SECTION_PUBLIC,
-    caption: "Cadastro da usuária, etapa 2: preferências e privacidade.",
+    caption:
+      "Cadastro da usuária, etapa 2: endereço, contato e como conheceu a plataforma.",
   },
   {
     id: "07-onboarding-empresa-etapa1",
@@ -161,19 +256,27 @@ export const SCREENS: Screen[] = [
   },
   {
     id: "08-onboarding-empresa-etapa2",
-    role: "public",
+    // Same guard as step 2 of the person's wizard, same fix.
+    role: "companyOnboarding",
     path: "/onboarding/company/step2",
     section: SECTION_PUBLIC,
-    caption: "Cadastro da empresa, etapa 2: dados complementares.",
+    caption:
+      "Cadastro da empresa, etapa 2: responsável, contato e endereço da sede.",
   },
 
   // 2. Conteúdo público
   {
     id: "09-busca-empresas",
     role: "public",
-    path: "/search",
     section: SECTION_CONTENT,
     caption: "Busca de empresas cadastradas na plataforma.",
+    // /search with no query renders its empty state — "Digite algo para
+    // buscar" — which is not the screen the caption promises. The term is a
+    // seeded company name, so the figure shows the result list itself.
+    open: async (page) => {
+      await page.goto("/search?q=Construtora&scope=companies");
+      await page.getByRole("heading", { name: /^Empresas \(/ }).waitFor();
+    },
   },
   {
     id: "10-perfil-publico-empresa",
@@ -206,13 +309,10 @@ export const SCREENS: Screen[] = [
     section: SECTION_CONTENT,
     caption: "Índice dos manuais da plataforma, disponível sem necessidade de login.",
   },
-  {
-    id: "14-ajuda",
-    role: "public",
-    path: "/ajuda",
-    section: SECTION_CONTENT,
-    caption: "Página de ajuda, com acessos rápidos às principais áreas.",
-  },
+  // /ajuda was dropped from this list on purpose and must not be added back:
+  // it is the development page, and the figure taken of it showed four test
+  // accounts and the password they share, printed on screen. These figures end
+  // up in documents that circulate, which is no place for credentials.
 
   // 3. Área da usuária
   {
@@ -281,26 +381,30 @@ export const SCREENS: Screen[] = [
       await openFromList(page, "/app/complaints/", "Atraso na entrega de documentação da obra");
     },
   },
+  // Settings is one page with three tabs — Informações, Senha, Deletar — and
+  // /app/settings/account and /app/settings/security are both `redirect()` to
+  // it. Three catalog entries pointing at those three URLs produced three
+  // copies of the same picture. The two figures below are the two tabs the
+  // manual actually describes, reached by clicking the tab rather than by a
+  // URL that no longer exists; there is no third figure because there is no
+  // separate screen for personal data — the Informações tab *is* it.
   {
     id: "19-configuracoes",
     role: "person",
-    path: "/app/settings",
     section: SECTION_PERSON,
-    caption: "Configurações da conta da usuária.",
-  },
-  {
-    id: "20-configuracoes-dados",
-    role: "person",
-    path: "/app/settings/account",
-    section: SECTION_PERSON,
-    caption: "Edição dos dados pessoais e das opções de privacidade.",
+    caption:
+      "Configurações da conta, aba Informações: nome, e-mail, telefone e endereço da usuária.",
+    // The address fields and the Salvar button sit below the fold at 1440x900,
+    // and the caption names them.
+    fullPage: true,
+    open: (page) => openSettingsTab(page, "Informações"),
   },
   {
     id: "21-configuracoes-seguranca",
     role: "person",
-    path: "/app/settings/security",
     section: SECTION_PERSON,
-    caption: "Troca de senha e configurações de segurança.",
+    caption: "Configurações da conta, aba Senha: troca da senha de acesso.",
+    open: (page) => openSettingsTab(page, "Senha"),
   },
 
   // 4. Área da empresa

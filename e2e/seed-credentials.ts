@@ -34,13 +34,23 @@ export function readSeedPassword(): string {
 }
 
 /**
- * The seeded accounts the suite signs in as, one per role the manual describes.
+ * The seeded accounts the suite signs in as, one per role the manual describes,
+ * plus the two that stopped in the middle of signing up.
  * Emails are seed data, not credentials, so they are named here directly.
+ *
+ * `personOnboarding` and `companyOnboarding` exist for the figures, not for the
+ * specs: step 2 of either onboarding wizard sends a visitor with no session
+ * back to /login, so capturing those two screens needs an account that is
+ * signed in and has *not* finished onboarding — a state none of the three
+ * roles above can be in, because all three have `onboardingCompletedAt` set.
+ * `scripts/seed.ts` leaves that field null for these two.
  */
 export const SEED_ACCOUNTS = {
   person: { email: "maria@exemplo.com", name: "Maria Silva" },
   company: { email: "empresa@construtorax.com", name: "João Costa" },
   admin: { email: "admin@comunicamulher.com.br", name: "Admin" },
+  personOnboarding: { email: "julia@exemplo.com", name: "Júlia Ramos" },
+  companyOnboarding: { email: "contato@obrasaurora.com", name: "Obras Aurora" },
 } as const;
 
 export type SeedRole = keyof typeof SEED_ACCOUNTS;
@@ -49,4 +59,6 @@ export const STORAGE_STATE = {
   person: join(__dirname, ".auth", "person.json"),
   company: join(__dirname, ".auth", "company.json"),
   admin: join(__dirname, ".auth", "admin.json"),
+  personOnboarding: join(__dirname, ".auth", "person-onboarding.json"),
+  companyOnboarding: join(__dirname, ".auth", "company-onboarding.json"),
 } as const satisfies Record<SeedRole, string>;
