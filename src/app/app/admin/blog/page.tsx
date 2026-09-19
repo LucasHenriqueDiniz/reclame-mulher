@@ -55,7 +55,7 @@ export default function AdminBlogPage() {
       });
 
       if (!response.ok) {
-        throw new Error("Nao foi possivel carregar os posts");
+        throw new Error("Não foi possível carregar os posts");
       }
 
       const data = (await response.json()) as BlogPostsResponse;

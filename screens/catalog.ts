@@ -43,6 +43,11 @@ export interface Screen {
   fullPage?: boolean;
   /** Reaches screens with no fixed URL — a detail page, a wizard step. */
   open?: (page: Page) => Promise<void>;
+  /**
+   * This capture writes to the database, so `capture.spec.ts` runs it before
+   * the screens that display counts. See the note there.
+   */
+  mutatesData?: boolean;
 }
 
 /**
@@ -368,6 +373,9 @@ export const SCREENS: Screen[] = [
     caption:
       "Confirmação do envio, com o identificador que a usuária guarda para acompanhar o caso.",
     open: (page) => openWizard(page, 5),
+    // Reaching the confirmation means submitting a real report, which is one
+    // more complaint for Construtora X than the seed holds.
+    mutatesData: true,
   },
   {
     id: "18-detalhe-reclamacao",

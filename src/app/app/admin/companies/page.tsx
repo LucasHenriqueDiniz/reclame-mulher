@@ -43,7 +43,7 @@ export default function AdminCompaniesPage() {
         | null;
 
       if (!response.ok) {
-        throw new Error(data?.error || "Nao foi possivel carregar as empresas.");
+        throw new Error(data?.error || "Não foi possível carregar as empresas.");
       }
 
       setCompanies(data?.companies ?? []);
@@ -70,7 +70,7 @@ export default function AdminCompaniesPage() {
         | null;
 
       if (!response.ok) {
-        throw new Error(data?.error || "Nao foi possivel atualizar a verificacao.");
+        throw new Error(data?.error || "Não foi possível atualizar a verificação.");
       }
 
       const updated = data?.company;
@@ -80,7 +80,7 @@ export default function AdminCompaniesPage() {
         );
       }
     } catch (updateError) {
-      setError(updateError instanceof Error ? updateError.message : "Erro ao atualizar verificacao.");
+      setError(updateError instanceof Error ? updateError.message : "Erro ao atualizar verificação.");
     } finally {
       setSavingId(null);
     }
@@ -98,7 +98,7 @@ export default function AdminCompaniesPage() {
       <div>
         <h1 className="mb-2 font-heading text-3xl">Verificação de Empresas</h1>
         <p className="text-gray-600">
-          Revise empresas cadastradas e controle o selo de verificacao publicado no perfil.
+          Revise empresas cadastradas e controle o selo de verificação publicado no perfil.
         </p>
       </div>
 
@@ -107,7 +107,7 @@ export default function AdminCompaniesPage() {
           <Clock3 className="mb-3 h-6 w-6 text-amber-600" />
           <h2 className="mb-1 font-semibold text-[#2A3F54]">Pendentes</h2>
           <p className="text-sm text-gray-600">
-            {pendingCount} empresa(s) aguardando verificacao.
+            {pendingCount} empresa(s) aguardando verificação.
           </p>
         </div>
         <div className="rounded-xl border bg-white p-5 shadow-sm">
@@ -179,7 +179,7 @@ export default function AdminCompaniesPage() {
                       {location ? ` • ${location}` : ""}
                     </p>
                     <p className="text-sm text-gray-600">
-                      Responsavel: {company.contactName || company.responsibleName || "Nao informado"}
+                      Responsável: {company.contactName || company.responsibleName || "Não informado"}
                       {company.responsibleEmail ? ` • ${company.responsibleEmail}` : ""}
                     </p>
                     <p className="text-xs text-gray-500">
