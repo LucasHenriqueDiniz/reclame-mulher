@@ -120,10 +120,15 @@ export function CompanyComplaintDetailContent({
   complaint,
   messages,
   companyStats,
+  companySlug,
+  companyVerified,
 }: {
   complaint: ComplaintDetail;
   messages: MessageItem[];
   companyStats: CompanyStats | null;
+  /** The stored slug, or null when the company has none. */
+  companySlug: string | null;
+  companyVerified: boolean;
 }) {
   const [response, setResponse] = useState("");
   const [status, setStatus] = useState(complaint.status);
@@ -399,10 +404,12 @@ export function CompanyComplaintDetailContent({
               <h3 className="font-['Poppins'] font-semibold text-[#2A3F54] text-lg mb-1">
                 {complaint.company.name ?? "Empresa"}
               </h3>
-              <Badge className="bg-[#1E88E5]/10 text-[#1E88E5] hover:bg-[#1E88E5]/10 mb-4">
-                <Shield className="w-3 h-3 mr-1" />
-                VERIFICADA
-              </Badge>
+              {companyVerified && (
+                <Badge className="bg-[#1E88E5]/10 text-[#1E88E5] hover:bg-[#1E88E5]/10 mb-4">
+                  <Shield className="w-3 h-3 mr-1" />
+                  VERIFICADA
+                </Badge>
+              )}
 
               {/* Stats */}
               {companyStats != null && (
@@ -456,11 +463,13 @@ export function CompanyComplaintDetailContent({
                 </div>
               )}
 
-              <Link href={`/company/${complaint.company.name?.toLowerCase().replace(/\s+/g, "-") ?? ""}`}>
-                <Button variant="link" className="mt-4 text-[#1E88E5]">
-                  Ver página da empresa →
-                </Button>
-              </Link>
+              {companySlug && (
+                <Link href={`/company/${companySlug}`}>
+                  <Button variant="link" className="mt-4 text-[#1E88E5]">
+                    Ver página da empresa →
+                  </Button>
+                </Link>
+              )}
             </CardContent>
           </Card>
 
