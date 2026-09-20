@@ -1,6 +1,6 @@
 # Relatório de Bolsista de Iniciação Científica
 
-Plataforma ComunicaMulher — registro e acompanhamento de reclamações de mulheres impactadas por obras de infraestrutura.
+Plataforma ComunicaMulher: registro e acompanhamento de reclamações de mulheres impactadas por obras de infraestrutura.
 
 Seções **4. Material e Métodos** e **5. Resultados**.
 
@@ -20,9 +20,9 @@ Seções **4. Material e Métodos** e **5. Resultados**.
 
 ### 4.1 Natureza do trabalho
 
-O trabalho caracteriza-se como pesquisa aplicada de desenvolvimento tecnológico: o produto da investigação é um artefato de software em funcionamento, e não um experimento controlado. O desenvolvimento foi conduzido de forma incremental, em ciclos curtos, cada um deles entregando uma parte utilizável da plataforma — e não em uma única etapa de especificação seguida de uma única etapa de construção.
+O trabalho caracteriza-se como pesquisa aplicada de desenvolvimento tecnológico: o produto da investigação é um artefato de software em funcionamento, e não um experimento controlado. O desenvolvimento foi conduzido de forma incremental, em ciclos curtos, cada um deles entregando uma parte utilizável da plataforma, e não em uma única etapa de especificação seguida de uma única etapa de construção.
 
-Essa escolha decorre do próprio objeto. A plataforma precisa ser usada por mulheres com perfis muito distintos de familiaridade com tecnologia, e a única forma de verificar se uma tela funciona para essa leitora é colocá-la em funcionamento e observá-la. Ciclos curtos permitem que um erro de concepção seja identificado enquanto ainda é barato corrigi-lo — princípio de entrega incremental e resposta a mudanças formulado no Manifesto Ágil (BECK et al., 2001).
+Essa escolha decorre do próprio objeto. A plataforma precisa ser usada por mulheres com perfis muito distintos de familiaridade com tecnologia, e a única forma de verificar se uma tela funciona para essa leitora é colocá-la em funcionamento e observá-la. Ciclos curtos permitem que um erro de concepção seja identificado enquanto ainda é barato corrigi-lo. Esse é o princípio de entrega incremental e resposta a mudanças formulado no Manifesto Ágil (BECK et al., 2001).
 
 O desenvolvimento ocorreu entre outubro de 2025 e setembro de 2026, registrado em um repositório de controle de versão com 80 revisões documentadas.
 
@@ -30,7 +30,7 @@ O desenvolvimento ocorreu entre outubro de 2025 e setembro de 2026, registrado e
 
 O trabalho foi organizado em cinco etapas, parcialmente sobrepostas:
 
-1. **Levantamento de requisitos e definição dos perfis de uso.** Identificação dos três papéis que a plataforma precisa atender — a mulher que registra o relato, a empresa responsável pela obra e a administração da plataforma — e das ações que cada um precisa executar.
+1. **Levantamento de requisitos e definição dos perfis de uso.** Identificação dos três papéis que a plataforma precisa atender (a mulher que registra o relato, a empresa responsável pela obra e a administração da plataforma) e das ações que cada um precisa executar.
 2. **Definição das diretrizes de acessibilidade e linguagem.** Documento próprio, descrito em 4.3, elaborado antes da prototipagem para condicionar as decisões de interface.
 3. **Prototipagem da interface.** Construção de 20 telas de protótipo navegável em ferramenta de design, cobrindo os fluxos principais antes de qualquer implementação.
 4. **Implementação.** Construção da aplicação, do banco de dados e das interfaces, em ciclos incrementais.
@@ -38,7 +38,7 @@ O trabalho foi organizado em cinco etapas, parcialmente sobrepostas:
 
 ### 4.3 Diretrizes de acessibilidade e de linguagem
 
-Antes da prototipagem foi elaborado um documento de diretrizes voltado especificamente à inclusão de pessoas com baixa escolaridade e pouca familiaridade com sistemas digitais. As diretrizes dialogam com os princípios de perceptibilidade, operabilidade e compreensibilidade das WCAG 2.1 (W3C, 2018) e com o direito de acesso à informação assegurado pela Lei Brasileira de Inclusão (BRASIL, 2015), mas vão além deles em um ponto: as WCAG tratam sobretudo de deficiência, e o obstáculo principal deste público é a escolaridade. O documento parte da caracterização do público — pessoas que leem pouco ou com dificuldade, pessoas mais velhas, usuárias que dependem quase inteiramente do telefone celular, pessoas que precisam da ajuda de outra pessoa para preencher seus dados, pessoas com deficiência visual parcial ou total — e estabelece cinco princípios de projeto:
+Antes da prototipagem foi elaborado um documento de diretrizes voltado especificamente à inclusão de pessoas com baixa escolaridade e pouca familiaridade com sistemas digitais. As diretrizes dialogam com os princípios de perceptibilidade, operabilidade e compreensibilidade das WCAG 2.1 (W3C, 2018) e com o direito de acesso à informação assegurado pela Lei Brasileira de Inclusão (BRASIL, 2015), mas vão além deles em um ponto: as WCAG tratam sobretudo de deficiência, e o obstáculo principal deste público é a escolaridade. O documento parte da caracterização do público (pessoas que leem pouco ou com dificuldade, pessoas mais velhas, usuárias que dependem quase inteiramente do telefone celular, pessoas que precisam da ajuda de outra pessoa para preencher seus dados, pessoas com deficiência visual parcial ou total) e estabelece cinco princípios de projeto:
 
 - **Uma ação por tela.** Cada tela responde a uma pergunta simples. Havendo mais de uma decisão importante, o fluxo é dividido em etapas.
 - **Menos texto, mais clareza.** Frases curtas, palavras concretas, verbos diretos, exemplos reais; sem jargão jurídico ou termos técnicos de produto.
@@ -73,10 +73,10 @@ A seleção das tecnologias privilegiou três critérios: maturidade e documenta
 
 A aplicação é um sistema web único, publicado em ambiente de nuvem, organizado em quatro camadas:
 
-- **Páginas e rotas de API** (`src/app/`) — 44 páginas e 32 rotas de API no mesmo diretório. Cada rota de API é o ponto de entrada de uma operação: lê a sessão da usuária, valida o corpo da requisição, aciona o acesso a dados e devolve a resposta.
-- **Validação** (`src/server/dto/`) — um esquema de validação por operação, que descreve o formato esperado de cada requisição. Nenhum dado chega ao banco sem passar por ele.
-- **Acesso a dados** (`src/server/repos/`) — um módulo por entidade, reunindo todas as consultas ao banco daquela entidade. É a única camada autorizada a tocar o esquema do banco, o que impede que uma consulta apareça espalhada pela interface.
-- **Esquema de dados** (`src/db/schema.ts`) — a definição única do modelo de dados, a partir da qual as migrações são geradas.
+- **Páginas e rotas de API** (`src/app/`): 44 páginas e 32 rotas de API no mesmo diretório. Cada rota de API é o ponto de entrada de uma operação: lê a sessão da usuária, valida o corpo da requisição, aciona o acesso a dados e devolve a resposta.
+- **Validação** (`src/server/dto/`): um esquema de validação por operação, que descreve o formato esperado de cada requisição. Nenhum dado chega ao banco sem passar por ele.
+- **Acesso a dados** (`src/server/repos/`): um módulo por entidade, reunindo todas as consultas ao banco daquela entidade. É a única camada autorizada a tocar o esquema do banco, o que impede que uma consulta apareça espalhada pela interface.
+- **Esquema de dados** (`src/db/schema.ts`): a definição única do modelo de dados, a partir da qual as migrações são geradas.
 
 O controle de acesso às rotas é feito por um interceptador (`middleware.ts`), executado antes de qualquer página: rotas públicas são liberadas, e o acesso a qualquer rota da área logada sem sessão válida é redirecionado ao login.
 
@@ -102,7 +102,7 @@ Quatro mecanismos foram implementados:
 
 - **Senhas nunca armazenadas em texto.** São gravadas apenas como hash, por função de derivação com sal.
 - **Sessão por token assinado.** A sessão trafega em um cookie inacessível ao JavaScript da página (`httpOnly`), o que reduz o risco de roubo de sessão.
-- **Limite de tentativas de login.** Cinco tentativas por endereço de origem a cada quinze minutos. A contagem é mantida na memória do processo que atende a requisição; como a aplicação é publicada em ambiente de execução distribuído, o limite vale por instância e não globalmente. Trata-se, portanto, de uma barreira contra tentativas automatizadas simples, e não de uma proteção completa contra força bruta distribuída — a substituição por um contador compartilhado é um trabalho futuro identificado.
+- **Limite de tentativas de login.** Cinco tentativas por endereço de origem a cada quinze minutos. A contagem é mantida na memória do processo que atende a requisição; como a aplicação é publicada em ambiente de execução distribuído, o limite vale por instância e não globalmente. Trata-se, portanto, de uma barreira contra tentativas automatizadas simples, e não de uma proteção completa contra força bruta distribuída. A substituição por um contador compartilhado é um trabalho futuro identificado.
 - **Minimização de dados.** São coletados apenas os dados necessários ao registro e ao acompanhamento do relato, em linha com o princípio da necessidade previsto na Lei Geral de Proteção de Dados (BRASIL, 2018).
 - **Anonimato como opção da autora.** A reclamação pode ser publicada sem identificação da autora. A empresa responsável recebe e responde normalmente; o que não é exibido publicamente é o nome de quem registrou. Trata-se de um requisito de segurança pessoal, não de uma preferência estética: a mulher que denuncia uma obra pode conviver com quem a executa.
 
@@ -111,7 +111,7 @@ Quatro mecanismos foram implementados:
 A verificação da plataforma é automatizada e executada a cada alteração do código, em dois níveis:
 
 - **Testes unitários** (Vitest): 29 testes em 5 arquivos, cobrindo as regras de validação e as funções de apresentação de dados.
-- **Testes de ponta a ponta** (Playwright): 25 testes em 8 roteiros, que executam a aplicação em um navegador real e percorrem os fluxos completos — autenticação e redirecionamento por perfil, painel da usuária, criação de reclamação nas quatro etapas, resposta da empresa, troca de senha, edição de publicações do blog e cadastro de projetos.
+- **Testes de ponta a ponta** (Playwright): 25 testes em 8 roteiros, que executam a aplicação em um navegador real e percorrem os fluxos completos: autenticação e redirecionamento por perfil, painel da usuária, criação de reclamação nas quatro etapas, resposta da empresa, troca de senha, edição de publicações do blog e cadastro de projetos.
 
 Os testes de ponta a ponta não usam dados de produção. A cada execução, um banco PostgreSQL descartável é criado, o esquema é aplicado, uma carga de dados de demonstração é inserida e o banco é destruído ao final. Isso torna cada execução independente da anterior e reprodutível em qualquer máquina.
 
@@ -131,7 +131,7 @@ O procedimento também revelou defeitos. A captura sistemática das telas expôs
 
 ### 5.1 Visão geral
 
-A plataforma foi construída e está em funcionamento, publicada em ambiente de nuvem e acessível pela internet. O núcleo opera de ponta a ponta: uma mulher cria sua conta, registra uma reclamação com fotos e localização, recebe um identificador, acompanha a resposta da empresa e vê a situação do caso mudar até a resolução — e a empresa recebe, responde e encerra o atendimento pela mesma plataforma.
+A plataforma foi construída e está em funcionamento, publicada em ambiente de nuvem e acessível pela internet. O núcleo opera de ponta a ponta: uma mulher cria sua conta, registra uma reclamação com fotos e localização, recebe um identificador, acompanha a resposta da empresa e vê a situação do caso mudar até a resolução, e a empresa recebe, responde e encerra o atendimento pela mesma plataforma.
 
 | Indicador | Quantidade |
 |---|---|
@@ -157,19 +157,19 @@ No primeiro acesso, a plataforma pergunta qual perfil está sendo criado. A sepa
 
 ### 5.3 Registro de uma reclamação
 
-Este é o fluxo central da plataforma e o que mais recebeu atenção de projeto. Ele materializa o princípio de "uma ação por tela": está dividido em quatro etapas — **Histórico**, **Descrição**, **Fotos** e **Finalizar** — com barra de progresso permanentemente visível e possibilidade de retorno a qualquer etapa anterior antes do envio.
+Este é o fluxo central da plataforma e o que mais recebeu atenção de projeto. Ele materializa o princípio de "uma ação por tela": está dividido em quatro etapas (**Histórico**, **Descrição**, **Fotos** e **Finalizar**), com barra de progresso permanentemente visível e possibilidade de retorno a qualquer etapa anterior antes do envio.
 
 Na primeira etapa a autora localiza a empresa responsável pela obra e informa se já reclamou do mesmo problema por outro canal. A pergunta não é burocrática: saber que a pessoa já tentou resolver por outra via altera a forma como a empresa trata o caso.
 
 {{figura:17-nova-reclamacao-etapa1}}
 
-A segunda etapa reúne o relato em si — título, descrição livre e localização.
+A segunda etapa reúne o relato em si: título, descrição livre e localização.
 
 {{figura:17b-nova-reclamacao-etapa2}}
 
 A terceira etapa é o envio de fotos, explicitamente opcional. A tela oferece o botão "Continuar sem foto", de modo que a ausência de imagens não interrompe o registro nem exige da usuária a interpretação de um campo vazio.
 
-A quarta etapa classifica o relato em três dimensões: tipo do problema (saúde, mobilidade, patrimônio, direitos humanos ou ambiental), urgência e alcance do impacto — se atinge apenas a autora, sua família, a vizinhança ou a comunidade. É essa classificação que permite, mais adiante, agregar os relatos por natureza e por gravidade.
+A quarta etapa classifica o relato em três dimensões: tipo do problema (saúde, mobilidade, patrimônio, direitos humanos ou ambiental), urgência e alcance do impacto: se atinge apenas a autora, sua família, a vizinhança ou a comunidade. É essa classificação que permite, mais adiante, agregar os relatos por natureza e por gravidade.
 
 {{figura:17d-nova-reclamacao-etapa4}}
 
@@ -179,7 +179,7 @@ Concluído o envio, a plataforma confirma o registro e apresenta o identificador
 
 ### 5.4 Acompanhamento pela autora
 
-O painel da usuária reúne seus relatos com a situação de cada um, filtráveis por abas — últimas, não respondidas, respondidas e concluídas.
+O painel da usuária reúne seus relatos com a situação de cada um, filtráveis por abas: últimas, não respondidas, respondidas e concluídas.
 
 {{figura:15-painel-usuaria}}
 
@@ -189,7 +189,7 @@ Ao abrir um relato, a autora encontra os dados do caso, sua descrição, os anex
 
 ### 5.5 Área da empresa
 
-A empresa dispõe de um painel com cinco indicadores — reclamações recebidas, casos resolvidos, casos sem resposta, taxa de resolução e projetos ativos — e da lista de reclamações recebidas, filtrável por situação e pesquisável por texto.
+A empresa dispõe de um painel com cinco indicadores (reclamações recebidas, casos resolvidos, casos sem resposta, taxa de resolução e projetos ativos) e da lista de reclamações recebidas, filtrável por situação e pesquisável por texto.
 
 {{figura:22-painel-empresa}}
 
@@ -203,7 +203,7 @@ O cadastro de obras permite vincular cada reclamação ao projeto correspondente
 
 ### 5.6 Transparência pública
 
-O perfil público de cada empresa é o resultado com maior potencial de efeito prático. Ele reúne, em uma página acessível sem cadastro, os dados da empresa, seus indicadores de atendimento — taxa de resolução, casos resolvidos, tempo médio de resposta — e as reclamações públicas que recebeu.
+O perfil público de cada empresa é o resultado com maior potencial de efeito prático. Ele reúne, em uma página acessível sem cadastro, os dados da empresa, seus indicadores de atendimento (taxa de resolução, casos resolvidos, tempo médio de resposta) e as reclamações públicas que recebeu.
 
 O efeito pretendido é assimétrico em favor de quem reclama: a empresa que responde bem tem esse comportamento registrado e visível; a que não responde também.
 
@@ -221,7 +221,7 @@ O registro de auditoria guarda quem fez o quê e quando. Em uma plataforma que t
 
 ### 5.8 Documentação de uso
 
-Os manuais da plataforma foram publicados dentro da própria aplicação e são acessíveis **sem necessidade de login**. A decisão é deliberada: exigir sessão para ler a documentação exclui exatamente quem mais precisa dela — quem ainda está decidindo se vai se cadastrar e quem ficou preso na tela de login.
+Os manuais da plataforma foram publicados dentro da própria aplicação e são acessíveis **sem necessidade de login**. A decisão é deliberada: exigir sessão para ler a documentação exclui exatamente quem mais precisa dela: quem ainda está decidindo se vai se cadastrar e quem ficou preso na tela de login.
 
 {{figura:13-manuais}}
 
@@ -248,17 +248,17 @@ O relato honesto dos limites integra o resultado:
 
 Reúnem-se aqui os dados apurados que sustentam a argumentação da seção seguinte, cuja redação cabe à orientação. Cada item traz o dado e o que ele permite afirmar.
 
-**Sobre o desequilíbrio que a plataforma pretende corrigir.** Hoje, a mulher afetada por uma obra e a empresa que a executa negociam em condições assimétricas: o canal é privado, o histórico não fica registrado e o custo de não responder é zero. A plataforma altera três variáveis dessa relação — o registro passa a ser permanente e identificado por um protocolo, o histórico da conversa fica preservado, e a taxa de resolução de cada empresa torna-se pública. Nenhuma delas obriga a empresa a responder; todas elas tornam a ausência de resposta visível.
+**Sobre o desequilíbrio que a plataforma pretende corrigir.** Hoje, a mulher afetada por uma obra e a empresa que a executa negociam em condições assimétricas: o canal é privado, o histórico não fica registrado e o custo de não responder é zero. A plataforma altera três variáveis dessa relação: o registro passa a ser permanente e identificado por um protocolo, o histórico da conversa fica preservado, e a taxa de resolução de cada empresa torna-se pública. Nenhuma delas obriga a empresa a responder; todas elas tornam a ausência de resposta visível.
 
-**Sobre a viabilidade técnica com equipe reduzida.** A plataforma foi construída e mantida com 26.602 linhas de código, 46 bibliotecas de produção e infraestrutura de custo próximo de zero em faixa gratuita de serviços de nuvem. O dado sustenta a afirmação de que uma plataforma cívica desse porte é viável fora do ambiente corporativo — em um laboratório universitário, por uma equipe pequena.
+**Sobre a viabilidade técnica com equipe reduzida.** A plataforma foi construída e mantida com 26.602 linhas de código, 46 bibliotecas de produção e infraestrutura de custo próximo de zero em faixa gratuita de serviços de nuvem. O dado sustenta a afirmação de que uma plataforma cívica desse porte é viável fora do ambiente corporativo, em um laboratório universitário, por uma equipe pequena.
 
 **Sobre a sustentabilidade da manutenção.** Os 54 testes automatizados e a verificação executada a cada alteração enviada ao repositório são o que permite que a plataforma seja mantida por pessoas que não participaram de sua construção. Em um projeto acadêmico, cujo corpo de bolsistas se renova, essa é uma condição de continuidade e não um refinamento técnico.
 
-**Sobre a distância entre projetar para a inclusão e comprová-la.** As diretrizes de acessibilidade foram formuladas antes da prototipagem e são rastreáveis em decisões concretas da interface — a divisão em quatro etapas, o retorno permitido a qualquer etapa, a mensagem que informa que é possível voltar. Mas a eficácia dessas decisões junto ao público-alvo não foi medida. A distância entre a diretriz aplicada e a diretriz comprovada é, provavelmente, o ponto mais fértil da discussão e o que melhor justifica a continuidade da pesquisa.
+**Sobre a distância entre projetar para a inclusão e comprová-la.** As diretrizes de acessibilidade foram formuladas antes da prototipagem e são rastreáveis em decisões concretas da interface: a divisão em quatro etapas, o retorno permitido a qualquer etapa, a mensagem que informa que é possível voltar. Mas a eficácia dessas decisões junto ao público-alvo não foi medida. A distância entre a diretriz aplicada e a diretriz comprovada é, provavelmente, o ponto mais fértil da discussão e o que melhor justifica a continuidade da pesquisa.
 
 **Sobre o alcance por telefone celular.** O público descrito nas diretrizes depende quase inteiramente do celular. A plataforma foi construída com layout adaptável, mas a verificação sistemática nessa condição ainda não foi feita, e as figuras deste relatório foram capturadas em resolução de computador. É uma lacuna entre o requisito declarado e a evidência disponível.
 
-**Sobre a transparência como mecanismo.** O perfil público de cada empresa reúne taxa de resolução, casos resolvidos e tempo médio de resposta em página aberta, sem cadastro. O mecanismo é assimétrico em favor de quem reclama e não depende de sanção: opera por reputação. Sua eficácia real depende de volume de uso — com poucos relatos, os indicadores não distinguem empresas — o que liga esta discussão diretamente ao trabalho futuro de adoção.
+**Sobre a transparência como mecanismo.** O perfil público de cada empresa reúne taxa de resolução, casos resolvidos e tempo médio de resposta em página aberta, sem cadastro. O mecanismo é assimétrico em favor de quem reclama e não depende de sanção: opera por reputação. Sua eficácia real depende de volume de uso. Com poucos relatos, os indicadores não distinguem empresas, o que liga esta discussão diretamente ao trabalho futuro de adoção.
 
 ---
 
@@ -278,4 +278,14 @@ W3C. **Web Content Accessibility Guidelines (WCAG) 2.1**. W3C Recommendation, 5 
 
 ## Observação para a montagem final do relatório
 
-TODO
+Este documento traz apenas as seções 4 e 5, e dentro delas a parte referente ao desenvolvimento da plataforma: tecnologias empregadas, arquitetura, modelo de dados, segurança e privacidade, procedimentos de verificação e a descrição do sistema entregue.
+
+Quatro pontos precisam ser resolvidos antes da entrega:
+
+1. **Integrar as demais contribuições das seções 4 e 5.** O levantamento de requisitos (4.2), as diretrizes de acessibilidade (4.3) e a prototipagem da interface (4.4) aparecem aqui apenas na medida em que condicionaram o desenvolvimento. Cada uma precisa receber o relato de quem a conduziu, com os resultados correspondentes na seção 5.
+
+2. **Renumerar as figuras.** A numeração deste documento começa em 1 e precisa seguir a sequência do relatório completo.
+
+3. **Consolidar a bibliografia.** A lista ao final reúne somente as obras citadas nestas duas seções.
+
+4. **Redigir a Discussão.** Os dados apurados que a sustentam estão reunidos em 5.11, cada um acompanhado do que permite afirmar.

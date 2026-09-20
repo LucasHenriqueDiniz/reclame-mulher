@@ -48,12 +48,12 @@ const DOCUMENTS: Record<string, DocumentSpec> = {
   manual: {
     source: join(ROOT, "documentos", "manual-usuaria.md"),
     out: join(ROOT, "assets", "Manual-de-Uso-ComunicaMulher.docx"),
-    footer: "ComunicaMulher — Manual de Uso · ",
+    footer: "ComunicaMulher | Manual de Uso, pág. ",
   },
   relatorio: {
     source: join(ROOT, "documentos", "relatorio-metodologia-resultados.md"),
     out: join(ROOT, "assets", "Relatorio-IC-Metodologia-e-Resultados.docx"),
-    footer: "Relatório de bolsista IC — Metodologia e Resultados · ",
+    footer: "Relatório de bolsista IC | Metodologia e Resultados, pág. ",
   },
 };
 
@@ -148,7 +148,7 @@ function figure(
       alignment: AlignmentType.CENTER,
       spacing: { after: 240 },
       children: [
-        new TextRun({ text: `Figura ${index} — `, bold: true, size: 18, color: "444444" }),
+        new TextRun({ text: `Figura ${index}. `, bold: true, size: 18, color: "444444" }),
         new TextRun({ text: caption, size: 18, color: "444444" }),
       ],
     }),
