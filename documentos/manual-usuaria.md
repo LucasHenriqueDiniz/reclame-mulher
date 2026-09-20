@@ -10,7 +10,7 @@ As imagens deste manual foram capturadas diretamente da plataforma em funcioname
 
 ## 1. O que é a plataforma
 
-A ComunicaMulher liga duas pontas que hoje não conversam: de um lado, a mulher que é afetada por uma obra — poeira, barulho fora de hora, falta de sinalização, rua interditada, risco de acidente; de outro, a empresa responsável por aquela obra.
+A ComunicaMulher liga duas pontas que hoje não conversam: de um lado, a mulher que é afetada por uma obra (poeira, barulho fora de hora, falta de sinalização, rua interditada, risco de acidente); de outro, a empresa responsável por aquela obra.
 
 A plataforma faz três coisas:
 
@@ -20,9 +20,9 @@ A plataforma faz três coisas:
 
 Existem três perfis de acesso, e cada um enxerga uma área diferente:
 
-- **Pessoa** — registra reclamações e acompanha as respostas.
-- **Empresa** — recebe, responde e muda a situação das reclamações que lhe dizem respeito.
-- **Administração** — cuida do cadastro das empresas, do conteúdo do blog e do registro de auditoria.
+- **Pessoa**: registra reclamações e acompanha as respostas.
+- **Empresa**: recebe, responde e muda a situação das reclamações que lhe dizem respeito.
+- **Administração**: cuida do cadastro das empresas, do conteúdo do blog e do registro de auditoria.
 
 ### A página inicial
 
@@ -75,7 +75,7 @@ O cadastro da empresa também tem duas etapas: a identificação da empresa na p
 
 Este é o fluxo central da plataforma. Ele é dividido em quatro etapas, mostradas na barra de progresso no alto da tela: **Histórico**, **Descrição**, **Fotos** e **Finalizar**. É possível voltar a qualquer etapa antes de enviar.
 
-### Etapa 1 — Escolher a empresa e informar o histórico
+### Etapa 1: Escolher a empresa e informar o histórico
 
 1. No seu painel, clique em **Começar um novo relato**.
 2. Clique em **Buscar** e procure a empresa responsável pela obra.
@@ -87,10 +87,10 @@ Essa primeira pergunta não é burocracia: saber que a pessoa já tentou resolve
 
 {{figura:17-nova-reclamacao-etapa1}}
 
-### Etapa 2 — Descrever o que aconteceu
+### Etapa 2: Descrever o que aconteceu
 
 1. Escreva um **título** curto que resuma o problema.
-2. No campo de **descrição**, conte o que aconteceu com suas palavras — o que está ocorrendo, desde quando e como isso afeta você.
+2. No campo de **descrição**, conte o que aconteceu com suas palavras: o que está ocorrendo, desde quando e como isso afeta você.
 3. Informe o **local**: rua, número e cidade.
 4. Clique em **Continuar**.
 
@@ -98,24 +98,24 @@ Quanto mais concreta a descrição, mais rápido a empresa consegue identificar 
 
 {{figura:17b-nova-reclamacao-etapa2}}
 
-### Etapa 3 — Anexar fotos
+### Etapa 3: Anexar fotos
 
 As fotos são **opcionais**. Se você tiver imagens do problema, anexe-as aqui; se não tiver, clique em **Continuar sem foto** e siga adiante.
 
 {{figura:17c-nova-reclamacao-etapa3}}
 
-### Etapa 4 — Classificar e enviar
+### Etapa 4: Classificar e enviar
 
 Na última etapa você classifica o relato em três perguntas:
 
-- **Qual tipo de problema?** — saúde, mobilidade, patrimônio, direitos humanos ou ambiental.
-- **Quão urgente é?** — de baixa a alta urgência.
-- **Quem mais está sendo afetado?** — só você, sua família, a vizinhança ou a comunidade.
+- **Qual tipo de problema?** Saúde, mobilidade, patrimônio, direitos humanos ou ambiental.
+- **Quão urgente é?** De baixa a alta urgência.
+- **Quem mais está sendo afetado?** Só você, sua família, a vizinhança ou a comunidade.
 
 A mesma tela traz os dois controles de privacidade do relato:
 
-- **Quero fazer este relato sem mostrar meu nome** — a empresa recebe e responde normalmente; o que não aparece publicamente é a sua identificação.
-- **Quero que outras pessoas possam ver este relato** — define se o relato entra no perfil público da empresa.
+- **Quero fazer este relato sem mostrar meu nome**: a empresa recebe e responde normalmente; o que não aparece publicamente é a sua identificação.
+- **Quero que outras pessoas possam ver este relato**: define se o relato entra no perfil público da empresa.
 
 Depois de responder às três perguntas e conferir esses dois controles, clique em **Enviar relato**.
 
@@ -123,7 +123,7 @@ Depois de responder às três perguntas e conferir esses dois controles, clique 
 
 ### Confirmação e identificador
 
-Enviado o relato, a plataforma confirma o registro e mostra o **identificador** — um código no formato `#R-XXXX-XXXX`. Guarde esse código: é por ele que você e a empresa se referem ao caso.
+Enviado o relato, a plataforma confirma o registro e mostra o **identificador**, um código no formato `#R-XXXX-XXXX`. Guarde esse código: é por ele que você e a empresa se referem ao caso.
 
 A mesma tela informa o prazo médio de resposta daquela empresa e leva direto ao relato recém-criado.
 
@@ -143,9 +143,9 @@ As abas **Últimas**, **Não Respondidas**, **Respondidas** e **Concluídas** fi
 
 ### As situações de uma reclamação
 
-- **Aberta** — registrada, ainda sem resposta da empresa.
-- **Respondida** — a empresa já se manifestou e o caso está em andamento.
-- **Resolvida** — a empresa concluiu o atendimento.
+- **Aberta**: registrada, ainda sem resposta da empresa.
+- **Respondida**: a empresa já se manifestou e o caso está em andamento.
+- **Resolvida**: a empresa concluiu o atendimento.
 
 ### A lista completa
 
@@ -155,7 +155,7 @@ A lista completa reúne todas as suas reclamações, com identificador, empresa,
 
 ### O detalhe de uma reclamação
 
-Ao abrir um relato, você vê os dados do caso, a descrição que escreveu, as fotos anexadas e todo o histórico de mensagens, em ordem cronológica — as suas e as da empresa. É por aqui que você responde e acompanha o caso até o fim.
+Ao abrir um relato, você vê os dados do caso, a descrição que escreveu, as fotos anexadas e todo o histórico de mensagens, em ordem cronológica, as suas e as da empresa. É por aqui que você responde e acompanha o caso até o fim.
 
 Na figura abaixo o relato ainda está **em aberto**: só existe a mensagem que a autora escreveu, e o campo de resposta espera a manifestação da empresa. Assim que ela responder, a resposta aparece logo abaixo, e a situação passa a **Respondida**.
 
@@ -191,7 +191,7 @@ A busca lista as empresas cadastradas e leva ao perfil público de cada uma.
 
 ### O perfil público de uma empresa
 
-O perfil público reúne os dados da empresa, os indicadores de atendimento — taxa de resolução, casos resolvidos, tempo médio de resposta — e as reclamações públicas que ela recebeu. É onde se vê, na prática, como aquela empresa responde.
+O perfil público reúne os dados da empresa, os indicadores de atendimento (taxa de resolução, casos resolvidos, tempo médio de resposta) e as reclamações públicas que ela recebeu. É onde se vê, na prática, como aquela empresa responde.
 
 {{figura:10-perfil-publico-empresa}}
 
@@ -215,7 +215,7 @@ Os manuais da plataforma ficam disponíveis sem necessidade de login.
 
 ### O painel da empresa
 
-O painel abre com cinco indicadores — reclamações recebidas, casos resolvidos, casos sem resposta, taxa de resolução e projetos ativos — e, abaixo deles, a lista das reclamações recebidas, que pode ser filtrada por situação e pesquisada por texto.
+O painel abre com cinco indicadores (reclamações recebidas, casos resolvidos, casos sem resposta, taxa de resolução e projetos ativos) e, abaixo deles, a lista das reclamações recebidas, que pode ser filtrada por situação e pesquisada por texto.
 
 {{figura:22-painel-empresa}}
 
@@ -243,7 +243,7 @@ O que a empresa preenche aqui é o que aparece para qualquer pessoa no perfil p�
 
 ### Projetos
 
-Cadastrar as obras permite que cada reclamação seja vinculada ao projeto correspondente — e é isso que faz o relato chegar à equipe certa.
+Cadastrar as obras permite que cada reclamação seja vinculada ao projeto correspondente, e é isso que faz o relato chegar à equipe certa.
 
 {{figura:27-projetos-empresa}}
 
@@ -297,4 +297,4 @@ Ele continua no seu painel, ao lado de cada reclamação da sua lista.
 Depende da empresa. O prazo médio de cada uma aparece no seu perfil público e na tela de confirmação do relato.
 
 **Quem vê a minha reclamação?**
-A empresa responsável sempre. O público em geral vê os relatos marcados como públicos — respeitando a opção de anonimato que você escolheu.
+A empresa responsável sempre. O público em geral vê os relatos marcados como públicos, respeitando a opção de anonimato que você escolheu.

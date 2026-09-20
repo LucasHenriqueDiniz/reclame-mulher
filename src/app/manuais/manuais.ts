@@ -36,7 +36,7 @@ export const MANUAIS: Manual[] = [
     file: "INDICE_DOCUMENTACAO.md",
     title: "Índice da documentação",
     audience: "Quem procura um documento específico",
-    summary: "Roteia o leitor por público — pessoa, empresa, moderação e gestão.",
+    summary: "Roteia o leitor por público: pessoa, empresa, moderação e gestão.",
   },
   {
     slug: "fluxos-visuais",
