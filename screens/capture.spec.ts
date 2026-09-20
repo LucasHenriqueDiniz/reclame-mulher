@@ -77,6 +77,22 @@ async function waitForMotionToStop(page: Page): Promise<void> {
   );
 }
 
+/**
+ * The captures that write to the database come first.
+ *
+ * Capturing the wizard's confirmation means submitting a real report, and that
+ * report is one more complaint than the seed holds for the company every other
+ * figure displays. With it in the middle of the run, the public profile was
+ * captured against three complaints and the company dashboard against four —
+ * one company with two resolution rates, 33% and 25%, in two figures of the
+ * same document. Running the writers first puts every figure on the same side
+ * of the change, whatever order the list is written in.
+ */
+const ORDERED_SCREENS = [
+  ...SCREENS.filter((screen) => screen.mutatesData),
+  ...SCREENS.filter((screen) => !screen.mutatesData),
+];
+
 async function capture(browser: Browser, screen: Screen): Promise<void> {
   const context = await browser.newContext(contextOptions(screen.role));
   const page = await context.newPage();
@@ -112,7 +128,7 @@ test.describe("platform screens", () => {
     mkdirSync(OUTPUT_DIR, { recursive: true });
   });
 
-  for (const screen of SCREENS) {
+  for (const screen of ORDERED_SCREENS) {
     test(`${screen.id} — ${screen.caption}`, async ({ browser }) => {
       await capture(browser, screen);
     });

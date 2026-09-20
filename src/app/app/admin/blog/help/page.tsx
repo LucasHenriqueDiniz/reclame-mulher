@@ -121,7 +121,7 @@ const syntaxSections: Array<{
       },
       {
         label: "Embeds",
-        syntax: "Nao ha suporte nativo",
+        syntax: "Não há suporte nativo",
         example: "Exemplos de embed: vídeo do YouTube, post do Instagram, mapa incorporado, iframe de documento.",
         note: "Hoje o blog nao incorpora esses blocos automaticamente; se precisar, use um link comum.",
       },

@@ -187,6 +187,23 @@ async function main() {
   // has to agree with these two fields to be worth reading.
   const verifiedConstrutoraXAt = daysAgo(14);
 
+  // Registration dates. Without these, `createdAt` defaults to the moment of the
+  // seed run, and every company reads as created today — which puts it after its
+  // own verification and after the audit entries that record it. The figures of
+  // the admin area print both dates side by side, so the two have to agree.
+  const construtoraXRegisteredAt = daysAgo(60);
+  const transportesSulRegisteredAt = daysAgo(45);
+  const obrasAuroraRegisteredAt = daysAgo(1);
+
+  // Opening and answering times. `getStats` reads the average response time as
+  // `updatedAt - createdAt` over the complaints that are no longer OPEN, so with
+  // both columns defaulting to the seed run the difference was zero and the
+  // indicator rendered as a dash — in the same figure whose caption promises it.
+  const hoursAfter = (from: Date, hours: number) =>
+    new Date(from.getTime() + hours * 60 * 60 * 1000);
+  const noiseOpenedAt = daysAgo(6);
+  const signageOpenedAt = daysAgo(10);
+
   const [company1, company2, company3] = await db
     .insert(schema.companies)
     .values([
@@ -209,6 +226,7 @@ async function main() {
         responsibleName: "João Costa",
         responsibleEmail: "empresa@construtorax.com",
         verifiedAt: verifiedConstrutoraXAt,
+        createdAt: construtoraXRegisteredAt,
       },
       {
         name: "Transportes Sul",
@@ -225,6 +243,7 @@ async function main() {
         address: "Av. dos Caminhões, 500",
         neighborhood: "Industrial",
         streetNumber: "500",
+        createdAt: transportesSulRegisteredAt,
       },
       // Registered through step 1 and never finished: name, CNPJ and slug are
       // all POST /api/auth/register-company writes, and step 2 fills the rest.
@@ -232,6 +251,7 @@ async function main() {
         name: "Obras Aurora",
         slug: "obras-aurora",
         cnpj: "45678901000122",
+        createdAt: obrasAuroraRegisteredAt,
       },
     ])
     .returning({ id: schema.companies.id });
@@ -299,6 +319,7 @@ async function main() {
         status: "OPEN",
         isPublic: true,
         isAnonymous: false,
+        createdAt: daysAgo(3),
       },
       {
         authorId: user3.id,
@@ -309,6 +330,8 @@ async function main() {
         status: "RESPONDED",
         isPublic: true,
         isAnonymous: true,
+        createdAt: noiseOpenedAt,
+        updatedAt: hoursAfter(noiseOpenedAt, 30),
       },
       {
         authorId: user1.id,
@@ -318,6 +341,8 @@ async function main() {
         status: "RESOLVED",
         isPublic: true,
         isAnonymous: false,
+        createdAt: signageOpenedAt,
+        updatedAt: hoursAfter(signageOpenedAt, 54),
       },
     ])
     .returning({ id: schema.complaints.id });
