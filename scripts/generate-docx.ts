@@ -22,12 +22,12 @@ import {
   Footer,
   HeadingLevel,
   ImageRun,
-  PageBreak,
   PageNumber,
   Packer,
   Paragraph,
   Table,
   TableCell,
+  TableLayoutType,
   TableRow,
   TextRun,
   WidthType,
@@ -115,7 +115,12 @@ function runs(text: string): TextRun[] {
     );
 }
 
-function figure(id: string, index: number, source: string): Paragraph[] {
+function figure(
+  id: string,
+  index: number,
+  source: string,
+  pageBreakBefore: boolean
+): Paragraph[] {
   const path = join(FIGURES, `${id}.jpg`);
   if (!existsSync(path)) {
     throw new Error(
@@ -134,6 +139,7 @@ function figure(id: string, index: number, source: string): Paragraph[] {
 
   return [
     new Paragraph({
+      pageBreakBefore,
       alignment: AlignmentType.CENTER,
       spacing: { before: 240, after: 80 },
       children: [new ImageRun({ type: "jpg", data, transformation: fit(w, h) })],
@@ -160,19 +166,76 @@ function cells(line: string): string[] {
 }
 
 /**
+ * Usable text width in twips (1/1440 inch): A4 less Word's default one-inch
+ * margins is 6.27 inches, the same page the figure box is measured against.
+ */
+const CONTENT_WIDTH = 9029;
+
+/** Rough width of one 11pt Calibri character, and a cell's two margins, in twips. */
+const CHARACTER_WIDTH = 110;
+const CELL_PADDING = 200;
+
+/**
+ * Column widths in twips, proportional to the longest cell each column holds.
+ *
+ * They have to be stated. Left to itself `docx` writes `<w:gridCol w:w="100"/>`
+ * — a hundred twips, about one character — and a table width of `100%` where
+ * the format wants fiftieths of a percent as an integer. Word and Google Docs
+ * discard the invalid width, the grid wins, and every column collapses into a
+ * vertical stack of single letters.
+ */
+function columnWidths(rows: string[][]): number[] {
+  const count = rows[0]!.length;
+  const column = (index: number) => rows.map((row) => row[index] ?? "");
+
+  // Share of the row, by how much text the column carries. Clamped so one long
+  // cell cannot starve its neighbours and a short column still reads.
+  const weights = Array.from({ length: count }, (_, index) =>
+    Math.min(Math.max(...column(index).map((cell) => cell.length), 8), 64)
+  );
+  const total = weights.reduce((sum, weight) => sum + weight, 0);
+  const widths = weights.map((weight) => Math.round((CONTENT_WIDTH * weight) / total));
+
+  // A column narrower than its longest word breaks that word across lines —
+  // "Internacionaliz / ação". The floor is what the word needs; the surplus is
+  // taken from whichever column has the most to give.
+  const floors = Array.from({ length: count }, (_, index) => {
+    const longestWord = Math.max(
+      ...column(index).flatMap((cell) => cell.split(/\s+/).map((word) => word.length)),
+      1
+    );
+    return longestWord * CHARACTER_WIDTH + CELL_PADDING;
+  });
+
+  for (let index = 0; index < count; index += 1) {
+    const deficit = Math.min(floors[index]!, CONTENT_WIDTH / count) - widths[index]!;
+    if (deficit <= 0) continue;
+    const donor = widths.indexOf(Math.max(...widths));
+    widths[index] += deficit;
+    widths[donor] -= deficit;
+  }
+
+  // The row has to add up to the content width exactly, or Word rescales it.
+  widths[count - 1] = CONTENT_WIDTH - widths.slice(0, -1).reduce((sum, w) => sum + w, 0);
+  return widths;
+}
+
+/**
  * A Markdown table as a Word table: header row shaded, the rest plain, the
  * whole thing stretched to the text width so it does not float at whatever
  * width the longest cell happens to need.
  */
 function table(rows: string[][]): Table {
   const [header, ...body] = rows;
+  const widths = columnWidths(rows);
 
   const row = (values: string[], isHeader: boolean) =>
     new TableRow({
       tableHeader: isHeader,
       children: values.map(
-        (value) =>
+        (value, column) =>
           new TableCell({
+            width: { size: widths[column]!, type: WidthType.DXA },
             shading: isHeader ? { fill: "EEF3F8" } : undefined,
             margins: { top: 60, bottom: 60, left: 100, right: 100 },
             children: [
@@ -188,7 +251,9 @@ function table(rows: string[][]): Table {
     });
 
   return new Table({
-    width: { size: 100, type: WidthType.PERCENTAGE },
+    width: { size: CONTENT_WIDTH, type: WidthType.DXA },
+    columnWidths: widths,
+    layout: TableLayoutType.FIXED,
     rows: [row(header!, true), ...body.map((values) => row(values, false))],
   });
 }
@@ -197,6 +262,25 @@ function build(markdown: string, source: string): (Paragraph | Table)[] {
   const out: (Paragraph | Table)[] = [];
   const lines = markdown.split("\n");
   let figureNumber = 0;
+
+  /**
+   * A `---` emits no paragraph of its own; it marks the next block as starting
+   * a page.
+   *
+   * A paragraph that *contains* a `PageBreak` leaves a blank page behind
+   * whenever the page before it is already full: the empty paragraph no longer
+   * fits, so it moves to the next page, and the break inside it then pushes the
+   * real content one page further — stranding a page that holds nothing but
+   * that paragraph. It happened after every figure that reached the bottom
+   * margin. `pageBreakBefore` belongs to the block that follows, so there is no
+   * paragraph left over to strand.
+   */
+  let pendingPageBreak = false;
+  const breakBefore = () => {
+    const value = pendingPageBreak;
+    pendingPageBreak = false;
+    return value;
+  };
 
   for (let i = 0; i < lines.length; i += 1) {
     const text = lines[i]!.trimEnd();
@@ -213,6 +297,11 @@ function build(markdown: string, source: string): (Paragraph | Table)[] {
         i += 1;
       }
       i -= 1;
+      // A table carries no `pageBreakBefore`, so an empty paragraph takes it.
+      // That paragraph lands at the top of the new page and strands nothing.
+      if (breakBefore()) {
+        out.push(new Paragraph({ pageBreakBefore: true, spacing: { after: 0 } }));
+      }
       out.push(table(rows));
       continue;
     }
@@ -220,22 +309,27 @@ function build(markdown: string, source: string): (Paragraph | Table)[] {
     const isFigure = text.match(FIGURE_PATTERN);
     if (isFigure) {
       figureNumber += 1;
-      out.push(...figure(isFigure[1]!, figureNumber, source));
+      out.push(...figure(isFigure[1]!, figureNumber, source, breakBefore()));
       continue;
     }
 
     if (text === "---") {
-      out.push(new Paragraph({ children: [new PageBreak()] }));
+      pendingPageBreak = true;
       continue;
     }
 
     if (text.startsWith("# ")) {
-      out.push(new Paragraph({ text: text.slice(2), heading: HeadingLevel.TITLE }));
+      out.push(new Paragraph({
+          pageBreakBefore: breakBefore(),
+          text: text.slice(2),
+          heading: HeadingLevel.TITLE,
+        }));
       continue;
     }
     if (text.startsWith("## ")) {
       out.push(
         new Paragraph({
+          pageBreakBefore: breakBefore(),
           heading: HeadingLevel.HEADING_1,
           spacing: { before: 360, after: 160 },
           children: runs(text.slice(3)),
@@ -246,6 +340,7 @@ function build(markdown: string, source: string): (Paragraph | Table)[] {
     if (text.startsWith("### ")) {
       out.push(
         new Paragraph({
+          pageBreakBefore: breakBefore(),
           heading: HeadingLevel.HEADING_2,
           spacing: { before: 260, after: 120 },
           children: runs(text.slice(4)),
@@ -256,7 +351,12 @@ function build(markdown: string, source: string): (Paragraph | Table)[] {
 
     if (text.startsWith("- ")) {
       out.push(
-        new Paragraph({ bullet: { level: 0 }, spacing: { after: 80 }, children: runs(text.slice(2)) })
+        new Paragraph({
+          pageBreakBefore: breakBefore(),
+          bullet: { level: 0 },
+          spacing: { after: 80 },
+          children: runs(text.slice(2)),
+        })
       );
       continue;
     }
@@ -268,6 +368,7 @@ function build(markdown: string, source: string): (Paragraph | Table)[] {
       // sentence instead, which survives copy-paste into the report.
       out.push(
         new Paragraph({
+          pageBreakBefore: breakBefore(),
           spacing: { after: 80 },
           indent: { left: 360 },
           children: [
@@ -279,7 +380,9 @@ function build(markdown: string, source: string): (Paragraph | Table)[] {
       continue;
     }
 
-    out.push(new Paragraph({ spacing: { after: 120 }, children: runs(text) }));
+    out.push(
+      new Paragraph({ pageBreakBefore: breakBefore(), spacing: { after: 120 }, children: runs(text) })
+    );
   }
 
   return out;
