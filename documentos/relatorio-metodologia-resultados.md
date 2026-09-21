@@ -282,9 +282,9 @@ Este documento traz apenas as seções 4 e 5, e dentro delas a parte referente a
 
 Quatro pontos precisam ser resolvidos antes da entrega:
 
-1. **Integrar as demais contribuições das seções 4 e 5.** O levantamento de requisitos (4.2), as diretrizes de acessibilidade (4.3) e a prototipagem da interface (4.4) aparecem aqui apenas na medida em que condicionaram o desenvolvimento. Cada uma precisa receber o relato de quem a conduziu, com os resultados correspondentes na seção 5.
+1. **Integrar as demais contribuições das seções 4 e 5.** Três etapas aparecem aqui apenas na medida em que condicionaram o desenvolvimento, e precisam do relato de quem as conduziu. O levantamento de requisitos e a prototipagem da interface são os itens 1 e 3 da lista de 4.2, cada um resumido em um parágrafo. As diretrizes de acessibilidade têm a seção 4.3 inteira. Os resultados correspondentes entram na seção 5.
 
-2. **Renumerar as figuras.** A numeração deste documento começa em 1 e precisa seguir a sequência do relatório completo.
+2. **Renumerar as figuras e numerar as tabelas.** A numeração das figuras começa em 1 aqui e precisa seguir a sequência do relatório completo. As tabelas estão sem número e sem legenda, porque a numeração depende de quantas vêm antes delas.
 
 3. **Consolidar a bibliografia.** A lista ao final reúne somente as obras citadas nestas duas seções.
 
