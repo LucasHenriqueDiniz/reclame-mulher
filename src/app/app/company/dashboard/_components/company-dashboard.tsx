@@ -5,6 +5,7 @@ import {
   companyTheme as S,
   CompanyProfileHero,
   MetricCard,
+  responseTimeValue,
 } from "@/components/company";
 import { ComplaintsTab, type Complaint } from "./complaints-tab";
 import { ProjectsTab } from "./projects-tab";
@@ -88,11 +89,7 @@ export function CompanyDashboard({
           <MetricCard
             label="Taxa de resolução"
             value={`${stats.resolutionRate}%`}
-            sub={
-              stats.avgResponseHours != null
-                ? `Resp. média: ${stats.avgResponseHours}h`
-                : undefined
-            }
+            sub={`Resp. média: ${responseTimeValue(stats.avgResponseHours)}`}
             color={stats.resolutionRate >= 70 ? S.green : S.orange}
           />
           <MetricCard

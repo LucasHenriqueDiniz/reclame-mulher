@@ -58,9 +58,18 @@ to sort:
 |---|---|---|
 | `01-auth-routing` | — | seeded state |
 | `02-person-dashboard` | — | seeded state |
+| `02b-company-stats` | — | Construtora X having exactly one of each |
 | `03-company-reply` | reply + status change | exactly one open report |
 | `04-person-create-complaint` | a new report | nothing above it |
 | `05-person-change-password` | the hash, then puts it back | nothing above it |
 
 Read-only specs come first; each writing spec runs after everything that
 depends on the state it changes.
+
+`02b` carries a letter because it had to be inserted, not appended. Its
+assertions are about the singular — "1 diálogo ativo" — so they only hold while
+Construtora X has exactly one active dialogue, one resolved case and one project
+in progress, which is the seeded state. `03` moves a report to RESPONDED and `04`
+adds one, and after either the counts are 2 and there is no singular left to
+check. Renumbering `03` through `05` to make room would have rewritten three
+files to insert one.

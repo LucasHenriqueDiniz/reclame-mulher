@@ -43,3 +43,37 @@ export type CompanyStats = {
   resolutionRate: number;
   activeProjectsCount: number;
 };
+
+/**
+ * What a company with no answered complaint shows where its average response time goes.
+ *
+ * `CompaniesRepo.getStats` returns null — not zero — for that company, and every call site
+ * used to fall back to a bare "-", which reads as a rendering failure rather than as an
+ * absence. The two formatters below share this constant so the four places that display
+ * the metric cannot drift apart on what "no data" is called.
+ */
+const NO_RESPONSE_HISTORY = "Sem histórico";
+
+/**
+ * The average response time for a slot that already carries its own label, such as a
+ * metric tile reading "Tempo médio de resposta". Just the value, since the label supplies
+ * the noun.
+ *
+ * Callers that need to restyle the empty case — a two-word placeholder does not fit type
+ * sized for "43h" — should test `avgResponseHours == null` themselves rather than compare
+ * against the returned string.
+ */
+export function responseTimeValue(avgResponseHours: number | null) {
+  return avgResponseHours == null ? NO_RESPONSE_HISTORY : `${avgResponseHours}h`;
+}
+
+/**
+ * The average response time as a standalone sentence, for a line that has no label of its
+ * own — the icon row in the complaint detail sidebar, where the text has to say what the
+ * number means.
+ */
+export function responseTimeLabel(avgResponseHours: number | null) {
+  return avgResponseHours == null
+    ? `${NO_RESPONSE_HISTORY} de resposta`
+    : `Resposta em ${avgResponseHours}h`;
+}
